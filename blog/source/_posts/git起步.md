@@ -28,12 +28,12 @@ date: 2021-01-28 13:49:03
    * 已跟踪是本地仓库中有的文件，初次克隆某个仓库时，工作目录的所有文件都是已跟踪的文件。
    * 未跟踪是新创建的文件，即对该文件从来没有执行git add命令。
    * 当编辑过某些文件后，git将这些文件标记为已修改，这就跟[tag1](#modified)对于上了。
-6. 使用`git add`开始跟踪一个新文件，`git add .`提交当前路径下的所有的已修改的文件。
+6. 使用`git add`开始跟踪一个新文件，`git add .`暂存当前路径下的所有的已修改的文件。
    * 通过`git status`可以查看文件的状态。
    * 取消已暂存的状态`git reset HEAD  "文件名"`
 7. 使用`git commit -m "提交说明"`来提交暂存区的数据到**本地仓库**。
 8. 使用`git push origin master` 将修改提交到远程仓库。**注意：你需要先配置一下公钥，不然push不上去**。
-   * `git push [remote-name] [branch-name]`，这是完整命令。当使用克隆命令时，默认使用origin作为远程仓库的名字，master作为本地分支的名字
+   * `git push [remote-name] [branch-name]`，这是完整命令。当使用克隆命令时，默认使用origin作为远程仓库的名字，master作为本地分支的名字，`git push`不加其他参数也能用，但是如果你创建了好几个分支就得加上[remote-name]和[branch-name]。
 
 #### tips
 
