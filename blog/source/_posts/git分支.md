@@ -34,3 +34,5 @@ date: 2021-01-28 16:11:34
 * 分支的衍合（rebase），`git rebase master`。他的结果合直接使用merge一样。**谨慎使用该方式**
 
 **参考链接:[Pro Git](http://git.oschina.net/progit/3-Git-%E5%88%86%E6%94%AF.html)**
+
+**参考链接：[开源指北](https://gitee.com/opensource-guide/git_tutorial/Git%20%E5%91%BD%E4%BB%A4%E8%AF%A6%E8%A7%A3/%E5%B8%B8%E7%94%A8%20Git%20%E5%91%BD%E4%BB%A4/#git-%E5%91%BD%E4%BB%A4%E6%89%8B%E5%86%8C)**
