@@ -5,8 +5,8 @@
 # Site
 title: 小象のblog
 subtitle: ''
-description: ''
-keywords:
+description: '记录学习笔记'
+keywords: 'xiaoxiang,小象のblog'
 author: '小象'
 language: en
 timezone: ''
@@ -98,7 +98,7 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: landscape
+theme: default
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
