@@ -1,9 +1,9 @@
 ---
-title: note
+title: english
 categories:
-  - [english]
+  - []
 site: english
-date: 2021-03-06 15:28
+date: 2020-03-06 15:28
 ---
 
 artifact：工件	general：普遍的，全体的，一般的
@@ -20,3 +20,8 @@ elapse：流逝	unit of measure：度量单位	support：支持
 
 copyright：版权	transaction：交易、事务	assemble：集合
 
+stylesheet：样式表	item：项目	emphasis：强调
+
+uniform resource locator：统一资源定位符URL
+
+ORM：Object Relation Mapping，即对象关系映射，指的是java对象和关系数据库之间的映射
