@@ -66,3 +66,4 @@ date: 2021-02-28 13:44:27
   * 语法：`X-Forward-For:<client>,<proxy1>,<proxy2>...`。
   * 第一个参数表示客户端的IP地址，如果一个请求经过了多个代理服务器，那么每一个代理服务器的IP都会被依次记录在内。
 
+https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Forwarded
