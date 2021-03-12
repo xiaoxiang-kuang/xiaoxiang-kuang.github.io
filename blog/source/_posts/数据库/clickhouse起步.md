@@ -70,7 +70,7 @@ date: 2021-03-11 10:00:32
 
   * ENGINE：引擎名和参数
 
-  * ORDER BY：排序键，可以是一组列的元组或任意的表达式。如果没有用PRIMARY KEY显式指定主键，clickhouse会使用排序键作为主键，如果不需要tuple，可以使用ORDER BY tuple()
+  * ORDER BY：排序键，可以是一组列的元组或任意的表达式。**如果没有用PRIMARY KEY显式指定主键，clickhouse会使用排序键作为主键**，如果不需要tuple，可以使用ORDER BY tuple()
 
   * PARTITION BY：分区键，要按月分区，可以使用表达式toYYYYMM(date_column)，这里date_column是一个Date类型的列，分区的格式会是YYYYMM
 
@@ -89,16 +89,18 @@ date: 2021-03-11 10:00:32
   * 当数据被插入到表中时，会创建多个数据片段并按主键的字典排序。
   * 不同分区的数据会被分成不同的片段，clickhouse在后台合并数据片段以便更高效存储。合并机制不保证具有相同主键的行全部合并到同一个数据片中。
   * 数据片段以wide或compact格式存储。wide格式下，每一列都会在文件系统中存储为单独的文件，compact模式下所有列都存储在同一个文件下。
-  * 每个数据片段被逻辑分割成颗粒。颗粒是进行数据查询时最小的不可分割数据集。
+  * 每个数据片段被逻辑分割成颗粒。颗粒是进行数据查询时最小的不可分割数据集。每个颗粒都包含整数个行。
+  
 * 可以使用ORDER BY tuple()创建没有主键的表，这种情况下，clickhouse会根据数据插入的顺序存储。
+
 * 对于select查询，如果where子句中有下面这些表达式，就可以使用索引
   * 包含一个与主键/分区键中的部分字段或全部字段相等或不等的表达式。
-  
   * 主键/分区键 in (xxx,xxx,xxx) 或者 主键/分区键 like 'xxx'。
-  
-* 基于主键/分区键的字段上的某些函数。
-  
+  * 基于主键/分区键的字段上的某些函数。
   * 基于主键/分区键的表达式的逻辑表达式。
   
+* TTL
+
+  * TTL表达式的计算结果必须是日期或日期时间类型的字段
 
 [MergeTree](https://clickhouse.tech/docs/zh/engines/table-engines/mergetree-family/mergetree/)这一块越看越迷惑，之后再来接着看吧。
