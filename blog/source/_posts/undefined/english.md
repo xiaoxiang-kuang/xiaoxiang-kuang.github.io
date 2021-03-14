@@ -44,3 +44,5 @@ replication：复制	robust：强壮	apply：申请	sparse：稀疏
 recursion：递归	interval：间隔	interpreter：解释器
 
 yeild：产量、生产
+
+po：persistant object持久化对象
