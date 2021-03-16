@@ -43,6 +43,19 @@ replication：复制	robust：强壮	apply：申请	sparse：稀疏
 
 recursion：递归	interval：间隔	interpreter：解释器
 
-yeild：产量、生产
+yeild：产量、生产	reconcile：使和解、调和	assignment：任务、作业、（赋值）
 
 po：persistant object持久化对象
+
+assembly：集合、集会、组装	assert：断言，坚称	underscore：强调、下划线
+
+UTF：Unicode Transformation Format即unicode转换格式
+
+deprecate：不赞成	revert：恢复	implicit：隐含的	explicit：明确的
+
+chain：链子	assert：断言	digest：摘要、消化、理解	poll：投票
+
+route：路线	migrate：迁移、移植	bypass：绕过、避开
+
+cascade：级联	contrib：贡献	abort：中断
+

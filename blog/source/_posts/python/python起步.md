@@ -103,7 +103,7 @@ def nop():
   * 命名关键字参数必须传入参数名
 * 上面这些都可以组合
 
-## python进阶
+## 其他
 
 * 切片：`L[:2]`切出下标为0和1的元素
 * for in可用来迭代，判断是否可迭代可以用collections的Iterable类型判断。
@@ -116,3 +116,4 @@ def nop():
 * 任何代码的第一个字符串都被视为模块的文档注释，`__author__`变量可以把作者写进去
 * 导入模块`import sys`，sys的argv变量用list存储了命令行的所有参数，argv的第一个参数是py文件的名称
 * 类似`__xxx__`的变量是特殊变量，类似`_xxx_`和`_xxx`的变量是非公开变量（private）。
+* 命名类用UpperCamelCase（第一个字母大写，后面采用驼峰命名法），命名函数和方法采用lowercase_with_underscores（小写带下划线），
