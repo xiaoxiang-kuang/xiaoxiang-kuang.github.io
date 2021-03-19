@@ -5,7 +5,7 @@ categories:
 date: 2020-03-06 15:28
 ---
 
-artifact：工件	archive：归档、档案	general：普遍的，全体的，一般的
+artifact：工件	archive：归档、档案	architecture：结构	general：普遍的，全体的，一般的
 
 close policy：关闭策略	extract：提取	common：公共的、普通的
 
@@ -57,5 +57,16 @@ chain：链子	assert：断言	digest：摘要、消化、理解	poll：投票
 
 route：路线	migrate：迁移、移植	bypass：绕过、避开
 
-cascade：级联	contrib：贡献	abort：中断
+cascade：级联	contrib：贡献	abort：中断	encapsulate：封装
 
+optional：可选的	arbitrary：随机的、任意的	collapse：崩溃、折叠
+
+aggregate：集合	replica：副本、复制品	distributed：集群（distribute：分发）
+
+shard：碎片	coordination：协调	replication：重复、复制	decimal：小数
+
+apm：application performance management应用性能管理
+
+propose：建议、提议、提交	attach：附加	detach：拆卸、分离
+
+reverse：颠倒、逆向	compatible：兼容的	plain：平原、普通的

@@ -56,7 +56,7 @@ date: 2021-02-28 13:44:27
 
 * 代理可以将请求地址设置为自身的ip。
 * `Forwarded`（标准化版本）首部包含了代理服务器的客户端的信息。
-  * 语法：`FOrwarded:by=<identifier>;for=<identifier>;host=<host>;proto=<http|https>`
+  * 语法：`Forwarded:by=<identifier>;for=<identifier>;host=<host>;proto=<http|https>`
   * identifier可以是：①ip地址；②语义不明的标识符；③unknown。
   * `by=<identifier>`该请求进入代理服务器的接口。
   * `for=<identifier>`发起请求的客户端以及代理链中的一系列的代理服务器（这意味着要写多个for=）。
@@ -65,5 +65,12 @@ date: 2021-02-28 13:44:27
 * `X-Forwarded-For`：在客户端访问服务器的过程中，如果需要经过HTTP代理或者负载均衡服务器，可以使用该参数来获取最初发起请求的客户端的IP地址。
   * 语法：`X-Forward-For:<client>,<proxy1>,<proxy2>...`。
   * 第一个参数表示客户端的IP地址，如果一个请求经过了多个代理服务器，那么每一个代理服务器的IP都会被依次记录在内。
+* `X-Forwarded-Host`：用来确定客户端发起请求中使用Host指定的初始域名
+  * `Host`：Host请求头指明了请求将要发送到的服务器的主机名和端口号，所有**HTTP/1.1请求报文中必须包含一个Host头字段**。
+* `X-Forwarded-Proto`：用来确定客户端与代理服务器或者负载均衡服务器之间连接所采用的传输协议。
 
-https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Forwarded
+### HTTP报文
+
+* 对于一些像post这样的方法，报文的body就包含了要发送的资源。
+
+https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Overview
