@@ -71,6 +71,54 @@ date: 2021-02-28 13:44:27
 
 ### HTTP报文
 
-* 对于一些像post这样的方法，报文的body就包含了要发送的资源。
+* headers中以x开头的都不是http标准协议
+
+#### http请求组成
+
+```text
+#一个http的动作，如下面的method
+#要获取的资源路径，如下面的/chat
+#HTTP协议版本号
+GET /chat HTTP/1.1
+#Headers，为服务器表达其他的信息
+#Host指明了要发送到的服务器主机名
+Host: xiaoxiang.space
+#指明了client的应用类型，操作系统、软件开发商及版本号
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:86.0) Gecko/20100101 Firefox/86.0
+#告知服务器客户端可以处理的内容类型，采用mime来表示，;q=表示前面这个类型权重因子，没写就默认是1
+Accept: application/json, text/javascript, */*; q=0.01
+#客户端声明其能理解的自然语言
+Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2
+#会将客户端能够理解的内容编码方式通知给服务端。对应Content-Encoding
+Accept-Encoding: gzip, deflate
+#指示资源的MIME类型，下面这是post请求的默认格式
+#加了这个就是ajax异步请求
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+X-Requested-With: XMLHttpRequest
+Content-Length: 22
+Origin: http://xiaoxiang.space
+Connection: keep-alive
+Referer: http://xiaoxiang.space/index
+Cookie: JSESSIONID=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+#对于一些POST这样的方法，报文的body也包含了发送的资源
+```
+
+#### HTTP响应组成
+
+```text
+#一个HTTP协议版本号
+#一个状态码
+#一个状态信息，我这个请求中居然没有？？？
+HTTP/1.1 200 
+#HTTP headers
+Set-Cookie: xiaoxiang.space=1; Max-Age=3600; Expires=Tue, 23-Mar-2021 11:21:23 GMT
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Tue, 23 Mar 2021 10:21:23 GMT
+Keep-Alive: timeout=20
+Connection: keep-alive
+```
+
+
 
 https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Overview
