@@ -1,9 +1,9 @@
 ---
 title: mime
 categories:
-  - [web]
+  - [web,http]
 site: web
-date: 2021-03-19 16:47:06
+date: 2021-02-19 16:47:06
 ---
 
 * MIME：multipurpose internet mail extensions媒体类型
