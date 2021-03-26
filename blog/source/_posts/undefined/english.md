@@ -7,7 +7,7 @@ date: 2020-03-06 15:28
 
 artifact：工件	archive：归档、档案	architecture：结构	general：普遍的，全体的，一般的
 
-close policy：关闭策略	extract：提取	common：公共的、普通的
+close policy：关闭策略	extract：提取	common：公共的、普通的	compression：压缩
 
 perform：执行	reference to：提及	integration：整合
 
@@ -35,7 +35,7 @@ granularity：粒度	compact：紧凑	statement：声明、账单、语句	synta
 
 case insensitive：大小写不敏感	clause：子句、从句	aggregate：聚集
 
-process：处理	combination：结合	correspond：一致、符合
+process：处理	combination：结合	correspond：一致、符合、（corresponding相应的）
 
 in contrast to：相比	distribute：分发、分配	appropriate：合适的
 
@@ -70,3 +70,20 @@ apm：application performance management应用性能管理
 propose：建议、提议、提交	attach：附加	detach：拆卸、分离
 
 reverse：颠倒、逆向	compatible：兼容的	plain：平原、普通的
+
+register：记录、注册	legacy：遗产	manifest：清单、显然的	constraint：约束
+
+palette：调色板	hint：提示、暗示	intent：意图	vertical：垂直的
+
+restriction：限制	resume：继续、恢复、简历	collaborate：合作
+
+expire：过期	explicitly：明确的	chunk：数据块	poll：轮询
+
+carriage：车辆（carriage return回车)	feed：喂（line feed换行）
+
+mechanism：机制	inspect：检查	mitgate：检查	technique：技术
+
+scheme：方案	presence：存在、到场	optimize：优化
+
+time to live：存活时间	toggle：切换	instantly：立刻
+
