@@ -87,3 +87,6 @@ scheme：方案	presence：存在、到场	optimize：优化
 
 time to live：存活时间	toggle：切换	instantly：立刻
 
+scale：规模	minus：减	exponent：指数	asset：资产
+
+threshold：阈值

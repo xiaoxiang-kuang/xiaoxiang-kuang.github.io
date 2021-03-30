@@ -1,5 +1,5 @@
 ---
-title: android-studio
+title: android
 categories:
   - [其他]
 date: 2021-03-22 14:36:24

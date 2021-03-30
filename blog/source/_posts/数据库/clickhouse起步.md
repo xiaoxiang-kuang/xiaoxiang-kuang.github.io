@@ -44,10 +44,23 @@ date: 2021-03-11 10:00:32
 #### merge tree
 
 * MergeTree：设计用于插入大量数据当一张表当中。数据可以以数据片段的形式一个接一个的快速写入，数据片段在后台按照一定的规则进行合并。
-* VersionedCollapsingMergeTree：允许快速写入不断变化的对象状态；删除后台中的旧对象状态。
-* SummingMergeTree：合并SummingMergeTree表的数据片断时，clickhouse会把所有具有相同主键的行合并为一行，该行包含了被合并的行中具有数值数据类型的列的汇总值。如果主键的组合方式使得单个键值对应于大量的行，则可以显著的减少存储空间并加快数据查询的速度。
-* ReplacingMergeTree：该引擎会删除排序键值相同的重复项。适用于在后台清除重复的数据以节省空间，但不保证没有重复数据出现。
+
+* SummingMergeTree：合并SummingMergeTree表的数据片断时，clickhouse会把所有具有**相同主键的行合并为一行**，该行包含了被合并的行中具有数值数据类型的列的汇总值。如果主键的组合方式使得单个键值对应于大量的行，则可以显著的减少存储空间并加快数据查询的速度。
+
+* ReplacingMergeTree：该引擎会**删除排序键值相同**的重复项。适用于在后台清除重复的数据以节省空间，但不保证没有重复数据出现。在数据合并的时候，如果制定了Replcaing的参数，当参数未指定，则保留最后一条数据，当参数已指定，则保留ver值最大的版本。数据的去重只会在数据的合并期间进行，所以常常今天数据重复了，明天看数据还没有被去重。
+
 * AggregateMergeTree：改变了数据片段的合并逻辑。clickhouse会将一个数据片段内所有具有相同主键的行替换为一行，这一行会存储一系列聚合函数的状态。可以使用AggregatingMergeTree表来做增量数据的聚合统计，包括物化视图的数据聚合。
+
+* CollapsingMergeTree：会异步的删除掉所有字段的值都相等（除了列Sign，该列一个为1，一个为-1）的成对的行，下面这两行就会被删除。
+
+  * | UserId | PageViews | Duration | Sign |
+    | ------ | --------- | -------- | ---- |
+    | 123    | 5         | 146      | 1    |
+    | 123    | 5         | 146      | -1   |
+
+  * 1是状态行，-1是状态取消行
+
+* VersionedCollapsingMergeTree：用于相同目的的折叠树但使用了不同的折叠算法，允许以多个线程的任何顺序插入数据。Version列有助于正确折叠行，即使他们以错误的顺序插入。而CollapsingMergeTree只允许严格的连续插入。
 
 ##### MergeTree
 
@@ -76,7 +89,7 @@ date: 2021-03-11 10:00:32
 
   * ENGINE：引擎名和参数
 
-  * ORDER BY：排序键，可以是一组列的元组或任意的表达式。**如果没有用PRIMARY KEY显式指定主键，clickhouse会使用排序键作为主键**，如果不需要tuple，可以使用ORDER BY tuple()
+  * ORDER BY：排序键，可以是一组列的元组或任意的表达式。**如果没有用PRIMARY KEY显式指定主键，clickhouse会使用排序键作为主键**，如果不需要排序，可以使用ORDER BY tuple()
 
   * PARTITION BY：分区键，要按月分区，可以使用表达式toYYYYMM(date_column)，这里date_column是一个Date类型的列，分区的格式会是YYYYMM
 
@@ -84,7 +97,9 @@ date: 2021-03-11 10:00:32
 
   * SIMPLE BY：用于抽样表达式，如果要用抽样表达式，主键中必须包含这个表达式。如`SAMPLE BY intHash32(UserID) ORDER BY (CounterID, EventDate, intHash32(UserID))`
 
-  * TTL：指定行存储的持续时间并定义数据片段在硬盘和卷上的移动逻辑的规则列表。
+  * TTL：可以为表设置，也可以为每个列单独设置
+
+    * 表TTL：表可以设置一个用于移除过期行的表达式，当表中的行过期时，clickhouse会删除所有对应的行。clickhouse在数据片段合并的时候会删除掉过期的数据，如果在合并的过程中执行SELECT查询，则可能得到过期的数据。
 
   * SETTINGS：控制MergeTree行为的额外参数
 
@@ -110,3 +125,15 @@ date: 2021-03-11 10:00:32
   * TTL表达式的计算结果必须是日期或日期时间类型的字段
 
 [MergeTree](https://clickhouse.tech/docs/zh/engines/table-engines/mergetree-family/mergetree/)这一块越看越迷惑，之后再来接着看吧。
+
+#### 日志引擎
+
+* 是为了需要写入许多小数据量（少于一百万行）的表的场景而开发的。
+
+##### 该引擎的共同属性
+
+1. 写入时将数据追加到文件末尾。
+2. 不支持索引。
+3. 非原子地写入数据。
+
+* Log和StripeLog支持并行读取数据，Log引擎将表中的每一列使用不同的文件；StripeLog将所有的数据存储到一个文件中

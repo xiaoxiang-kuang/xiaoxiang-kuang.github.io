@@ -6,8 +6,6 @@ site: web
 date: 2021-03-02 20:22:15
 ---
 
-* 一个block形式展现的块级元素不会被嵌套进内联元素中，但可以嵌套在其他块级元素中。
-
 ## head
 
 * `<meta>`:元数据就是描述数据的地方
@@ -42,5 +40,6 @@ date: 2021-03-02 20:22:15
 * `<address>`：标记联系方式的元素。
 * `<code> <pre> <var> <kbd> <samp>`：用于展示计算机代码。
 * `<time datetime="2021-03-10">2021年3月10日</time>`：标记时间，可供机器识别格式。
+* 一个block形式展现的块级元素不会被嵌套进内联元素中，但可以嵌套在其他块级元素中。
 
 https://developer.mozilla.org/zh-CN/docs/Learn/HTML/Introduction_to_HTML/Document_and_website_structure
