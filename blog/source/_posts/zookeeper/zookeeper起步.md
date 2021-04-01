@@ -40,6 +40,12 @@ server.3=zoo3:2888:3888
   * `get /zk_test`：验证数据是否与znode关联
   * `set /zk_test junk`：来更改与zk_test相关的数据
   * `delete /zk_test`
-* zookeeper中所有存储的数据是由znode组成，以key/value的形式存储数据。每个节点都有一个访问控制列表
-* acl：`access control list`访问控制表
 
+## Znode
+
+* 组成
+  * data：Znode存储的数据信息
+  * stat：包含Znode的各种元数据，如事务ID、版本号、时间戳、大小等
+  * child：当前节点的子节点引用
+  * acl：`access control list`访问控制表，表示哪些人或哪些ip可以访问本节点
+* Znode是用来存储少量的状态和配置信息，每个节点的数据最大不能超过1MB
