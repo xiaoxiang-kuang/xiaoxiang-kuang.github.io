@@ -47,6 +47,8 @@ date: 2021-01-28 13:49:03
 * `git tag`可以给某一时间点的版本打标签。
 * `git remote set-url origin 仓库地址`：修改仓库的远程地址
 * `git remote -v`：查看当前仓库对应的远程地址。
+* `git update-index --assume-unchanged 文件名`：取消本地跟踪
+* `git update-index --no-assume-unchanged 文件名`：恢复本地跟踪
 * 协议：
   * ssh协议：唯一一个同时支持读写操作的网络协议，但无法实现对仓库的匿名访问。
   * git协议：该协议通常用来克隆，**通常**不能用来推送（因为没有授权机制，如果允许推送操作，每一个知道该URL的人都有推送权限），比http协议高效。
