@@ -104,5 +104,6 @@ theme: default
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: git  
+  #repo: git@github.com:into-nightfall/xiaoxiang.github.io.git
   repo: git@gitee.com:xiaoxiangxiong/xiaoxiangxiong.git
   branch: master

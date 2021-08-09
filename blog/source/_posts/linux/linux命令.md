@@ -15,3 +15,4 @@ date: 2021-02-08 11:29:58
   * `-a --all`显示所有连线中的socket
   * `-o`：windows下是显示进程的PID
   * `-n --numeric`：显示IP地址而不是域名
+* `df -h`查看磁盘的信息
