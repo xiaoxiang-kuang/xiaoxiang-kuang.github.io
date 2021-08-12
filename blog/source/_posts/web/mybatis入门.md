@@ -1,8 +1,8 @@
 ---
 title: mybatis入门
 categories:
-  - [java,web]
-site: java
+  - [web]
+site: web
 date: 2021-04-02 09:26:31
 ---
 
