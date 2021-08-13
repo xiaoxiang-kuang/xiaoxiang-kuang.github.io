@@ -1,7 +1,7 @@
 ---
 title: django起步
 categories:
-  - [python, django]
+  - [python]
 site: python
 date: 2021-03-16 15:38:07
 ---
