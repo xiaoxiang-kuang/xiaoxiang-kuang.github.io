@@ -31,7 +31,7 @@ date: 2021-01-28 13:49:03
    * 当编辑过某些文件后，git将这些文件标记为已修改，这就跟[tag1](#modified)对于上了。
 6. 使用`git add`开始跟踪一个新文件，`git add .`暂存当前路径下的所有的已修改的文件。
    * 通过`git status`可以查看文件的状态。
-   * 取消已暂存的状态`git reset HEAD  "文件名"`
+   * 取消已暂存的状态`git reset [--mixed] HEAD  "文件名"`，该方式会清除暂存区的数据，保留工作目录的数据。
 7. 使用`git commit -m "提交说明"`来提交暂存区的数据到**本地仓库**。
 8. 使用`git push origin master` 将修改提交到远程仓库。（使用`ssh-keygen`生成密钥，并将公钥放到git上去，以后提交就不用输账号和密码了）。
    * `git push [remote-name] [branch-name]`，这是完整命令。当使用克隆命令时，默认使用origin作为远程仓库的名字，master作为本地分支的名字，`git push`不加其他参数也能用，但是如果你创建了好几个分支就得加上[remote-name]和[branch-name]。
