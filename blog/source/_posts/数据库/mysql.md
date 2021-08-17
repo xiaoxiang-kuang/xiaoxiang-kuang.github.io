@@ -29,10 +29,10 @@ date: 2021-02-04 15:58:03
   * float（4字节）、double（8字节）。
 * 日期和时间类型
 
-  * DATE（YYYY-MM-DD）、DATETIME（YYYY-MM-DD hh:mm:ss）、TIMESTAMP（范围是UTC1970-01-01 00:00:01~UTC2038-01-19 03:14:07)、TIME（范围-838:59:59~838:59:59）、YEAR（范围是1901~2155）
+  * DATE（YYYY-MM-DD）、DATETIME（YYYY-MM-DD hh:mm:ss）、TIMESTAMP（范围是UTC1970-01-01 00:00:01-UTC2038-01-19 03:14:07)、TIME（范围-838:59:59-838:59:59）、YEAR（范围是1901-2155）
 * 字符串类型
 
-  * CHAR（长度为声明时的长度，范围0~255）、VARCHAR（可变长度，范围时0~65535）、4种TEXT。
+  * CHAR（长度为声明时的长度，范围0-255）、VARCHAR（可变长度，范围时0-65535）、4种TEXT。
 
 #### DATABASE
 
@@ -46,7 +46,7 @@ CRATE DATABASE db_name [[DEFAULT] CHARACTER SET [=] utf8];
 
 * 克隆和复制。
 
-```MYSQL
+```sql
 #从origin_tb1克隆一个新表（只有结构，没有数据）。
 CREATE TABLE new_tb1 LIKE origin_tb1;
 #复制origin_tb1表，（结构和数据都复制了）。
@@ -60,14 +60,14 @@ CREATE TABLE new_tb1 AS SELECT * FROM origin_tb1;
 * mysql将账户存储在mysq数据库的user表中。
 * `CREATE USER`用于创建性的mysql用户；账户首次创建没有特权，需要使用`GRANT`分配特权。
 
-```MYSQL
+```sql
 #如果不指定主机，默认就是'%'（所有ip都能访问）
 CREATE USER 'jeffrey'@'localhost' IDENTIFIED BY 'password';
 ```
 
 * `ALTER USER`修改账户的信息（如修改密码）。不推荐使用`SET PASSWORD`来修改密码。
 
-```MYSQL
+```sql
 #修改自己的密码，USER()会返回当前登录用户的用户名和主机名
 ALTER USER USER() IDENTIFIED BY 'password';
 #锁定账户
@@ -77,7 +77,7 @@ ALTER USER 'jeffrey'@'localhost' ACCOUNT UNLOCK;
 
 * `GRANT`用来对账户进行授权，`REVOKE`用来撤销账户特权。
 
-```MYSQL
+```sql
 #授予除GRANT和PROXY外的所有特权
 #还可以授予ALTER、CREATE、DELETE、DROP、SELECT、UPDATE、GRANT OPTION
 GRANT ALL ON db1.* TO 'jeffrey'@'localhost';
@@ -90,7 +90,7 @@ REVOKE ALL [PRIVILEGES], GRANT OPTION FROM 'jeffrey'@'localhost';
 
 ### SHOW
 
-```MYSQL
+```sql
 #显示属性
 SHOW COLUMNS FROM MYSQL.USER;
 #显示建库语句
