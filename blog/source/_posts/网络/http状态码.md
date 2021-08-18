@@ -17,3 +17,5 @@ date: 2021-08-17 15:47:27
 * `500 INTERNAL SERVER ERROR`服务器内部错误。
 * `502 BAD GATEWAY`服务器作为网关需要得到处理该请求的响应，但得到了一个错误的响应。
 * `503 SERVICE UNAVILABLE`服务器没有准备好处理请求。
+
+**参考链接：**[HTTP 响应代码 - HTTP | MDN (mozilla.org)](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status)
