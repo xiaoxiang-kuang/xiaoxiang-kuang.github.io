@@ -3,10 +3,10 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: 小象のblog
+title: 小象的blog
 subtitle: ''
-description: '记录学习笔记'
-keywords: 'xiaoxiang,小象のblog'
+description: '这是小象的个人网站，用来做学习笔记'
+keywords: 'xiaoxiang,小象的blog,小象'
 author: '小象'
 language: en
 timezone: ''
@@ -107,3 +107,6 @@ deploy:
   #repo: git@github.com:into-nightfall/xiaoxiang.github.io.git
   repo: git@gitee.com:xiaoxiangxiong/xiaoxiangxiong.git
   branch: master
+
+#自定义参数
+git_index: https://gitee.com/xiaoxiangxiong

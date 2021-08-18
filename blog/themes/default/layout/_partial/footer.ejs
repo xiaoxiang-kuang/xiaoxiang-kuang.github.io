@@ -4,8 +4,11 @@
   <% } %>
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; <%= date(new Date(), 'YYYY') %> <%= config.author || config.title %><br>
-      <%= __('powered_by') %> <a href="http://hexo.io/" target="_blank">Hexo</a>
+	  <span>友情链接:</span>
+	  <a href="<%= config.git_index %>" target="_blank">git主页</a>
+	  <br>
+      &copy; <%= date(new Date(), 'YYYY') %> <%= config.author || config.title %> |
+	  <%= __('powered_by') %> <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>
