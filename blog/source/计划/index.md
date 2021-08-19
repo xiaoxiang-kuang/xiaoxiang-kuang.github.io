@@ -2,13 +2,12 @@
 title: 计划
 date: 2021-08-19 19:39:40
 ---
-
 <style>
-  li{
+	#plan li{
       list-style-type:none;
     }
 </style>
-
+<div id="plan">
 
 - [ ] 学习tcp的头部
 - [ ] 学习jwt
@@ -17,4 +16,8 @@ date: 2021-08-19 19:39:40
 - [x] 学习mysql授权指令、基本数据类型
 - [ ] 学习mysql的view和建表语句
 - [ ] 学习gradle
+
+</div>
+
+
 
