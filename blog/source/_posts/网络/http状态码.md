@@ -1,7 +1,7 @@
 ---
 title: http状态码
 categories:
-  - [网络]
+  - [网络,http]
 site: 网络
 date: 2021-08-17 15:47:27
 ---
