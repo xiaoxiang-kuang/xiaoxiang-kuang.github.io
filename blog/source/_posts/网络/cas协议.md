@@ -1,12 +1,12 @@
 ---
 title: cas协议
 categories:
-  - [javaee]
-site: javaee
+  - [网络]
+site: 网络
 date: 2021-08-19 15:45:06
 ---
 
-**[CAS详细流程](/img/javaee/cas协议/1.png)**
+**[CAS详细流程](/img/网络/cas协议/1.png)**
 
 ### CAS协议
 
