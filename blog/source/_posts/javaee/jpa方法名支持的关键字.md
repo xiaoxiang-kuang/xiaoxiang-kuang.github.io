@@ -6,6 +6,8 @@ site: javaee
 date: 2021-08-18 11:19:52
 ---
 
+<div style="overflow:auto;">
+
 | 关键字            | 例子                                                    | jpql                                                       |
 | ----------------- | ------------------------------------------------------- | ---------------------------------------------------------- |
 | Distinct          | findDistinctByLastnameAndFirstname                      | select distinct ... where x.lastname=?1 and x.firstname=?2 |
@@ -32,3 +34,5 @@ date: 2021-08-18 11:19:52
 | True              | findByActiveTrue                                        | … where x.active = true                                    |
 | False             | findByActiveFalse()                                     | … where x.active = false                                   |
 | IgnoreCase        | findByFirstnameIgnoreCase                               | … where UPPER(x.firstname) = UPPER(?1)                     |
+
+</div>
