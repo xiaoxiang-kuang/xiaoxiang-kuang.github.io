@@ -4,7 +4,9 @@ categories:
   - [其他]
 date: 2021-08-21 15:38:59
 ---
+* 放在博客园了，[idea创建servlet项目 - 小象MAX - 博客园 (cnblogs.com)](https://www.cnblogs.com/xiaoxiangmax/p/15169878.html)
 
+<!--
 ![](/img/其他/idea创建servlet项目/1.png)
 
 ![](/img/其他/idea创建servlet项目/2.png)
@@ -58,3 +60,4 @@ date: 2021-08-21 15:38:59
 ![](/img/其他/idea创建servlet项目/22.png)
 
 ![](/img/其他/idea创建servlet项目/23.png)
+-->

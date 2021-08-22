@@ -105,8 +105,8 @@ theme: default
 deploy:
   type: git  
   #repo: git@github.com:into-nightfall/xiaoxiang.github.io.git
-  repo: git@gitee.com:xiaoxiangxiong/xiaoxiangxiong.git
+  repo: git@gitee.com:xiaoxiangmax/xiaoxiangmax.git
   branch: master
 
 #自定义参数
-git_index: https://gitee.com/xiaoxiangxiong
+git_index: https://gitee.com/xiaoxiangmax
