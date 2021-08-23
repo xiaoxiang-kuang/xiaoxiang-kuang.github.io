@@ -30,6 +30,7 @@ date: 2021-04-02 09:26:31
     <!--映射文件位置-->
     <mappers>
         <mapper resource="space/xiaoxiang/dao/XxxxMapper.xml"/>
+        <!--<package name="space.xiaoxiang.dao"/> 使用package接口的包名必须与xml包名一样-->
     </mappers>
 </configuration>
 ```
@@ -96,6 +97,5 @@ public void test() throws IOException {
     }
 }
 ```
-
 
 
