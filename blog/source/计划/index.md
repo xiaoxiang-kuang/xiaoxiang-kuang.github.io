@@ -9,7 +9,8 @@ date: 2021-08-19 19:39:40
 </style>
 <div id="plan">
 
-- [ ] 学习https
+- [ ] curl
+- [x] 学习https
 - [ ] 密码学
 - [ ] 计算机网络
 - [ ] 学习tcp的头部
