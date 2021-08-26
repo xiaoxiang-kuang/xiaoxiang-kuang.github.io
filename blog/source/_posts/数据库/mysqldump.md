@@ -6,9 +6,9 @@ site: 数据库
 date: 2021-08-24 16:14:08
 ---
 
-mysqldump的优势是可以在数据恢复之前放电的查看和编译文件，或者进行少了的修改以进行测试。但它不是备份大量数据的解决方案。
+mysqldump的可以备份数据库。但它不是备份大量数据的解决方案。
 ``` shell
-mysqldump [options] db_name> file_name
+mysqldump [options] db_name > file_name
 mysqldump [options] --databases db_name ...
 ```
 

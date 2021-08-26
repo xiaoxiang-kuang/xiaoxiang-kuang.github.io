@@ -11,6 +11,21 @@ date: 2021-02-08 11:29:58
 * `tail`默认输出10行的数据。
   * `tail -f filename`文件内容如果有增加，输出增加的内容。
   * `-n num filename`输出文件末尾的n行，开始默认是10行。
+* `curl`（client url）通过指定的url上传或者下载数据。
+  * `curl xiaoxiang.space`查看网页源码。
+  * `curl -o [文件名] xiaoxiang.space`保存文件。
+  * 使用`-L`参数，当有重定向时，会跳转到新的网址。
+  * `-i`显示http response的头信息，同时也会显示网页代码。
+  * `-I/--head`只显示http response。
+  * `-v`显示一次http通信的整个过程。
+  * 发送get请求和参数，直接把数据附加到网址后面就行。
+  * `curl -X POST --data-urlencode "data=xxx" example.com/xxx`发送post请求。`-X`参数可以支持几个动词。
+  * `--User-Agent`、`--cookie`等，`--header`增加一个头信息。
+  * `--user name:password`http认证。
+  * `-k`跳过ssl检测。
+  * `--limit-rate`限制HTTP请求和回应的带宽。
+  * **参考链接：**[curl网站开发指南 - 阮一峰的网络日志 (ruanyifeng.com)](https://www.ruanyifeng.com/blog/2011/09/curl.html)
+  * **参考链接：**[curl 的用法指南 - 阮一峰的网络日志 (ruanyifeng.com)](https://www.ruanyifeng.com/blog/2019/09/curl-reference.html)
 
 ##### 系统管理
 

@@ -6,7 +6,7 @@ site: 数据库
 date: 2021-08-18 16:20:11
 ---
 
-* mysqladmin可以用来检测服务的配置和当前的状态等。
+* mysqladmin可以用来检测服务的配置、创建数据库、关闭mysql服务等。
 
 ```shell
 mysqladmin [options] command [command-arg] [command [command-arg]]
