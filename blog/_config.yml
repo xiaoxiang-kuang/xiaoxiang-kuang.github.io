@@ -4,7 +4,6 @@
 
 # Site
 title: 小象的blog
-subtitle: ''
 description: '这是小象的个人网站，用来做学习笔记'
 keywords: 'xiaoxiang,小象的blog,小象'
 author: '小象'
@@ -18,8 +17,8 @@ root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 pretty_urls:
-  trailing_index: true # Set to false to remove trailing 'index.html' from permalinks
-  trailing_html: true # Set to false to remove trailing '.html' from permalinks
+  trailing_index: false # Set to false to remove trailing 'index.html' from permalinks
+  trailing_html: false # Set to false to remove trailing '.html' from permalinks
 
 # Directory
 source_dir: source
