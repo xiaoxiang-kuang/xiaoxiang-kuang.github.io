@@ -1,4 +1,5 @@
 blog/public/
+blog/nohup.*
 
 # Windows thumbnail cache files
 Thumbs.db

@@ -6,11 +6,7 @@ site: linux
 date: 2021-02-08 11:29:58
 ---
 
-* `df -h`查看磁盘的信息
 * `history  n`用来查询过去执行的指令。bash会记录使用过的指令，默认记录1000个，指令存放位置在~/.bash_history中。该文件会记录上一次登录之前的指令，而这一次登录所执行的指令都存在内存中，当注销后，这些指令才会记录到.bash_history中。
-* `tail`默认输出10行的数据。
-  * `tail -f filename`文件内容如果有增加，输出增加的内容。
-  * `-n num filename`输出文件末尾的n行，开始默认是10行。
 * `curl`（client url）通过指定的url上传或者下载数据。
   * `curl xiaoxiang.space`查看网页源码。
   * `curl -o [文件名] xiaoxiang.space`保存文件。
@@ -27,7 +23,9 @@ date: 2021-02-08 11:29:58
   * **参考链接：**[curl网站开发指南 - 阮一峰的网络日志 (ruanyifeng.com)](https://www.ruanyifeng.com/blog/2011/09/curl.html)
   * **参考链接：**[curl 的用法指南 - 阮一峰的网络日志 (ruanyifeng.com)](https://www.ruanyifeng.com/blog/2019/09/curl-reference.html)
 
-##### 系统管理
+## 系统管理
+
+### 网络
 
 * netstat：显示网络状态
   * `netstat -tulnp`用来获取目前主机已启动的服务
@@ -37,7 +35,11 @@ date: 2021-02-08 11:29:58
   * `-n `：显示数字而不是别名
   * -p显示socket的pid/程序名
   
+
+### 进程
+
 * `ps aux`查询所有系统运行的进程
+  
   * %CPU：使用的cpu资源百分比；%mem：使用的内存资源百分比；vsz：使用的虚拟内存Kb；rss：占用的固定内存Kb；tty：该进程是在哪个终端机上运行，如果于与终端机无关则显示？；stat：进程目前状态（R运行；S睡眠但可被唤醒；D不可被唤醒；T停止状态；Z僵尸状态）；time：实际使用cpu的时间。
   
 * `top [-d n]`每隔n秒（默认为5）更新一次
@@ -68,30 +70,44 @@ date: 2021-02-08 11:29:58
   * example：当使用vim时，会产生一个.filename.swp文件，使用-15时，vim会以正常的步骤结束vi的工作，所以.filename.swp会被主动的移除，但如果使用-9，由于vim工作被强制移除了，所以.filename.swp就会继续存在文件系统中。
   
 
-##### vim
+## 文件
 
-通过配置~/.vimrc（不建议修改/etc/vimrc）可以设定一些vim的属性，在vim的命令模式输入`:set all`可以查到
+### 查看文件内容
 
-* `ctrl+f`向下移动一页
-* `ctrl+b`向上移动一页
-* `0或者home`移动到这一列的最前面
-* `$或end`移到这一列最后一页
-* `G(注意是大写)`移到文件的最后一列
-* `gg`移到文件的第一列
-* `n+enter`光标向下移动n列
-* `/word`搜索为名称为word的字符串
-* `:1,100s/word1/word2/g`[第一行，第二行]中所有的word1被替换成word2
-* `:1,$s/word1/word2/g`第一行到最后一行所有word1被替换为word2
-* `:1,$s/word1/word2/gc`第一行到最后一行所有word1被替换为word2，且在取代前会提示字符给用户确认
-* `dd`删除当前一整行
-* `yy`复制一整行
-* `p`将复制的数据在光标的下一行粘贴，`P`在光标的上一行粘贴
-* `u`复原前一个动作
-* `ctr+r`重复上一个动作
-* `:w [filename]`将文件另存为
-* `:set nu/nonu`开启/关闭行号
+* cat：从第一行开始显示文件内容
+  * `-n`标上行号
+* tac：从最后一行开始显示
+* nl：显示的时候输出行号
+* more：一页一页的显示文件内容
+* less：与more类似，但是可以往前翻
+  * `/srting`，向下搜索string
+  * `?string`，向上搜索string
+* head：只看头几行
+  * 默认是显示10行
+  * `head -n -100 filename`文件后面100行不显示
+* tail：只看尾几行
+  * 默认是显示10行
+  * `tail -f filename`文件内容如果有增加，输出增加的内容
+  * `-n num filename`输出文件末尾的n行，默认是10行
+  * `tail -n +100 filename`文件100行以后都会被列出来
+* od：以二进制查看
+* file：查看文件类型
 
-##### 解压
+### 查找文件
+
+* whereis：针对几个特定目录查找文件，`whereis -l`查看这几个特定目录。
+* which：根据PATH查看可执行文件。
+* locate：根据/var/lib/mlocate内的数据库记载搜索文件（数据库未更新前搜索某新建的文件可能搜不到）。
+* find：强大的查询工具。用法`find [PATH] [option] [action]`，PATH可以是多个目录，find查找会进入子目录。
+  * 查看/home下3天前到4天前中间的24小时内有修改的文件`find /home -mtime 3`（如果是+3表示大于等于3天前的文件名，-3表示小于等于3天内的文件名）；
+  * 查看/home下属于bes的文件`find /home -user bes`，查看不属于任何人的文件`find / -nouser`；
+  * 查到/home下文件名包含了passwd的文件名`find /home -name "*passwd*"`;
+  * 查看/home下文件类型为普通文件的文件名`find /home -type f`;
+  * 查看文件权限大于755的文件名`find -perm /755`；
+  * `find / -perm /7000 -exec ls -l {} \;`其中{}表示find找到的内容会放到{}中；-exec到\;是关键字，表示开始和结束。
+  * find查找会直接去查找磁盘，可能比较慢。
+
+### 压缩
 
 * `tar -xzvf xxx.tar.gz`解压文件
   * -x extract提取文件；-z通过gzip处理文件；-v：verbose显示执行过程；-f指定文件名
@@ -99,7 +115,11 @@ date: 2021-02-08 11:29:58
   * -c：create生成文件
   * tips：-C（大写）将文件放到指定文件夹
 
-##### 权限
+### 权限
 
 * `chown [-R] name:groupname 文件或目录`来修改文件的拥有者，-R表示递归。
+
+### 磁盘
+
+* `df -h`查看磁盘的信息
 
