@@ -71,3 +71,17 @@ export HEAP="-Xms1024m -Xmx1024m"
 ##### 点击绿色三角执行测试，点击靠右边的扫帚清除之前的测试数据。
 
 **参考链接：**[Apache JMeter - User's Manual: Building a Web Test Plan](https://jmeter.apache.org/usermanual/build-web-test-plan.html)
+
+#### 命令行模式（CLI Mode）
+
+* -n指定JMeter运行在cli模式。
+* -t指定JMX文件。
+* -l 指定jtl文件的名称，该文件是用来记录结果。
+* -e加载完测试后生成报告。
+* -o生成报告的文件夹的位置，必须为空或者不存在。
+
+```sh
+jmeter -n -t  test.jmx -l sso.jtl -e -o test
+```
+
+**参考链接：**[Apache JMeter - User's Manual: Getting Started](http://jmeter.apache.org/usermanual/get-started.html#non_gui)

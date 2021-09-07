@@ -14,6 +14,7 @@ date: 2021-08-17 15:47:27
 * `401 UNAUTHORIZED`当前请求需要用户验证。
 * `403 FORBIDDEN`服务器已经理解请求，但是拒绝执行。
 * `404 NOT FOUND`请求资源未找到。
+* `405 Method Not Allowed`请求方法不能被用于请求相应的资源。
 * `500 INTERNAL SERVER ERROR`服务器内部错误。
 * `502 BAD GATEWAY`服务器作为网关需要得到处理该请求的响应，但得到了一个错误的响应。
 * `503 SERVICE UNAVILABLE`服务器没有准备好处理请求。
