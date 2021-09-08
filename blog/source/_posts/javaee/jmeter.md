@@ -40,6 +40,8 @@ export HEAP="-Xms1024m -Xmx1024m"
 
 ##### 3. 添加cookie
 
+* 添加cookie管理后不需要做配置，除非需要在多个请求间共享cookie。添加了cookie管理后cookie会为每个请求管理cookie。
+
 ![](/img/javaee/jmeter/5.png)
 
 ![](/img/javaee/jmeter/6.png)
@@ -69,6 +71,8 @@ export HEAP="-Xms1024m -Xmx1024m"
 ![](/img/javaee/jmeter/11.png)
 
 ##### 点击绿色三角执行测试，点击靠右边的扫帚清除之前的测试数据。
+
+* 官方不建议在GUI模式下加载测试，GUI模式下用来创建测试案例和调试bug，测试需要在CLI模式下执行（命令行模式）。
 
 **参考链接：**[Apache JMeter - User's Manual: Building a Web Test Plan](https://jmeter.apache.org/usermanual/build-web-test-plan.html)
 
