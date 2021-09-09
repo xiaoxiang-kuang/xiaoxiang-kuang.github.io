@@ -20,13 +20,15 @@ server {
         proxy_pass http://localhost:8080/;
     }
     
+    #将会映射到/html/tool这个路径下
     location /tool {
     	root html;
     }
-	#正则表达式以~开始
+    #正则表达式以~开始，这里是匹配图片
     location ~ \.(gif|jpg|png)$ {
         root /data/images;
     }
 }
 ```
 
+**参考链接：**[Beginner’s Guide (nginx.org)](http://nginx.org/en/docs/beginners_guide.html)

@@ -1,6 +1,6 @@
 blog/public/
 blog/nohup.*
-
+blog/public.tar
 # Windows thumbnail cache files
 Thumbs.db
 ehthumbs.db

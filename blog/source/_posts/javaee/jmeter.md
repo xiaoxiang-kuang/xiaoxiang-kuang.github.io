@@ -89,3 +89,5 @@ jmeter -n -t  test.jmx -l sso.jtl -e -o test
 ```
 
 **参考链接：**[Apache JMeter - User's Manual: Getting Started](http://jmeter.apache.org/usermanual/get-started.html#non_gui)
+
+* 类似于JDBC的jar包需要放在JMETER_HOME/lib路径下；开发的jmeter工具应放在JMETER_HOME/lib/ext路径下。
