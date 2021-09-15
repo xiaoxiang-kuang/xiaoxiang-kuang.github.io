@@ -32,3 +32,17 @@ server {
 ```
 
 **参考链接：**[Beginner’s Guide (nginx.org)](http://nginx.org/en/docs/beginners_guide.html)
+
+#### nginx内嵌的一些变量
+
+```nginx
+#等于在proxy_pass指令中指定的被代理服务的主机名和端口
+$proxy_host
+#等于在proxy_pass中指定的服务的端口，或者是其服务的默认端口
+$proxy_port
+#如果X-Forwarded-For属性未在请求头中，$proxy_add_x_forwarded_for的值就等于$remote_addr;
+#如果X-Forwarded-For在请求头中，那$proxy_add_x_forwarded_for的值就等于上一个$proxy_add_x_forwarded_for加上",$remote_addr"。
+#例：proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for
+$proxy_add_x_forwarded_for
+```
+
