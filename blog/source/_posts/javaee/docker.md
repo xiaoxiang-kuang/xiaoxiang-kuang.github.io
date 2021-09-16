@@ -15,10 +15,11 @@ docker ps #获取容器的id
 docker stop <container-id> #停止容器运行
 docker rm <container-id> #移除容器
 docker rm -f <container-id> #停止并移除容器运行
+docker exec -i -t <container-id> /bin/bash #-i保持stdin打开，-t分配一个终端
 
 #根据当前路径的dockerfile构建一个镜像。-t给镜像起个名字。
 # . 表示在当前路径下，可以使用一个.dockerignore文件来忽略某些文件。
-docker build -t image_name:image_version .
+docker build -f Dockerfile -t image_name:image_version .
 #-d后台运行。-p将主机的端口映射到容器的端口。
 docker run -d -p 80:80 image_name:image_version
 #启动一个shell，执行了两个命令，第一个命令随机挑选了一个数并写到了txt文件中，第二个命令让容器保持运行

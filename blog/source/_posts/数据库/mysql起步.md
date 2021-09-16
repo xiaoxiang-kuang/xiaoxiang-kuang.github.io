@@ -14,6 +14,36 @@ date: 2021-02-04 15:58:03
 * unix下数据库名是大小写相关的。建议在创建数据库的时候要么全大写，要么全小写。
 * 查看当前账户拥有的权限，可以使用`show grants for 'joe'@'home.example.com'`。
 
+### linux上mysql布局
+
+| 文件资源             | 位置                                                         |
+| -------------------- | ------------------------------------------------------------ |
+| 客户端程序和脚本     | /usr/bin                                                     |
+| mysqld server        | /usr/sbin                                                    |
+| 配置文件地址         | /etc/my.cnf                                                  |
+| 数据存放目录         | /var/lib/mysql                                               |
+| 错误日志文件         | /var/log/mysqld.log                                          |
+| secure_file_priv     | /var/lib/mysql-files                                         |
+| System V init script | /etc/init.d/mysqld                                           |
+| Systemd服务          | mysqld                                                       |
+| Pid文件              | /var/run/mysql/mysqld.pid                                    |
+| Socket               | /var/lib/mysql/mysql.sock                                    |
+| 使用手册             | /usr/share/man                                               |
+| 字符集文件等其他文件 | /usr/share/mysql                                             |
+| 库                   | /usr/lib/mysql                                               |
+| **参考链接：**       | [MySQL :: MySQL 8.0 Reference Manual :: 2.5.4 Installing MySQL on Linux Using RPM Packages from Oracle](https://dev.mysql.com/doc/refman/8.0/en/linux-installation-rpm.html) |
+
+* `systemctl start mysqld`启动mysql。
+* mysql安装后，`'root'@'localhost'`超级用户被创建，其密码在`/var/log/mysqld.log`，使用`grep 'temporary password' /var/log/mysqld.log`来寻找密码。
+* 修改密码`ALTER USER 'root'@'localhost' IDENTIFIED BY 'newPassword'`。
+* mysql8修改成简单的密码会报错。解决流程如下：
+
+1. mysql8增加了一组变量来控制密码的长度、强度等。通过`SHOW VARIABLES LIKE 'validate_password%'`来查看。
+2. validate_password.length用来要求密码的最小长度，这个参数不得小于`validate_password.number_count+validate_password.special_char_count+2*validate_password.mixed_case_count)`。
+3. validate_password.policy会影响validate_password的其他变量是否有效（除validate_password.check_user_name），它的值可以为0(LOW)，1(MEDIUM)，2(STRONG)。为0则只检查length这个变量。
+4. 更改策略：`set global validate_password.policy=0;set global validate_password.number=4;`
+5. **参考链接：**[MySQL :: MySQL 8.0 Reference Manual :: 6.4.3.2 Password Validation Options and Variables](https://dev.mysql.com/doc/refman/8.0/en/validate-password-options-variables.html)
+
 ### 基础SQL
 
 #### 数据类型
@@ -58,9 +88,9 @@ CREATE TABLE new_tb1 AS SELECT * FROM origin_tb1;
 ```sql
 #显示属性
 SHOW COLUMNS FROM MYSQL.USER;
-#显示建库语句
-SHOW CREATE DATABASE MYSQL.USER;
-#显示建表语句
+#显示建库语句，例：
+SHOW CREATE DATABASE MYSQL;
+#显示建表语句，例：
 SHOW CREATE TABLE MYSQL.USER;
 #显示创建该用户的语句
 SHOW CREATE USER root;

@@ -42,14 +42,14 @@ mysqldump -u root -p --databases test --add-drop-database
   * 从外部导入（sql文件中指定了数据库的情况）。
 
   ```shell
-  shell>mysql <dump.sql
+  shell>mysql[-u root -p] <dump.sql
   ```
 
   * 外部导入（sql文件中未指定数据库）
 
   ``` shell
   shell> mysqladmin create db1 #如果有该数据库就不用建了
-  shell> mysql db1 < dump.sql #指定数据库
+  shell> mysql [-u root -p] db1 < dump.sql #指定数据库
   ```
 
   

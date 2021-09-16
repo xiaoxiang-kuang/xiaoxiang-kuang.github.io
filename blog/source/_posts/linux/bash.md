@@ -54,7 +54,7 @@ date: 2021-09-09 16:28:01
 
 * login shell是取得bash时需要输入完整的登录账号密码的就是login shell。
 * non-login shell就是取得bash接口不需要重复的登入。如从图形化界面进入linux后，开启每个bash都不需要再次输入用户名和密码。这就是non-login shell。
-* login shell会读取`/etc/profile`（系统整体的设定）和`~/.bash_profile或~/.bash_login或~/.profile`（个人的设定）的文件。
+* login shell会读取`/etc/profile`（系统整体的设定，每个使用者登入取得bash时一定会读取的配置文件。）和`~/.bash_profile或~/.bash_login或~/.profile`（个人的设定）的文件。
 * non-login shell仅会读取~/.bashrc。
 * source可以立即读入配置文件的内容。
 
@@ -122,9 +122,16 @@ str=${str:-root}
 * 黑洞装置`/dev/null`，可以吃掉任何导向这个装置的信息。
 * 将正确和错误输出都放到同一个文件中`find /home -name .bashrc > list 2>&1`。对2>&1的理解，这里2表示错误输出，意思是将错误输出重定向到标准输出，&1表示对标准输出的应用。
 * 管道`|`只会处理标准输出，会忽略标准错误输出。
-* 管道必须要接收上一个指令的标准输入。
+* 管道命令必须要接收上一个指令的标准输入，如less、more、head、tail时管道命令，而如ls、cp、mv就不是管道命令。
 * 管道后面第一个必须是指令。
 * 在管道中常常会使用前一个指令的输出作为后一个指令的输入，某些指令需要指定文件名来处理，该stdin和stdout可以使用`减号"-"`来替代。如`tar -cvf - /home | tar -xvf - -C /tmp/homeback`，这个命令是将/home里的文件打包，将打包的文件输出到stdout，后面的命令从stdin读取数据，所以我们就不需要文件名了，直接使用-代替。
+* grep [-in]  '搜索字符串'  filename：查找文件或标准输出中的字符串，-i表示忽略大小写，-n表示输出行号。
+* cut：将一段数据切出来
+  *  ` cat filename |cut -d '分隔字符'  -f num`：-d后面跟分隔字符，将数据分为几段，-f表示取出第几段。
+  *  `cat filename  |cut -c 12-`：-c表示每一行都获取从第12个字符后面的所有字符（注意12后面有个减号）。
+* `xargs [OPTION] COMMAND [R]`：读入stdin的数据，并以空格符作为分割，将stdin分割成参数。
+  * `xargs -n 1`表示每次执行指令值取一个参数。
+  * `xargs -I R`将从标准输入获取到的数据替换后面命令的参数R。
 
 ### 命令执行的判断依据 ;  &&  ||
 

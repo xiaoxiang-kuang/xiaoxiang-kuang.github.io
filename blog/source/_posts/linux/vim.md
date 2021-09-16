@@ -16,7 +16,7 @@ date: 2021-09-01 14:17:21
 * `gg`移到文件的第一列
 * `n+enter`光标向下移动n列
 * `/word`搜索为名称为word的字符串
-* `:1,100s/word1/word2/g`[第一行，第二行]中所有的word1被替换成word2
+* `:1,2s/word1/word2/g`[第一行，第二行]中所有的word1被替换成word2
 * `:1,$s/word1/word2/g`第一行到最后一行所有word1被替换为word2
 * `:1,$s/word1/word2/gc`第一行到最后一行所有word1被替换为word2，且在取代前会提示字符给用户确认
 * `dd`删除当前一整行

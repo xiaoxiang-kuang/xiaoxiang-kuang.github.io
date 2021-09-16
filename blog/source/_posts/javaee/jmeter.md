@@ -18,6 +18,8 @@ export HEAP="-Xms1024m -Xmx1024m"
 
 * 解决cookie跨域`CookieManager.check.cookies=false`
 
+<!--
+
 #### 创建web测试
 
 ##### 1. 添加Users 
@@ -75,6 +77,8 @@ export HEAP="-Xms1024m -Xmx1024m"
 * 官方不建议在GUI模式下加载测试，GUI模式下用来创建测试案例和调试bug，测试需要在CLI模式下执行（命令行模式）。
 
 **参考链接：**[Apache JMeter - User's Manual: Building a Web Test Plan](https://jmeter.apache.org/usermanual/build-web-test-plan.html)
+
+-->
 
 #### 命令行模式（CLI Mode）
 

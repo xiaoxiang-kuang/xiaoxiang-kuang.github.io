@@ -58,19 +58,6 @@ date: 2021-02-08 11:29:58
   * 执行过程中按下M表示以内存的使用来排序，N表示已PID来排序，P表示以CPU来排序，T表示以TIME+来排序，按下q可以离开top
   * `-p PID`观察指定PID
   
-* systemctl
-  
-  * systemd将所谓的daemon执行脚本称为的一个unit。配置文件都存放在/etc/systemd/system、/usr/lib/systemd/system/（主要的脚本执行设定）。
-  * 管理服务的状态，格式：`systemctl [command] [unit]`，command如下：
-  
-  | start | stop | enable   | disable    | status | is-active |
-  | ----- | ---- | -------- | ---------- | ------ | --------- |
-  | 启动  | 停止 | 开机启动 | 开机不启动 | 状态   | 是否运行  |
-
-  * 结果的第二行表示该服务是否会开机启动，结果的第三行表示该服务的当前状态。
-  * `systemctl [list-units]`列出目前启动的unit；`systemctl list-unit-files`将`/usr/lib/systemd/system/`下的所有文件进行说明。
-  * systemctl中配置文件中最重要的是ExecStart，它是实际执行此daemon的指令或者脚本，这里很多的bash语法都不支持。
-  
   `kill `
   
   * `kill -9 PID`立刻强制删除一个工作
@@ -107,10 +94,6 @@ date: 2021-02-08 11:29:58
 
 * whereis：针对几个特定目录查找文件，`whereis -l`查看这几个特定目录。
 * which：根据PATH查看可执行文件。
-* grep [-in]  '搜索字符串'  filename：查找文件或标准输出中的字符串，-i表示忽略大小写，-n表示输出行号。
-* cut：将一段数据切出来
-  *  ` cat filename |cut -d '分隔字符'  -f num`：-d后面跟分隔字符，将数据分为几段，-f表示取出第几段。
-  * `cat filename  |cut -c 12-`：-c表示每一行都获取从第12个字符后面的所有字符（注意12后面有个减号）。
 * locate：根据/var/lib/mlocate内的数据库记载搜索文件（数据库未更新前搜索某新建的文件可能搜不到）。
 * find：强大的查询工具。用法`find [PATH] [option] [action]`，PATH可以是多个目录，find查找会进入子目录。
   * 查看/home下3天前到4天前中间的24小时内有修改的文件`find /home -mtime 3`（如果是+3表示大于等于3天前的文件名，-3表示小于等于3天内的文件名）；

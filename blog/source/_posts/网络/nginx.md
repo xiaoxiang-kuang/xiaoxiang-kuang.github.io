@@ -1,7 +1,7 @@
 ---
 title: nginx
 categories:
-  - [网络]
+  - [网络,nginx]
 site: 网络
 date: 2021-08-12 10:03:28
 ---
