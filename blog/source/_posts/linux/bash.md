@@ -9,7 +9,6 @@ date: 2021-09-09 16:28:01
 * 用户可以透过应用程序来指挥kernel，让kernel来完成我们所需要的硬件任务，因为程序是在最外层，类似鸡蛋的外壳一样，所以就叫壳程序（shell）。shell是提供用户操作系统的一个接口。
 * bash全称就是Bourne Again SHell，是linux预设的shell。
 * 系统中合法的shell都会写入到/etc/shells这个文件。当用户登录的时候，系统会提供一个shell，这个shell就记录在/etc/passwd这个文件中。
-* `alias lm='ls -al'`：给命令设定别名；`alias`：可以查看系统的所有别名；使用`unalias lm`取消别名。
 * bash有很多内建指令，如cd等，可以通过type这个指令观察。
 * 一行输不完，可以通过\\来换行。
 * ulimit限制用户的某些系统资源。
