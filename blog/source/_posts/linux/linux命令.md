@@ -120,8 +120,14 @@ date: 2021-02-08 11:29:58
 ### 权限
 
 * `chown [-R] name:groupname 文件或目录`来修改文件的拥有者，-R表示递归。
+* `su`
+  * `su`单纯使用su切换为root身份时，表明切换为root身份。读取变量的设定方式为non-login shell的方式，这种方式很多原本的变量不会改变。
+  * `su -`使用该命令代表使用login-shell的变量文件来登入系统。
 
 ### 磁盘
 
 * `df -h`查看磁盘的信息
+* `mount | umount`挂载与卸载
+  * `mount /d /dev/sda2`将/dev/sda2挂载到/d。
+  * `umount [-fn] 挂载点或装置文件名`-f强制删除。
 
