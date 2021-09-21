@@ -126,8 +126,21 @@ date: 2021-02-08 11:29:58
 
 ### 磁盘
 
-* `df -h`查看磁盘的信息
-* `mount | umount`挂载与卸载
+* `df -h`查看磁盘的信息。
+* `du [-hskm] 文件或目录名称` 查看文件系统的磁盘使用量。
+  * -h 易读的方式显示。
+  * -s 列出总量。
+  * -k和-m 以kB/mB显示。
+* `mount [-alt]LABLE=''/UUID=''/装置文件名 挂载点/umount`挂载与卸载
   * `mount /d /dev/sda2`将/dev/sda2挂载到/d。
-  * `umount [-fn] 挂载点或装置文件名`-f强制删除。
+  * `umount [-f] 挂载点或装置文件名` -f强制删除。
+  * -n 不写入/etc/mtab。
+  * -o后面可以跟一些挂载时额外加上的参数；1. asyn，sync 此文件系统是否使用同步写入（sync）或异步（async）的内存机制。默认为async。2. atime，noatime 是否修订文件的读取时间。3. ro，rw 挂载文件系统为只读或可写。auto，noauto 允许此文件系统被以mount -a自动挂载（auto）。4. dev，nodev 是否允许此文件系统上可建立装置文件。5.suid，nosuid 是否允许此文件系统上有suid的文件格式。6. ecex，noexec 是否允许此文件系统上有可执行文件。7. user，nouser 是否允许此文件系统让任何使用者执行mount，一般mount只有root可以进行，但下达该命令后，一般user也能对其进行挂载。8. defaults 默认为rw，suid， dev，exec，auto，nouser，async。9. remount 重新挂载。
+  * -a 依照配置文件/etc/fstab的数据将所有未挂载的磁盘挂载。
+  * -t 要挂载的文件系统的类型。
+* 开机挂载(修改/etc/fstab[filesystem table]）
+  * 参数格式：装置/UUID/LABEL 挂载点 文件系统 文件系统参数 dump fsck
+  * 例：UUID=XXX（使用blkid查询） /d ntfs defaults 0 0
+  * /etc/fstab是开机时的配置文件，实际的filesystem的挂载记录到/etc/mtab和/proc/mounts这两个文件中。
+  
 
