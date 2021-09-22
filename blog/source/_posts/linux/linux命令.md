@@ -13,6 +13,8 @@ date: 2021-02-08 11:29:58
 3. 由bash内建的指令来执行。
 4. 通过$PATH这个变量的顺序搜寻到第一个指令来执行。
 
+
+
 * `history  n`用来查询过去执行的指令，n表示显示最近n个命令。bash会记录使用过的指令，默认记录1000个，指令存放位置在~/.bash_history中。该文件会记录上一次登录之前的指令，而这一次登录所执行的指令都存在内存中，当注销后，这些指令才会记录到.bash_history中。
 * `curl`（client url）通过指定的url上传或者下载数据。
   * `curl xiaoxiang.space`查看网页源码。
@@ -119,17 +121,45 @@ date: 2021-02-08 11:29:58
 
 ### 权限
 
+* `chgrp [-R] 文件/文件夹` 改变文件的群组（必须是/etc/group中存在的）。
+
 * `chown [-R] name:groupname 文件或目录`来修改文件的拥有者，-R表示递归。
+
+* `chmod [-R] 文件/目录` 改变文件/目录的权限。
+
 * `su`
   * `su`单纯使用su切换为root身份时，表明切换为root身份。读取变量的设定方式为non-login shell的方式，这种方式很多原本的变量不会改变。
-  * `su -`使用该命令代表使用login-shell的变量文件来登入系统。
+  * `su - username`使用该命令代表使用login-shell的变量文件来登入系统。
+  * `su - -c 指令` 执行一次root的指令。
+  
+* `sudo` 并非所有人都能执行sudo，只有/etc/sudoers内的用户能执行sudo这个指令。
+
+  * `sudo [-u 用户] 指令` 以某个用户的身份执行指令。不加该参数表示使用root执行指令。
+  * sudoers文件格式1：`使用者账号  登入者的来源主机名=（可切换的账号）  可下达的指令。` 可下达的指令必须使用绝对路径。
+  * sudoers文件格式2： `%群组  ALL=(ALL)  ALL`
+  * sudoers文件格式3： `%群组  ALL=(ALL)  NOPASSWORD:ALL`
+  * sudoers文件格式4：`myuser1 All=(root) !/usr/bin/passwd, /usr/bin/passwd [A-Za-z]*,!/usr/bin/passwd root`。表示myuser1可以执行除了passwd和passwd root外的所有指令。
+  * 创建别名：
+
+  ``` bash
+  #别名必须大写
+  User_Alias ADMPW=pro1,pro2,pro3 myuser1,myuser2
+  Cmd_Alias ADMPWCOM=!/usr/bin/passwd, /usr/bin/passwd [A-Za-z]*,!/usr/bin/passwd root
+  ADMPW ALL=(root) ADMPWCOM
+  
+  #可以使用sudo搭配su，将用户身份转换为root
+  ADMPWCOM ALL=(root) /bin/su -
+  ```
+
+  * sudo时间间隔为5min。
 
 ### 磁盘
 
 * `df -h`查看磁盘的信息。
 * `du [-hskm] 文件或目录名称` 查看文件系统的磁盘使用量。
   * -h 易读的方式显示。
-  * -s 列出总量。
+  * -s （summarize）列出总量。
+  * -d （--max-depth=N）：
   * -k和-m 以kB/mB显示。
 * `mount [-alt]LABLE=''/UUID=''/装置文件名 挂载点/umount`挂载与卸载
   * `mount /d /dev/sda2`将/dev/sda2挂载到/d。
