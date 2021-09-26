@@ -9,16 +9,18 @@ date: 2021-08-19 19:39:40
 </style>
 <div id="plan">
 
-- [ ] curl
-- [x] 学习https
+- [ ] 开机过程
+- [ ] rc.local
+- [ ] nacos
+
+
+
+
 - [ ] 密码学
 - [ ] 计算机网络
 - [ ] 学习tcp的头部
-- [x] 学习jwt
-- [ ] 学习shell命令
 - [ ] 学习redis
-- [x] 学习mysql授权指令、基本数据类型
-- [ ] 学习mysql的view和建表语句
+- [ ] 学习mysql的索引
 - [ ] 学习gradle
 </div>
 
