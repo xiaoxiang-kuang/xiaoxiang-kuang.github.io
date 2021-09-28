@@ -67,6 +67,12 @@ date: 2021-02-08 11:29:58
   * example：当使用vim时，会产生一个.filename.swp文件，使用-15时，vim会以正常的步骤结束vi的工作，所以.filename.swp会被主动的移除，但如果使用-9，由于vim工作被强制移除了，所以.filename.swp就会继续存在文件系统中。
   
 
+### man（manual）
+
+* man中有几个常用的数字的含义：1 用户在shell环境中可以操作的指令或可执行文件；4 装置文件的说明，通常在/dev下的文件；5 配置文件或者某些文件的格式；7 惯例与协议等；8 系统管理员可用的指令。例：`man 8 sudo`。
+* man page一般包含：①NAME：简短的说明；②SYNOPSIS：简短的指令下达语法说明；③DESCRIPTION：较完整的说明；④OPTIONS；⑤COMMANDS：当这个程序执行的时候，可以在此程序中下达的指令。⑥FILES：关联的文件；⑦SEE ALSO：其他可以参考的信息；⑧EXAMPLE：一些可以参考的范例。
+* 快捷键：空格键:向下翻一页    [Page Up]:向上翻一页    [Page Down]:向下翻一页    [Home]:去第一页    [End]:去最后一页    /string:向下搜索string    ?string:向上搜索string    n/N:n表示下一个搜索，N表示上一个搜索。
+
 ## 文件
 
 ### 查看文件
@@ -86,7 +92,7 @@ date: 2021-02-08 11:29:58
   * 默认是显示10行
   * `tail -f filename`文件内容如果有增加，输出增加的内容
   * `-n num filename`输出文件末尾的n行，默认是10行
-  * `tail -n +100 filename`文件100行以后都会被列出来
+  * `tail -n +100 filename`文件第100行（包括）以后都会被列出来
 * od：以二进制查看
 * file：查看文件类型
 * wc：查看文件里有多少字，多少行，多少字符。
@@ -137,7 +143,7 @@ date: 2021-02-08 11:29:58
   * `sudo [-u 用户] 指令` 以某个用户的身份执行指令。不加该参数表示使用root执行指令。
   * sudoers文件格式1：`使用者账号  登入者的来源主机名=（可切换的账号）  可下达的指令。` 可下达的指令必须使用绝对路径。
   * sudoers文件格式2： `%群组  ALL=(ALL)  ALL`
-  * sudoers文件格式3： `%群组  ALL=(ALL)  NOPASSWORD:ALL`
+  * sudoers文件格式3： `%群组  ALL=(ALL)  NOPASSWD:ALL`
   * sudoers文件格式4：`myuser1 All=(root) !/usr/bin/passwd, /usr/bin/passwd [A-Za-z]*,!/usr/bin/passwd root`。表示myuser1可以执行除了passwd和passwd root外的所有指令。
   * 创建别名：
 
