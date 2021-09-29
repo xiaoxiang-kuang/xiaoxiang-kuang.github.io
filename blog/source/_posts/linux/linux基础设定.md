@@ -35,8 +35,15 @@ nmcli connection up eth0
 #### 防火墙
 
 * firewalld预先准备了几套防火墙策略集合（zone）。常见的zone：1. trusted允许所有的数据包；2. home；3. internal；4. work；5. public；6. external；7.dmz；8. block；9.drop。
-* 常见命令：1. --get-default-zone查询默认的zone；2. --set-default-zone设置默认的zone，--get-zones显示可用的zone；4. --list-all显示当前区域的网卡配置参数、资源、端口及服务等信息；5. --list-all-zones显示所有区域的网卡配置参数、资源、端口及服务等信息；6. --add-service=服务名、--remove-service=服务名；7. --add-port=端口号/协议、--remove-port=端口号/协议。8. --add-forward-port=port=源端口号:proto=协议:toport=目标端口号:toaddr:目标ip地址。
+* 常见命令：1. --get-default-zone查询默认的zone；2. --set-default-zone设置默认的zone，--get-zones显示可用的zone；4. --list-all显示当前区域的网卡配置参数、资源、端口及服务等信息；5. --list-all-zones显示所有区域的网卡配置参数、资源、端口及服务等信息；6. --add-service=服务名、--remove-service=服务名；7. --add-port=端口号/协议、--remove-port=端口号/协议。8. --add-forward-port=port=源端口号:proto=协议:toport=目标端口号:toaddr:目标ip地址。9. --panic-on/--panic-off启动/关闭应急状态，阻断一切网络连接。
 * firewalld设置只在下次重启前有效，如果需要永久生效，需要加上--permanent模式，并执行firewall-cmd --reload。
+
+``` sh
+#永久拒绝192.168.10.0/24网段的所有用户访问本机的ssh服务。
+firewall-cmd --permanent --zone=public --add-rich-rule="rule family="ipv4" source address="192.168.10.0/24" service name="ssh" reject"
+```
+
+
 
 ### 开机
 
