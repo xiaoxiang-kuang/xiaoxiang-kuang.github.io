@@ -50,22 +50,24 @@ date: 2021-02-08 11:29:58
 * `ps aux`查询所有系统运行的进程
   
   * %CPU：使用的cpu资源百分比；%mem：使用的内存资源百分比；vsz：使用的虚拟内存Kb；rss：占用的固定内存Kb；tty：该进程是在哪个终端机上运行，如果于与终端机无关则显示？；stat：进程目前状态（R运行；S睡眠但可被唤醒；D不可被唤醒；T停止状态；Z僵尸状态）；time：实际使用cpu的时间。
-  
 * `top [-d n]`每隔n秒（默认为5）更新一次
-  
+
   * 第一行显示的是：当前时间、开机到现今经过的时间、登入系统的人数、系统在1、5、15分钟的平均工作负载
   * 第二行显示进程总量、进程状态；第三行显示cpu整体负载；第四行和第五行显示物理内存和虚拟内存的使用情况。
   * 第三行（%Cpus...）显示的是CPU的整体负载，wa表示I/O wait
   * PR:priority，指进程的优先级、NI：Nice，于PR有关；TIME+表示CPU使用时间的累加
   * 执行过程中按下M表示以内存的使用来排序，N表示已PID来排序，P表示以CPU来排序，T表示以TIME+来排序，按下q可以离开top
   * `-p PID`观察指定PID
-  
-  `kill `
-  
+* `kill `
+
   * `kill -9 PID`立刻强制删除一个工作
   * `kill  [-15] PID`以正常的方式结束一个工作
   * example：当使用vim时，会产生一个.filename.swp文件，使用-15时，vim会以正常的步骤结束vi的工作，所以.filename.swp会被主动的移除，但如果使用-9，由于vim工作被强制移除了，所以.filename.swp就会继续存在文件系统中。
-  
+* nohup
+  * nohup会将标准输入重定向到/dev/null，将标准输出重定向到nohup.out（一般情况）或$HOME/nohup.out文件，将标准错误输出重定向到标准输出。
+  * `nohup COMMAND > FILE` 保存输出内容到文件。
+  * `nohup COMMAND &` 后台执行命令。
+
 
 ### man（manual）
 
