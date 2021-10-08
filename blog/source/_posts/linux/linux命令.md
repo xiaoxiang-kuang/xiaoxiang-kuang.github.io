@@ -61,11 +61,10 @@ date: 2021-02-08 11:29:58
   * `kill -9 PID`立刻强制删除一个工作
   * `kill  [-15] PID`以正常的方式结束一个工作
   * example：当使用vim时，会产生一个.filename.swp文件，使用-15时，vim会以正常的步骤结束vi的工作，所以.filename.swp会被主动的移除，但如果使用-9，由于vim工作被强制移除了，所以.filename.swp就会继续存在文件系统中。
-  
-* `nohup`
-  * 将标准输入重定向/dev/null；将标准输出重定向到nohup.out（不能放到当前路径下则放到$HOME/nohup.out）；将标准错误输出重定向到标准输出。
-  * `nohup COMMAND > FILE` 输出到文件。
-  * `nohup COMMAND &` 后台执行
+* nohup
+  * nohup会将标准输入重定向到/dev/null，将标准输出重定向到nohup.out（一般情况）或$HOME/nohup.out文件，将标准错误输出重定向到标准输出。
+  * `nohup COMMAND > FILE` 保存输出内容到文件。
+  * `nohup COMMAND &` 后台执行命令。
 
 ### man（manual）
 
