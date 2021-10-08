@@ -1,3 +1,4 @@
+#!/bin/bash
 #此脚本需要和服务器的deploy脚本配合使用
 blog_path=$(pwd)
 blog_dir_name=${blog_path##/*/}
@@ -11,7 +12,7 @@ tar -cf public.tar public/
 echo "正在传输文件到服务器..."
 scp public.tar root@xiaoxiang.space:/www
 rm -f public.tar
-if [ $? -ne 0];then
+if [ $? -ne 0 ];then
 	echo "文件传输失败..."
 	exit 1
 fi

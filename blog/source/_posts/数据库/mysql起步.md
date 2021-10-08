@@ -8,10 +8,18 @@ date: 2021-02-04 15:58:03
 
 * 查询版本和当前时间`select version(),current_date;`
 * mysql执行结束后会显示返回了多少行和用了多长时间，受网络其他因素影响
-* 用作计算器`select sin(pi()/4),(4+1)*5);`
 * 当输入多行，打算不执行这句sql语句，输入`\c`
 * 自带的的mysql database描述了用户的访问权限。
-* unix下数据库名是大小写相关的。建议在创建数据库的时候要么全大写，要么全小写。
+* unix下数据库名是大小写相关的。建议在创建数据库的时候要么全大写，要么全小写，可以在刚安装的时候修改my.cnf文件。
+* 相邻的带引号的多个字符串会拼接成一个字符串。下面这两个等价：
+
+```sql
+'a string'
+'a''string'
+```
+
+
+
 * 查看当前账户拥有的权限，可以使用`show grants for 'joe'@'home.example.com'`。
 
 ### linux上mysql布局
@@ -33,36 +41,30 @@ date: 2021-02-04 15:58:03
 | 库                   | /usr/lib/mysql                                               |
 | **参考链接：**       | [MySQL :: MySQL 8.0 Reference Manual :: 2.5.4 Installing MySQL on Linux Using RPM Packages from Oracle](https://dev.mysql.com/doc/refman/8.0/en/linux-installation-rpm.html) |
 
+### mysql安装
+
 * `systemctl start mysqld`启动mysql。
 * mysql安装后，`'root'@'localhost'`超级用户被创建，其密码在`/var/log/mysqld.log`，使用`grep 'temporary password' /var/log/mysqld.log`来寻找密码。
 * 修改密码`ALTER USER 'root'@'localhost' IDENTIFIED BY 'newPassword'`。
-* mysql8修改成简单的密码会报错。解决流程如下：
-
-1. mysql8增加了一组变量来控制密码的长度、强度等。通过`SHOW VARIABLES LIKE 'validate_password%'`来查看。
-2. validate_password.length用来要求密码的最小长度，这个参数不得小于`validate_password.number_count+validate_password.special_char_count+2*validate_password.mixed_case_count)`。
-3. validate_password.policy会影响validate_password的其他变量是否有效（除validate_password.check_user_name），它的值可以为0(LOW)，1(MEDIUM)，2(STRONG)。为0则只检查length这个变量。
-4. 更改策略：`set global validate_password.policy=0;set global validate_password.number=4;`
-5. **参考链接：**[MySQL :: MySQL 8.0 Reference Manual :: 6.4.3.2 Password Validation Options and Variables](https://dev.mysql.com/doc/refman/8.0/en/validate-password-options-variables.html)
+* mysql8修改成简单的密码会报错（试了下mysql5.7也会报错，解决方法一样）。解决流程如下：
+  1. mysql8增加了一组变量来控制密码的长度、强度等。通过`SHOW VARIABLES LIKE 'validate_password%'`来查看。
+  2. validate_password.length用来要求密码的最小长度，这个参数不得小于`validate_password.number_count+validate_password.special_char_count+2*validate_password.mixed_case_count)`。
+  3. validate_password.policy会影响validate_password的其他变量是否有效（除validate_password.check_user_name），它的值可以为0(LOW)，1(MEDIUM)，2(STRONG)。为0则只检查length这个变量。
+  4. 更改策略：`set global validate_password.policy=0;set global validate_password.number=4;`
+  5. **参考链接：**[MySQL :: MySQL 8.0 Reference Manual :: 6.4.3.2 Password Validation Options and Variables](https://dev.mysql.com/doc/refman/8.0/en/validate-password-options-variables.html)
 
 ### 基础SQL
 
 #### 数据类型
 
+1. 整数数据类型 tinyint（1字节）、smallint（2字节）、mediumint（3字节）、int（4字节）、bigint（8字节）。
+2. 定点数据类型 `decimal(5,2)`，其中5是精度，表示有效位数；2表示小数点后几位。
+3. 浮点类型 float（4字节）、double（8字节）。
+4. 日期和时间类型 DATE（YYYY-MM-DD）、DATETIME（YYYY-MM-DD hh:mm:ss）、TIMESTAMP（范围是UTC1970-01-01 00:00:01-UTC2038-01-19 03:14:07)、TIME（范围-838:59:59-838:59:59）、YEAR（范围是1901-2155）
+5. 字符串类型 CHAR（长度为声明时的长度，范围0-255）、VARCHAR（可变长度，范围时0-65535）、4种TEXT。
+6. 字节串类型 BINARY、VARCHAR、四种BLOB。
 
-* 整数数据类型
-  * tinyint（1字节）、smallint（2字节）、mediumint（3字节）、int（4字节）、bigint（8字节）。
-* 定点数据类型
-
-  * `decimal(5,2)`，其中5是精度，表示有效位数；2表示小数点后几位。
-* 浮点类型
-
-  * float（4字节）、double（8字节）。
-* 日期和时间类型
-
-  * DATE（YYYY-MM-DD）、DATETIME（YYYY-MM-DD hh:mm:ss）、TIMESTAMP（范围是UTC1970-01-01 00:00:01-UTC2038-01-19 03:14:07)、TIME（范围-838:59:59-838:59:59）、YEAR（范围是1901-2155）
-* 字符串类型
-
-  * CHAR（长度为声明时的长度，范围0-255）、VARCHAR（可变长度，范围时0-65535）、4种TEXT。
+* 可以把BLOB看作VARBINARY，把TEXT看作VARCHAR，但它们有一点点不同：①对于BLOB和TEXT列上的索引，必须要指定缩影前缀长度，对应VARBINARY和VARCHAR，这是可选的；②BLOB和TEXT所在的列不能有默认值。**参考链接：**[MySQL :: MySQL 5.7 Reference Manual :: 11.3.4 The BLOB and TEXT Types](https://dev.mysql.com/doc/refman/5.7/en/blob.html)
 
 #### DATABASE
 
