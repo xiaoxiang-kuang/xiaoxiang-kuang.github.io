@@ -79,7 +79,8 @@ firewall-cmd --permanent --zone=public --add-rich-rule="rule family="ipv4" sourc
 ## 账号
 
 * 默认情况下所有的系统上的账号和一般身份使用者，都记录在/etc/passwd这个文件中，个人密码记录在/etc/shadow文件下，所有组名都记录在/etc/group中。
-* 当输入账号密码登陆后，系统先1. 寻找/etc/passwd里面是否有输入的账号，有的话读取UID和GID以及该账号的home目录和shell；2. 进入/etc/shadow李找出对应的账号与UID，然后和对密码是否相符；3. shell启动。
+* 当输入账号密码登陆后，系统先1. 寻找/etc/passwd里面是否有输入的账号，有的话读取UID和GID以及该账号的home目录和shell；2. 进入/etc/shadow找出对应的账号与UID，然后和对密码是否相符；3. shell启动。
+* 查看已登录系统上的用户，可以使用`who`。
 
 ### /etc/passwd
 
@@ -114,6 +115,7 @@ root:x:0:dmtsai,alex
 
 * 在/etc/passwd中有个GID，即初始群组，初始群组不会加在/etc/group的第四个字段。
 * 使用`groups`命令可以获取当前账号所有的群组，输出的第一个群组为有效群组，新创建的一个文件使用的就是有效群组。通过`newgrp xxx`来切换有效群组。
+* 相关命令：`groupadd groupmod groupdel`
 
 ### 命令
 
@@ -121,7 +123,17 @@ root:x:0:dmtsai,alex
   * `-g 初始群组` 该字段会被添加到/etc/passwd第四个字段。 
   * `-u UID -G 次要群组 -c 说明信息(/etc/passwd第五个字段) -r 系统账号 -s /bin/bash(指定一个初始的shell)`。
   * -M 不建立home目录(系统账号默认) ；-m 建立home目录(一般账号默认)。
-  * useradd参考的是/etc/default/useradd文件。
+  * useradd参考的是/etc/default/useradd文件，默认值可以通过`useradd -D`查看；除此之外，还参考了/etc/login.defs文件。
+  * 相关命令:`id chsh`
+* passwd
+  * 使用useradd建立了账号后，默认情况下无法使用该账号登陆，需要使用passwd设定密码。
+  * `-l` lock，会在/etc/shadow第二栏最前面加!使得密码失效，`-u` unlock，与-l相反；`-S` 列出秘密相关参数；`-n` 多久不可修改密码；`-x` 多久内必须修改密码； `-w` 密码过期前多少天开始警告 ；`-i` 密码失效日期；`--stdin` 从控制台获取输入。
+  * 其他命令`chage -l user`。
+* usermod
+  * 修改账号的数据。
+* userdel：删除用户的相关数据。`-r`表示同时删除该用户的home目录。
+
+
 
 
 
