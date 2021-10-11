@@ -103,7 +103,7 @@ date: 2021-02-08 11:29:58
 * which：根据PATH查看可执行文件。
 * locate：根据/var/lib/mlocate内的数据库记载搜索文件（数据库未更新前搜索某新建的文件可能搜不到）。
 * find：强大的查询工具。用法`find [PATH] [option] [action]`，PATH可以是多个目录，find查找会进入子目录。
-  * 查看/home下3天前到4天前中间的24小时内有修改的文件`find /home -mtime 3`（如果是+3表示大于等于3天前的文件名，-3表示小于等于3天内的文件名）；
+  * 查看/home下3天内有修改的文件`find /home -mtime 3`（如果是+3表示大于等于3天前的文件名，-3表示小于等于3天内的文件名）；
   * 查看/home下属于bes的文件`find /home -user bes`，查看不属于任何人的文件`find / -nouser`；
   * 查到/home下文件名包含了passwd的文件名`find /home -name "*passwd*"`;
   * 查看/home下文件类型为普通文件的文件名`find /home -type f`;

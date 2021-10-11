@@ -14,6 +14,11 @@ date: 2021-08-16 17:25:09
 ```sql
 #如果不指定主机，默认就是'%'（所有ip都能访问）
 CREATE USER 'jeffrey'@'localhost' IDENTIFIED BY 'password';
+
+#删除用户。
+DROP USER 'jeffrey'@'localhost';
+#重命名现有的账户,可以用来解决账号只能在本地访问的问题。
+RENAME USER 'jeffrey'@'localhost' TO 'jeff'@'%'
 ```
 
 * `ALTER USER`修改账户的信息（如修改密码）。不推荐使用`SET PASSWORD`来修改密码。
@@ -35,6 +40,3 @@ GRANT ALL ON db1.* TO 'jeffrey'@'localhost';
 REVOKE INSERT ON *.* FROM 'jeffrey'@'localhost';
 REVOKE ALL [PRIVILEGES], GRANT OPTION FROM 'jeffrey'@'localhost';
 ```
-
-* `DROP USER 'jeffrey'@'localhost'`用来删除用户。
-* `RENAME USER 'jeffrey'@'localhost' TO 'jeff'@'%'` 用来重命名现有的账户。
