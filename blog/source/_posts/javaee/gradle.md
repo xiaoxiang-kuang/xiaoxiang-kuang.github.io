@@ -41,3 +41,104 @@ org.gradle.workers.max=
 
 **参考链接：**[Build Environment (gradle.org)](https://docs.gradle.org/current/userguide/build_environment.html)
 
+## 构建
+
+### Project和tasks
+
+* 每个gradle build由多个projects组成，一个project又由多个tasks组成。
+
+``` groovy
+tasks.register('upper') {
+    doLast {
+        String someString = 'mY_nAmE'
+        println "Original: $someString"
+        println "Upper case: ${someString.toUpperCase()}"
+    }
+}
+tasks.register('hello') {
+    dependsOn tasks.upper
+    doLast {
+        print 'hello world'
+    }
+}
+
+#执行gradle -q hello，-q表示抑制日志消息
+```
+
+```groovy
+
+
+tasks.register('hello') {
+    doLast {
+        println 'Hello Earth'
+    }
+}
+tasks.named('hello') {
+    doFirst {
+        println 'Hello Venus'
+    }
+}
+tasks.named('hello') {
+    doLast {
+        println 'Hello Mars'
+    }
+}
+tasks.named('hello') {
+    doLast {
+        println 'Hello Jupiter'
+    }
+}
+
+#执行gradle -q hello
+#doFirst和doLast可以被执行多次，他们被添加到task的actions list的开始或结束位置，当task执行时，在action list中的action会被按顺序执行。
+```
+
+#### 默认task
+
+* gradle允许定义多个默认的task
+
+```groovy
+defaultTasks 'clean', 'run'
+
+tasks.register('clean') {
+    doLast {
+        println 'Default Cleaning!'
+    }
+}
+
+tasks.register('run') {
+    doLast {
+        println 'Default Running!'
+    }
+}
+#通过gradle -q执行
+```
+
+#### 为构建脚本添加外部依赖
+
+* 如果构建脚本需要使用外部的库，可以使用buildscript，buildscript中添加的依赖只对构建脚本有效。
+
+```groovy
+//使用改库中的某个类
+import org.apache.commons.codec.binary.Base64
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    //将库添加到classpath路径下
+    dependencies {
+        classpath group: 'commons-codec', name: 'commons-codec', version: '1.2'
+    }
+}
+
+tasks.register('encode') {
+    doLast {
+        def byte[] encodedString = new Base64().encode('hello world\n'.getBytes())
+        println new String(encodedString)
+    }
+}
+
+#gradle -q encode
+```
+

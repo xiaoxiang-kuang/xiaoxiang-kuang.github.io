@@ -107,7 +107,7 @@ X-Requested-With: XMLHttpRequest
 #用来指明发送给服务器的消息主体的大小
 Content-Length: 22
 #指示了请求来自哪个站点。
-Origin: http://xiaoxiang.space
+Origin: https://developer.mozilla.org
 #决定当前的事务完成后，是否会关闭网络连接，如果是keep-alive，网络连接就是持久的，使得对同一个服务器的请求可以继续在该连接上完成
 Connection: keep-alive
 #包含了当前请求页面的来源页面的地址
