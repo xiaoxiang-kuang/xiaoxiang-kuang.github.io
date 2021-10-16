@@ -43,7 +43,7 @@ org.gradle.workers.max=
 
 ## 构建
 
-### Project和tasks
+### tasks
 
 * 每个gradle build由多个projects组成，一个project又由多个tasks组成。
 
@@ -119,7 +119,7 @@ tasks.register('run') {
 * 如果构建脚本需要使用外部的库，可以使用buildscript，buildscript中添加的依赖只对构建脚本有效。
 
 ```groovy
-//使用改库中的某个类
+//使用库中的某个类
 import org.apache.commons.codec.binary.Base64
 
 buildscript {

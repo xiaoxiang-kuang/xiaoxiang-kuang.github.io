@@ -135,8 +135,6 @@ root:x:0:dmtsai,alex
 
 
 
-
-
 * `hostnamectl [set-hostname 主机名]` 修改主机名。
 * `timedatectl [list-timezones | set-timezone | set-time | set-ntp]` 列出系统上的失去、设定时区、设定时间、设定网络校时。
 * `localectl set-locale LANG=en_US.utf8`设置语系。通过`locale -a`可以查看linux支持了多少语系，通过`locale`来查看系统目前的语言环境。LANG只和输出信息有关，若要修改其他的不同信息，要更新LC_ALL。
