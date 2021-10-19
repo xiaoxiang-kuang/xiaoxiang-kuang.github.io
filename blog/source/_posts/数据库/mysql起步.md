@@ -53,9 +53,9 @@ date: 2021-02-04 15:58:03
   4. 更改策略：`set global validate_password.policy=0;set global validate_password.number=4;`
   5. **参考链接：**[MySQL :: MySQL 8.0 Reference Manual :: 6.4.3.2 Password Validation Options and Variables](https://dev.mysql.com/doc/refman/8.0/en/validate-password-options-variables.html)
 
-### 基础SQL
+## 基础SQL
 
-#### 数据类型
+### 数据类型
 
 1. 整数数据类型 tinyint（1字节）、smallint（2字节）、mediumint（3字节）、int（4字节）、bigint（8字节）。
 2. 定点数据类型 `decimal(5,2)`，其中5是精度，表示有效位数；2表示小数点后几位。
@@ -66,7 +66,7 @@ date: 2021-02-04 15:58:03
 
 * 可以把BLOB看作VARBINARY，把TEXT看作VARCHAR，但它们有一点点不同：①对于BLOB和TEXT列上的索引，必须要指定缩影前缀长度，对应VARBINARY和VARCHAR，这是可选的；②BLOB和TEXT所在的列不能有默认值。**参考链接：**[MySQL :: MySQL 5.7 Reference Manual :: 11.3.4 The BLOB and TEXT Types](https://dev.mysql.com/doc/refman/5.7/en/blob.html)
 
-#### DATABASE
+### DATABASE
 
 * 创建数据库
 
@@ -74,7 +74,7 @@ date: 2021-02-04 15:58:03
 CRATE DATABASE db_name [[DEFAULT] CHARACTER SET [=] utf8];
 ```
 
-#### TABLE
+### TABLE
 
 * 克隆和复制。
 
@@ -84,6 +84,37 @@ CREATE TABLE new_tb1 LIKE origin_tb1;
 #复制origin_tb1表，（结构和数据都复制了）。
 CREATE TABLE new_tb1 AS SELECT * FROM origin_tb1;
 ```
+
+#### ALTER
+
+```sql
+#单个alter table可以跟多个修改语句，用逗号隔开
+#删除
+ALTER TABLE t2 DROP COLUMN c, DROP COLUMN d;
+```
+
+##### change、modify、alter
+
+* change可以重命名列、修改列的定义。配合FIRST或AFTER，可以指定列的位置。
+* MODIFY可以修改列的定义，但无法修改它的名字。配合FIRST或AFTER能指定列的名字。
+* ALTER只能修改列的默认值。
+
+```sql
+#将a的名字改为b，修改定义
+ALTER TABLE t1 CHANGE a b BIGINT NOT NULL;
+#不修改a的名字，只修改定义
+ALTER TABLE t1 CHANGE a a BIGINT NOT NULL;
+#修改b的定义
+ALTER TABLE t1 MODIFY b INT NOT NULL;
+#如果只想要修改b的名字而不去修改它的定义，就需要将定义再写一遍
+ALTER TABLE t1 CHANGE b a INT NOT NULL;
+#除了如PRIMARY KEY或UNIQUE属性，其他的如DEFAULT COMMENT等需要在修改时带上，否则修改后的列是没有这些属性。
+#使用CHANGE或MODIFY，myslq会尝试将列中数据转化未新的类型。
+#当使用CHANGE修改列名后，使用了该列的VIEW需要修改。
+#ALTER TABLE xxx ALTER ...SET DEFAULT xxx或ALTER ... DROP DEFAULT。如果旧的默认值被删除而列不可以为NULL，mysql将为其分配默认值（数字类型默认为0，如果指定了AUTO_INCREMENT，默认值是序列中的下一个值，对于EMUM，默认值为第一个枚举值，对于其他字符串类型，默认值为空字符串）。
+```
+
+* [MySQL :: MySQL 5.7 Reference Manual :: 13.1.8 ALTER TABLE Statement](https://dev.mysql.com/doc/refman/5.7/en/alter-table.html)
 
 ### SHOW
 

@@ -123,7 +123,7 @@ str=${str:-root}
 * 管道命令必须要接收上一个指令的标准输入，如less、more、head、tail时管道命令，而如ls、cp、mv就不是管道命令。
 * 管道后面第一个必须是指令。
 * 在管道中常常会使用前一个指令的输出作为后一个指令的输入，某些指令需要指定文件名来处理，该stdin和stdout可以使用`减号"-"`来替代。如`tar -cvf - /home | tar -xvf - -C /tmp/homeback`，这个命令是将/home里的文件打包，将打包的文件输出到stdout，后面的命令从stdin读取数据，所以我们就不需要文件名了，直接使用-代替。
-* grep [-in]  '搜索字符串'  filename：查找文件或标准输出中的字符串，-i表示忽略大小写，-n表示输出行号。
+* grep [-in]  '搜索字符串'  filename：查找文件或标准输出中的字符串，-i表示忽略大小写，-n表示输出行号。`-v`：表示选择未匹配的行。
 * cut：将一段数据切出来
   *  ` cat filename |cut -d '分隔字符'  -f num`：-d后面跟分隔字符，将数据分为几段，-f表示取出第几段。
   *  `cat filename  |cut -c 12-`：-c表示每一行都获取从第12个字符后面的所有字符（注意12后面有个减号）。
@@ -141,4 +141,77 @@ str=${str:-root}
 
 * %ns表示n个字符；%ni表示n个整数数字数；%N.nf表示一共N个数字，小数点占n个。
 * `\n表示换行，\t表示tab键`。
+
+### 正则表达式
+
+* vi、grep、awk、seq等工具支持正则表达式；cp、ls不支持正则表达式，只能使用bash本身的通配符。
+
+| 规则                 | 意义                                                         |
+| -------------------- | ------------------------------------------------------------ |
+| ^word                | 寻找以word开始的行                                           |
+| word$                | 寻找以行尾为word的行                                         |
+| .                    | 代表任意一个字符                                             |
+| \                    | 转义字符                                                     |
+| *                    | 重复前一个字符0到无穷次                                      |
+| [abc]                | 搜寻含有a或b或c的那一行，[]只代表一个待搜寻的字符            |
+| [a-z]                | 搜寻两个字符间的所有连续字符，这个连续与ASCII编码有关。      |
+| [^abc]               | 反向选择，不要有a或者b或者c的行                              |
+| \\{n,m\\}            | \\{n,m\\} 连续n到m个的前一个字符<br>\\{n\\} 连续n个前一个字符<br>\\{n,\\} 连续n个以上的前一个字符 |
+| [:alnum:]            | 代表a-z,A-Z,0-9                                              |
+| [:alpha:]            | 代表A-Z,a-z                                                  |
+| [:blank:]            | 代表空格和[Tab]                                              |
+| [:digit:]            | 代表数字                                                     |
+| [:lower:]、[:upper:] | 代表小写字符、代表大写字符                                   |
+| [:space:]            | 任何会产生空白的字符，包括空格，[Tab]，CR等                  |
+| [:xdigit:]           | 代表16进位的数字类型。                                       |
+
+#### sed
+
+* `sed [-nefr] [n1[,n2]] function`。
+  * -i 直接修改读取的文件；-n只有经过sed处理的行会被输出（配合q使用）。
+  * n1,n2表示选择进行操作的行数。
+  * function有：a 新增到的当前下几行；c 取代；d 删除；i 插入到当前的上一行；p 打印；s 取代，如1,20s/old/new/g。
+
+``` sh
+#将显示到屏幕的内容删除第2-5行
+nl /etc/passwd | sed '2,5d'
+#删除第三行到最后一行
+nl /etc/passwd | sed '3,$d'
+#在第二行后面加上drink tea（就是加在了第三行）
+nl /etc/passwd | sed '2a drink tea'
+#在第二行后面加上了两行，每一行之间都要以反斜杠\来进行新行的增加
+nl /etc/passwd | sed '2a drink tea \
+drink beer'
+#取代2-5行
+nl /etc/passed | sed '2,5c No 2-5 number'
+#仅列出/etc/passwd文件的第5-7行
+nl /etc/passwd | sed -n '5,7p'
+#删除5-7行
+nl /etc/passwd | sed '5,7 d'
+#去掉开始的空格，删除以1和2开始的行
+nl /etc/passwd |sed 's/^ *//g' | sed '/^[1-2]/ d'
+#去掉有#注释的行
+cat /etc/man_db.conf | grep 'MAN'| sed 's/#.*$//g' | sed '/^$/d' 
+#将行末尾的.改为!
+sed -i 's/\.$/\!/g' regular_express.txt
+#文件的最后一行增加一行文字
+sed -i '$a # This is a test' regular_express.txt
+```
+
+* 取代命令 `sed 's/要被取代的字符串/新的字符串/g'`
+
+#### awk 数据处理工具
+
+* `awk '条件类型1{动作1}' filename` 
+* awk默认以空格或者[Tab]按键隔开，隔开的每一行的每个字段都是有变量名称的，那就是$1、$2...。$0表示一整行。
+* NF表示每一行的字段总数；NR表示目前是第几行；FS表示目前的分割字符，默认是空格
+
+``` sh
+#输出账号和ip，有些数据格式不对
+last -n 5 | awk '{print $1 "\t" $3}'
+
+last -n 5| awk '{print $1 "\t lines: " NR "\t columns: " NF}' 
+#将分割字符设为冒号:，查询第三栏小于10，并只输出账号和第三栏
+cat /etc/passwd | awk 'BEGIN {FS=":"} $3 < 10 {print $1 "\t " $3}' 
+```
 

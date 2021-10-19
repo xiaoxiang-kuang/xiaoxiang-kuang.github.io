@@ -87,7 +87,7 @@ firewall-cmd --permanent --zone=public --add-rich-rule="rule family="ipv4" sourc
 * 每一行都代表一个账号，有几行就代表有几个账号在系统中。里面有很多账号本来就是系统正常运行所必需的，可以称之为系统账号。
 
 ```sh
-#账号名称:x:UID:GID:用户信息说明:home目录:shell
+#①账号名称:②x:③UID:④GID:⑤用户信息说明:⑥home目录:⑦shell
 root:x:0:0:root:/root:/bin/bash
 #账户名称需要和UID对应，UID就是使用者标识符，UID中0表示系统管理员；1～999表示系统账号（1～200表示系统自行建立的系统账号）；1000～60000就是给一般使用者使用的。一个UID可以包含多个用户
 #早期unix密码放在此文件中，后来放到了/etc/shadow中，这里用x替代。
