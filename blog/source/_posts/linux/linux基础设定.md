@@ -22,7 +22,7 @@ nmcli connection show [NAME]
 #ipv4.gateway[gw_ip] 网关的IP地址
 
 #修改网络参数
-nmcli connection modify eho0 \
+nmcli connection modify eth0 \
 connection.autoconnect yes \
 ipv4.method manual \
 ipv4.addresses 192.168.x.x/24 \
