@@ -1,11 +1,11 @@
 ---
-title: jpa方法名支持的关键字
-categories:
+title: jpa
   - [javaee]
 site: javaee
 date: 2021-08-18 11:19:52
 ---
 
+### jpa方法支持的关键字
 <div style="overflow:auto;">
 
 | 关键字            | 例子                                                    | jpql                                                       |
@@ -36,3 +36,11 @@ date: 2021-08-18 11:19:52
 | IgnoreCase        | findByFirstnameIgnoreCase                               | … where UPPER(x.firstname) = UPPER(?1)                     |
 
 </div>
+
+### ddl-auto
+
+* none：禁用ddl；
+* validate：验证表结构，不对数据库有任何修改；
+* update：如果启动时表格式不一样则更新表，原有数据保留
+* create：启动时删除数据库中的表，然后创建；
+* create-drop：启动时删除数据库中的表，然后创建，退出时删除数据表。
