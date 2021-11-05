@@ -18,7 +18,7 @@ date: 2021-02-04 15:58:03
 'a''string'
 ```
 
-
+* 查看和设置系统变量`SET [GLOBAL| SESSION] 系统变量` ``SHOW [GLOBAL |SESSION] VARIABLES [LIKE XXX]`。状态变量是用来显示服务器程序运行状态的，只能查看`SHOW [GLOBAL|SESSION] STATUS [LIKE XXX]`。
 
 * 查看当前账户拥有的权限，可以使用`show grants for 'joe'@'home.example.com'`。
 
@@ -53,6 +53,16 @@ date: 2021-02-04 15:58:03
   4. 更改策略：`set global validate_password.policy=0;set global validate_password.number=4;`
   5. **参考链接：**[MySQL :: MySQL 8.0 Reference Manual :: 6.4.3.2 Password Validation Options and Variables](https://dev.mysql.com/doc/refman/8.0/en/validate-password-options-variables.html)
 
+### mySql配置
+
+* mysql配置文件被划分为多个组，每个组有一个组名，用[]括起来。
+
+```
+[mysqld]
+default-storage-engine=InnoDB
+validate_password=OFF
+```
+
 ## 基础SQL
 
 ### 数据类型
@@ -65,6 +75,32 @@ date: 2021-02-04 15:58:03
 6. 字节串类型 BINARY、VARCHAR、四种BLOB。
 
 * 可以把BLOB看作VARBINARY，把TEXT看作VARCHAR，但它们有一点点不同：①对于BLOB和TEXT列上的索引，必须要指定缩影前缀长度，对应VARBINARY和VARCHAR，这是可选的；②BLOB和TEXT所在的列不能有默认值。**参考链接：**[MySQL :: MySQL 5.7 Reference Manual :: 11.3.4 The BLOB and TEXT Types](https://dev.mysql.com/doc/refman/5.7/en/blob.html)
+
+### character set&collation
+
+```sh
+#显示字符集
+SHOW CHARACTER SET LIKE 'utf%';
+#一个字符集一般都有多个collation
+SHOW COLLATION [WHERE Charset = 'latin1'] [LIKE 'utf8'];
+
+#创建数据库时指定默认的字符集和collation，下面的表也会默认使用该设定。
+CREATE DATABASE test_database CHARACTER SET utf8 COLLATE utf8_general_ci;
+#每次连接数据库时可以这样设置
+SET NAMES 'utf8'
+```
+
+#### collation后缀含义
+
+| 后缀 | 含义                          |
+| ---- | ----------------------------- |
+| _ai  | Accent-insensitive            |
+| _as  | Accent-sensitive              |
+| _ci  | Case-insensitive 大小写不敏感 |
+| _cs  | Case-sensitive 大小写敏感     |
+| _bin | Binary                        |
+
+[MySQL :: MySQL 5.7 Reference Manual :: 10.3.1 Collation Naming Conventions](https://dev.mysql.com/doc/refman/5.7/en/charset-collation-names.html)
 
 ### DATABASE
 

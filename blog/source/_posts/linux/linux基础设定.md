@@ -131,6 +131,7 @@ root:x:0:dmtsai,alex
   * 其他命令`chage -l user`。
 * usermod
   * 修改账号的数据。
+  * 添加群组`usermod -a -G wheel koal`
 * userdel：删除用户的相关数据。`-r`表示同时删除该用户的home目录。
 
 

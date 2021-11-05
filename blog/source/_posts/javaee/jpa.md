@@ -1,5 +1,6 @@
 ---
 title: jpa
+categories:
   - [javaee]
 site: javaee
 date: 2021-08-18 11:19:52

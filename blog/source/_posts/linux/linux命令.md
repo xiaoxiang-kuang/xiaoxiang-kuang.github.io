@@ -14,6 +14,20 @@ date: 2021-02-08 11:29:58
    4. 通过$PATH这个变量的顺序搜寻到第一个指令来执行。
 
 * `history  n`用来查询过去执行的指令，n表示显示最近n个命令。bash会记录使用过的指令，默认记录1000个，指令存放位置在~/.bash_history中。该文件会记录上一次登录之前的指令，而这一次登录所执行的指令都存在内存中，当注销后，这些指令才会记录到.bash_history中。
+* 使用write可以给linux上的其他用户发消息，通过`who`可以查看目前有谁在线。通过`write koal`给所有以koal登录的用户发消息。通过`mesg n`来关闭接收消息，但无法拒绝root的消息。通过`mesg y`来开启接收消息。
+
+## 系统管理
+
+### 网络
+
+* netstat：显示网络状态
+  * `netstat -tulnp`用来获取目前主机已启动的服务
+  * -t/-u显示tcp/udp传输协议的连接情况
+  * -l显示监听状态的的服务
+  * `-a`显示所有连线中的socket
+  * `-n `：显示数字而不是别名
+  * -p显示socket的pid/程序名
+  
 * `curl`（client url）通过指定的url上传或者下载数据。
   * `curl xiaoxiang.space`查看网页源码。
   * `curl -o [文件名] xiaoxiang.space`保存文件。
@@ -29,19 +43,6 @@ date: 2021-02-08 11:29:58
   * `--limit-rate`限制HTTP请求和回应的带宽。
   * **参考链接：**[curl网站开发指南 - 阮一峰的网络日志 (ruanyifeng.com)](https://www.ruanyifeng.com/blog/2011/09/curl.html)
   * **参考链接：**[curl 的用法指南 - 阮一峰的网络日志 (ruanyifeng.com)](https://www.ruanyifeng.com/blog/2019/09/curl-reference.html)
-
-## 系统管理
-
-### 网络
-
-* netstat：显示网络状态
-  * `netstat -tulnp`用来获取目前主机已启动的服务
-  * -t/-u显示tcp/udp传输协议的连接情况
-  * -l显示监听状态的的服务
-  * `-a`显示所有连线中的socket
-  * `-n `：显示数字而不是别名
-  * -p显示socket的pid/程序名
-  
 
 ### 进程
 
@@ -79,6 +80,7 @@ date: 2021-02-08 11:29:58
 
 * 要使用at，需要先启动atd。我们使用at这个指令来产生要运行的工作，并将这个工作以文本文件的方式写入到/var/spool/at/目录内，该工作就能等待atd这个服务的取用与执行。
 * at会先寻找/etc/at.allow这个文件，写在这个文件中的使用者可以使用at，不在这个文件中的用户不能使用at，即使用户没有写在at.deny中。如果不在这个文件中，at会寻找/etc/at.deny这个文件，写在这个文件中的使用者不能用at，不在这个文件中的使用者可以使用（也就是说两个文件存在一个就可以）。如果两个文件都不存在，就只有root可以执行at。
+* at会将所有的标准输出和标准错误输出传送到执行者的mailbox中，解决方法是`echo "hello world" > /dev/tty1`。
 
 ```sh
 at [-ldv] TIME
@@ -90,7 +92,10 @@ TIME: HH:MM [YYYY--MM-DD] 18:02 2021-10-29
 	  HH:MM[am|pm] + number [minutes|hours|days|weeks]
 #再过5分钟后执行，ctrl+d退出
 at now + 5 minutes
-
+#查询还没执行的任务
+atq
+#删除3这个任务
+atrm 3
 ```
 
 
