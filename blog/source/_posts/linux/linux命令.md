@@ -181,7 +181,7 @@ atrm 3
   ADMPW ALL=(root) ADMPWCOM
   
   #可以使用sudo搭配su，将用户身份转换为root
-  ADMPWCOM ALL=(root) /bin/su -
+  ADMPW ALL=(root) /bin/su -
   ```
 
   * sudo时间间隔为5min。
