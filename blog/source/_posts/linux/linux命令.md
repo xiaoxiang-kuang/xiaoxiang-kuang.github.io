@@ -102,8 +102,11 @@ atrm 3
 
 * 与at类似，cron也有两个限制文件，/etc/cron.allow和/etc/cron.deny，/etc/cron.allow比deny要优先，两个文件只选择一个来限制，所以保留一个即可。系统默认保留/etc/cron.deny。
 * 当用户使用crontab指令来建立工作排程后，该项工作就会被记录到/var/spool/cron里面去，而且以账号来判别。cron执行的 每一项工作都会被记录到/var/log/cron这个文件中。
-* 下达指令最好使用绝对路径，周与日不可以同存。
-* crond预设有三个地方会有执行脚本配置文件，分别是`/etc/crontab` ,`/etc/cron.d/*`,`/var/spool/cron/*`
+* 下达指令最好使用绝对路径；cron会每分钟去读取一次/etc/crontab与/var/spool/cron里面的数据，所以编辑完文件后，cron会按照设定自动执行。
+* 放到`/etc/cron.hourly`目录内的所有执行文件（必须是shell脚本）会在每小时的一分钟开始后的5分钟内随机选择一个时间点来执行（详细请看/etc/cron.d/路径下的文件）。放到`/etc/cron.daily`、`/etc/cron.weekly`、`/etc/cron.monthly`下面的文件是由anacron执行的。而anacron执行方式是在`/etc/cron.hourly/0anacron`里面。
+* crond预设有三个地方会有执行脚本配置文件，分别是`/etc/crontab` ,`/etc/cron.d/*`,`/var/spool/cron/*`。
+* 当执行项目有输出时，该数据会mail给MAILTO设定的账号，所以如果不是很重要，将输出重定向到/dev/null中。
+* 建议个人的话使用`crontab -e`来创建定时任务，系统维护人员直接使用`vim /etc/crontab`，开发的软件使用`vim /etc/cron.d/newfile`。
 
 ```sh
 crontab [-u username] [-l | -e |-r]
@@ -127,6 +130,37 @@ crontab [-u username] [-l | -e |-r]
 | ,        | 代表该字段有多个参数，如每天3点和6点执行命令，为`0 3,6 * * * command` |
 | -        | 表示一段时间范围内，如8点到12点之间每小时的20分都进行一项工作，`20 8-12 * * * command` |
 | /n       | n代表数字，表示每隔n单位的时间执行一此，如每隔5分钟执行一次，`*/5 * * * * command`，也可以写成`0-59/5 * * * * command` |
+
+* `/etc/crontab`
+
+```sh
+#使用哪种shell接口
+SHELL=/bin/bash
+#执行文件搜寻路径
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+#有输出时发给谁
+MAILTO=root
+#该文件中需要指定用户
+1 * * * * *  username command
+```
+
+#### anacron
+
+* `/etc/cron.daily`各字段含义：
+  * 天数：anacron 执行当下与时间戳 (/var/spool/anacron/ 内的时间纪录文件) 相差的天数，若超过此天数，就准备开始执行，若没有超过此天数，则不予执行后续的指令。
+  * 延迟时间：超过天数导致要执行定时任务，延迟执行的时间。
+  * 工作名称定义：通常与后续的目录资源名称相同即可。
+  * 实际要进行的指令串。
+
+* anacron执行流程（cron.daily)：
+
+1. 由 /etc/anacrontab 分析到 cron.daily 这项工作名称的天数为 1 天； 
+2. 由 /var/spool/anacron/cron.daily 取出最近一次执行 anacron 的时间戳；
+3. 由上个步骤与目前的时间比较，若差异天数为 1 天以上 (含 1 天)，就准备进行指令；
+4. 若准备进行指令，根据 /etc/anacrontab 的设定，将延迟 5 分钟 + 随机n分钟 (看RANDOM_DELAY 的 设定)；
+5.  延迟时间过后，开始执行后续指令，亦即『 run-parts /etc/cron.daily 』这串指令；
+6. 执行完毕后， anacron 程序结束。
+
 
 ## 文件
 

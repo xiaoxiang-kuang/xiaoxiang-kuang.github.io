@@ -12,3 +12,4 @@ date: 2021-10-28 09:19:42
 
 * 获取配置：`curl -X GET "http://127.0.0.1:8848/nacos/v1/cs/configs?dataId=nacos.cfg.dataId&group=test"`
 
+**一个nacos简单案例，之后会接着补充的：**[nacos: naocs-demon (gitee.com)](https://gitee.com/xiaoxiangmax/nacos)
