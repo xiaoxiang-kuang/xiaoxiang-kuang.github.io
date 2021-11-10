@@ -11,11 +11,13 @@ hexo clean && hexo generate
 tar -cf public.tar public/
 echo "正在传输文件到服务器..."
 scp public.tar root@xiaoxiang.space:/opt/www
-rm -f public.tar
 if [ $? -ne 0 ];then
-	echo "文件传输失败..."
-	exit 1
+        echo "文件传输失败..."
+        rm -f public.tar
+        exit 1
+else
+        echo "文件传输成功，服务器会自动解压，请一分钟后查看"
+        rm -f public.tar
+        exit 0
 fi
-echo "正在登陆服务器..."
-ssh root@xiaoxiang.space "sh /opt/www/deploy.sh"
-exit 0
+
