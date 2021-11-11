@@ -35,7 +35,13 @@ nmcli connection up eth0
 #### 防火墙
 
 * firewalld预先准备了几套防火墙策略集合（zone）。常见的zone：1. trusted允许所有的数据包；2. home；3. internal；4. work；5. public；6. external；7.dmz；8. block；9.drop。
-* 常见命令：1. --get-default-zone查询默认的zone；2. --set-default-zone设置默认的zone，--get-zones显示可用的zone；4. --list-all显示当前区域的网卡配置参数、资源、端口及服务等信息；5. --list-all-zones显示所有区域的网卡配置参数、资源、端口及服务等信息；6. --add-service=服务名、--remove-service=服务名；7. --add-port=端口号/协议、--remove-port=端口号/协议。8. --add-forward-port=port=源端口号:proto=协议:toport=目标端口号:toaddr:目标ip地址。9. --panic-on/--panic-off启动/关闭应急状态，阻断一切网络连接。
+* 常见命令：
+  1. --get-default-zone查询默认的zone；- -set-default-zone设置默认的zone，--get-zones显示可用的zone；
+  2.  --list-all显示当前区域的网卡配置参数、资源、端口及服务等信息； --list-all-zones显示所有区域的网卡配置参数、资源、端口及服务等信息；
+  3.  --add-service=服务名、--remove-service=服务名；
+  4.  --add-port=端口号/协议、--remove-port=端口号/协议；--list-ports列出已开放的端口。
+  5. --add-forward-port=port=源端口号:proto=协议:toport=目标端口号:toaddr:目标ip地址。
+  6.  --panic-on/--panic-off启动/关闭应急状态，阻断一切网络连接。
 * firewalld设置只在下次重启前有效，如果需要永久生效，需要加上--permanent模式，并执行firewall-cmd --reload。
 
 ``` sh
@@ -43,7 +49,10 @@ nmcli connection up eth0
 firewall-cmd --permanent --zone=public --add-rich-rule="rule family="ipv4" source address="192.168.10.0/24" service name="ssh" reject"
 ```
 
+### 进程与SELINUX
 
+* 进程（process）：程序被触发后，执行者的权限与属性、程序及程序所需的数据都会被加载到内存中，操作系统给与这个内存内的单元一个标识符PID。
+* 当登入系统后，会取得一个bash，当使用这个bash提供的接口去执行另一个指令时，另外执行的指令也会生成PID，这就时子进程了，而原来的bash环境就是父进程。
 
 ### 开机
 
