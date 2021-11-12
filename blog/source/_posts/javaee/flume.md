@@ -44,3 +44,4 @@ a1.sinks.k1.channel = c1
 #bin/flume-ng agent -c conf -f example.conf --name a1 -Dflume.root.logger=INFO,console
 ```
 
+* 通过linux命令发送一条log `logger --udp --port 5140 --server 172.27.32.2 "hello world"`
