@@ -58,6 +58,7 @@ date: 2021-02-08 11:29:58
   * PR:priority，指进程的优先级、NI：Nice，于PR有关；TIME+表示CPU使用时间的累加
   * 执行过程中按下M表示以内存的使用来排序，N表示已PID来排序，P表示以CPU来排序，T表示以TIME+来排序，按下q可以离开top
   * `-p PID`观察指定PID
+  * 在top执行过程中可以按下`P`使得以CPU的使用资源排序，按下`M`以内存的使用资源排序，按下`N`以PID来排序。
 
 * `kill `
   * `kill -9 PID`立刻强制删除一个工作
@@ -160,6 +161,12 @@ MAILTO=root
 4. 若准备进行指令，根据 /etc/anacrontab 的设定，将延迟 5 分钟 + 随机n分钟 (看RANDOM_DELAY 的 设定)；
 5.  延迟时间过后，开始执行后续指令，亦即『 run-parts /etc/cron.daily 』这串指令；
 6. 执行完毕后， anacron 程序结束。
+
+### 查看系统信息
+
+* `free -h`查看内存使用情况。
+* `uname [-asrmpi]` -a表示所有；-s 系统核心名称；-r 核心的版本；-m 本系统的硬件名称(x86_64)；-p CPU的类型；-i 硬件的平台。
+* `uptime`显示系统启动时间和工作负载。
 
 
 ## 文件
