@@ -49,7 +49,7 @@ nmcli connection up eth0
 firewall-cmd --permanent --zone=public --add-rich-rule="rule family="ipv4" source address="192.168.10.0/24" service name="ssh" reject"
 ```
 
-### 进程与SELINUX
+### 进程
 
 * 进程（process）：程序被触发后，执行者的权限与属性、程序及程序所需的数据都会被加载到内存中，操作系统给与这个内存内的单元一个标识符PID。
 * 当登入系统后，会取得一个bash，当使用这个bash提供的接口去执行另一个指令时，另外执行的指令也会生成PID，这个新进程就是子进程，而原来的bash环境就是父进程。linux中进程通常由父进程以复制(fork)的方式产生一个一摸一样的子进程，然后被复制出来的子进程再以exec的方式来执行实际要进行的程序，最终就会成为一个子进程。
