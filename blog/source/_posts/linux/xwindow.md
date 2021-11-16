@@ -42,4 +42,24 @@ date: 2021-11-15 14:28:47
   * 当单纯执行xinit的时候，默认执行的命令为`xinit xterm -geogmetry _1_1 -n login -display :0 -- X :0`。-display:0表示这个虚拟机是第:0号的X显示接口。一般会使用startx来启动xwindow，因为startx会自动找到对应的参数。
 * xserverrc
   * 在启动X server时，Xorg会去读取/etc/X11/xorg.conf这个配置文件。linux通过执行`X`来启动X server，linux可以同时启动多个X，第一个X的画面在:0即tty2，第二个X是:1即tty3。
+* 在文字接口下启动X时，直接使用startx来找到X Server和X client的参数或者配置文件，然后再呼叫xinit来启动X窗口系统。xinit现在如X server到预设的:0这个显示接口，然后再加载X client到这个X显示接口上。X client通常就是GNOME或者KDE。
+* X Server理论上要启动一个6000端口来和X client通信，但是在同一台机器上时，会使用socket来通信。在X Window System环境下，我们称port 6000为第0个显示接口，即hostname:0，可以简写为:0。
+
+```sh
+#X启动
+
+#启动X server，这个时候会跳转到tty2（也可能是别的，下面以tty2举例），但是啥都没有，用ctrl+alt+F1跳回到tty1
+X :1 &
+#启动X Client，这个时候tty2会变白，通过ctrl+alt+F2跳到tty2
+xterm -display :1 &
+#在tty2执行
+xclock -display :1 &
+xeyes -display :1 &
+#切换到tty1，安装twm
+apt install twm
+#启动twm，再切换到tty2就能拖动窗口了
+twm -display :1 &
+```
+
+
 
