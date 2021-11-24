@@ -12,12 +12,21 @@ date: 2021-08-12 10:03:28
 * 配置文件可以包含多个`server`块，他们之间通过监听的端口和服务名来区分。一旦nginx决定使用哪个服server来处理请求，他就会根据server块内location的指令来匹配请求头中的url，①精确匹配优先级最高，遇到就返回结果；②普通匹配会选择location中前缀最长的那个，和顺序无关；③当location中有正则表达式时，会优先匹配正则表达式（正则级别比普通匹配优先级高，但比精确匹配优先级低），正则表达式的匹配顺序按照文件中的物理顺序匹配，只要匹配到一条正则，就会返回结果；如果没有匹配，就会取普通匹配中最匹配的那个。
 * nginx的错误日志文件在`usr/local/nginx/logs`、`/var/log/nginx`
 * 使用`proxy_pass`来配置代理服务。代理服务的流程：server接收request->把request传给代理服务->获取代理服务的response->把response返回给客户端。
+* proxy_pass有两个要注意的点
+  * proxy_pass后面如果跟了一个完整的url，如`http://localhost:8080/xxx`，那么最后访问的时候就是location中匹配的那一部分替换成proxy_pass的url。
+  * proxy_pass后面如果跟的是如`http://localhost:8080`，那么最后访问的是proxy_pass的链接加上请求路径。
 
 ```nginx
 server {
 	listen 80;
-    location / {
-        proxy_pass http://localhost:8080/;
+    #最后的地址就是http://localhost:8080/journey/xxx
+    location /journey {
+        proxy_pass http://localhost:8080;
+    }
+    
+    #最后的地址就是http://localhost:8080/test/xxx，location对应的chat会被替换为url。
+    location /chat {
+        proxy_pass http://localhost:8080/test;
     }
     
     #将会映射到/html/tool这个路径下

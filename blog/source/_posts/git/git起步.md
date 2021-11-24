@@ -36,17 +36,46 @@ date: 2021-01-28 13:49:03
 8. 使用`git push origin master` 将修改提交到远程仓库。（使用`ssh-keygen`生成密钥，并将公钥放到git上去，以后提交就不用输账号和密码了）。
    * `git push [remote-name] [branch-name]`，这是完整命令。当使用克隆命令时，默认使用origin作为远程仓库的名字，master作为本地分支的名字，`git push`不加其他参数也能用，但是如果你创建了好几个分支就得加上[remote-name]和[branch-name]。
 
-#### tips
+### tips
+
+#### .gitignore
 
 * 可以创建一个.gitignore文件，来指明哪些文件不需要被提交到仓库。
+
+* `.gitignore`文件的格式规范如下：
+  * 所有空行或者以`#`开头的行都会被Git忽略。
+  * 忽略指定的模式以外的文件或者目录，可以在模式前加上`!`。
+  * 匹配模式以`/`开头防止递归。
+  * 匹配模式以`/`结尾防止递归。
+  * `*`匹配零个或多个任意字符，`[a-c]`匹配任意一个列在方括号中的字符，`?`只匹配任何一个字符，`**`表示匹配任意中间目录。
+
+```sh
+#忽略所有的.a文件
+*.a
+#跟踪所有的lib.a，即使在前面忽略了.a文件
+!lib.a
+#只忽略当前目录下的TODO文件，而不忽略subdir/TODO文件
+/TODO
+#忽略任何目录下名为build的文件夹
+build/
+#忽略doc/notes.txt，但不忽略doc/server/arch.txt
+doc/*.txt
+#忽略doc/目录及其所有子目录下的.pdf文件
+doc/**/*.pdf
+```
+
+### git rm
+
+* 当我们想从文件从Git仓库中删除，但仍希望保留在当前目录中。可以使用`git rm --cached README`。
+* `git rm`删除工作目录的文件并从暂存区删除。如果删除之前修改过并且已经放到暂存区域的文件，使用`git rm -f xxx`。
+
+
+
 * 查看文件修改了什么地方，可以使用`git diff`指令。
 * 从git暂存区移除文件可以使用`git rm`，他不会移除工作目录的文件（这要自己删除）。
 * 查看提交历史`git log`，后跟`-2`只会显示最近两次的跟新。
-* 添加一个远程仓库`git remote add [仓库名称] [仓库地址]`,抓取该仓库所有文件`git fetch [仓库名称]`,切换到该仓库`git checkout [仓库名称]/master`，修改远程仓库的名字`git remote rename [原名] [新名]`。
-* `git pull`是将远程仓库抓下来，合并到本地分支。
+* 切换到其他分支`git checkout master`.
 * `git tag`可以给某一时间点的版本打标签。
-* `git remote set-url origin 仓库地址`：修改仓库的远程地址
-* `git remote -v`：查看当前仓库对应的远程地址。
 * `git update-index --assume-unchanged 文件名`：取消本地跟踪
 * `git update-index --no-assume-unchanged 文件名`：恢复本地跟踪
 * 协议：
@@ -56,6 +85,8 @@ date: 2021-01-28 13:49:03
 
 
 
-**参考链接：[Pro Git](http://git.oschina.net/progit/)**
-**参考链接：[开源指北](https://gitee.com/opensource-guide/git_tutorial/Git%20%E5%91%BD%E4%BB%A4%E8%AF%A6%E8%A7%A3/%E5%B8%B8%E7%94%A8%20Git%20%E5%91%BD%E4%BB%A4/#git-%E5%91%BD%E4%BB%A4%E6%89%8B%E5%86%8C)**
+**参考链接：**[Pro Git](http://git.oschina.net/progit/)
 
+**参考链接：**[Git - 记录每次更新到仓库 (git-scm.com)](https://git-scm.com/book/zh/v2/Git-基础-记录每次更新到仓库)
+
+**参考链接：**[开源指北](https://gitee.com/opensource-guide/git_tutorial/Git 命令详解/常用 Git 命令/#git-命令手册)
