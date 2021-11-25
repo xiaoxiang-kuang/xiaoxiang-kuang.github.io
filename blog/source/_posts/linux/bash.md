@@ -123,7 +123,12 @@ str=${str:-root}
 * 管道命令必须要接收上一个指令的标准输入，如less、more、head、tail时管道命令，而如ls、cp、mv就不是管道命令。
 * 管道后面第一个必须是指令。
 * 在管道中常常会使用前一个指令的输出作为后一个指令的输入，某些指令需要指定文件名来处理，该stdin和stdout可以使用`减号"-"`来替代。如`tar -cvf - /home | tar -xvf - -C /tmp/homeback`，这个命令是将/home里的文件打包，将打包的文件输出到stdout，后面的命令从stdin读取数据，所以我们就不需要文件名了，直接使用-代替。
-* grep [-in]  '搜索字符串'  filename：查找文件或标准输出中的字符串，-i表示忽略大小写，-n表示输出行号。`-v`：表示选择未匹配的行。
+* grep [-invAB]  '搜索字符串'  filename：查找文件或标准输出中的字符串，
+  * -i表示忽略大小写。
+  * -n表示输出行号。
+  * `-v`：表示选择未匹配的行（反选）。
+  * -A：--after-context，输出查找字符串后面n行。
+  * -B：--before-context，输出查找字符串前面多少行
 * cut：将一段数据切出来
   *  ` cat filename |cut -d '分隔字符'  -f num`：-d后面跟分隔字符，将数据分为几段，-f表示取出第几段。
   *  `cat filename  |cut -c 12-`：-c表示每一行都获取从第12个字符后面的所有字符（注意12后面有个减号）。
@@ -213,5 +218,7 @@ last -n 5 | awk '{print $1 "\t" $3}'
 last -n 5| awk '{print $1 "\t lines: " NR "\t columns: " NF}' 
 #将分割字符设为冒号:，查询第三栏小于10，并只输出账号和第三栏
 cat /etc/passwd | awk 'BEGIN {FS=":"} $3 < 10 {print $1 "\t " $3}' 
+#杀掉所有的java程序
+jps |grep -vi jps | awk '{print $1}' | xargs -n 1 -I {} kill {}
 ```
 
