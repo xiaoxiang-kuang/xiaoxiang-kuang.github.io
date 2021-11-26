@@ -12,27 +12,65 @@ date: 2021-09-24 19:27:36
 
 * 目前主流网卡为使用以太网络协议开发出来的以太网卡（Ethernet），所以linux称呼这种网络接口为ethN（N为数字）。新的centos7对网卡的编号有另一套规则，网卡待会现在与网卡的来源有关：eno1（BIOS内建的网卡），ens1（BIOS内建的PCI-E网卡），enp2s0（PCI-E）界面的独立网卡。
 
-```sh
-#后面不接参数会输出所有的设备，NAME：连接代号  TYPE：网卡类型  DEVICE：网卡名
-nmcli connection show [NAME]
-#connection.autoconnect[yes|no] 是否开机就启动这个连接
-#ipv4.method[auto|manual] 自动还是手动设定网络参数
-#ipv4.dns[dns_server_ip] 填写DNS的地址
-#ipv4.addresses[IP/Netmask] 将IP和子网掩码的集合，用斜线/隔开
-#ipv4.gateway[gw_ip] 网关的IP地址
+* nmcli可用来设置ip、dns等配置，与直接修改/etc/sysconfig/network-scripts/ifcfg-xxx（centos7）、/etc/NetworkManager/system-connections/ethernet-xxx（ubuntu18）等效。
 
-#修改网络参数
-nmcli connection modify eth0 \
-connection.autoconnect yes \
-ipv4.method manual \
-ipv4.addresses 192.168.x.x/24 \
-ipv4.gateway 192.168.x.x \
-ipv4.dns 192.168.x.x
-#让修改生效
-nmcli connection up eth0
+* 一个网卡设备可以有多个配置，但是只能有一个为激活状态，多个配置可以在不同的网络环境中切换。比如小明在公司用静态IP的方式连接到网络，在家用DHCP的方式连接网络，可以创建两个connections，一个叫static-conn，另一个叫dhcp-conn，当需要使用DHCP的方式时，执行`nmcli con up dhcp-conn`激活配置，当使用静态IP的方式时，执行`nmcli con static-conn`激活配置。
+
+`nmcli connection {show | up |down| modify | add | edit |clone | delete |monitor | reload | load | import | export } ARGUMENTS...`
+
+```sh
+#为网卡enp0s8创建一个配置
+nmcli connection add ifname enp0s8 type ethernet ipv4.method auto
+#在一个交互式的窗口中为ethernet-enp0s8编写配置
+nmcli connection edit ethernet-enp0s8
+#修改ethernet-enp0s8的网络参数
+nmcli connection modify enp0s8 \ 
+    connection.autoconnect yes \ #是否开机就启动这个配置
+    ipv4.method manual \ #自动（DHCP）还是手动设定网络参数
+    ipv4.addresses 192.168.x.x/24 \ #设定地址
+    ipv4.gateway 192.168.x.x \ #设定网关
+    ipv4.dns 192.168.x.x #设定DNS
+#移除某个配置，只需要将该配置的值置为空
+nmcli con modify ethernet-enp0s8 ipv4.dns ""
+#为ethernet-enp0s8添加dns的配置（因为dns和ip能有多个配置，所以可以用+和-，不能有多个配置的不能用）
+nmcli con modify ethernet-enp0s8 +ipv4.dns 8.8.8.8
+#为ethernet-enp0s8删除ip的配置
+nmcli con modify ethernet-enp0s8 -ipv4.addresses "192.168.100.25/24"
+#修改配置名称
+nmcli connection modify ethernet-enp0s8 con-name 
+
+
+#列出所有的配置。
+nmcli connection show 
+#仅列出激活状态的配置。
+nmcli connection show --active
+#列出ethernet-enp0s8的配置。
+nmcli connection show ethernet-enp0s8 
+
+#激活enp0s8设备的配置。
+nmcli connection up ifname enp0s8
+#激活名称为ethernet-enp0s8的配置。
+nmcli connection up ethernet-enp0s8 
+
+#删除ethernet-enp0s8的配置
+nmcli connection delete ethernet-enp0s8
+
+#导入一个openvpn的配置给networkmanager
+nmcli con import type openvpn file ~/Downloads/frootvpn.ovpn
 ```
 
 #### 防火墙
+
+```sh
+#查看防火墙的状态
+systemctl status firewalld
+#关闭防火墙并禁止开机自启
+systemctl stop firewalld; systemctl disable firewalld
+#启用防火墙并允许开机自启
+systemctl start firewalld; systemctl enable firewalld
+```
+
+* 防火墙的服务名为firewalld，centos7使用firewall-cmd来管理防火墙。
 
 * firewalld预先准备了几套防火墙策略集合（zone）。常见的zone：1. trusted允许所有的数据包；2. home；3. internal；4. work；5. public；6. external；7.dmz；8. block；9.drop。
 * 常见命令：
@@ -45,6 +83,9 @@ nmcli connection up eth0
 * firewalld设置只在下次重启前有效，如果需要永久生效，需要加上--permanent模式，并执行firewall-cmd --reload。
 
 ``` sh
+#永久放开3306端口，并立刻生效
+firewall-cmd --add-port 3306/tcp --permanent
+firewall-cmd --reload
 #永久拒绝192.168.10.0/24网段的所有用户访问本机的ssh服务。
 firewall-cmd --permanent --zone=public --add-rich-rule="rule family="ipv4" source address="192.168.10.0/24" service name="ssh" reject"
 ```
