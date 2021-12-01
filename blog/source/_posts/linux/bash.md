@@ -53,7 +53,7 @@ date: 2021-09-09 16:28:01
 * login shell是取得bash时需要输入完整的登录账号密码的就是login shell。
 * non-login shell就是取得bash接口不需要重复的登入。如从图形化界面进入linux后，开启每个bash都不需要再次输入用户名和密码。这就是non-login shell。
 * login shell会读取`/etc/profile`（系统整体的设定，每个使用者登入取得bash时一定会读取的配置文件。）和`~/.bash_profile或~/.bash_login或~/.profile`（个人的设定）的文件。
-* non-login shell仅会读取~/.bashrc。
+* non-login shell会读取~/.bashrc、/etc/bashrc、/etc/profile.d（不同的linux会有些不同）。
 * source可以立即读入配置文件的内容。
 
 ### 通配符与特殊符号

@@ -141,7 +141,7 @@ firewall-cmd --permanent --zone=public --add-rich-rule="rule family="ipv4" sourc
 3. 依据bootloader的设定载入kernel，kernel会开始侦测硬件和载入驱动程序；
 4. 在硬件驱动成功后，kernel会主动呼叫systemd程序，并以default.target流程开机；
    1. systemd执行sysinit.target初始化系统及basic.target准备操作系统；
-   2. systemd启动multi-user.target下的本机于服务器服务；
+   2. systemd启动multi-user.target下的服务；
    3. systemd执行multi-user.target下的/etc/rc.d/rc.local文件；
    4. systemd执行multi-user.target下的getty.target及登入服务；
    5. systed执行graphical需要的服务。

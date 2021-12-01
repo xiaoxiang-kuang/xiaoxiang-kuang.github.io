@@ -6,7 +6,7 @@ site: 网络
 date: 2021-08-12 10:03:28
 ---
 
-* nginx默认的配置文件名是nginx.conf，位置在`/usr/local/nginx/conf`、`/etc/niginx`、或`/usr/local/etc/nginx`。
+* nginx默认的配置文件名是nginx.conf，位置在`/usr/local/nginx/conf`、`/etc/niginx`、或`/usr/local/etc/nginx`。通过`nginx -c xxx.conf`来指定配置文件。
 * 当nginx启动后，可以通过`nginx -s signal`来控制nginx，signal可以是：
   * stop：快速关闭；quit：正常关闭；reload：重新加载配置文件；reopen：重新打开配置文件。
 * 配置文件可以包含多个`server`块，他们之间通过监听的端口和服务名来区分。一旦nginx决定使用哪个服server来处理请求，他就会根据server块内location的指令来匹配请求头中的url，①精确匹配优先级最高，遇到就返回结果；②普通匹配会选择location中前缀最长的那个，和顺序无关；③当location中有正则表达式时，会优先匹配正则表达式（正则级别比普通匹配优先级高，但比精确匹配优先级低），正则表达式的匹配顺序按照文件中的物理顺序匹配，只要匹配到一条正则，就会返回结果；如果没有匹配，就会取普通匹配中最匹配的那个。
