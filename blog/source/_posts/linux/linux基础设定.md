@@ -92,6 +92,21 @@ firewall-cmd --reload
 firewall-cmd --permanent --zone=public --add-rich-rule="rule family="ipv4" source address="192.168.10.0/24" service name="ssh" reject"
 ```
 
+### SELinux
+
+* 全称是Security Enhanced Linux。SELinux是在进行进程、文件等细部权限设定依据的一个核心模块。SELinux提供了一些预设的策略（Policy），并在政策内提供了多个规则（rule）。
+* 自主式访问控制（Discretionary Access Control，DAC）是根据进程的拥有者与文件资源的rwx权限来决定有无存取的能力。
+* 委任式访问控制（Mandatory Access Control，MAC）可以根据特定的进程和特定的文件资源来进行权限的管控，即使是root，在使用不同的进程时，取得到的权限不一定是root，而要看当时进程的设定而定。控制的主体由使用者变成了进程。
+* SELinux是通过MAC的方式来管控进程，控制的主体是进程，而目标是该进程能否读取的文件资源。
+  * 主体（Subject）：即进程。
+  * 目标（Object）：主体目标能否存取的目标资源，一般就是文件系统。
+  * 策略（Policy）：由于进程和文件数量庞大，SELinux会依据某些服务来制定基本的存取安全性策略，这些策略中由详细的规则（rule）来指定不同的服务开放某些资源的存取与否。Linux里提供了三个主要的策略，分别是：
+    * targeted：针对网络服务限制多，针对本机限制少，是预设的策略。
+    * minimum：仅针对选择的进程来保护。
+    * mls：完整的SELinux限制，限制较为严格。
+  * 安全性本文（security context）：主体能不能存取目标除了策略指定外，主体和目标的安全性本文必须一致才能够顺利存取，安全性本文类似于文件系统的rwx。
+* 主体如果要存取目标，首先需要通过SELinux政策内的规则；其次与目标资源的安全性本文对比；最后再检查目标的rwx权限。
+
 ### 进程
 
 * 进程（process）：程序被触发后，执行者的权限与属性、程序及程序所需的数据都会被加载到内存中，操作系统给与这个内存内的单元一个标识符PID。
