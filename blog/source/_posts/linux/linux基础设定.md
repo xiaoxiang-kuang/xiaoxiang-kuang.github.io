@@ -107,6 +107,39 @@ firewall-cmd --permanent --zone=public --add-rich-rule="rule family="ipv4" sourc
   * 安全性本文（security context）：主体能不能存取目标除了策略指定外，主体和目标的安全性本文必须一致才能够顺利存取，安全性本文类似于文件系统的rwx。
 * 主体如果要存取目标，首先需要通过SELinux政策内的规则；其次与目标资源的安全性本文对比；最后再检查目标的rwx权限。
 
+#### 安全性文本
+
+* 文件的安全性文本是放到文件的inode内的，可以使用`ls -Z`去观察安全性文本。
+* 安全性文本主要用冒号分为三个字段。`identify:role:type`。
+* 身份识别（Identify），常见的有：
+  * unconfined_u：不受限的用户，也就是说该文件来自于不受限的进程所产生的。
+  * system_u：系统用户，大部分就是系统自己产生的。
+* 基本上如果是系统或软件本身所提供的文件，大多就是system_u这个身份名称，如果是用户透过bash自己建立的文件，大多数是不受限的unconfined_u，如果是网络服务所产生的文件，或者是系统服务运作过程中产生的文件，大部分的识别就会是system_u。
+* 角色（Role）
+  * object_r：代表的是文件或目录等文件资源。
+  * system_r：代表的就是进程。
+* 类型（Type），一个主体进程能不能读取到资源，与类型有关，类型在文件和进程中的定义不太相同。在文件资源上称为类型Type，在进程上称为领域domain。
+
+#### SELinux三种模式的启动、关闭和观察
+
+* SELinux目前共有三种模式，分别为：
+  * enforcing：强制模式，代表SELinux正确的开始限制domain/type了。
+  * permissive：宽容模式，表示不会实际限制domain和type，但会有警告信息。
+  * disable：关闭，代表SELinux并没有实际运作。
+
+```sh
+#获取当前的SELinux模式
+getenforce
+#查询当前的策略
+sestatus 
+#修改策略，修改/etc/selinux/config的SELINUX=enforcing
+#SELinux在enforcing和permissive之间切换无需重启
+#切换到disable或者从disable切换到其他需要重启
+setenforce [0|1] #0表示permissive，1表示Enforcing
+```
+
+
+
 ### 进程
 
 * 进程（process）：程序被触发后，执行者的权限与属性、程序及程序所需的数据都会被加载到内存中，操作系统给与这个内存内的单元一个标识符PID。

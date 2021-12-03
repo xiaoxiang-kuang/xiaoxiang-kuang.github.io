@@ -255,6 +255,46 @@ MAILTO=root
 
   * sudo时间间隔为5min。
 
+#### ACL
+
+* Access Control List，用来提供在owner、group，others的rwx之外的权限设定，可以针对单一使用者，单一文件或目录来进行rwx的权限规范。
+
+```sh
+#检查系统是否支持ACL
+dmesg | grep -i acl
+
+#设定acl参数
+setfacl[-bkRd] [{-m | -x} acl参数] 目标文件名
+-m : 设定acl参数给文件使用
+-x : 删除后面的acl参数
+-b : 移除所有的acl参数设定
+-k : 移除预设的acl参数
+-R : 递归设定acl
+-d : 设定预设的acl参数，只对目录有效，在该目录新建的数据都会引用此默认值
+
+#为xiaoxiang用户设定文件的权限为rwx
+#一个文件设定了ACL参数后，他的权限部分就会多出来一个+号。
+setfacl -m u:xiaoxiang:rwx file1
+#为文件使用者设定权限
+setfacl -m u::rwx file2
+#为群组设置权限
+setfacl -m g:mygroup:rx file3
+#为目录设置acl权限，未来文件的acl权限都继承此目录
+setfacl -m d:u:xiaoxiang:rx /home/xiaoxiang/dir1
+#让xiaoxiang无法使用该目录
+setfacl -m u:xiaoxiang:- /home/xiaoxiang/dir2
+
+#取消某个账号的ACL权限设定
+setfacl -x u:xiaoxiang /home/xiaoxiang/file5
+
+#获取file1的acl权限内容
+getfacl file1
+#结果中#开头的表示默认值
+#结果中的mask表示用来规范最大允许权限
+```
+
+
+
 ### 磁盘
 
 * `df -h`查看磁盘的信息。
