@@ -204,3 +204,57 @@ done
 ### shell调试
 
 * `shell [-nvx] xxx.sh`：-n查询语法是否正确；-v先输出文件内容再执行shell脚本；-x执行前先将使用到的script输出到屏幕上。
+
+### 例：
+
+```sh
+#!/bin/bash
+
+current_path="/opt/www/journey"
+tmp_path="/tmp"
+jar_name="journey.jar"
+
+tmp_jar_path="${current_path}${tmp_path}/${jar_name}"
+jar_path="${current_path}/${jar_name}"
+logs_path="${current_path}/logs"
+
+mkdir -p "${tmp_path}"
+mkdir -p "${logs_path}"
+
+function start() {
+	nohup java -jar ${jar_path} > "${logs_path}/start.log" 2>&1 &
+	if [[ $? == 0 ]];then
+		echo "server is starting"
+	fi
+}
+
+function stop() {
+	jar_pid=`ps aux | grep ${jar_name} | sed '/.*grep.*'${jar_name}'.*/d' | awk '{print $2}'`
+	kill ${jar_pid} 2>/dev/null
+	if [[ $? == 0 ]];then
+		echo "server has stopped"
+	fi
+}
+
+function update() {
+	if [[ !  -f ${tmp_jar_path} ]];then 
+		echo "file not exists..."
+		exit 1
+	fi
+	stop
+	mv ${tmp_jar_path} ${jar_path}
+	start
+}
+
+if [[ "start" == $1 ]];then
+	start 
+elif [[ "stop" == $1 ]];then
+	stop
+elif [[ "update" == $1  ]];then
+	update
+else
+	echo "invalid args"
+fi
+
+```
+

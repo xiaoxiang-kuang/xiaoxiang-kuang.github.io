@@ -207,7 +207,7 @@ sed -i '$a # This is a test' regular_express.txt
 
 #### awk 数据处理工具
 
-* `awk '条件类型1{动作1}' filename` 
+* `awk '条件类型1{动作1}' filename` ，awk只能用单引号。
 * awk默认以空格或者[Tab]按键隔开，隔开的每一行的每个字段都是有变量名称的，那就是$1、$2...。$0表示一整行。
 * NF表示每一行的字段总数；NR表示目前是第几行；FS表示目前的分割字符，默认是空格
 
