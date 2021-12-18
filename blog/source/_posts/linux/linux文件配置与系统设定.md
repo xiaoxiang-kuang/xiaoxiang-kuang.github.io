@@ -1,5 +1,5 @@
 ---
-title: linux基础设定
+title: linux文件配置与系统设定
 categories:
   - [linux]
 site: linux
@@ -149,37 +149,6 @@ setenforce [0|1] #0表示permissive，1表示Enforcing
   2. 暂存进程开始以exec的方式加载实际要执行的程序。
 * 常驻内存中的进程通常提供一些功能以服务用户，因此这些常驻程序就会被称为：服务（daemon）。
 
-#### 相关命令jobs、fg、&、nohup、kill、nice
-
-* 使用`&`可以将任务丢到后台执行，但标准输出和标准错误输出仍然会被输出到屏幕上。
-* 可以使用`ctrl+z`将任务丢到背景，状态是暂停。
-* 使用 `jobs -l`可以观察当前背景中的任务。其中+代表最近被放到背景，-代表最近倒数第二个被放到背景。
-* 使用fg可以将背景工作拿到前台来执行。命令：`fg &jobnumber`。
-* 删除背景中的工作。命令：`kill [-15 |-9] %jobnumber`。
-* `&`将进程放到了背景执行，但是当退出bash后，进程就会被终止掉，如果需要退出bash后进程仍然能继续执行，可以使用nohup。nohup能在退出bash后还能继续执行工作。
-* 使用`ps -lf`显示当前的bash的进程。
-  * -l时较详细的输出当前bash的信息，-f是更完整的输出。🤣
-  * 输出中的S代表该进程的状态，主要的状态有：R running；S sleep；D 不可唤醒的睡眠状态，而可能是在等待I/O；T 停止状态；Z zombie僵尸状态。
-  * PRI/NI priority/nice 代表此进程被cpu所执行的优先级。PRI值越低代表优先级越高。优先级是由内核动态调整的，用户无法干涉，如果需要调整进程的优先执行次序时，可以通过修改Nice的值。一般来说有PRI(new)=PRI(old)+nice，但是最终的PRI也是有系统分析后决定的，nice的值有正有负，当nice为负数时，该进程就会降低pri值，所以会被较为优先的处理。nice的值的范围是`-10~19`。一般使用者仅可以调整自己进程的nice值，范围为`0~19`，且只能将nice调高。使用nice和renice调整。
-    * nice：新执行的指令给予新的nice值 `nice [-n 数字] command`。
-    * renice：已存在进程的nice重新调整 `renice [-number] PID`。
-  *  ADDR/SZ/WCHAN  addr标识该进程在cpu的哪个部分，如果是running的进程，一般就会显示-，sz代表该进程用掉了多少的内存。wchaz代表进程目前是否在运行中。
-  * TIME代表使用掉的cpu的时间。
-* `ps axjf`可以列出来类似进程树的进程显示。
-* `pstree [-Apu]` -p显示每个进程的pid，-u显示每个进程的所属账号。-A各个进程之间以ascii字符来连接。
-
-* 当想要进程执行某些动作时，可以给该进程一个工作号码，可以使用`kill -l `或者`man 7 signal`查到，主要的信号与名称对应关系。
-
-| signal     | 内容                                                         |
-| ---------- | ------------------------------------------------------------ |
-| 1 SIGHUP   | 启动被终止的进程，可以让该PID重新读取自己的配置文件，类似于重新启动 |
-| 2 SIGINT   | 相当于用键盘输入一个ctrl-c来中断一个进程的执行               |
-| 9 SIGKILL  | 强制中断一个进程的进行                                       |
-| 15 SIGTERM | 以正常的结束进程来终止该进程                                 |
-| 19 SIGSTOP | 相当于使用键盘ctrl-z来暂停一个进程的执行。                   |
-
-* kill可以帮我们将signal传递给某个%jobnumber或者某个PID。
-
 ### 开机
 
 #### 流程如下
@@ -268,10 +237,3 @@ root:x:0:dmtsai,alex
   * 修改账号的数据。
   * 添加群组`usermod -a -G wheel koal`
 * userdel：删除用户的相关数据。`-r`表示同时删除该用户的home目录。
-
-
-
-* `hostnamectl [set-hostname 主机名]` 修改主机名。
-* `timedatectl [list-timezones | set-timezone | set-time | set-ntp]` 列出系统上的失去、设定时区、设定时间、设定网络校时。
-* `localectl set-locale LANG=en_US.utf8`设置语系。通过`locale -a`可以查看linux支持了多少语系，通过`locale`来查看系统目前的语言环境。LANG只和输出信息有关，若要修改其他的不同信息，要更新LC_ALL。
-* 硬件数据收集：`dmidecode(CPU型号、主板型号、内存相关型号等), gdisk, dmesg, vmstat（分析cpu、内存、io目前的状态）, lspci, lsusb,iostat。

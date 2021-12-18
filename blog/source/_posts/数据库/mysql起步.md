@@ -44,7 +44,7 @@ date: 2021-02-04 15:58:03
 ### mysql安装
 
 * `systemctl start mysqld`启动mysql。
-* mysql安装后，`'root'@'localhost'`超级用户被创建，其密码在`/var/log/mysqld.log`，使用`grep 'temporary password' /var/log/mysqld.log`来寻找密码。
+* mysql安装后，会自动创建超级用户`'root'@'localhost'`，其密码在`/var/log/mysqld.log`，使用`grep 'temporary password' /var/log/mysqld.log`来寻找密码。
 * 修改密码`ALTER USER 'root'@'localhost' IDENTIFIED BY 'newPassword'`。
 * mysql8修改成简单的密码会报错（试了下mysql5.7也会报错，解决方法一样）。解决流程如下：
   1. mysql8增加了一组变量来控制密码的长度、强度等。通过`SHOW VARIABLES LIKE 'validate_password%'`来查看。
@@ -53,7 +53,7 @@ date: 2021-02-04 15:58:03
   4. 更改策略：`set global validate_password.policy=0;set global validate_password.number=4;`
   5. **参考链接：**[MySQL :: MySQL 8.0 Reference Manual :: 6.4.3.2 Password Validation Options and Variables](https://dev.mysql.com/doc/refman/8.0/en/validate-password-options-variables.html)
 
-### mySql配置
+### mySQL配置
 
 * mysql配置文件被划分为多个组，每个组有一个组名，用[]括起来。
 

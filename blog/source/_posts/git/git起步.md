@@ -69,12 +69,18 @@ doc/**/*.pdf
 * 当我们想从文件从Git仓库中删除，但仍希望保留在当前目录中。可以使用`git rm --cached README`。
 * `git rm`删除工作目录的文件并从暂存区删除。如果删除之前修改过并且已经放到暂存区域的文件，使用`git rm -f xxx`。
 
+### git stash 
+
+* `git stash`将工作区的变动暂存起来。
+* `git stash list` 列出当前已暂存的entries，最新的是`stash@{0}`。
+* `git stash pop`  从stash列表中移除一个暂存的数据，并将其应用到当前的工作目录。使用此命令可能会导致冲突，需要手动解决冲突并调用`git stash drop`来手动删除。
+* `git stash drop [stash]` 从stash列表中删除一个stash entry。
+
 
 
 * 查看文件修改了什么地方，可以使用`git diff`指令。
-* 从git暂存区移除文件可以使用`git rm`，他不会移除工作目录的文件（这要自己删除）。
 * 查看提交历史`git log`，后跟`-2`只会显示最近两次的跟新。
-* 切换到其他分支`git checkout master`.
+* 切换到其他分支`git checkout master`。
 * `git tag`可以给某一时间点的版本打标签。
 * `git update-index --assume-unchanged 文件名`：取消本地跟踪
 * `git update-index --no-assume-unchanged 文件名`：恢复本地跟踪
