@@ -1,12 +1,12 @@
 ---
-title: kafka&elasticsearch
+title: kafka
 categories:
   - [javaee]
 site: javaee
 date: 2021-10-21 14:15:47
 ---
 
-## kafka
+## 命令行
 
 ``` sh
 #启动服务
@@ -66,14 +66,5 @@ public static void main(String[] args) {
     //执行此客户端
     streams.start();
 }
-```
-
-## elasticsearch
-
-``` sh
-#启动elasticsearch
-./bin/elasticsearch
-#测试elasticsearch是否启动运行
-curl http://127.0.0.1:9200
 ```
 
