@@ -1,5 +1,5 @@
 ---
-title: shell
+title: bash下
 categories:
   - [linux]
 site: linux
