@@ -90,7 +90,7 @@ date: 2021-02-28 13:44:27
 #HTTP协议版本号
 GET /chat HTTP/1.1
 #Headers，为服务器表达其他的信息
-#Host指明了要发送到的服务器主机名
+#Host指明了要发送到的服务器主机名和端口号，如果没有包含端口号，会自动使用请求服务的默认端口。
 Host: xiaoxiang.space
 #指明了client的应用类型，操作系统、软件开发商及版本号
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:86.0) Gecko/20100101 Firefox/86.0
@@ -106,11 +106,12 @@ Content-Type: application/x-www-form-urlencoded; charset=UTF-8
 X-Requested-With: XMLHttpRequest
 #用来指明发送给服务器的消息主体的大小
 Content-Length: 22
-#指示了请求来自哪个站点。
+#指示了请求来自哪个站点。仅展示服务器名称，不包含任何路径。
+#除了不包含任何路径，该字段与Referer类型。
 Origin: https://developer.mozilla.org
 #决定当前的事务完成后，是否会关闭网络连接，如果是keep-alive，网络连接就是持久的，使得对同一个服务器的请求可以继续在该连接上完成
 Connection: keep-alive
-#包含了当前请求页面的来源页面的地址
+#表示当前页面的来源页面的地址。如果当前页面采用的是非安全协议而来源页面采用的是安全协议时Referer不会被发送。
 Referer: http://xiaoxiang.space/index
 #是由先前服务器通过Set-Cookie首部投放并存储到客户端。
 Cookie: JSESSIONID=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -147,6 +148,8 @@ Connection: keep-alive
 #下面是响应的数据
 xxx
 ```
+
+**参考链接：**[HTTP Headers - HTTP | MDN](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers)
 
 * HTTP消息是服务器和客户端之间交换数据的方式，有两种类型的消息：请求和响应。
 
