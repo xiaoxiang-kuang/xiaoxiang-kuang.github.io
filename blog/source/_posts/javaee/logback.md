@@ -40,7 +40,7 @@ date: 2021-08-23 10:10:05
 </configuration>
 ```
 
-## Appender
+## appender
 
 ### AppenderBase
 
@@ -87,7 +87,19 @@ date: 2021-08-23 10:10:05
 
 * 作为一个事件调度器存在，必须调用其他appender来完成操作。
 
+## encoder
 
+* encoder将日志事件转换为字节数组，同时将字节数组写入到一个OutputStream中。
+* PatternLayoutEncoder是目前唯一真正有用的encoder，它仅包裹了一个PatternLayout就完成了大部分的工作。
+
+## layout
+
+* layout负责将日志事件转化为字符串。
+
+### PatternLayout
+
+* 可以通过调整PatternLayout的转换模式来进行定制，PatternLayout的转换模式由字面量和转换说明符组成，每一个转换说明符由一个百分号开始`%`，后面跟随格式修改器，以及可用大括号括起来的转换字符和可选的参数。格式修改器可以对字段进行对齐，修改最大最小宽度等。
+* 括号用于对转换模式进行分组，`(`和`)`都有特殊的含义。
 
 
 
