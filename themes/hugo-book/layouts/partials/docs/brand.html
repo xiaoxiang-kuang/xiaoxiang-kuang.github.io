@@ -1,0 +1,8 @@
+<h2 class="book-brand">
+  <span class="flex align-center">
+    {{- with .Site.Params.BookLogo -}}
+    <img src="{{ . | relURL }}" alt="Logo" />
+    {{- end -}}
+    <span>{{ .Site.Title }}</span>
+  </span>
+</h2>

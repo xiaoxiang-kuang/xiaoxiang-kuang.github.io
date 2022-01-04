@@ -1,0 +1,16 @@
+{{ define "main" }}
+  {{ range sort .Paginator.Pages }}
+  <div class="markdown" style="margin-bottom:1.25rem;">
+    <div><a href="{{ .RelPermalink }}" style="font-size:115%;">{{ partial "docs/title.html" . }}</a></div>
+    {{ with .Date }}
+		<div>{{ partial "docs/date" (dict "Date" . "Format" $.Site.Params.BookDateFormat) }}</div>
+	{{ end }}
+  </div>
+  {{ end }}
+
+  {{ template "_internal/pagination.html" . }}
+{{ end }}
+
+{{ define "toc" }}
+  {{ partial "docs/taxonomy" . }}
+{{ end }}

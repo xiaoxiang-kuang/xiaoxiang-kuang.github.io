@@ -1,0 +1,24 @@
+<!--tags-->
+<nav>
+  <ul>
+  {{ range $term, $_ := .Site.Taxonomies }}
+    {{ with $.Site.GetPage (printf "/%s" $term | urlize) }}
+	  {{ if eq .Title "Tags" }}
+		<li>
+		  <strong>{{ .Title | title }}</strong>
+		  <ul>
+		  {{ range .Pages }}
+			<li>
+			  <a href="{{ .RelPermalink }}"  class="flex justify-between">
+			    <span>{{ .Title }}</span>
+			    <span>{{ len .Pages }}</span>
+			  </a>
+			</li>
+		  {{ end }}
+		  </ul>
+		</li>
+      {{ end }}
+	{{ end }}
+  {{ end }}
+  </ul>
+</nav>
