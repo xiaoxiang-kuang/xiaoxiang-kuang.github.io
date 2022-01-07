@@ -6,7 +6,6 @@ date: 2021-09-16 19:55:13
 ---
 
 * 当执行make时，make会在当时的目录下搜索Makefile（makefile）文件，而makefile里面则记录了原始码如何编译的详细信息，make按照makefile去编译这些文件。当在编译完成之后，修改了某个源码文件，执行make时，make只会针对被修改的文件进行编译。通常软件开发商会写一支侦测程序来侦测使用者的作业环境，以及该作业环境是否有软件开发商所需要的其他功能，在侦测程序侦测完毕后，会主动建立Makefile，通常这个检查程序的文件名为configure或config。
-
 * tarball就是将软件的所有原始码文件先以tar打包，然后再压缩。tarball文件通常包括：源代码文件；侦测程序文件（configure或config）；本软件的简易说明和安装说明（INSTALL或README）。
 
 ```sh
@@ -44,7 +43,5 @@ clean:
 * 通常会将自己安装的软件放到/usr/local下，将源代码放到/usr/local/src下。
 
 [鸟哥的 Linux 私房菜 -- 第二十一章、软件安装：源代码与 Tarball (vbird.org)](http://linux.vbird.org/linux_basic/0520source_code_and_tarball.php#intro_make)
-
-<!--more-->
 
 <!--more-->

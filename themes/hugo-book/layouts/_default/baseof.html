@@ -1,18 +1,14 @@
 <!DOCTYPE html>
-<html lang="{{ .Site.Language.Lang }}" dir="{{ .Site.Language.LanguageDirection | default "ltr" }}">
+<html dir="ltr">
 <head>
   {{ partial "docs/html-head" . }}
-  {{ partial "docs/inject/head" . }}
 </head>
-<body dir="{{ .Site.Language.LanguageDirection | default "ltr" }}">
-  <input type="checkbox" class="hidden toggle" id="menu-control" />
+<body dir="ltr">
   <input type="checkbox" class="hidden toggle" id="toc-control" />
   <main class="container flex">
     <aside class="book-menu">
       <div class="book-menu-content">
-        {{ template "menu" . }} <!-- Left menu Content -->
-		<div style="border-bottom:0.1px solid #ccc;"></div>
-		{{ template "toc" . }}
+        {{ template "menu-toc" . }} 
       </div>
     </aside>
 
@@ -21,27 +17,22 @@
         {{ template "header" . }} <!-- Mobile layout header -->
       </header>
 
-      {{ partial "docs/inject/content-before" . }}
       {{ template "main" . }} <!-- Page Content -->
-      {{ partial "docs/inject/content-after" . }}
 
       <footer class="book-footer">
         {{ template "footer" . }} <!-- Footer under page content -->
-        {{ partial "docs/inject/footer" . }}
       </footer>
-
-      {{ template "comments" . }} <!-- Comments block -->
-
+	  
       <label for="menu-control" class="hidden book-menu-overlay"></label>
     </div>
   </main>
-
-  {{ partial "docs/inject/body" . }}
 </body>
 </html>
 
-{{ define "menu" }}
-  {{ partial "docs/menu" . }}
+{{ define "menu-toc" }}
+  {{ partial "docs/menu" . }}<!-- Left menu Content -->
+  <div style="border-bottom:0.1px solid #ccc;"></div>
+  {{ template "toc" . }}
 {{ end }}
 
 {{ define "header" }}
@@ -50,7 +41,6 @@
   {{ if default true (default .Site.Params.BookToC .Params.BookToC) }}
   <aside class="hidden clearfix">
 	<nav>
-	  {{ partial "docs/inject/menu-before" . }}
 	  {{ partial "docs/menu-hugo" .Site.Menus.before }}
 
 	  {{ if .Site.Params.BookMenuBundle }}
@@ -60,7 +50,6 @@
 	  {{ end }}
 
 	  {{ partial "docs/menu-hugo" .Site.Menus.after }}
-	  {{ partial "docs/inject/menu-after" . }}
 	</nav>
 	<div style="border-bottom:0.1px solid #ccc;"></div>
 	{{ template "toc" . }}
@@ -70,14 +59,6 @@
 
 {{ define "footer" }}
   {{ partial "docs/footer" . }}
-{{ end }}
-
-{{ define "comments" }}
-  {{ if and .Content (default true (default .Site.Params.BookComments .Params.BookComments)) }}
-  <div class="book-comments">
-    {{- partial "docs/comments" . -}}
-  </div>
-  {{ end }}
 {{ end }}
 
 {{ define "main" }}

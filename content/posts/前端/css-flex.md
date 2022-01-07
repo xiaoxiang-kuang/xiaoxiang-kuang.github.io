@@ -6,13 +6,13 @@ tags:
 draft: false
 ---
 
-## 弹性容器属性。
-
 * 弹性盒子（Flex Box），能将当前页面适应不同的屏幕大小。
 * 弹性盒子由弹性容器（Flex container）和弹性子元素（Flex item）组成。
 * 弹性容器通过设置display属性的值为flex或inline-flex将其定义为弹性容器，弹性容器内包含了一个或多个弹性子元素。
 * 弹性容器外及弹性子元素内是正常渲染的。弹性盒子只定义了弹性子元素如何在弹性容器内布局。
 * 弹性子元素通常在弹性盒子内一行显示，默认每个容器只有一行。
+
+## 弹性容器属性
 
 ### flex-direction
 
@@ -30,7 +30,7 @@ flex-direction: row | row-reverse | column | column-reverse
 
 ### justify-content
 
-* justify-content属性应用在弹性容器上，把弹性容器沿着弹性容器的主轴线对其。
+* justify-content设置弹性子元素在水平方向上的对齐方式。
 
 ``` css
 justify-content: flex-start | flex-end | center | space-between | space-around
@@ -42,6 +42,8 @@ justify-content: flex-start | flex-end | center | space-between | space-around
   * center： 所有弹性项目挨着居中。
   * space-between：弹性容器平均分布在该行上，如果剩余空间为负或者只有一个弹性项，则该值等于flex-start。否则第一个弹性子元素和行的起始位置对其，最后一个弹性子元素和行的结束位置对其，其他元素平均分布。
   * space-around：弹性容器平均分布在改行上，如果剩余空间为负或只有一个弹性元素，该值等于center。否则弹性子元素间彼此间隔相等（如20px），第一个和最后一个弹性子元素和容器之间有一半的间隔（10px）。
+
+![](/img/前端/css-flex/justify-content.png)
 
 ### align-items
 
@@ -73,7 +75,7 @@ flex-wrap: nowrap | wrap | wrap-reverse | initial | inherit;
 
 ### align-content
 
-* align-content属性用来设置flex-wrap的行为，它设置各个行的对齐方式。
+* align-content只用来设置多行的对齐方式。
 
 ```css
 align-content: flex-start | flex-end | center | space-between | space-around | stretch

@@ -1,13 +1,14 @@
 {{ define "main" }}
+<div style="display:flex; flex-wrap:wrap;">
   {{ range sort .Paginator.Pages }}
-  <div class="markdown" style="margin-bottom:1.25rem;">
+  <article class="markdown" style="padding-bottom:1.25rem; width:20rem;">
     <div><a href="{{ .RelPermalink }}" style="font-size:115%;">{{ partial "docs/title.html" . }}</a></div>
     {{ with .Date }}
 		<div>{{ partial "docs/date" (dict "Date" . "Format" $.Site.Params.BookDateFormat) }}</div>
 	{{ end }}
-  </div>
+  </article>
   {{ end }}
-
+</div>
   {{ template "_internal/pagination.html" . }}
 {{ end }}
 

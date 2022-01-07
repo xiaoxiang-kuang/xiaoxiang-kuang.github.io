@@ -234,7 +234,7 @@ var myGreeting = function() {
 * 部分事件：
   * onfocus/onblur：聚焦或者解除焦点。
   * onclick/ondbclick：点击或者双击
-  * window.onkeypress/window.onkeydown/window.onkeyup：按钮被按下时发生改变。keypress指的是通俗意义的按下按钮（按下并松开），keydown和keyup指的是按键动作的一部分，分别指按下和松开，该事件只能添加到整个浏览器窗口的window对象中。
+  * window.onkeypress / window.onkeydown / window.onkeyup：按钮被按下时发生改变。keypress指的是通俗意义的按下按钮（按下并松开），keydown和keyup指的是按键动作的一部分，分别指按下和松开，该事件只能添加到整个浏览器窗口的window对象中。
   * onmouseover/onmouseout：鼠标挪到元素上方，鼠标从元素挪开。
 * 不建议直接在html中插入javascript代码；如`<button onclick="bgChange()">Press me</button>`。
 

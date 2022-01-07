@@ -16,8 +16,14 @@ markup:
   tableOfContents:
     startLevel: 1
 
+#除了/posts外的其他页面每页的项目数量
+paginate: 24
+
 menu:
   after:
+    - name: "分类"
+      url: "/tags/"
+      weight: 20
     - name: "工具"
       url: "https://xiaoxiang.space/journey/tools"
       weight: 50
@@ -48,10 +54,6 @@ params:
   # For backward compatibility you can set '*' to render all sections to menu. Acts same as '/'
   BookSection: docs
 
-  # Set source repository location.
-  # Used for 'Last Modified' and 'Edit this page' links.
-#  BookRepo: https://github.com/alex-shpak/hugo-book
-
   # (Optional, default 'commit') Specifies commit portion of the link to the page's last modified
   # commit hash for 'doc' page type.
   # Requires 'BookRepo' param.
@@ -59,20 +61,10 @@ params:
   # Github uses 'commit', Bitbucket uses 'commits'
   # BookCommitPath: commit
 
-  # Enable "Edit this page" links for 'doc' page type.
-  # Disabled by default. Uncomment to enable. Requires 'BookRepo' param.
-  # Edit path must point to root directory of repo.
-  BookEditPath: edit/main/exampleSite
-
   # Configure the date format used on the pages
   # - In git information
   # - In blog posts
   BookDateFormat: "January 2, 2006"
-
-  # (Optional, default true) Enables search function with flexsearch,
-  # Index is built on fly, therefore it might slowdown your website.
-  # Configuration for indexing can be adjusted in i18n folder per language.
-  BookSearch: false
 
   # (Optional, default true) Enables comments template on pages
   # By default partals/docs/comments.html includes Disqus template

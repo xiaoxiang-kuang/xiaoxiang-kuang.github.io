@@ -1,6 +1,7 @@
 ---
 title: tcp
 tags:
+  - 计算机网络
   - 网络
 date: 2020-03-27 16:13:37
 ---
@@ -15,5 +16,5 @@ date: 2020-03-27 16:13:37
 * TCP的接收端会丢弃重复的数据
 * TCP提供流量控制。TCP连接的每一方都有固定大小的缓存空间。TCP的接收端只允许另一端发送接收端所能接纳的数据
 
-<img src="/img/网络/tcp/1.png" style="max-width:400px;">
+<img src="/img/网络/tcp/1.png">
 <!--more-->

@@ -1,5 +1,5 @@
 {{ define "main" }}
-  {{ range sort .Paginator.Pages }}
+  {{ range sort (.Paginator 8).Pages }}
   <article class="markdown book-post">
     <h2>
       <a href="{{ .RelPermalink }}">{{ partial "docs/title.html" . }}</a>

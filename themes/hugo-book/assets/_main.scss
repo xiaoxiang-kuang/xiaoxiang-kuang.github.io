@@ -69,6 +69,7 @@ ul.pagination {
   display: flex;
   justify-content: center;
   list-style-type: none;
+  padding: 0;
 
   .page-item a {
     padding: $padding-16;
@@ -360,4 +361,18 @@ body[dir="rtl"] .book-menu {
   .book-toc .book-toc-content {
     padding: $padding-16 * 2 $padding-16;
   }
+}
+
+.markdown{
+  code,li,a,p {
+    word-break:break-all;
+  }
+}
+
+@media screen and (max-width: 540px) {
+  ul.pagination {
+    .page-item a {
+      padding: $padding-12;
+    }
+}
 }
