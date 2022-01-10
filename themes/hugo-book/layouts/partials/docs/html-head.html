@@ -1,11 +1,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<meta name="description" content="{{ default .Summary .Description }}">
 <meta name="theme-color" content="#FFFFFF">
 <meta name="color-scheme" content="light dark">
-
+<!--
 {{- template "_internal/opengraph.html" . -}}
-
+-->
 <title>{{ partial "docs/html-head-title" . }}</title>
 
 {{- $manifest := resources.Get "manifest.json" | resources.ExecuteAsTemplate "manifest.json" . }}

@@ -6,128 +6,126 @@ tags:
 draft: false
 ---
 
-* 弹性盒子（Flex Box），能将当前页面适应不同的屏幕大小。
-* 弹性盒子由弹性容器（Flex container）和弹性子元素（Flex item）组成。
-* 弹性容器通过设置display属性的值为flex或inline-flex将其定义为弹性容器，弹性容器内包含了一个或多个弹性子元素。
-* 弹性容器外及弹性子元素内是正常渲染的。弹性盒子只定义了弹性子元素如何在弹性容器内布局。
-* 弹性子元素通常在弹性盒子内一行显示，默认每个容器只有一行。
+## flexbox的轴线
 
-## 弹性容器属性
+* 使用flex布局时，flex有两根轴线：主轴和交叉轴，主轴由flex-direction定义，另一根轴垂直于它。
 
-### flex-direction
+### 主轴
 
-* flex-direction指定了弹性子元素在父容器中的位置。
+* 主轴由flex-direction定义，有四个值：
+  * row
+  * row-reverse
+  * column
+  * column-reverse
+* 当选择了row或者row-reverse，主轴将沿着水平方向延伸。
 
-```css
-flex-direction: row | row-reverse | column | column-reverse
-```
+![](/img/前端/css-flex/1.png)
 
-* flex-direction的值：
-  * row：从左到右排列，默认。
-  * row-reverse：从右到左排列。最后一项在最前面。
-  * column：从上到下排列。
-  * column-reverse：从下到上排列。最后一项在最上面。
+* 当选择了column或者column-reverse，主轴就会沿着上下方向延伸。
 
-### justify-content
+![](/img/前端/css-flex/2.png)
 
-* justify-content设置弹性子元素在水平方向上的对齐方式。
+### 交叉轴
 
-``` css
-justify-content: flex-start | flex-end | center | space-between | space-around
-```
+* 交叉轴始终垂直于主轴。
 
-* justify-content值：
-  * flex-start：从左边开始挨着填充，默认。
-  * flex-end：从右边开始挨着填充。最后一项在最后边。
-  * center： 所有弹性项目挨着居中。
-  * space-between：弹性容器平均分布在该行上，如果剩余空间为负或者只有一个弹性项，则该值等于flex-start。否则第一个弹性子元素和行的起始位置对其，最后一个弹性子元素和行的结束位置对其，其他元素平均分布。
-  * space-around：弹性容器平均分布在改行上，如果剩余空间为负或只有一个弹性元素，该值等于center。否则弹性子元素间彼此间隔相等（如20px），第一个和最后一个弹性子元素和容器之间有一半的间隔（10px）。
+### 起始线和终止线
 
-![](/img/前端/css-flex/justify-content.png)
+* 如果flex-direction是row，那么主轴的起始线是左边，终止线是右边。
+
+![](/img/前端/css-flex/3.png)
+
+## flex容器
+
+* 采用了flexbox的区域就叫做flex容器，通过将一个标签的display属性改为`flex`或`inline-flex`来创建一个flex容器，这样容器内的直系子元素就会变成flex元素。所有的css属性都会有一个初始行为（假设元素未设置width、height、margin等属性）：
+  * 元素排列成一行（flex-direction属性的初始值为row）。
+  * 元素从主轴线的起始线开始。
+  * 元素不会在主轴方向不会被拉伸，但可能会缩小。
+  * 元素会被拉伸来填充交叉轴的大小。
+  * flex-basis的属性为auto。
+  * flex-wrap属性为nowrap。
+
+### flex-wrap实现多行flex容器
+
+* 当项目太大而无法全部显示在一行中，添加`flex-wrap:wrap`，项目就会换行显示。这样每一行都相当于是一个新的flex容器，在该行上发生的空间分布不会影响其他行。
+* 当`flew-wrap`设置为`unwrap`，所有的flex元素都不会换行，它们将缩小以适配容器。如果项目的子元素无法缩小，使用`nowrap`会导致溢出。
+
+### flex-flow
+
+* `flex-direction`和`flex-wrap`可以组合简写为属性`flex-flow`第一个值为`flex-direction`，第二个值为`flex-wrap`。如`flex-flow: row wrap`。
 
 ### align-items
 
-* align-items用来设置弹性盒子在纵轴方向上的对齐方式。
+* `align-items`设置元素在交叉轴方向上对齐，默认值为`stretch`。
+* 相应的值：
+  * `stretch`  拉伸以贴到交叉轴的起始线和终止线。
+  * `flex-start` 贴着交叉轴的起始线。
+  * `flex-end` 贴着交叉轴的终止线。
+  * `center` 交叉轴方向上居中。
+  * `baseline` 
 
-```css
-align-items: flex-start | flex-end | center | baseline | stretch
-```
+图中`flex-direction: row`。
 
-* align-items的值：
-  * flex-start：弹性子元素的起始位置靠着该行的最上方。
-  * flex-end：弹性子元素的起始位置靠着该行的最下方。
-  * center：弹性盒子在该行水平方向的中心。如果该行的高度小于弹性子元素的尺寸，则会在两个方向上溢出相同的长度。
-  * baseline：
-  * stretch：使弹性子元素的高度和弹性容器的高度一致，该值也会受到margin、height等的影响。
+![](/img/前端/css-flex/4.png)
 
-### flex-wrap属性
+### justify-content
 
-* flex-wrap属性指定弹性盒子的子元素的换行方式。
+* `justify-content`属性用来使元素在主轴方向上对齐，默认值是`flex-start`。
+* 相应的值：
+  * `stretch` 
+  * `flex-start` 沿着主轴的起始线对齐。
+  * `flex-end` 沿着主轴的终止线对齐。
+  * `center` 主轴方向上居中
+  * `space-around` 使每个元素的左右空间相等，第一个和最后一个元素距离起始线和终止线的距离是其他元素间隔的1/2。 
+  * `space-between` 使每个元素的左右空间相等，第一个和最后一个元素贴上起始线和终止线。
 
-```css
-flex-wrap: nowrap | wrap | wrap-reverse | initial | inherit;
-```
+图中`flex-direction: row`。
 
-* flex-wrap的值：
-  * nowrap：弹性容器为单行，默认。
-  * wrap：弹性容器为多行，该情况下溢出的弹性子元素会被放到新行。
-  * wrap-reverse：反转wrap排列。
+![](/img/前端/css-flex/5.png)
 
-### align-content
+## flex元素
 
-* align-content只用来设置多行的对齐方式。
+* flex容器里除了元素所占的空间以外的空间就是**可用空间**。
 
-```css
-align-content: flex-start | flex-end | center | space-between | space-around | stretch
-```
+### flex-basis
 
-* align-content的值：
-  * stretch：默认，各行将会伸展以占用剩余的空间。
-  * flex-start：各行向弹性容器的顶部对齐。
-  * flex-end：各行向弹性容器的底部对齐。
-  * center：各行向弹性容器的中间位置对齐。
-  * space-between：各行在弹性容器中平均分布，上下两端不保留间距。如果只有一行，则等于flex-start。
-  * space-around：各行在弹性容器中平均分布，容器上下两端保留子元素和子元素之间间距大小的一半。
+* flex-basis定义了该元素的空间大小，该属性的默认值是元素内容的尺寸（auto）。
 
-## 弹性子元素属性
+### flex-grow
 
-### 排序
+* 处理flex元素在主轴上增加空间的问题。
 
-* 用整数来设置子元素的排列顺序，数值小的排在前面，可以为负值。
+* 该值被设定为一个正数时，flex会以flex-basis为基础，按照比例沿着主轴方向扩展尺寸。
+* 当给flex中所有的元素设定flex-grow为1时，容器中的可用空间会被这些元素平分，他们会延展以填充主轴方向上的空间。
 
-```css
-order: -1
-```
+### flex-shrink
 
-### 对齐
+* 处理flex元素在主轴上收缩的问题。
+* 如果容器中没有足够排列flex元素的空间，就可以设置flex-shrink属性为正整数来缩小它占用的空间到flex-shrink以下。
+* 给flex-shrink属性更大的数值可以比赋值小数值的同级元素收缩程度更大。
 
-* 设置margin的值为auto时，自动获取弹性容器中的**剩余空间**。
+### flex属性的简写
+
+* `flex-grow、flex-shrink、flex-basis`可以简写为flex，顺序也是`flex-grow、flex-shrink、flex-basis`。
+* `flex`有预定义的简写形式：
+  * `flex:initial` 相当于`flex: 0 1 auto` ，`flex-grow`的值为0，所以flex元素不会超过他们的`flex-basis`尺寸，`flex-shrink`为1，可以缩小flex元素来防止他们溢出。
+  * `flex: auto` 相当于`flex: 1 1 auto`，和上面的`flex: initial`基本相同，但是flex元素在需要的时候既可以拉伸也可以伸缩。
+  * `flex: none` 相当于`flex: 0 0 auto`，元素既不能拉伸也不能收缩。
+  * `flex: 1`或`flex: 2` 相当于`flex: 1 1 0`。
 
 ### align-self
 
-* align-self属性用于设置弹性子元素在纵轴方向上的对齐方式。
+* `align-self`设置元素在交叉轴方向上的排列方式，会覆盖已有的`align-items`元素。
+* 值：
+  * `auto`设置为父元素的`align-items`的值
+  * `stretch` 拉伸贴上交叉轴的起始线和终止线。
+  * `center` 交叉轴方向上居中。
+  * `flex-start` 贴上交叉轴起始线。
+  * `flex-end`  贴上交叉轴终止线。
 
-```css
-align-self: auto | flex-start | flex-end | center | baseline | stretch
-```
+参考链接：[flex 布局的基本概念 - CSS（层叠样式表） | MDN (mozilla.org)](https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_Flexible_Box_Layout/Basic_Concepts_of_Flexbox)
 
-* align-self的值：
-  * auto：计算夫元素的align-items值，如果父元素没有此属性，则为stretch。
-  * flex-start：弹性盒子靠住该行的顶部。
-  * flex-end：弹性盒子靠住该行的底部。
-  * center：弹性盒子在弹性容器中竖直居中。
-  * baseline：
-  * stretch：子元素的高度为容器的高度，但仍然受到height、margin等影响。
-
-### flex
-
-* flex指定弹性子元素如何分配空间。
-
-```css
-flex: 1
-```
-
-* flex的值：当有三个子元素，flex分别为2 1 1，则第一个分两份，后面两个分别分一份。
+参考链接：[Flex 布局教程：语法篇 - 阮一峰的网络日志 (ruanyifeng.com)](http://www.ruanyifeng.com/blog/2015/07/flex-grammar.html?utm_source=tuicool)
 
 <!--more-->
 

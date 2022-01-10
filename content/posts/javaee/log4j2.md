@@ -18,3 +18,5 @@ draft: false
 8. 在classpath路径下找log4j2.json或log4j2.jsn文件。
 9. 在classpath路径下找log4j2.xml文件。
 10. 如果没有找到配置文件，则会使用默认配置，将日志输出到控制台。
+
+<!--more-->
