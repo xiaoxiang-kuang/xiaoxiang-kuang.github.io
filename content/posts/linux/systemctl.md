@@ -43,6 +43,26 @@ ExecStart=/bin/bash xxx.sh
 #通过systemctl enable example.service，可以将此unit安装到multi-user.target的/etc/systemd/system/multi-user.target.wants/目录下（即创建了此unit的一个符号链接）。
 #在multi-user.target启动后，会启动此unit。
 WantedBy=multi-user.target
+
+#一个sshd服务的案例
+[Unit]
+Description=OpenSSH server daemon
+Documentation=man:sshd(8) man:sshd_config(5)
+After=network.target sshd-keygen.service
+Wants=sshd-keygen.service
+
+[Service]
+Type=simple
+#EnvironmentFile=/etc/sysconfig/sshd
+ExecStart=/usr/local/sbin/sshd -D $OPTIONS
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=process
+Restart=on-failure
+RestartSec=42s
+
+[Install]
+WantedBy=multi-user.target
+
 ```
 
 ---

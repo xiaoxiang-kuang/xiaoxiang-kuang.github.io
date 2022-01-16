@@ -1,6 +1,8 @@
 ---
 title: "Hugo模板"
 date: 2022-01-03T17:09:17+08:00
+tags:
+  - 其他
 draft: false
 ---
 
