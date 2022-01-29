@@ -22,7 +22,7 @@ date: 2021-03-24 15:02:16
 
 ### 简单请求
 
-* 如果请求的HTTP方法是GET、HEAD、POST，并且HTTP头部除了被用户代理自动设置的首部字段外，只有Accept-Language、Content-Language、Content-Type ；并且Content-Type 的值仅限于下列三者之一： text/plain、multipart/form-data、application/x-www-form-urlencoded；并且请求中的任意 XMLHttpRequest 对象均没有注册任何事件监听器；XMLHttpRequest 对象可以使用 XMLHttpRequest.upload 属性访问，请求中没有使用 ReadableStream 对象。那么Web浏览器发出的是简单请求。发出简单请求时，该请求将像一般请求一样发送到服务器。
+* 如果请求的HTTP方法是GET、HEAD、POST，并且HTTP头部除了被用户代理自动设置的首部字段外，只有Accept-Language、Content-Language、Content-Type ；并且Content-Type 的值仅限于下列三者之一： text/plain、multipart/form-data、application/x-www-form-urlencoded。那么Web浏览器发出的是简单请求。发出简单请求时，该请求将像一般请求一样发送到服务器。
 * 简单请求不会触发CORS 预检请求。
 
 ### 预检请求
@@ -73,35 +73,9 @@ Access-Control-Allow-Methods: <method>[, <method>]*
 
 * Access-Control-Allow-Headers 首部字段用于预检请求的响应。其指明了实际请求中允许携带的首部字段。
 
-## HTTP请求首部字段
+参考链接：[跨资源共享（CORS）](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/CORS)
 
-* 这些首部字段无须手动设置。 当开发者使用 XMLHttpRequest 对象发起跨源请求时，它们已经被设置。
-
-### Origin
-
-```
-Origin: <origin>
-```
-
-* Origin 首部字段表明预检请求或实际请求的源站。
-* origin 参数的值为源站 URI。它不包含任何路径信息。
-
-### Access-Control-Request-Method
-
-```
-Access-Control-Request-Method: <method>
-```
-
-* 用于预检请求，将实际请求所使用的 HTTP 方法告诉服务器。
-
-### Access-Control-Request-Headers
-
-```
-Access-Control-Request-Headers: <field-name>[, <field-name>]*
-```
-* 将实际请求所携带的首部字段告诉服务器。
-
-**参考链接：[跨资源共享（CORS）](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/CORS)**
+参考链接：[跨域资源共享 - 阮一峰的网络日志 (ruanyifeng.com)](https://www.ruanyifeng.com/blog/2016/04/cors.html)
 
 
 <!--more-->
