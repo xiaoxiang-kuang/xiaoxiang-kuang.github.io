@@ -471,7 +471,7 @@ MAILTO=root
 
 * locate：根据/var/lib/mlocate内的数据库记载搜索文件（数据库未更新前搜索某新建的文件可能搜不到）。
 
-### find：强大的查询工具。
+### find：查找工具
 
 * 用法`find [PATH] [option] [action]`，PATH可以是多个目录，find查找会进入子目录。
 

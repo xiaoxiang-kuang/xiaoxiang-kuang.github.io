@@ -93,12 +93,10 @@ threshold：阈值	scheduler：调度器	duplicate：重复	suspend：暂停
 
 graceful：优雅的	exhausted：用尽	set  up设置	retrive：检索
 
-expire：到期	excryption：加密	infer：推断	ISP：（Internet Service Provider ）因特网服务提供商
-
-at the expense of 以xxx为代价	respectively 分别的	with the expection 除了情况、例外	other than 除了	feel free to 随意	simply put 简而言之
+expire：到期	excryption：加密	infer：推断	at the expense of 以xxx为代价	respectively 分别的	with the expection 除了情况、例外	other than 除了	feel free to 随意	simply put 简而言之
 
 suite 套	capability 能力	relevant 相关的	phrase 短句	desirable 期望的
 
-clause 从句	criteria 标准、准则	interpret 解释	deprecate 反对
+clause 从句	criteria 标准、准则	interpret 解释	deprecate 反对 conjunction 结合
 
 <!--more-->

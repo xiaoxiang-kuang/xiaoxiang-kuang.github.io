@@ -25,11 +25,8 @@ menu:
       url: "/tags/"
       weight: 20
     - name: "工具"
-      url: "http://xiaoxiang.space:81/tools.html"
+      url: "http://xiaoxiang.space:81"
       weight: 50
-    - name: "说点什么"
-      url: "http://xiaoxiang.space:81/message-board.html"
-      weight: 60
 
 params:
   # (Optional, default light) Sets color theme: light, dark or auto.
