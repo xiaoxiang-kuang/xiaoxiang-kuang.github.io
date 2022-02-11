@@ -3,6 +3,9 @@ title: linux命令总结
 tags: 
   - linux
 date: 2021-02-08 11:29:58
+menu:
+  after:
+    weight: 1000
 ---
 
 ### linux指令执行过程
