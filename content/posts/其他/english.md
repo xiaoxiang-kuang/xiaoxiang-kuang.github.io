@@ -3,6 +3,9 @@ title: 生僻单词
 tags:
   - 其他
 date: 2020-03-06 15:28
+menu:
+  after:
+    weight: 1100
 ---
 
 | 单词整理                          |                                                     |                                  |                                             |                                            |                                      |
@@ -34,6 +37,6 @@ date: 2020-03-06 15:28
 | simply put 简而言之               | suite 套                                            | capability 能力                  | relevant 相关的                             | phrase 短句                                | desirable 期望的                     |
 | clause 从句                       | criteria 标准、准则                                 | interpret 解释                   | deprecate反对                               | conjunction 结合                           | journal 日志、日记                   |
 | endpoint 端点、终点               | retrieve 检索、提取、恢复                           | credential 证书、凭据            | comma 逗号                                  | advertise 广告、宣传                       | reject 拒绝                          |
-| coordinate 协调、配合、合作、做条 | significant 重要的、显著的                          |                                  |                                             |                                            |                                      |
+| coordinate 协调、配合、合作、做条 | significant 重要的、显著的                          | optimize 优化 充分利用           | optimistic 乐观                             |                                            |                                      |
 
 <!--more-->
