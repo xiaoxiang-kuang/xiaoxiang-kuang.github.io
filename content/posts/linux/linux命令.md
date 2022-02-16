@@ -435,7 +435,7 @@ MAILTO=root
 
 * `hostnamectl [set-hostname 主机名]` 修改主机名。
 * `timedatectl [list-timezones | set-timezone | set-time | set-ntp]` 列出系统上的失去、设定时区、设定时间、设定网络校时。
-* `localectl set-locale LANG=en_US.utf8`设置语系。通过`locale -a`可以查看linux支持了多少语系，通过`locale`来查看系统目前的语言环境。
+* `localectl set-locale LANG=en_US.utf8`设置语系。通过`locale -a`可以查看linux支持了多少语系，通过`locale`来查看系统目前的语言环境。LC_ALL、LC_CTYPE、LANG这三个环境变量的值决定了操作系统当前使用的是哪种字符集，优先级是`LC_ALL>LC_CTYPE>LANG`。
 * 硬件数据收集：dmidecode(CPU型号、主板型号、内存相关型号等), gdisk, dmesg, vmstat（分析cpu、内存、io目前的状态）, lspci, lsusb,iostat。
 
 ### ls 列出文件
