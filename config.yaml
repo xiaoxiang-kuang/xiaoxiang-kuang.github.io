@@ -27,6 +27,9 @@ menu:
     - name: "工具"
       url: "http://xiaoxiang.space:81"
       weight: 500
+#    - name: "留言"
+#      url: "http://xiaoxiang.space:81/#/message"
+#      weight: 501
 
 params:
   # (Optional, default light) Sets color theme: light, dark or auto.
