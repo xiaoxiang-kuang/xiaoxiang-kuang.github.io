@@ -16,7 +16,7 @@ menu:
 | elapse：流逝                      | unit of measure：度量单位                           | support：支持                    | copyright：版权                             | transaction：交易、事务                    | assemble：集合                       |
 | stylesheet：样式表                | item：项目                                          | emphasis：强调                   | uniform resource locator：统一资源定位符URL | ORM：Object Relation Mapping，对象关系映射 | interactive：交互的                  |
 | oriented：导向的                  | distribute：分配                                    | partition：分割                  | certificate：证书                           | optimize：优化                             | universal：通用的                    |
-| expiration：期满                  | of：属于；(后面)的(前面)                            | explicity：明确的                | materialized：具体化                        | granularity：粒度                          | compact：紧凑                        |
+| expiration：期满                  | of：属于；(后面)的(前面)                            | explicitly：明确的               | materialized：具体化                        | granularity：粒度                          | compact：紧凑                        |
 | statement：声明、账单、语句       | syntax：语法                                        | case insensitive：大小写不敏感   | clause：子句、从句                          | aggregate：聚集                            | process：处理                        |
 | combination：结合                 | correspond：一致、符合、（corresponding相应的）     | in contrast to：相比             | distribute：分发、分配                      | appropriate：合适的                        | replication：复制                    |
 | robust：强壮                      | apply：申请                                         | sparse：稀疏                     | recursion：递归                             | interval：间隔                             | interpreter：解释器                  |
@@ -38,6 +38,8 @@ menu:
 | clause 从句                       | criteria 标准、准则                                 | interpret 解释                   | deprecate反对                               | conjunction 结合                           | journal 日志、日记                   |
 | endpoint 端点、终点               | retrieve 检索、提取、恢复                           | credential 证书、凭据            | comma 逗号                                  | advertise 广告、宣传                       | reject 拒绝                          |
 | coordinate 协调、配合、合作、做条 | significant 重要的、显著的                          | optimize 优化 充分利用           | optimistic 乐观                             | discard 抛弃                               | illustrate 说明、阐述                |
-| underlying 潜在的、下面的         | severity 严重性                                     |                                  |                                             |                                            |                                      |
+| underlying 潜在的、下面的         | severity 严重性                                     | wildcard 通配符                  | appear 出现、似乎                           | replica 副本                               | assign 分配                          |
+| segment 部分、片段                | compact 紧凑的                                      | trail 足迹、痕迹                 | derive 派生                                 | participate 参加                           | exact 精确的                         |
+| preference 偏好                   | explicit 明确的                                     | constraint 限制                  |                                             |                                            |                                      |
 
 <!--more-->

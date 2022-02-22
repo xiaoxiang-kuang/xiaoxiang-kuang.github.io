@@ -75,32 +75,6 @@ validate_password=OFF
 
 * 可以把BLOB看作VARBINARY，把TEXT看作VARCHAR，但它们有一点点不同：①对于BLOB和TEXT列上的索引，必须要指定缩影前缀长度，对应VARBINARY和VARCHAR，这是可选的；②BLOB和TEXT所在的列不能有默认值。**参考链接：**[MySQL :: MySQL 5.7 Reference Manual :: 11.3.4 The BLOB and TEXT Types](https://dev.mysql.com/doc/refman/5.7/en/blob.html)
 
-### character set&collation
-
-```sh
-#显示字符集
-SHOW CHARACTER SET LIKE 'utf%';
-#一个字符集一般都有多个collation
-SHOW COLLATION [WHERE Charset = 'latin1'] [LIKE 'utf8'];
-
-#创建数据库时指定默认的字符集和collation，下面的表也会默认使用该设定。
-CREATE DATABASE test_database CHARACTER SET utf8 COLLATE utf8_general_ci;
-#每次连接数据库时可以这样设置
-SET NAMES 'utf8'
-```
-
-#### collation后缀含义
-
-| 后缀 | 含义                          |
-| ---- | ----------------------------- |
-| _ai  | Accent-insensitive            |
-| _as  | Accent-sensitive              |
-| _ci  | Case-insensitive 大小写不敏感 |
-| _cs  | Case-sensitive 大小写敏感     |
-| _bin | Binary                        |
-
-[MySQL :: MySQL 5.7 Reference Manual :: 10.3.1 Collation Naming Conventions](https://dev.mysql.com/doc/refman/5.7/en/charset-collation-names.html)
-
 ### DATABASE
 
 * 创建数据库
@@ -113,7 +87,7 @@ CRATE DATABASE db_name [[DEFAULT] CHARACTER SET [=] utf8];
 
 * 克隆和复制。
 
-```sql
+```
 #从origin_tb1克隆一个新表（只有结构，没有数据）。
 CREATE TABLE new_tb1 LIKE origin_tb1;
 #复制origin_tb1表，（结构和数据都复制了）。
@@ -122,7 +96,7 @@ CREATE TABLE new_tb1 AS SELECT * FROM origin_tb1;
 
 #### ALTER
 
-```sql
+```
 #单个alter table可以跟多个修改语句，用逗号隔开
 #删除
 ALTER TABLE t2 DROP COLUMN c, DROP COLUMN d;
@@ -134,7 +108,7 @@ ALTER TABLE t2 DROP COLUMN c, DROP COLUMN d;
 * MODIFY可以修改列的定义，但无法修改它的名字。配合FIRST或AFTER能指定列的名字。
 * ALTER只能修改列的默认值。
 
-```sql
+```
 #将a的名字改为b，修改定义
 ALTER TABLE t1 CHANGE a b BIGINT NOT NULL;
 #不修改a的名字，只修改定义
@@ -153,7 +127,7 @@ ALTER TABLE t1 CHANGE b a INT NOT NULL;
 
 ### SHOW
 
-```sql
+```
 #显示属性
 SHOW COLUMNS FROM MYSQL.USER;
 #显示建库语句，例：

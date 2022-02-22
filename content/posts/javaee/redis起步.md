@@ -49,4 +49,36 @@ date: 2021-08-13 17:27:55
 * getset key value 以新值换旧值，设置了新的值的同时获取旧值。
 * String内部采用类似arraylist的机制，字符串实际分配的空间一般高于字符串的长度，当字符串长度小于1M时，扩容都是加倍的，超过1M时，每次扩容都是只增加1M。最大为512M。
 
+### 链表
+
+#### 节点的结构
+
+```c
+//adlist.h/listNode
+//结构
+typedef struct listNode {
+    //前置节点
+    struct listNode *prev;
+    //后置节点
+    struct listNode *next;
+    //节点的值
+    void *value;
+}
+```
+
+* 双端链表，获取节点的前置节点和后置节点的复杂度都是O(1)。
+* 无环链表，表头指针的prev和表尾指针的next都是指向NULL。
+* list结构的head指针和tail指针能快速获取表头结点和表尾节点，复杂度是O(1)。
+* 可以通过list结构的len属性来获取链表中节点的数量，复杂度是O(1)。
+
+#### 命令
+
+* `lpush/rpush k1 v1 v2 v3` 从左/右边插入
+* `lpop/rpop k1` 从左/又边吐出一个值
+* `lindex key index`按照索引下标获取元素
+* `len key`获得列表的长度
+* `lset key index value` 将key的下标为index设置为value
+* `lrange key start stop` 按照下标索引获得元素，0表示左边第一个，-1表示右边第一个。
+* `lrem key n value` 删除n个value
+
 <!--more-->

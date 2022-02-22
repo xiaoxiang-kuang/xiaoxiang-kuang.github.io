@@ -13,32 +13,32 @@ date: 2021-10-27 22:28:22
 
 ``` sh
 #设置各个组件的名称
-a1.sources = r1
-a1.sources = k1
-a1.channels = c1
+a1.sources=r1
+a1.sinks=k1
+a1.channels=c1
 
-#使用的是NetCat TCP Source，这里配的是别名，Flume内置的一些组件都是有别名的。
 #监听的主机和端口
-a1.sources.r1.type = netcat
-al.sources.r1.bind = localhost
-a1.sources.r1.port = 44444
-
+a1.sources.r1.type=syslogudp
+al.sources.r1.bind=10.2.4.31
+a1.sources.r1.port=5145
+a1.sources.r1.keepFields=true
 #配置Sink
-a1.sinks.k1.type = logger
+a1.sinks.k1.type=org.apache.flume.sink.kafka.KafkaSink
+a1.sinks.k1.kafka.bootstrap.servers=10.2.4.31:9092
+a1.sinks.k1.kafka.topic=rawlog
 
 #配置channel
-a1.channels.c1.type = memory
+a1.channels.c1.type=memory
 #内存channel的容量大小为1000
-a1.channels.c1.capacity =1000
+a1.channels.c1.capacity=1000
 #source和sink从内存每次传输的event数量
-a1.channels.c1.transactionCapacity = 100
+a1.channels.c1.transactionCapacity=1000
 
 
 #把source绑定到channel上，一个source可以连接多个channel
-a1.sources.r1.channels = c1
+a1.sources.r1.channels=c1
 #把sink绑定到channel上，一个sink只能连接一个channel
-a1.sinks.k1.channel = c1
-
+a1.sinks.k1.channel=c1
 #启动 
 #bin/flume-ng agent -c conf -f example.conf --name a1 -Dflume.root.logger=INFO,console
 ```
