@@ -195,9 +195,9 @@ nl /etc/passwd | sed -n '5,7p'
 #删除5-7行
 nl /etc/passwd | sed '5,7 d'
 #去掉开始的空格，删除以1和2开始的行
-nl /etc/passwd |sed 's/^ *//g' | sed '/^[1-2]/ d'
-#去掉有#注释的行
-cat /etc/man_db.conf | grep 'MAN'| sed 's/#.*$//g' | sed '/^$/d' 
+nl /etc/passwd |sed 's/^ *//g' | sed '/^[1-2]/d'
+#去掉有#注释的行和空白行
+cat server.properties  | sed '/^#/d' | sed '/^\s*$/d'
 #将行末尾的.改为!
 sed -i 's/\.$/\!/g' regular_express.txt
 #文件的最后一行增加一行文字

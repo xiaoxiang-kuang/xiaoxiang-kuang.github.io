@@ -101,6 +101,19 @@ nmcli connection delete ethernet-enp0s8
 nmcli con import type openvpn file ~/Downloads/frootvpn.ovpn
 ```
 
+#### ifcfg-xxx配置介绍
+
+```
+#最小配置
+DEVICE=eth1  #网卡号，必须与文件名对应
+ONBOOT=yes	#是否默认启动，要联网必须要配置
+BOOTPROTO=none	#是否使用dhcp，是的话BOOTPROTO=dhcp
+HWADDR=08:00:27:35:2F:f2	#mac地址
+IPADDR=172.27.32.6	#ip地址
+NETMASK=255.255.255.0	#子网掩码
+GATEWAY=172.27.32.1	#网关
+```
+
 ### firewall-cmd centos下的防火墙工具
 
 ```sh
