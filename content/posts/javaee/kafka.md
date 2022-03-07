@@ -8,13 +8,15 @@ date: 2021-10-21 14:15:47
 ## 介绍
 
 * kafka中的消息以主题为单位进行归类，生产者负责将消息发送到特定的topic，消费者负责订阅topic并进行消费。
-
 * topic是一个逻辑上的概念，它可以细分为多个partition（分区），一个partition只属于单个topic（主题）。
-
 * 同一个topic下的不同的partition存放的消息是不同的。消息在被追加到分区文件中会被分配一个特定的偏移量（offset）。offset是消息在partition中唯一的标识，kafka通过offset来保证消息在分区内的顺序性。offset并不跨越分区，也就是说kafka保证的是partition有序而非topic有序。
 * partition可以分布在不同的broker上，也就是说一个topic可以横跨多个broker。
 * 每一条消息被发送到broker前，会根据分区规则选择存到哪个具体的分区，如果分区规则设置的合理，则所有的消息都可以均匀的分配到不同的分区中。如果一个topic只有一个分区，那么这个这个分区文件所在的机器的I/O将会成为这个topic的性能瓶颈。
 * kafka为分区引入了副本（replica）机制，同一个分区的不同副本中保存的是相同的消息。副本之间是一主多从的关系，leader副本负责处理读写请求，follower副本只负责于leader副本的消息同步，当leader副本出现故障时，从follower中重新选举的新leader对外提供服务。
+
+### 消费者
+
+* 一个消费者只属于一个消费组，每一个分区只能被一个消费组中的一个消费者所消费。
 
 ## 命令行
 
@@ -23,8 +25,10 @@ date: 2021-10-21 14:15:47
 bin/zookeeper-server-start.sh config/zookeeper.properties
 bin/kafka-server-start.sh config/server.properties
 
-#创建一个topic，存event
-bin/kafka-topics.sh --create --topic test --bootstrap-server localhost:9092
+#创建有4个partition的topic
+kafka-topics.sh --bootstrap-server 10.2.4.31:9092 --create --topic kuangpf-topic --partitions 4
+#展示topic更加详细的信息
+kafka-topics.sh --bootstrap-server 10.2.4.31:9092 --describe --topic kuangpf-topic
 #向topic中写入event
 bin/kafka-console-producer.sh --topic test --bootstrap-server localhost:9092
 #读取events
