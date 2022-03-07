@@ -27,6 +27,8 @@ docker run -d -p 80:80 image_name:image_version
 docker run -d ubuntu bash -c "shuf -i 1-10000 -n 1 -o /data.txt && tail -f /dev/null"
 #启动镜像，并执行后面的命令
 docker run -it ubuntu ls /
+#--name 指定容器的名称
+docker run -d -p 17106:3306 --name 171-mysql  mysql8:171-uam
 
 #进入容器中，-i保持stdin打开，-t分配一个终端
 docker exec -i -t <container-id> /bin/bash 
@@ -133,7 +135,14 @@ volumes:
   * 使用`docker-compose logs -f app`来查看特定服务的日志。
 * `docker-compose down [--volumes]`关闭并移除，--volumes指定是否删除volumes。
 
-#### 多阶段构建
+## dockerfile
+
+* 一个Dockerfile大部分情况下以FROM指令开始，FROM指令指定了构建的父镜像。
+* `ENV`用来设置环境变量，通过`${xxx}`的方式使用。
+* CMD在docker run时运行，RUN在docker build时运行。
+* RUN会在新的一层执行命令。
+
+### 多阶段构建
 
 ```dockerfile
 FROM maven AS build
