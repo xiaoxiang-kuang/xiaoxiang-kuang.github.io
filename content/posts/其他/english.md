@@ -41,6 +41,6 @@ menu:
 | underlying 潜在的、下面的         | severity 严重性                                     | wildcard 通配符                  | appear 出现、似乎                           | replica 副本                               | assign 分配                          |
 | segment 部分、片段                | compact 紧凑的                                      | trail 足迹、痕迹                 | derive 派生                                 | participate 参加                           | exact 精确的                         |
 | preference 偏好                   | explicit 明确的                                     | constraint 限制                  | precaution 预防措施                         | guarantee 担保                             | scale 比例、规模、缩放               |
-| preserve 保护、保持               | utilization 利用率                                  | dedicate 专心于、致力于          | immutable 不变的                            | consistency 一致性                         |                                      |
-
+| preserve 保护、保持               | utilization 利用率                                  | dedicate 专心于、致力于          | immutable 不变的                            | consistency 一致性                         | lease 租赁                           |
+| familiar 熟悉的、常见的 | retention 保留 | prohibit 禁止 |suppresses 镇压|||
 <!--more-->
