@@ -26,7 +26,7 @@ menu:
       weight: 20
     - name: "工具"
       url: "http://xiaoxiang.space:81"
-      weight: 500
+      weight: 5000
 #    - name: "留言"
 #      url: "http://xiaoxiang.space:81/#/message"
 #      weight: 501
