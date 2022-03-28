@@ -42,5 +42,5 @@ menu:
 | segment 部分、片段                | compact 紧凑的                                      | trail 足迹、痕迹                 | derive 派生                                 | participate 参加                           | exact 精确的                         |
 | preference 偏好                   | explicit 明确的                                     | constraint 限制                  | precaution 预防措施                         | guarantee 担保                             | scale 比例、规模、缩放               |
 | preserve 保护、保持               | utilization 利用率                                  | dedicate 专心于、致力于          | immutable 不变的                            | consistency 一致性                         | lease 租赁                           |
-| familiar 熟悉的、常见的 | retention 保留 | prohibit 禁止 |suppresses 镇压|||
+| familiar 熟悉的、常见的 | retention 保留 | prohibit 禁止 |suppresses 镇压|insufficient memory内存不足||
 <!--more-->

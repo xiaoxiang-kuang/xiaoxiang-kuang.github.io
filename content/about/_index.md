@@ -1,7 +1,7 @@
 ---
 menu:
   after:
-    weight: 1500
+    weight: 3999
 title: 关于
 ---
 

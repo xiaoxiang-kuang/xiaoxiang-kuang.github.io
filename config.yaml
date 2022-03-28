@@ -21,12 +21,16 @@ paginate: 24
 
 menu:
   after:
+#blog、分类等1-999
+#单个blog 1000-1999
+#工具等 2000-2999
+# 关于 3000-3999
     - name: "分类"
       url: "/tags/"
       weight: 20
     - name: "工具"
       url: "http://xiaoxiang.space:81"
-      weight: 5000
+      weight: 2000
 #    - name: "留言"
 #      url: "http://xiaoxiang.space:81/#/message"
 #      weight: 501
