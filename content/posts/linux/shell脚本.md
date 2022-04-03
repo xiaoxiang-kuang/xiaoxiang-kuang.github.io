@@ -407,51 +407,35 @@ done
 ```sh
 #!/bin/bash
 
-current_path="/opt/www/journey"
-tmp_path="/tmp"
-jar_name="journey.jar"
+#上传的文件路径
+file_path="/tmp/blog.tar"
+#文件放的位置
+blog_dir="/opt/web/front/xiaoxiang.space"
 
-tmp_jar_path="${current_path}${tmp_path}/${jar_name}"
-jar_path="${current_path}/${jar_name}"
-logs_path="${current_path}/logs"
-
-mkdir -p "${tmp_path}"
-mkdir -p "${logs_path}"
-
-function start() {
-	nohup java -jar ${jar_path} > "${logs_path}/start.log" 2>&1 &
-	if [[ $? == 0 ]];then
-		echo "server is starting"
-	fi
-}
-
-function stop() {
-	jar_pid=`ps aux | grep ${jar_name} | sed '/.*grep.*'${jar_name}'.*/d' | awk '{print $2}'`
-	kill ${jar_pid} 2>/dev/null
-	if [[ $? == 0 ]];then
-		echo "server has stopped"
-	fi
-}
-
-function update() {
-	if [[ !  -f ${tmp_jar_path} ]];then 
-		echo "file not exists..."
-		exit 1
-	fi
-	stop
-	mv ${tmp_jar_path} ${jar_path}
-	start
-}
-
-if [[ "start" == $1 ]];then
-	start 
-elif [[ "stop" == $1 ]];then
-	stop
-elif [[ "update" == $1  ]];then
-	update
-else
-	echo "invalid args"
+#检查上传的文件是否存在
+if [ !  -e "${file_path}" ];then
+    echo "文件不存在"
+    exit 0
 fi
+
+#检查当前是否有scp进程，没有就说明文件已经上传完成
+scp_status=$(ps aux | grep scp | grep -v grep)
+while [ -n "${scp_status}" ]
+do
+    sleep 1s
+    scp_status=$(ps aux | grep scp | grep -v grep)
+done
+echo "传输完成..."
+
+#将上传的文件解压到对应位置
+mkdir -p ${blog_dir}
+rm -rf "${blog_dir:?}/*"
+if tar -xvf ${file_path} -C ${blog_dir};then
+    echo "部署成功,文件位置为${blog_dir}"
+fi
+
+#删掉上传的文件
+rm -f ${file_path}
 ```
 
 <!--more-->
