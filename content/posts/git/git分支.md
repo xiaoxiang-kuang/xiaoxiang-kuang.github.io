@@ -10,7 +10,6 @@ date: 2021-01-28 16:11:34
 ### 开始
 
 * git分支，是一个指向commit对象的可变指针，它在每次提交后都会指向当前的commit对象。git有一个名为HEAD的特别指针，它是一个指向当前工作的本地分支的指针。
-* {% asset_img  ”/img/git/1.png“ This is an example image %}
 * ![](/img/git/1.png)
 * 创建一个新的分支`git branch testing`，这会在当前commit对象上新建一个分支指针。
 ![](/img/git/3.png)
@@ -31,7 +30,7 @@ date: 2021-01-28 16:11:34
 * 分支的合并会用两个分支的末端以及他们的共同祖先进行一次的三方合并，当两个分支在同一个commit链上时，旧一点的那个分支发起合并，则将其直接指向了新一点的那个分支。
 * 有时候分支合并会失败，比如两个分支同时修改了相同的文件。这个时候`git merge testing`仍然做了合并，但是没有提交，可以使用`git status`查看，此时就需要手动合并了。
 * `git branch --merged`查看那些分支已被并入当前分支。`git branch --no-merged`查看尚未合并的分支。
-* 删除远程分支`git push [远程名]:[分支名]`（没错，就是这样）。
+* 删除远程分支`git push [远程名]:[分支名] --delete` 。
 * 分支的衍合（rebase），`git rebase master`。他的结果和直接使用merge一样。**谨慎使用该方式**
 
 **参考链接：[Pro Git](http://git.oschina.net/progit/3-Git-%E5%88%86%E6%94%AF.html)**
