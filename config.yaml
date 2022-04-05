@@ -28,6 +28,9 @@ menu:
     - name: "分类"
       url: "/tags/"
       weight: 20
+    - name: "小记"
+      url: /categories/life/"
+      weight: 30
     - name: "工具"
       url: "http://tools.xiaoxiang.space"
       weight: 2000
