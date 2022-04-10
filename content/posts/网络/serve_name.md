@@ -101,4 +101,7 @@ server {
 
 然而，这种用法仅限于简单的情况，因为数字引用很容易被覆盖。
 
+<!--
 ## 复杂的name
+http://nginx.org/en/docs/http/server_names.html
+-->
