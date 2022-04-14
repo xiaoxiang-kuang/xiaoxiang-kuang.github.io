@@ -1,7 +1,6 @@
 ---
 title: CORS
 tags:
-  - 网络
   - http
 date: 2021-03-24 15:02:16
 ---

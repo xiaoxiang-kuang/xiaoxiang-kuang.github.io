@@ -1,7 +1,6 @@
 ---
 title: mime
 tags:
-  - 网络
   - http
 date: 2021-02-19 16:47:06
 ---

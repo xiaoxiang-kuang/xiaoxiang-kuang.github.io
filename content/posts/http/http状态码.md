@@ -1,7 +1,6 @@
 ---
 title: http状态码
 tags:
-  - 网络
   - http
 date: 2021-08-17 15:47:27
 ---

@@ -1,7 +1,7 @@
 ---
 title: jwt协议
 tags:
-  - 网络
+  - javaee
 date: 2021-08-20 09:57:48
 ---
 
