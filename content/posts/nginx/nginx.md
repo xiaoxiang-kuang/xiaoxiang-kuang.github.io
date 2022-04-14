@@ -1,7 +1,6 @@
 ---
 title: nginx
 tags:
-  - 网络
   - nginx
 date: 2021-08-12 10:03:28
 ---

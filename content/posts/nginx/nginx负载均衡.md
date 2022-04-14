@@ -1,7 +1,6 @@
 ---
 title: nginx负载均衡
 tags:
-  - 网络
   - nginx
 date: 2021-09-13 16:09:24
 ---
