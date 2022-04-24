@@ -78,7 +78,20 @@ docker scan image_name:image_version
 docker image history [--no-trunc] mysql:5.7
 ```
 
-#### docker-compose
+### restart策略
+
+* 当使用`docker run`命令时可以使用`--restart`来配置容器的重启策略。可选的标志如下：
+
+| flag                     | description                                                  |
+| ------------------------ | ------------------------------------------------------------ |
+| no                       | 任何情况下不会自动重启容器(默认)                             |
+| on-failure[:max-retries] | 当容器由于错误(退出代码为非0)而退出时会重启容器。使用`:max-retries`来限制容器尝试重启的次数。 |
+| always                   | 始终在容器停止时重启，除非容器是被手动停止的。在docker重新启动时容器也会重启。 |
+| unless-stopped           | 类似于always，但是当容器停止后，重启docker容器并不会启动。   |
+
+参考链接: [use-a-restart-policy](https://docs.docker.com/config/containers/start-containers-automatically/#use-a-restart-policy)
+
+## docker-compose
 
 * `docker-compose version`获取版本信息。
 * 创建一个叫`docker-compose.yml`的文件，如将下面这个命令转化为docker-compose。
