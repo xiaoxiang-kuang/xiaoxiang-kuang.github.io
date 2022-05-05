@@ -40,7 +40,6 @@ server {
 2. 以星号开头的最长通配符，如`*.exmaple.org`。
 3. 以星号结束的最长通配符，如`mail.*`。
 4. 第一个匹配的正则表达式(按照在配置文件出现的先后顺序)。
-<!--more-->
 
 ## 通配符
 
@@ -105,3 +104,5 @@ server {
 ## 复杂的name
 http://nginx.org/en/docs/http/server_names.html
 -->
+
+<!--more-->
