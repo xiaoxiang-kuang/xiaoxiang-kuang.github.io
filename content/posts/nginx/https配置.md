@@ -97,7 +97,7 @@ server {
 
 ### https优化
 
-* SSL会消耗额外的CPU资源，在多核的CPU上应该使`worker_processes`配置为不少于CPU核心数的值(可以将该参数设置为auto，这时nginx会自动调整)。
+* SSL会消耗额外的CPU资源，在多核的CPU上应该使`worker_processes`配置为不少于CPU核心数的值(可以将该参数设置为auto，这时nginx会自动调整工作进程数为CPU数量)。
 * CPU最密集的行为是SSL握手，有两种方式可以降低握手次数：
   * 使用`keepalive_timeout`，使用该参数可以是多个请求通过同一个连接，后面的请求可以复用SSL会话。
   * 通过`ssl_session_cache`可以将会话存储到工作进程之间共享的SSL会话缓存中，1MB的缓存可以包含大约4000个会话，默认缓存超时时间为5分钟，可以使用`ssl_session_timeout`来设置超时时间。
