@@ -296,7 +296,6 @@ yum [options] [command] [package ...]
   
   * %CPU：使用的cpu资源百分比；%mem：使用的内存资源百分比；vsz：使用的虚拟内存Kb；rss：占用的固定内存Kb；tty：该进程是在哪个终端机上运行，如果于与终端机无关则显示？；stat：进程目前状态（R运行；S睡眠但可被唤醒；D不可被唤醒；T停止状态；Z僵尸状态）；time：实际使用cpu的时间。
   * `--sort +rss` 按照rss以递增[+]或者递减[-]的顺序排序 。
-  
 * 使用`ps -lf`显示当前的bash的进程。
   * -l时较详细的输出当前bash的信息，-f是更完整的输出。🤣
   * 输出中的S代表该进程的状态，主要的状态有：R running；S sleep；D 不可唤醒的睡眠状态，而可能是在等待I/O；T 停止状态；Z zombie僵尸状态。
@@ -307,6 +306,7 @@ yum [options] [command] [package ...]
   * TIME代表使用掉的cpu的时间。
 * `ps axjf`可以列出来类似进程树的进程显示。
 * `pstree [-Apu]` -p显示每个进程的pid，-u显示每个进程的所属账号。-A各个进程之间以ascii字符来连接。
+* 相关文档 [The ps Command](http://www.linfo.org/ps.html)
 
 ### top 动态显示进程状态
 
