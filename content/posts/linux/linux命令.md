@@ -271,6 +271,12 @@ yum [options] [command] [package ...]
 * `-n `：显示数字而不是别名
 * -p显示socket的pid/程序名
 
+### tcpdump 抓包命令
+
+* `-i interface`监听指定的interface，如果未指定此参数，tcpdump会搜索系统interface上数字最小的interface（如eth0）监控。可以用`-i any`来监控所有的interface（此参数不会在promiscuous mode下工作）。
+* `-X`显示原始16进制数据内容和ascii编码后的内容
+* [tcpdump](https://www.tcpdump.org/)
+
 ### curl 强大的网络工具
 
 * （client url）通过指定的url上传或者下载数据。
