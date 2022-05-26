@@ -85,6 +85,8 @@ draft: false
 appName="auditSyslogDemo" facility="LOCAL0" newLine="true" messageId="Audit" id="App"/>
 ```
 
+参考链接：[RFC 5424: The Syslog Protocol (rfc-editor.org)](https://www.rfc-editor.org/rfc/rfc5424.html)
 
+参考链接：[Log4j – Log4j 2 Appenders (apache.org)](https://logging.apache.org/log4j/2.x/manual/appenders.html#SyslogAppender)
 
 <!--more-->

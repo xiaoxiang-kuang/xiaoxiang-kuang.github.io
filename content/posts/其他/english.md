@@ -43,6 +43,6 @@ menu:
 | preference 偏好                   | explicit 明确的                                     | constraint 限制                  | precaution 预防措施                         | guarantee 担保                             | scale 比例、规模、缩放               |
 | preserve 保护、保持               | utilization 利用率                                  | dedicate 专心于、致力于          | immutable 不变的                            | consistency 一致性                         | lease 租赁                           |
 | familiar 熟悉的、常见的 | retention 保留 | prohibit 禁止 |suppresses 镇压|insufficient memory内存不足|prompt 提示|
-| achieve 实现、达到 | populate 填入 | substitution 替换 | intensive 密集的 |||
+| achieve 实现、达到 | populate 填入 | substitution 替换 | intensive 密集的 |denote 指定，表示|specification 规范|
 
 <!--more-->

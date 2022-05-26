@@ -274,7 +274,9 @@ yum [options] [command] [package ...]
 ### tcpdump 抓包命令
 
 * `-i interface`监听指定的interface，如果未指定此参数，tcpdump会搜索系统interface上数字最小的interface（如eth0）监控。可以用`-i any`来监控所有的interface（此参数不会在promiscuous mode下工作）。
-* `-X`显示原始16进制数据内容和ascii编码后的内容
+* `-X`显示原始16进制数据内容和ascii编码后的内容。
+* `-D` 列出系统上可用的网络接口。
+* `-A` 以ASCII的方式打印出每个包（不包括链路层头部）。
 * [tcpdump](https://www.tcpdump.org/)
 
 ### curl 强大的网络工具
