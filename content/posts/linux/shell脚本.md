@@ -54,6 +54,33 @@ date: 2021-09-09 16:28:01
 * non-login shell会读取~/.bashrc、/etc/bashrc、/etc/profile.d（不同的linux会有些不同）。
 * source可以立即读入配置文件的内容。
 
+### 数组
+
+* 数组可以采用逐个赋值的方法创建。也可以一次性赋值。
+
+```
+ARRAY[INDEX]=value
+ARRAY=(value1 value2 ... valueN)
+```
+
+* 读取元素
+
+```
+#输出单个元素，${}是必须的
+echo ${array[0]}
+#输出所有元素
+echo ${foo[@]}
+#循环遍历所有元素，数据要放在双引号中
+for i in "${names[@]}"; do
+  echo $i
+done
+
+#数组赋值
+hobbies=( "${activities[@]}" )
+#获取数组长度
+echo ${#a[@]}
+```
+
 ## 通配符与特殊符号
 
 

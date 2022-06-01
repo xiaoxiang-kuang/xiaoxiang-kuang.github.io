@@ -24,4 +24,13 @@ view VNAME TYPE OID [MASK]
 access GROUP CONTEXT {any|v1|v2c|usm|tsm|ksm} LEVEL PREFX READ WRITE NOTIFY
 ```
 
+连接命令
+
+```
+#-v版本 -c community
+snmpwalk -c nsag -v2c 10.0.1.81 1.3.6.1.2.1.1.1.0
+```
+
+
+
 <!--more-->
