@@ -277,7 +277,25 @@ yum [options] [command] [package ...]
 * `-X`显示原始16进制数据内容和ascii编码后的内容。
 * `-D` 列出系统上可用的网络接口。
 * `-A` 以ASCII的方式打印出每个包（不包括链路层头部）。
+* `-nn`显示原始的ip地址和端口。
+* `-v`产生详细的输出. 比如包的TTL，id标识，数据包长度，以及IP包的一些选项。
 * [tcpdump](https://www.tcpdump.org/)
+* 例子
+
+```shell
+#以ASCII的形式显示在本机所有网卡、端口5140上监听的数据
+tcpdump -A -i any -n port 5140
+#抓来源是10.0.1.81，目的端口是5140的数据
+tcpdump -i any -nnA src host 10.0.1.81 and dst port 5140
+#同时指定两个端口
+tcpdump -i any -nnA port 8848 or port 5140
+tcpdump -i any -nnA port 8848 or 5140
+#指定端口范围
+tcpdump -i any -nnA portrange 514-5140
+#将抓到的数据保存到文件中
+tcpdump icmp -w icmp.pcap
+tcpdump icmp  -r icmp.pcap
+```
 
 ### curl 强大的网络工具
 
