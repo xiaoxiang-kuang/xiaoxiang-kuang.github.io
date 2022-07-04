@@ -1,0 +1,641 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>jvm on 小象的blog</title>
+    <link>/tags/jvm/</link>
+    <description>Recent content in jvm on 小象的blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Wed, 27 Jan 2021 11:04:38 +0000</lastBuildDate><atom:link href="/tags/jvm/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>常量池</title>
+      <link>/posts/javase/%E5%B8%B8%E9%87%8F%E6%B1%A0/</link>
+      <pubDate>Wed, 27 Jan 2021 11:04:38 +0000</pubDate>
+      
+      <guid>/posts/javase/%E5%B8%B8%E9%87%8F%E6%B1%A0/</guid>
+      <description>&lt;h3 id=&#34;常量池&#34;&gt;
+  常量池
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%b8%b8%e9%87%8f%e6%b1%a0&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;常量池中主要存放两大类常量：字面量和符号引用。&lt;/li&gt;
+&lt;li&gt;字面量比较接近Java语言层面的常量概念，如文本字符串、声明为final的常量值等。&lt;/li&gt;
+&lt;li&gt;符号引用包括了下面三类常量：类和接口的全限定命名、字段的名称和描述符、方法的名称和描述符。&lt;/li&gt;
+&lt;li&gt;在class文件中不会保存各个方法、字段的最终内存布局信息，当虚拟机运行时，需要从常量池中获得对应的符号引用，再在类创建时或运行时解析、翻译到具体的内存地址中。&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>垃圾回收器</title>
+      <link>/posts/javase/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/</link>
+      <pubDate>Wed, 30 Sep 2020 15:07:07 +0000</pubDate>
+      
+      <guid>/posts/javase/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;-XX:+PrintCommandLineFlags&lt;/strong&gt;：查看命令行参数（可打印出使用的是哪个垃圾回收器）。&lt;/p&gt;
+&lt;p&gt;
+  &lt;img src=&#34;/img/%e5%9e%83%e5%9c%be%e5%9b%9e%e6%94%b6%e5%99%a8/3.jpg&#34; alt=&#34;垃圾收集器&#34; /&gt;&lt;/p&gt;
+&lt;h3 id=&#34;serial回收器串行回收&#34;&gt;
+  Serial回收器：串行回收
+  &lt;a class=&#34;anchor&#34; href=&#34;#serial%e5%9b%9e%e6%94%b6%e5%99%a8%e4%b8%b2%e8%a1%8c%e5%9b%9e%e6%94%b6&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Client模式下默认的新生代垃圾收集器。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Serial收集器采用复制算法、串行回收和“Stop-The-World”机制的方式执行内存回收。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Serial Old-对应的老年代垃圾收集器，同样采用串行回收和“Stop-The-World”机制，只不过内存回收算法使用的是标记-压缩算法。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Serial Old是Client模式下默认的老年代的垃圾收集器。&lt;/li&gt;
+&lt;li&gt;Serial Old在Server模式下主要有两个用途：①与新生代的Parallel Scavenge配合使用；②作为老年代CMS收集器的后备垃圾收集方案。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;这个收集器是一个单线程的收集器，在它进行垃圾收集时，必须停掉其他所有的工作线程，直到它收集结束。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;-XX:+UseSerialGC：指定新生代Serial，老年代Serial Old GC。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;parnew回收器并行回收&#34;&gt;
+  ParNew回收器：并行回收
+  &lt;a class=&#34;anchor&#34; href=&#34;#parnew%e5%9b%9e%e6%94%b6%e5%99%a8%e5%b9%b6%e8%a1%8c%e5%9b%9e%e6%94%b6&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;多线程的Serial。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;-XX:+UseParNewGC：指定年轻代ParNew，不影响老年代。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;-XX:ParallelGCThreads：限制线程数量，默认开启与cpu数据相同的线程数。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;parallel-scavenge回收器吞吐量优先&#34;&gt;
+  Parallel Scavenge回收器：吞吐量优先
+  &lt;a class=&#34;anchor&#34; href=&#34;#parallel-scavenge%e5%9b%9e%e6%94%b6%e5%99%a8%e5%90%9e%e5%90%90%e9%87%8f%e4%bc%98%e5%85%88&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;同样采用并行回收、复制算法、STW机制。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Parallel Scavenge收集器的目标是达到一个可控的吞吐量，它也被称为吞吐量优先的垃圾收集器。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;自适应调节机制也是Parallel Scavenge与ParNew的一个重要区别。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;高吞吐量可以高效的利用cpu时间，尽快的完成程序的运算任务。&lt;strong&gt;主要用于在后台运算而不需要太多交互的任务&lt;/strong&gt;。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;应用场景：执行批量处理、订单处理、工资支付、科学计算的应用程序。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Parallel Old：老年代垃圾收集器，采用标记-压缩算法、并行回收、STW机制。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;-XX:+UseParallelGC：手动指定年轻代使用Parallel；-XX:+UserParallelOldGC：手动指定老年代。这两个参数，当指定一个，另一个也会被开启。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;-XX:ParallelGCThreads：设置年轻代并行的线程数。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;-XX:+UseAdaptiveSizePolicy：设置Parallel收集器具有自适应调节策列。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;cms回收器低延迟concurrent-mark-sweep&#34;&gt;
+  CMS回收器：低延迟(Concurrent-Mark-Sweep)
+  &lt;a class=&#34;anchor&#34; href=&#34;#cms%e5%9b%9e%e6%94%b6%e5%99%a8%e4%bd%8e%e5%bb%b6%e8%bf%9fconcurrent-mark-sweep&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;HotSpot虚拟机中第一款真正意义上的并发收集器，实现了让垃圾收集线程与用户线程同时执行。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;采用标记清除算法，也会导致stw。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;运行过程：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;初始标记：仅标记GC Roots能直接关联到的对象。速度很快，需要stw。&lt;/li&gt;
+&lt;li&gt;并发标记：从GC Roots的直接关联对象开始遍历整个对象图的过程，这个过程耗时较长但不需要停顿用户线程。&lt;/li&gt;
+&lt;li&gt;重新标记：修正并发标记期间因用户程序继续运作而导致标记产生变动的那一部分对象的标记记录，这个阶段的stw一般会比初始标记稍长一些。&lt;/li&gt;
+&lt;li&gt;并发清除：清理标记阶段判断已经死亡的对象，释放内存空间。这个阶段可与用户线程并发。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;
+  &lt;img src=&#34;/img/%e5%9e%83%e5%9c%be%e5%9b%9e%e6%94%b6%e5%99%a8/2.jpg&#34; alt=&#34;cms&#34; /&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;由于在垃圾收集阶段用户线程仍在执行，所以在&lt;strong&gt;CMS回收过程中，要保证应用程序线程有足够的内存可用&lt;/strong&gt;。因此，CMS收集器不能像别的收集器一样等到老年代几乎完全填满了才进行垃圾回收，而是在堆内存达到某一个阈值时，便开始进行回收。当CMS运行期间，内存无法满足程序要求，这时虚拟机会启用预备方案：临时使用Serial Old进行垃圾回收。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;CMS采用标记-清除算法，只能采用空闲列表进行内存分配。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;优点：低延迟，并发收集。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;缺点：产生内存碎片；对cpu资源非常敏感，因为占用了一部分线程，会导致吞吐量降低；无法处理浮动垃圾（并发标记阶段如果产生新的垃圾，cms无法对这些垃圾进行标记，会导致这些垃圾无法及时的被回收）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;-XX:+UseConcMarkSweepGC：手动指定使用CMS收集器。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;g1回收器区域分代化&#34;&gt;
+  G1回收器：区域分代化
+  &lt;a class=&#34;anchor&#34; href=&#34;#g1%e5%9b%9e%e6%94%b6%e5%99%a8%e5%8c%ba%e5%9f%9f%e5%88%86%e4%bb%a3%e5%8c%96&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;-XX:+UseG1GC：启用G1。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;目标：延迟可控的情况下获取尽可能高的吞吐量。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;G1是一个并行回收器，它把堆内存分割为很多不相关的区域。使用不同的region来表示Eden区、幸存者0区、幸存者1区、老年代等。&lt;/li&gt;
+&lt;li&gt;G1有计划的避免在java堆中进行全区域的垃圾回收，G1跟踪各个region里面的垃圾堆积的价值大小（回收所获得的空间大小以及回收所需时间的经验值），在后台维护一个优先列表，每次根据允许的收集时间，优先回收价值最大的region。&lt;/li&gt;
+&lt;li&gt;由于这种方式的侧重点在于回收垃圾最大量的区间，所以给G1取一个名字：垃圾优先（Garbage First）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;优点：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;并行性：G1在回收期间，可以多个GC线程同时工作。此时用户线程stw。&lt;/li&gt;
+&lt;li&gt;并发性：G1部分工作能与用户线程同时执行。&lt;/li&gt;
+&lt;li&gt;分代收集：G1仍属于分代型垃圾收集器。但是不再要求整个Eden、年轻代、或者老年代都是连续的，也不再坚持固定大小和数量。它同时兼顾年轻代和老年代。&lt;/li&gt;
+&lt;li&gt;空间整合：内存是以region为基本单位的。region之间是复制算法，整体上看可以看作是标记-压缩算法。可以避免产生内存碎片。&lt;/li&gt;
+&lt;li&gt;可预测的时间停顿模型：能让使用者明确指定在一个长度为M毫秒的时间片段内，消耗在垃圾收集上的时间不得超过N毫秒。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;-XX:MaxGCPauseMillis 设置期望达到的最大Gc停顿时间指标（JVM会尽力实现，但不保证达到）。默认值是200ms&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Remembered Set：一个对象可能被不同区域region所引用。当有其它region指向本region时，记录其他region的引用。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;G1垃圾回收的过程&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;年轻代GC：①扫描根（包含RSet）；②更新RSet；③处理RSet；④复制对象；⑤处理引用。&lt;/li&gt;
+&lt;li&gt;并发标记过程：①初始标记（标记根节点直接可达的对象，会触发一次年轻代GC）；②根区域扫描（扫描survivor区能直达老年代的对象并标记被引用的对象）；③并发标记（若发现一个region区域全是垃圾，则直接回收）；④再次标记；⑤独占清理；⑥并发清理阶段。&lt;/li&gt;
+&lt;li&gt;混合回收：回收整个Yong Region和一部分Old Region。&lt;/li&gt;
+&lt;li&gt;如果上述方式不能正常工作，就会触发Full GC。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;
+  &lt;img src=&#34;/img/%e5%9e%83%e5%9c%be%e5%9b%9e%e6%94%b6%e5%99%a8/4.jpg&#34; alt=&#34;现状&#34; /&gt;&lt;/p&gt;
+&lt;!--
+|  垃圾收集器  |    分类    |    作用位置    |      使用算法      |     特点     |               适用场景               |
+| :----------: | :--------: | :------------: | :----------------: | :----------: | :----------------------------------: |
+|    Serial    |    串行    |     新生代     |      复制算法      | 响应速度优先 |         单cpu的client模式下          |
+|    ParNew    |    并行    |     新生代     |      复制算法      | 响应速度优先 |  多cpu环境Server模式下与CMS配合使用  |
+|   Parallel   |    并行    |     新生代     |      复制算法      |  吞吐量优先  | 适用于后台运算而不需要太多交互的场景 |
+|  Serial Old  |    串行    |     老年代     |   标记-压缩算法    | 响应速度优先 |          单cpu的client模式           |
+| Parallel Old |    并行    |     老年代     |   标记-压缩算法    |  吞吐量优先  | 适用于后台运算而不需要太多交互的场景 |
+|     CMS      |    并发    |     老年代     |   标记-清除算法    | 响应速度优先 |        适用于互联网或B/S业务         |
+|      G1      | 并发、并行 | 新生代、老年代 | 标记压缩、复制算法 | 响应速度优先 |            面向服务端应用            |
+--&gt;</description>
+    </item>
+    
+    <item>
+      <title>垃圾回收相关概念</title>
+      <link>/posts/javase/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/</link>
+      <pubDate>Tue, 29 Sep 2020 18:29:54 +0000</pubDate>
+      
+      <guid>/posts/javase/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/</guid>
+      <description>&lt;h3 id=&#34;systemgc的理解&#34;&gt;
+  System.gc()的理解
+  &lt;a class=&#34;anchor&#34; href=&#34;#systemgc%e7%9a%84%e7%90%86%e8%a7%a3&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;在默认情况下，通过System.gc()或者Runtime.getRuntime().gc()的调用会显示触发Full GC，但是该方法可能不是立刻就执行。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;内存溢出&#34;&gt;
+  内存溢出
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%86%85%e5%ad%98%e6%ba%a2%e5%87%ba&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;产生原因：没有空闲内存，并且垃圾收集器也无法提供更多内存。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;内存泄漏&#34;&gt;
+  内存泄漏
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%86%85%e5%ad%98%e6%b3%84%e6%bc%8f&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;严格定义：对象不再被程序使用了，但是GC又不能回收他们的情况（仍然存在引用链）。&lt;/li&gt;
+&lt;li&gt;宽泛定义：一些不太好的实践会导致对象的生命周期变得很长，甚至导致OOM，也叫宽泛意义上的内存泄漏。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;安全点&#34;&gt;
+  安全点
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%ae%89%e5%85%a8%e7%82%b9&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;程序执行时并非在所有的地方都能停下来开始GC，只有在特定的位置才能停顿下来开始GC，这些位置称为“安全点”（safepoint）。&lt;/li&gt;
+&lt;li&gt;如何在GC发生时，检测所有的程序都跑到最近的安全点停顿下来了呢 &amp;ndash;&amp;gt; 主动式中断：设置一个中断标志，各个线程运行到safe point的时候主动轮询这个标志，如果中断标志为真，则将自己进行中断挂起。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;安全区域&#34;&gt;
+  安全区域
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%ae%89%e5%85%a8%e5%8c%ba%e5%9f%9f&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;指在一段代码片段中，对象的引用关系不会发生变化，在这个区域中的任何位置开始GC都是安全的。&lt;/li&gt;
+&lt;li&gt;可以应对处于sleep或者blocked状态的线程，这时候线程无法响应jvm的中断请求，“走”到安全点去中断挂起。&lt;/li&gt;
+&lt;li&gt;当程序运行到safe region的代码时，首先标识已经进入了safe region，如果这段时间发生了gc，jvm会忽略标识为safe region状态的线程。&lt;/li&gt;
+&lt;li&gt;当线程即将离开safe region时，会检测jvm是否已经完成了gc，如果完成了，则继续运行，否则线程必须等待直到收到可以安全离开safe region的信号为止。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;引用&#34;&gt;
+  引用
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%bc%95%e7%94%a8&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;强引用&lt;/strong&gt;：类似“Object object=new Object()”这类的引用，只要强引用还存在，就永不回收。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;软引用&lt;/strong&gt;：内存不足才回收。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;弱引用&lt;/strong&gt;：发现即回收。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;虚引用&lt;/strong&gt;：对象回收跟踪。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;如果一个对象仅持有虚引用，那么它和没有引用几乎是一样的，随时都可能被垃圾回收器回收。&lt;/li&gt;
+&lt;li&gt;它不能单独使用，也无法通过虚引用来获取被引用的对象。当试图通过虚引用的get方法来获取对象时，总是null。&lt;/li&gt;
+&lt;li&gt;为一个对象设置虚引用关联的唯一目的就是能够在这个对象被收集器回收时收到一个系统通知。&lt;/li&gt;
+&lt;li&gt;虚引用必须和引用队列一起使用。虚引用在创建时必须提供一个引用队列作为参数。当垃圾回收器准备回收一个对象时，如果发现它还有虚引用，就会在回收对象后，将这个虚引用加入引用队列，以通知引用程序对象的回收情况。&lt;/li&gt;
+&lt;li&gt;由于虚引用可以跟踪对象的回收时间，因此，也可以将一些资源释放操作放置在虚引用中执行和记录。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//声明强引用
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;Object obj&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; Object&lt;span style=&#34;color:#f92672&#34;&gt;();&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;//声明软引用
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;SoftReference&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;Object&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; sf&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; SoftReference&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;Object&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;(&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; Object&lt;span style=&#34;color:#f92672&#34;&gt;());&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;//声明弱引用
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;WeakReference&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;Object&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; wr&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; WeakReference&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;Object&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;(&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; Object&lt;span style=&#34;color:#f92672&#34;&gt;());&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;//虚引用
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;Object obj&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; Object&lt;span style=&#34;color:#f92672&#34;&gt;();&lt;/span&gt;
+ReferenceQueue&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;Object&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; rq&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; ReferenceQueue&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&amp;gt;();&lt;/span&gt;
+PhantomReference&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;Object&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; pr&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; PhantomReference&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&amp;gt;(&lt;/span&gt;obj&lt;span style=&#34;color:#f92672&#34;&gt;,&lt;/span&gt;rq&lt;span style=&#34;color:#f92672&#34;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;评估性能指标&#34;&gt;
+  评估性能指标
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e8%af%84%e4%bc%b0%e6%80%a7%e8%83%bd%e6%8c%87%e6%a0%87&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;吞吐量&lt;/strong&gt;：运行用户代码时间占总运行时间的比例。&lt;/li&gt;
+&lt;li&gt;垃圾收集开销：吞吐量的补数，垃圾收集所用时间与总运行时间的比例。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;暂停时间&lt;/strong&gt;：执行垃圾收集时，程序的工作线程被暂停的时间。&lt;/li&gt;
+&lt;li&gt;收集频率：相对于应用程序的执行，收集操作发生的频率。&lt;/li&gt;
+&lt;li&gt;内存占用：Java堆区所占的内存大小。&lt;/li&gt;
+&lt;li&gt;快速：一个对象从诞生到被回收所经历的时间。&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>垃圾回收算法</title>
+      <link>/posts/javase/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%AE%97%E6%B3%95/</link>
+      <pubDate>Sun, 27 Sep 2020 10:57:23 +0000</pubDate>
+      
+      <guid>/posts/javase/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%AE%97%E6%B3%95/</guid>
+      <description>&lt;h3 id=&#34;垃圾标记算法&#34;&gt;
+  垃圾标记算法
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%9e%83%e5%9c%be%e6%a0%87%e8%ae%b0%e7%ae%97%e6%b3%95&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;引用计数器法&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;给一个对象中添加一个引用计数器，每当有一个地方引用它时，计数器值就加1；当引用失效时，计数器值就减1；任何时刻计数器为0的对象就是不可能再被使用的。&lt;/li&gt;
+&lt;li&gt;优点：实现简单，垃圾对象便于识别；判定效率高，回收没有延迟性。&lt;/li&gt;
+&lt;li&gt;缺点：需要单独的字段存储计数器，增加了存储空间的开销；每次赋值都要更新计数器，伴随着加减法的操作，增加了时间开销；引用计数器有一个严重的问题，即&lt;strong&gt;无法处理循环引用情况&lt;/strong&gt;。这是一个致命缺陷，导致java在垃圾回收器中没有使用这类算法。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;可达性分析算法&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;基本思路：以根对象集合（GC Roots）为起始点，从这些节点开始向下搜索，搜索走过的路径称为引用链，当一个对象到GC Roots没有任何引用链相连时，则证明此对象是不可用的。&lt;/li&gt;
+&lt;li&gt;GC Roots包括：①虚拟机栈中引用的对象；②类静态属性引用的对象；③方法区中常量引用的对象；④本地方法栈中（Native方法）引用的对象；⑤被synchronized持有的对象；⑥jvm内部的引用。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;finalize&#34;&gt;
+  finalize
+  &lt;a class=&#34;anchor&#34; href=&#34;#finalize&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;垃圾回收之前总会调用finalize方法，该方法可以被重写：通常是在这个方法中进行一些资源释放和清理的工作。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;不要主动调用该方法，该方法的执行时间是没有保障的，它完全由gc线程决定。垃圾回收机制会主动调用该方法。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;finalize方法只能被调用一次。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;对象的三种状态：可触及；可复活；不可触及。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;判断一个对象是否可回收，至少经历两次标记过程：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;如果对象到gc roots没有引用链，则进行第一次标记&lt;/li&gt;
+&lt;li&gt;进行筛选，判断该对象是否有必要执行finalize方法：①如果对象没有重写finalize方法，或者finalize方法已经被虚拟机调用过，则虚拟机视为“没有必要执行”，该对象被判为不可及的；②如果对象重写了finalize方法且还未执行过，那么该对象将被插入到F-Queue队列中，由一个低优先级、虚拟机自动创建的Finalizer线程区执行它；③finalize方法是对象逃脱死亡命运的最后一次机会，稍后GC会对F-Queue中的对象进行第二次标记，如果对象在finalize方法中重新与引用链上的任意一个对象建立了联系，那么在第二次标记时它将被移出“即将回收”的集合。之后，如果该对象再次出现没有引用存在的情况下，finalize方法不会再次调用，对象会直接变为不可及的状态。也就是说一个对象的finalize方法就被调用一次。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;垃圾收集算法&#34;&gt;
+  垃圾收集算法
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%9e%83%e5%9c%be%e6%94%b6%e9%9b%86%e7%ae%97%e6%b3%95&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;标记-清除算法（Mark-Sweep）&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;执行过程：当堆中的有效内存空间被耗尽的时候，就会停止整个程序（STW），然后进行两项工作，第一项是标记，第二项是回收。&lt;/li&gt;
+&lt;li&gt;标记：从根节点开始，标记所有被引用的对象。一般是在对象的Header中记录为可达对象。&lt;/li&gt;
+&lt;li&gt;清除：对堆内存从头到尾进行线性的遍历，如果发现某个对象在其header中没有被标记为可达对象，则将其回收。&lt;/li&gt;
+&lt;li&gt;优点：实现简单。&lt;/li&gt;
+&lt;li&gt;缺点：效率不够高；导致STW；会导致内存空间不连续，产生内存碎片，需要维护一个空闲列表。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;
+  &lt;img src=&#34;/img/%e5%9e%83%e5%9c%be%e5%9b%9e%e6%94%b6/1.jpg&#34; alt=&#34;标记-清除算法&#34; /&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;复制算法&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;执行过程：将可用内存按容量分为大小相等的两块，每次只使用其中一块。当这一块的内存用完了，就将还活着的对象复制到另外一块上面去，然后再把已使用过的内存空间一次清理掉。&lt;/li&gt;
+&lt;li&gt;优点：实现简单；运行高效，不会出现内存碎片。&lt;/li&gt;
+&lt;li&gt;缺点：需要两倍的内存空间。&lt;/li&gt;
+&lt;li&gt;适用场景：存活对象比较少，垃圾对象比较多的场景。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;
+  &lt;img src=&#34;/img/%e5%9e%83%e5%9c%be%e5%9b%9e%e6%94%b6/2.jpg&#34; alt=&#34;复制算法&#34; /&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;标记-压缩（整理）算法&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;执行过程：第一阶段和标记-清除算法一样，从根节点标记所有被引用的对象。第二阶段是将所有存活对象整理到内存的一端，按顺序排放。之后清理边界外的所有对象。&lt;/li&gt;
+&lt;li&gt;指针碰撞：如果内存空间以规整、有序的方式分布，即已用和未用的内存都各自一边，彼此之间维系着一个记录下一次分配起始点的标记指针，当为新对象分配内存时，只需要通过修改指针的偏移量将新对象分配在第一个空闲内存位置上，这种分配方式就叫指针碰撞（Bump the Pointer）。&lt;/li&gt;
+&lt;li&gt;优点：解决了内存碎片化的问题；消除了复制算法中内存减半的问题。&lt;/li&gt;
+&lt;li&gt;缺点：效率低于复制算法和标记-清除算法；移动对象的同时，还要调整引用的地址；会导致stw。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;
+  &lt;img src=&#34;/img/%e5%9e%83%e5%9c%be%e5%9b%9e%e6%94%b6/3.jpg&#34; alt=&#34;标记-整理算法&#34; /&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;分代收集算法&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;不同的对象的生命周期是不一样的。因此，不同生命周期的对象可以采用不同的收集方式，以提高回收效率。一般把java堆分为新生代和老年代，这样就可以根据各个年代的特点使用不同的回收算法，以提高垃圾回收的效率。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;增量收集算法&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;如果一次将所有的垃圾进行处理，需要造成系统长时间的停顿，那么就可以让垃圾收集线程和应用程序线程交替执行。每次，垃圾收集线程只收集一小片区域的内存空间，接着切换到应用程序线程，依次反复，直到垃圾收集完成。&lt;/li&gt;
+&lt;li&gt;总的来说，增量收集算法的基础仍然是传统的标记-清除算法和复制算法。增量收集算法通过对线程间冲突的妥善处理，允许垃圾收集器以分阶段的方式完成标记、清理和复制工作。&lt;/li&gt;
+&lt;li&gt;缺点：线程切换和上下文转换的消耗，会使得垃圾回收的总体成本上升，造成系统吞吐量下降。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;分区算法&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;将堆空间划分为连续不同的小区间region，每一个小区间都独立使用，独立回收。这种算法的好处是可以控制一次回收多少个小区间。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>对象实例化及内存布局</title>
+      <link>/posts/javase/%E5%AF%B9%E8%B1%A1%E5%AE%9E%E4%BE%8B%E5%8C%96%E5%8F%8A%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80/</link>
+      <pubDate>Fri, 25 Sep 2020 15:14:10 +0000</pubDate>
+      
+      <guid>/posts/javase/%E5%AF%B9%E8%B1%A1%E5%AE%9E%E4%BE%8B%E5%8C%96%E5%8F%8A%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80/</guid>
+      <description>&lt;h2 id=&#34;创建对象的步骤&#34;&gt;
+  创建对象的步骤
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%88%9b%e5%bb%ba%e5%af%b9%e8%b1%a1%e7%9a%84%e6%ad%a5%e9%aa%a4&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;当遇到一条new指令时，首先判断能否在常量池中定位到一个类的符号应用，并检查这个符号引用代表的类是否加载、解析和初始化&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;为对象分配内存，对象所需的内存大小在类加载完后就可完全确定&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;如果内存规整，指针碰撞。&lt;/li&gt;
+&lt;li&gt;如果内存不规整，虚拟机需要维护一个列表，空闲列表分配。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;处理并发安全问题&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;采用cas失败重试&lt;/li&gt;
+&lt;li&gt;每个线程预先分配一块TLAB，通过-XX:+/-UseTLAB参数来设置。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;对象属性初始化，即所有属性设置0值。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;设置对象的对象头。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;属性的显式初始化、代码块中初始化、执行init方法进行初始化。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;对象的内存布局&#34;&gt;
+  对象的内存布局
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%af%b9%e8%b1%a1%e7%9a%84%e5%86%85%e5%ad%98%e5%b8%83%e5%b1%80&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;对象头，包括如下信息：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;运行时元数据：哈希值，gc分代年龄，锁状态标志，线程持有的锁，偏向线程id，偏向时间戳。&lt;/li&gt;
+&lt;li&gt;类型指针：指向类元数据的指针，确定该对象是哪个类的实例。&lt;/li&gt;
+&lt;li&gt;如果是数组，还需记录数组的长度。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;实例数据：它是真正存储的有效信息，包括程序代码中定义的各种类型的字段（包括从父类继承下来的和本身拥有的字段）。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;规则：相同宽度的字段总是被分配在一起；父类定义的变量会出现在子类之前；如果compactFields参数为true（默认为true），子类的窄变量可能插入到父类变量的空隙。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;对齐填充&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;仅仅起着占位符的作用，hotspot虚拟机要求任何对象的大小都必须是8字节的整数倍。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;
+  &lt;img src=&#34;/img/%e5%af%b9%e8%b1%a1%e5%ae%9e%e5%8a%9b%e5%8c%96%e5%86%85%e5%ad%98%e5%b8%83%e5%b1%80%e4%b8%8e%e8%ae%bf%e9%97%ae%e5%ae%9a%e4%bd%8d/1.jpg&#34; alt=&#34;内存布局&#34; /&gt;&lt;/p&gt;
+&lt;h3 id=&#34;访问定位&#34;&gt;
+  访问定位
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e8%ae%bf%e9%97%ae%e5%ae%9a%e4%bd%8d&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;直接指针&lt;/li&gt;
+&lt;li&gt;句柄访问
+&lt;ul&gt;
+&lt;li&gt;java堆中会划分出一块内存来作为句柄池，引用中存放的就是对象的句柄地址，句柄中包含了对象实例数据的指针和对象类型的指针。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>方法区</title>
+      <link>/posts/javase/%E6%96%B9%E6%B3%95%E5%8C%BA/</link>
+      <pubDate>Sat, 29 Aug 2020 15:36:35 +0000</pubDate>
+      
+      <guid>/posts/javase/%E6%96%B9%E6%B3%95%E5%8C%BA/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;各个线程共享的内存区域&lt;/li&gt;
+&lt;li&gt;存储已被虚拟机加载的类型信息、常量、静态变量、即时编译器编译后的代码缓存等&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;运行时常量池&#34;&gt;
+  运行时常量池
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e8%bf%90%e8%a1%8c%e6%97%b6%e5%b8%b8%e9%87%8f%e6%b1%a0&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;运行时常量池是方法区的一部分&lt;/li&gt;
+&lt;li&gt;Class文件中有一项是常量池表，这部分在类加载后存放到方法区的运行时常量池中&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>java堆</title>
+      <link>/posts/javase/java%E5%A0%86/</link>
+      <pubDate>Sat, 29 Aug 2020 14:58:40 +0000</pubDate>
+      
+      <guid>/posts/javase/java%E5%A0%86/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;java堆是被所有线程共享的一块内存区域&lt;/li&gt;
+&lt;li&gt;几乎所有的对象实例及数组都在堆上分配&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>jvm栈</title>
+      <link>/posts/javase/jvm%E6%A0%88/</link>
+      <pubDate>Sat, 29 Aug 2020 13:36:30 +0000</pubDate>
+      
+      <guid>/posts/javase/jvm%E6%A0%88/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;jvm栈是线程私有的&lt;/li&gt;
+&lt;li&gt;每个方法被执行的时候，java都会同步创建一个栈帧，用来存放局部变量表、操作数栈、动态连接、方法出口等信息&lt;/li&gt;
+&lt;li&gt;每一个方法被调用直至完毕的过程，就是一个栈帧在虚拟机中从入栈到出栈的过程&lt;/li&gt;
+&lt;li&gt;局部变量表存放了编译期间可知的各种java基本数据类型、对象引用和returnAddress（指向了一条字节码指令的地址）
+&lt;ul&gt;
+&lt;li&gt;这些数据类型在局部变量表中存储空间以局部变量槽（slot）表示，64位的long和double会占用两个槽，其余的数据类型只占用一个。&lt;/li&gt;
+&lt;li&gt;局部变量表所需的内存空间在编译期间完成分配。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>类加载机制</title>
+      <link>/posts/javase/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/</link>
+      <pubDate>Tue, 21 Jul 2020 10:57:57 +0000</pubDate>
+      
+      <guid>/posts/javase/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/</guid>
+      <description>&lt;h3 id=&#34;类加载的过程&#34;&gt;
+  类加载的过程
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e7%b1%bb%e5%8a%a0%e8%bd%bd%e7%9a%84%e8%bf%87%e7%a8%8b&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;加载&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;通过一个类的全限定名来获取定义此类的二进制字节流。&lt;/li&gt;
+&lt;li&gt;将这个字节流所代表的静态存储结构转化为方法去的运行时数据结构。&lt;/li&gt;
+&lt;li&gt;在内存中生成一个代表这个类的java.lang.Class对象，作为方法区这个类的各种数据的访问入口。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;验证&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;确保Class文件的字节流对象中包含的信息符合当前虚拟机的要求，并且不会危虚拟机自身的安全。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;准备&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;准备阶段是正式为类变量分配内存并设置类变量初始值（零值）的阶段，这些类变量使用的内存都将在方法区进行分配。&lt;/li&gt;
+&lt;li&gt;如果类变量同时也被final修饰了，那它就是一个常量，准备阶段就会被初始化为代码中指定的值。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;解析&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;将常量池内的符号引用替换为直接引用的过程。&lt;/li&gt;
+&lt;li&gt;符号引用：以一组符号来描述所引用的目标，符号可以是任何形式的字面量，只要使用时能无歧义地定位到目标即可。&lt;/li&gt;
+&lt;li&gt;直接引用：可以是直接指向目标的指针、相对偏移量或是一个能间接定位到目标的句柄。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;初始化&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;初始化时执行类构造器clinit的方法的过程。&lt;/li&gt;
+&lt;li&gt;clinit方法是由编译器自动收集类中的所有类变量的赋值动作和静态语句块static{}中的语句合并产生的，编译器收集的顺序是由语句在源文件中出现的顺序所决定的。&lt;/li&gt;
+&lt;li&gt;定义在静态语句块之后的类变量，在该静态语句块中可以赋值，但不能访问。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Main&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;static&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;
+        i&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;0&lt;span style=&#34;color:#f92672&#34;&gt;;&lt;/span&gt;	&lt;span style=&#34;color:#75715e&#34;&gt;//正常编译通过
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;        System&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;out&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;i&lt;span style=&#34;color:#f92672&#34;&gt;);&lt;/span&gt;	&lt;span style=&#34;color:#75715e&#34;&gt;//这句编译器会提示非法向前引用
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; i&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;1&lt;span style=&#34;color:#f92672&#34;&gt;;&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;类加载器&#34;&gt;
+  类加载器
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e7%b1%bb%e5%8a%a0%e8%bd%bd%e5%99%a8&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;启动类加载器Bootstrap ClassLoader
+&lt;ul&gt;
+&lt;li&gt;用来加载Java的核心类库（JAVA_HOME\lib目录或者被-Xbootclasspath参数所指定的路径中）。&lt;/li&gt;
+&lt;li&gt;没有父类加载器&lt;/li&gt;
+&lt;li&gt;加载扩展类和应用程序类加载器，并指定为它们的父类加载器。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;扩展类加载器Extension ClassLoader
+&lt;ul&gt;
+&lt;li&gt;派生于ClassLoader，父类为Bootstrap。&lt;/li&gt;
+&lt;li&gt;从java.ext.dirs系统变量所指定的路径中加载所有类库。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;应用程序类加载器Application ClassLoader
+&lt;ul&gt;
+&lt;li&gt;派生于ClassLoader，父类为扩展类加载器。&lt;/li&gt;
+&lt;li&gt;负责加载classspath下的类库。&lt;/li&gt;
+&lt;li&gt;程序中的默认类加载器。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;双亲委派机制&#34;&gt;
+  双亲委派机制
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%8f%8c%e4%ba%b2%e5%a7%94%e6%b4%be%e6%9c%ba%e5%88%b6&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;如果一个类收到类加载请求，它首先不会自己去尝试加载这个类，而是把这个请求委派给父类加载器去完成。&lt;/li&gt;
+&lt;li&gt;如果父类还有父类，则进一步向上委托，请求最终到达顶层的启动类加载器中。&lt;/li&gt;
+&lt;li&gt;如果父类可以完成加载，就成功返回。否则，子类加载器才会尝试自己去加载。&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

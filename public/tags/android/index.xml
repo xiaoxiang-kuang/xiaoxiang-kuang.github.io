@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>android on 小象的blog</title>
+    <link>/tags/android/</link>
+    <description>Recent content in android on 小象的blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Sat, 16 Oct 2021 11:17:50 +0000</lastBuildDate><atom:link href="/tags/android/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>kotlin</title>
+      <link>/posts/android/kotlin/</link>
+      <pubDate>Sat, 16 Oct 2021 11:17:50 +0000</pubDate>
+      
+      <guid>/posts/android/kotlin/</guid>
+      <description>&lt;h2 id=&#34;变量&#34;&gt;
+  变量
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%8f%98%e9%87%8f&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;kotlin中定义一个变量，只允许在变量前声明两种关键字：val和var。
+&lt;ul&gt;
+&lt;li&gt;val（value）用来声明一个不可变的变量，对应java的final。&lt;/li&gt;
+&lt;li&gt;var（variable）用来声明一个可变的变量。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;kotlin完全抛弃了java中的基本数据类型，全部使用了对象数据结构。
+&lt;ul&gt;
+&lt;li&gt;Int、Long、Short、Float、Double、Boolean、Char、Byte。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;kotlin可以将表达式卸载字符串里。例：&lt;code&gt;hello, ${obj.name} ,how are you&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;函数&#34;&gt;
+  函数
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%87%bd%e6%95%b0&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;methodName&lt;/span&gt;(param1: Int, param2: Int): Int {
+      &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+}
+&lt;span style=&#34;color:#75715e&#34;&gt;//括号后面的部分是可选的，声明函数会返回什么类型的数据。
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;//当函数体只有一行时，可用将唯一的一行代码写在函数定义的尾部，中间用等号连接。
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//return可以省略，kotlin可以自动推导返回值的类型。
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;methodName&lt;/span&gt;(param1: Int, param2: Int) = &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;函数参数的默认值&#34;&gt;
+  函数参数的默认值
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%87%bd%e6%95%b0%e5%8f%82%e6%95%b0%e7%9a%84%e9%bb%98%e8%ae%a4%e5%80%bc&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;printParams&lt;/span&gt;(num: Int, str: String = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;hello&amp;#34;&lt;/span&gt;) {
+    println(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;num is &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;$num&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; , str is &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;$str&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;逻辑控制&#34;&gt;
+  逻辑控制
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e9%80%bb%e8%be%91%e6%8e%a7%e5%88%b6&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;if&#34;&gt;
+  if
+  &lt;a class=&#34;anchor&#34; href=&#34;#if&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;kotlin的if是可以有返回值的，返回值就是每一个条件中最后一行代码的返回值。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;largerNumber&lt;/span&gt;(num1: Int, num2: Int): Int{
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt;(num1 &amp;gt; num2) {
+        num1
+    }&lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt; {
+        num2
+    }
+}
+&lt;span style=&#34;color:#75715e&#34;&gt;//等价于
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;largerNumber&lt;/span&gt;(num1: Int, num2: Int) = &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; (num1 &amp;gt; num2) num1 &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt; num2
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;when&#34;&gt;
+  when
+  &lt;a class=&#34;anchor&#34; href=&#34;#when&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;当需要判断的条件非常多的时候，可以使用when来替换if&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;getScore&lt;/span&gt;(name: String) = &lt;span style=&#34;color:#66d9ef&#34;&gt;when&lt;/span&gt; (name) {
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Tom&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;86&lt;/span&gt;
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Jim&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;77&lt;/span&gt;
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Jack&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;95&lt;/span&gt;
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Lily&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;100&lt;/span&gt;
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+}
+
+&lt;span style=&#34;color:#75715e&#34;&gt;//when还允许类型匹配
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;checkNumber&lt;/span&gt;(num: Number) {
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;when&lt;/span&gt; (num) {
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;is&lt;/span&gt; Int &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; println(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;number is Int&amp;#34;&lt;/span&gt;)
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;is&lt;/span&gt; Double &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; println(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;number is Double&amp;#34;&lt;/span&gt;)
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; println(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;number not support&amp;#34;&lt;/span&gt;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;for-in循环&#34;&gt;
+  for-in循环
+  &lt;a class=&#34;anchor&#34; href=&#34;#for-in%e5%be%aa%e7%8e%af&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//创建一个左闭右闭的区间
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;val&lt;/span&gt; range=&lt;span style=&#34;color:#ae81ff&#34;&gt;0.&lt;/span&gt;.&lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;//创建一个左闭右开的区间
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;val&lt;/span&gt; range=&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; until &lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt;
+
+&lt;span style=&#34;color:#75715e&#34;&gt;//遍历这个区间，使用step可以跳过一些元素
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; (i &lt;span style=&#34;color:#66d9ef&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0.&lt;/span&gt;.&lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt; step &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;) {
+        println(i)
+}
+&lt;span style=&#34;color:#75715e&#34;&gt;//创建一个降序的区间
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; (i &lt;span style=&#34;color:#66d9ef&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt; downTo &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;) {
+        println(i)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;面向对象&#34;&gt;
+  面向对象
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e9%9d%a2%e5%90%91%e5%af%b9%e8%b1%a1&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;类与对象&#34;&gt;
+  类与对象
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e7%b1%bb%e4%b8%8e%e5%af%b9%e8%b1%a1&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//创建类
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Person&lt;/span&gt; {
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;var&lt;/span&gt; name = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;var&lt;/span&gt; age = &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;eat&lt;/span&gt;() {
+        println(name + &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34; is eating. He is &amp;#34;&lt;/span&gt; + age + &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34; years old.&amp;#34;&lt;/span&gt;)
+    }
+}
+&lt;span style=&#34;color:#75715e&#34;&gt;//创建对象
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;() {
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;val&lt;/span&gt; p = Person()
+    p.name = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Jack&amp;#34;&lt;/span&gt;
+    p.age = &lt;span style=&#34;color:#ae81ff&#34;&gt;19&lt;/span&gt;
+    p.eat()
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;继承&#34;&gt;
+  继承
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e7%bb%a7%e6%89%bf&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;一个类默认是不可以被继承的，如果一个类要被继承，需要主动声明open关键字。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//超类
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;open&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Person&lt;/span&gt; {
+    &lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;…&lt;/span&gt;
+}
+&lt;span style=&#34;color:#75715e&#34;&gt;//子类
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Student&lt;/span&gt; : Person() {
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;var&lt;/span&gt; sno = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;var&lt;/span&gt; grade = &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;接口&#34;&gt;
+  接口
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%8e%a5%e5%8f%a3&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;interface&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Study&lt;/span&gt; {
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;readBooks&lt;/span&gt;()
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;doHomework&lt;/span&gt;()
+}
+&lt;span style=&#34;color:#75715e&#34;&gt;//实现
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Student&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;val&lt;/span&gt; name: String, &lt;span style=&#34;color:#66d9ef&#34;&gt;val&lt;/span&gt; age: Int) : Study {
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;readBooks&lt;/span&gt;() {
+        println(name + &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34; is reading.&amp;#34;&lt;/span&gt;)
+    }
+
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;doHomework&lt;/span&gt;() {
+        println(name + &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34; is doing homework.&amp;#34;&lt;/span&gt;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;数据类&#34;&gt;
+  数据类
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%95%b0%e6%8d%ae%e7%b1%bb&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;数据类会根据主构造函数的参数将equals、hashCode、toString方法自动生成。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Cellphone&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;val&lt;/span&gt; brand: String, &lt;span style=&#34;color:#66d9ef&#34;&gt;val&lt;/span&gt; price: Double)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;单例类&#34;&gt;
+  单例类
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%8d%95%e4%be%8b%e7%b1%bb&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Singleton&lt;/span&gt; {
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;singletonTest&lt;/span&gt;() {
+        println(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;singletonTest is called.&amp;#34;&lt;/span&gt;)
+    }
+}
+
+&lt;span style=&#34;color:#75715e&#34;&gt;//调用方式Singleton.singletonTest()
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;集合&#34;&gt;
+  集合
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e9%9b%86%e5%90%88&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//创建List
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;val&lt;/span&gt; list = listOf(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Apple&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Banana&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Orange&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Pear&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Grape&amp;#34;&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;//创建Set
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;val&lt;/span&gt; set = setOf(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Apple&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Banana&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Orange&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Pear&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Grape&amp;#34;&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;//创建Map
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;val&lt;/span&gt; map = mapOf(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Apple&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Banana&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Orange&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Pear&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Grape&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;lambda表达式&#34;&gt;
+  lambda表达式
+  &lt;a class=&#34;anchor&#34; href=&#34;#lambda%e8%a1%a8%e8%be%be%e5%bc%8f&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;格式：&lt;code&gt;{参数名1:参数类型,参数名2:参数类型-&amp;gt;函数体}&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;-&amp;gt;表示参数列表的结束以及函数体的开始，函数体中可以编写任意行代码，最后一行代码会自动作为lamabda表达式的返回值。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;() {
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;val&lt;/span&gt; list = listOf(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Apple&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Banana&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Orange&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Pear&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Grape&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Watermelon&amp;#34;&lt;/span&gt;)
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;val&lt;/span&gt; newList = list.map({ fruit: String &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; fruit.toUpperCase() })
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; (fruit &lt;span style=&#34;color:#66d9ef&#34;&gt;in&lt;/span&gt; newList) {
+        println(fruit)
+    }
+}
+&lt;span style=&#34;color:#75715e&#34;&gt;//当lambda参数是函数的最后一个参数时，可以把lambda表达式移到函数括号外面。
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//如果lambda参数是函数的唯一一个参数的话，可以将函数的括号省略。
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//大多数情况下也不必声明参数类型
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//当参数列表中只有一个参数时，不必声明参数名，可以使用it关键字代替。
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//以上代码可简写为：
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;val&lt;/span&gt; newList = list.map { &lt;span style=&#34;color:#66d9ef&#34;&gt;it&lt;/span&gt;.toUpperCase() }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;空指针检查&#34;&gt;
+  空指针检查
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e7%a9%ba%e6%8c%87%e9%92%88%e6%a3%80%e6%9f%a5&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//下面这段代码没有空指针风险，因为kotlin默认所有的参数和变量都不可为空。
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;doStudy&lt;/span&gt;(study: Study) {
+    study.readBooks()
+    study.doHomework()
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;?.&lt;/code&gt;操作符表示当对象不为空时正常调用相应的方法，当对象为空时就什么也不做。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;?:&lt;/code&gt;操作符表示如果左边表达式的结果不为空就返回左边表达式的结果，否则就返回右边表达式的结果。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt;(a &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;null&lt;/span&gt;) {
+    a.doSomething()
+}
+&lt;span style=&#34;color:#75715e&#34;&gt;//上面这个java代码等价于
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;a&lt;span style=&#34;color:#f92672&#34;&gt;?.&lt;/span&gt;doSomething()
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;val&lt;/span&gt; c = &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; (a ! = &lt;span style=&#34;color:#66d9ef&#34;&gt;null&lt;/span&gt;) {
+    a
+} &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt; {
+    b
+}
+&lt;span style=&#34;color:#75715e&#34;&gt;//等价于
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;val&lt;/span&gt; c = a &lt;span style=&#34;color:#f92672&#34;&gt;?:&lt;/span&gt; b
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+    </item>
+    
+    <item>
+      <title>fragment</title>
+      <link>/posts/android/fragment/</link>
+      <pubDate>Thu, 15 Jul 2021 22:01:00 +0000</pubDate>
+      
+      <guid>/posts/android/fragment/</guid>
+      <description>&lt;h2 id=&#34;fragment生命周期&#34;&gt;
+  Fragment生命周期
+  &lt;a class=&#34;anchor&#34; href=&#34;#fragment%e7%94%9f%e5%91%bd%e5%91%a8%e6%9c%9f&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;onAttach：当Fragment和Activity建立关联时调用。&lt;/li&gt;
+&lt;li&gt;onCreateView：Fragment创建视图时调用。&lt;/li&gt;
+&lt;li&gt;onActivityCreated：与Fragment关联的Activity已经创建完毕时调用（即Activity的onCreate已返回时调用）。&lt;/li&gt;
+&lt;li&gt;onDestroyView：当与Fragment中的视图被移除时调用。&lt;/li&gt;
+&lt;li&gt;onDetach：当Fragment和Activity解除关联时调用。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;
+  &lt;img src=&#34;/img/android/fragment.jpg&#34; alt=&#34;fragment&#34; /&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>activity</title>
+      <link>/posts/android/activity/</link>
+      <pubDate>Thu, 15 Jul 2021 21:41:21 +0000</pubDate>
+      
+      <guid>/posts/android/activity/</guid>
+      <description>&lt;h2 id=&#34;activity生命周期&#34;&gt;
+  Activity生命周期
+  &lt;a class=&#34;anchor&#34; href=&#34;#activity%e7%94%9f%e5%91%bd%e5%91%a8%e6%9c%9f&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;onCreate：Activity第一次被创建的时候调用，将页面上的各种元素加载到内存中。&lt;/li&gt;
+&lt;li&gt;onStart：在Activity由不可见变为可见的时候调用。&lt;/li&gt;
+&lt;li&gt;onResume：Activity准备好和用户进行交互的时候调用。&lt;/li&gt;
+&lt;li&gt;onPause：系统准备去启动或者恢复另一个Activity调用。&lt;/li&gt;
+&lt;li&gt;onStop：在Activity完全不可见时调用。&lt;/li&gt;
+&lt;li&gt;onDestroy：Activity被销毁之前调用。&lt;/li&gt;
+&lt;li&gt;onRestart：Activity由停止状态变为运行状态之前调用。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;
+  &lt;img src=&#34;/img/android/activity.jpg&#34; alt=&#34;activity&#34; /&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>android</title>
+      <link>/posts/android/android/</link>
+      <pubDate>Mon, 22 Mar 2021 14:36:24 +0000</pubDate>
+      
+      <guid>/posts/android/android/</guid>
+      <description>&lt;h2 id=&#34;项目结构&#34;&gt;
+  项目结构
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e9%a1%b9%e7%9b%ae%e7%bb%93%e6%9e%84&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;app &amp;gt; java &amp;gt; 包名 &amp;gt; MainActivity&lt;/code&gt;：主activity，是应用的入口点。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;app &amp;gt; res &amp;gt; layout &amp;gt; activity_main.xml&lt;/code&gt;：定义了activity界面的布局。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;app &amp;gt; manifests &amp;gt; AndroidMainifest.xml&lt;/code&gt;：描述应用的基本特性并定义其每个组件。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Gradle Scripts &amp;gt; build.gradle&lt;/code&gt;：一个是针对项目的gradle，一个是针对模块的gradle。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;安卓应用组件&#34;&gt;
+  安卓应用组件
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%ae%89%e5%8d%93%e5%ba%94%e7%94%a8%e7%bb%84%e4%bb%b6&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;Activity
+&lt;ul&gt;
+&lt;li&gt;拥有界面的单个屏幕&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;服务
+&lt;ul&gt;
+&lt;li&gt;是一种在后台运行的组件，用于执行长时间运行的操作。如后台播放歌曲，服务不提供界面。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;广播接收器
+&lt;ul&gt;
+&lt;li&gt;每个应用程序都可以对自己感兴趣的广播进行注册，这样该程序就只会收到自己关心的广播内容。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;内容提供程序
+&lt;ul&gt;
+&lt;li&gt;管理一组共享的应用数据。其他应用可通过内容提供程序查询或修改数据。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

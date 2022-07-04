@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>Mysql系统变量 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.d1618bcc7dc3b2f814dad501e6e03731b06bd4540bd19265a8737f6e23228b96.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <span class="flex align-center"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </span>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/tags/">
+        分类
+      </a>
+  </li>
+  
+  <li>
+    <a href="http://xiaoxiang.space:81">
+        工具
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/%E5%85%B6%E4%BB%96/english/">
+        生僻单词
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#设置系统变量">设置系统变量</a>
+          <ul>
+            <li><a href="#通过命令行设置">通过命令行设置</a></li>
+            <li><a href="#通过配置文件设置">通过配置文件设置</a></li>
+            <li><a href="#运行过程中修改">运行过程中修改</a></li>
+          </ul>
+        </li>
+        <li><a href="#状态变量">状态变量</a></li>
+        <li><a href="#补充">补充</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>Mysql系统变量</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/tags/">
+        分类
+      </a>
+  </li>
+  
+  <li>
+    <a href="http://xiaoxiang.space:81">
+        工具
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/%E5%85%B6%E4%BB%96/english/">
+        生僻单词
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#设置系统变量">设置系统变量</a>
+          <ul>
+            <li><a href="#通过命令行设置">通过命令行设置</a></li>
+            <li><a href="#通过配置文件设置">通过配置文件设置</a></li>
+            <li><a href="#运行过程中修改">运行过程中修改</a></li>
+          </ul>
+        </li>
+        <li><a href="#状态变量">状态变量</a></li>
+        <li><a href="#补充">补充</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql%E7%B3%BB%E7%BB%9F%E5%8F%98%E9%87%8F/">Mysql系统变量</a>
+  </h1>
+  
+  <h5>February 22, 2022</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
+  </div>
+  
+
+
+
+<ul>
+<li>mysql有很多的系统变量，能够影响程序的行为，很多命令都能在运行过程中修改。</li>
+</ul>
+<pre><code>#获取某个变量的信息
+show [global | session] variables like 'xxx'
+
+#获取默认存储引擎
+show variables like 'default_storage_engine'
+#获取默认的最大连接数
+show variables like 'max_connections';
+</code></pre><h2 id="设置系统变量">
+  设置系统变量
+  <a class="anchor" href="#%e8%ae%be%e7%bd%ae%e7%b3%bb%e7%bb%9f%e5%8f%98%e9%87%8f">#</a>
+</h2>
+<h3 id="通过命令行设置">
+  通过命令行设置
+  <a class="anchor" href="#%e9%80%9a%e8%bf%87%e5%91%bd%e4%bb%a4%e8%a1%8c%e8%ae%be%e7%bd%ae">#</a>
+</h3>
+<pre><code>mysqld --max_connections=10
+</code></pre><h3 id="通过配置文件设置">
+  通过配置文件设置
+  <a class="anchor" href="#%e9%80%9a%e8%bf%87%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6%e8%ae%be%e7%bd%ae">#</a>
+</h3>
+<pre><code>[server]
+max_connections=10
+</code></pre><h3 id="运行过程中修改">
+  运行过程中修改
+  <a class="anchor" href="#%e8%bf%90%e8%a1%8c%e8%bf%87%e7%a8%8b%e4%b8%ad%e4%bf%ae%e6%94%b9">#</a>
+</h3>
+<ul>
+<li>许多系统变量分为全局范围（global）和会话范围（session）。</li>
+<li>并不是所有的变量都有全局范围和会话范围，如max_connections只有全局范围。</li>
+<li>服务器在启动时会给所有的全局变量一个默认值，当有连接的客户端时，服务器为每个连接的客户端维护一组会话变量，并以全局变量的值初始化。</li>
+</ul>
+<pre><code>#全局设置存储引擎
+set global default_sotrage_engine=MyISAM
+#本次会话期间设置存储引擎
+set [session] default_storage_engine=MyISAM
+
+#获取会话范围的变量内容
+show SESSION VARIABLES LIKE 'default_sotrage_engine'
+#不写修饰符默认是session范围，如果一个变量没有session范围则显示global范围的值
+show VARIABLES LIKE 'max_connections'
+</code></pre><h2 id="状态变量">
+  状态变量
+  <a class="anchor" href="#%e7%8a%b6%e6%80%81%e5%8f%98%e9%87%8f">#</a>
+</h2>
+<ul>
+<li>状态变量有关服务器的运行情况。</li>
+<li>状态变量不能人为设置。</li>
+</ul>
+<pre><code>show [global | session] status like [like 'xxx']
+
+#查看当前有多少客户端与服务器建立了连接。
+show status like 'threads_connected'
+</code></pre><h2 id="补充">
+  补充
+  <a class="anchor" href="#%e8%a1%a5%e5%85%85">#</a>
+</h2>
+<ul>
+<li>
+<p>很多变量不可修改，如<code>version</code>。</p>
+</li>
+<li>
+<p>大部分系统变量都可以当启动选项传入。</p>
+</li>
+</ul></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备20006455号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

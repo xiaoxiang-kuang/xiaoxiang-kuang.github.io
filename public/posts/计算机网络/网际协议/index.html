@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>网际协议 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.d1618bcc7dc3b2f814dad501e6e03731b06bd4540bd19265a8737f6e23228b96.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <span class="flex align-center"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </span>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/tags/">
+        分类
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/life/">
+        小记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql/">
+        mysql
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/%E5%85%B6%E4%BB%96/english/">
+        生僻单词
+      </a>
+  </li>
+  
+  <li>
+    <a href="http://tools.xiaoxiang.space">
+        工具
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#ip头部">IP头部</a></li>
+            <li><a href="#ip路由选择">IP路由选择</a></li>
+            <li><a href="#子网寻址">子网寻址</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>网际协议</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/tags/">
+        分类
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/life/">
+        小记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql/">
+        mysql
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/%E5%85%B6%E4%BB%96/english/">
+        生僻单词
+      </a>
+  </li>
+  
+  <li>
+    <a href="http://tools.xiaoxiang.space">
+        工具
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#ip头部">IP头部</a></li>
+            <li><a href="#ip路由选择">IP路由选择</a></li>
+            <li><a href="#子网寻址">子网寻址</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%BD%91%E9%99%85%E5%8D%8F%E8%AE%AE/">网际协议</a>
+  </h1>
+  
+  <h5>November 16, 2021</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>
+  </div>
+  
+
+
+
+<ul>
+<li>所有的TCP、UDP、ICMP、ICMP数据都以IP数据报格式传输。</li>
+<li>特点：
+<ul>
+<li>不可靠：他不能保证IP数据报能成功到达目的地，如果发生某种错误，IP有一个简单的错误处理算法：丢弃该数据，然后发送ICMP消息报给信源端。</li>
+<li>无连接：IP并不维护任何关于后续数据报的状态信息，每个数据报的处理是相互独立的。IP可以不按顺序接收，如果信源向信宿发送两个连续的数据报，则每个数据报都是独立地进行路由选择。</li>
+</ul>
+</li>
+</ul>
+<h3 id="ip头部">
+  IP头部
+  <a class="anchor" href="#ip%e5%a4%b4%e9%83%a8">#</a>
+</h3>
+<p>
+  <img src="/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/ip.png" alt="" /></p>
+<ul>
+<li>TCP/IP首部中的所有二进制整数再网络中传输都要求大端（最高位在左边，最低为在右边），这种字节序又叫网络字节序。</li>
+</ul>
+<h4 id="各个字段的含义">
+  各个字段的含义
+  <a class="anchor" href="#%e5%90%84%e4%b8%aa%e5%ad%97%e6%ae%b5%e7%9a%84%e5%90%ab%e4%b9%89">#</a>
+</h4>
+<ul>
+<li>协议版本号是4。</li>
+<li>首部长度通常为20个字节。最长为60个字节。</li>
+<li>服务类型包括一个3bit的优先权子字段（现在已经被忽略），4bit的TOS字段和1bit未用但必须为0的字段。4bit的TOS分别代表：最小时延、最大吞吐量、最高可靠性和最小费用。4bit只能置其中1bit。</li>
+<li>总长度字段是指整个IP数据报的长度，以字节为单位，利用首部长度字段和总长度字段，就可以知道IP数据报中数据内容的起始位置和长度。</li>
+<li>标识字段唯一地标识主机发送的每一份数据报。通常每发送一份报文它的值就会加1。</li>
+<li>TTL（time-to-live）生存时间字段设置了数据报可以经过最多的路由器数。它指定了数据报的生存时间。初始值由源主机设置（通常为32或64），一旦经过一个处理它的路由器，它的值就减去1。当该字段的值为1时，数据报就被丢弃，并发送ICMP报文通知源主机。</li>
+<li>协议字段通过填充不同的标识符来表示哪一个高层协议将用于接收IP分组中的数据。</li>
+<li>首部检验和字段是根据ip首部计算的检验和码。</li>
+<li>每一份IP数据报都包含源ip和目的ip。</li>
+<li>任选项是数据报中一个可变长的可选信息。</li>
+</ul>
+<h3 id="ip路由选择">
+  IP路由选择
+  <a class="anchor" href="#ip%e8%b7%af%e7%94%b1%e9%80%89%e6%8b%a9">#</a>
+</h3>
+<ul>
+<li>IP层在内存中有一个路由表，当收到一份数据报并进行发送时，他都要对该表搜索一次。
+<ul>
+<li>路由表的每一项都包含：①目的IP地址；②下一跳的路由器的IP地址，或者直接连接网络IP地址；下一站路由器是指一个在直接相连完了上的路由器，通过它可以转发数据；③标志；其中一个标志指明目的IP地址是网络地址还是主机地址，另一个标志指明下一站路由器是否为真正的下一站路由器，还是一个直接相连的接口；④为数据报的传输指定一个网络接口。</li>
+</ul>
+</li>
+<li>当数据报来自某个网络接口时，IP首先检查目的IP地址是否为本机IP地址之一或者IP广播地址。如果确实是这样，数据报就被送到由IP首部协议字段所指定的协议模块进行处理。</li>
+<li>如果数据报的目的IP是其他的地址，并且IP层被设置为路由器的功能，那么就对数据报进行转发。</li>
+<li>IP路由选择主要完成：①搜索路由表，寻找能与目的IP地址网络号和主机号完全匹配的表目，如果找到，则把表目发给指定的下一站路由器或者直接相连的网络接口；②搜索路由表，找到能与目的网络号匹配的表，如果找到，将表目发给该表目指定的下一站路由器或者直接相连的网络接口；③搜索路由表，寻找标为&quot;默认&quot;的表目；④如果以上步骤都没成功，那么该数据报就不能被传送。</li>
+</ul>
+<h3 id="子网寻址">
+  子网寻址
+  <a class="anchor" href="#%e5%ad%90%e7%bd%91%e5%af%bb%e5%9d%80">#</a>
+</h3>
+<ul>
+<li>含义：IP地址不再单纯的由一个网络号和主机号组成，而是把主机号在分成一个子网号和一个主机号。</li>
+<li>子网对外部路由器来说隐藏了内部的网络组织的细节。</li>
+<li>通过IP可以区分网络号和主机号，通过子网掩码可以区分子网号和主机号。子网掩码中的1表示IP地址中的网络号和子网号，子网掩码中的0表示IP地址中的主机号。</li>
+<li>通过IP地址和子网掩码的与运算，可以计算出IP属于哪一个子网。</li>
+</ul></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备20006455号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>mysql账户管理 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.d1618bcc7dc3b2f814dad501e6e03731b06bd4540bd19265a8737f6e23228b96.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <span class="flex align-center"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </span>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/tags/">
+        分类
+      </a>
+  </li>
+  
+  <li>
+    <a href="http://xiaoxiang.space:81">
+        工具
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/%E5%85%B6%E4%BB%96/english/">
+        生僻单词
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#mysql账户管理">MYSQL账户管理</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>mysql账户管理</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/tags/">
+        分类
+      </a>
+  </li>
+  
+  <li>
+    <a href="http://xiaoxiang.space:81">
+        工具
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/%E5%85%B6%E4%BB%96/english/">
+        生僻单词
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#mysql账户管理">MYSQL账户管理</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql%E8%B4%A6%E6%88%B7%E7%AE%A1%E7%90%86/">mysql账户管理</a>
+  </h1>
+  
+  <h5>August 16, 2021</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
+  </div>
+  
+
+
+
+<h3 id="mysql账户管理">
+  MYSQL账户管理
+  <a class="anchor" href="#mysql%e8%b4%a6%e6%88%b7%e7%ae%a1%e7%90%86">#</a>
+</h3>
+<ul>
+<li>mysql将账户存储在mysq数据库的user表中。</li>
+<li><code>CREATE USER</code>用于创建性的mysql用户；账户首次创建没有特权，需要使用<code>GRANT</code>分配特权。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#f92672">#</span><span style="color:#960050;background-color:#1e0010">如果不指定主机，默认就是</span><span style="color:#e6db74">&#39;%&#39;</span><span style="color:#960050;background-color:#1e0010">（所有</span>ip都能访问<span style="color:#960050;background-color:#1e0010">）</span>
+<span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">USER</span> <span style="color:#e6db74">&#39;jeffrey&#39;</span><span style="color:#f92672">@</span><span style="color:#e6db74">&#39;localhost&#39;</span> IDENTIFIED <span style="color:#66d9ef">BY</span> <span style="color:#e6db74">&#39;password&#39;</span>;
+
+<span style="color:#f92672">#</span><span style="color:#960050;background-color:#1e0010">删除用户。</span>
+<span style="color:#66d9ef">DROP</span> <span style="color:#66d9ef">USER</span> <span style="color:#e6db74">&#39;jeffrey&#39;</span><span style="color:#f92672">@</span><span style="color:#e6db74">&#39;localhost&#39;</span>;
+<span style="color:#f92672">#</span><span style="color:#960050;background-color:#1e0010">重命名现有的账户</span>,<span style="color:#960050;background-color:#1e0010">可以用来解决账号只能在本地访问的问题。</span>
+<span style="color:#66d9ef">RENAME</span> <span style="color:#66d9ef">USER</span> <span style="color:#e6db74">&#39;jeffrey&#39;</span><span style="color:#f92672">@</span><span style="color:#e6db74">&#39;localhost&#39;</span> <span style="color:#66d9ef">TO</span> <span style="color:#e6db74">&#39;jeff&#39;</span><span style="color:#f92672">@</span><span style="color:#e6db74">&#39;%&#39;</span>
+</code></pre></div><ul>
+<li><code>ALTER USER</code>修改账户的信息（如修改密码）。不推荐使用<code>SET PASSWORD</code>来修改密码。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#f92672">#</span><span style="color:#960050;background-color:#1e0010">修改自己的密码，</span><span style="color:#66d9ef">USER</span>()<span style="color:#960050;background-color:#1e0010">会返回当前登录用户的用户名和主机名</span>
+<span style="color:#66d9ef">ALTER</span> <span style="color:#66d9ef">USER</span> <span style="color:#66d9ef">USER</span>() IDENTIFIED <span style="color:#66d9ef">BY</span> <span style="color:#e6db74">&#39;password&#39;</span>;
+<span style="color:#f92672">#</span><span style="color:#960050;background-color:#1e0010">锁定账户</span>
+<span style="color:#66d9ef">ALTER</span> <span style="color:#66d9ef">USER</span> <span style="color:#e6db74">&#39;jeffrey&#39;</span><span style="color:#f92672">@</span><span style="color:#e6db74">&#39;localhost&#39;</span> ACCOUNT <span style="color:#66d9ef">LOCK</span>;
+<span style="color:#66d9ef">ALTER</span> <span style="color:#66d9ef">USER</span> <span style="color:#e6db74">&#39;jeffrey&#39;</span><span style="color:#f92672">@</span><span style="color:#e6db74">&#39;localhost&#39;</span> ACCOUNT UNLOCK;
+</code></pre></div><ul>
+<li><code>GRANT</code>用来对账户进行授权，<code>REVOKE</code>用来撤销账户特权。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#f92672">#</span><span style="color:#960050;background-color:#1e0010">授予除</span>GRANT和PROXY外的所有特权
+<span style="color:#f92672">#</span><span style="color:#960050;background-color:#1e0010">还可以授予</span><span style="color:#66d9ef">ALTER</span><span style="color:#960050;background-color:#1e0010">、</span><span style="color:#66d9ef">CREATE</span><span style="color:#960050;background-color:#1e0010">、</span><span style="color:#66d9ef">DELETE</span><span style="color:#960050;background-color:#1e0010">、</span><span style="color:#66d9ef">DROP</span><span style="color:#960050;background-color:#1e0010">、</span><span style="color:#66d9ef">SELECT</span><span style="color:#960050;background-color:#1e0010">、</span><span style="color:#66d9ef">UPDATE</span><span style="color:#960050;background-color:#1e0010">、</span><span style="color:#66d9ef">GRANT</span> <span style="color:#66d9ef">OPTION</span>
+<span style="color:#66d9ef">GRANT</span> <span style="color:#66d9ef">ALL</span> <span style="color:#66d9ef">ON</span> db1.<span style="color:#f92672">*</span> <span style="color:#66d9ef">TO</span> <span style="color:#e6db74">&#39;jeffrey&#39;</span><span style="color:#f92672">@</span><span style="color:#e6db74">&#39;localhost&#39;</span>;
+<span style="color:#66d9ef">REVOKE</span> <span style="color:#66d9ef">INSERT</span> <span style="color:#66d9ef">ON</span> <span style="color:#f92672">*</span>.<span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> <span style="color:#e6db74">&#39;jeffrey&#39;</span><span style="color:#f92672">@</span><span style="color:#e6db74">&#39;localhost&#39;</span>;
+<span style="color:#66d9ef">REVOKE</span> <span style="color:#66d9ef">ALL</span> [<span style="color:#66d9ef">PRIVILEGES</span>], <span style="color:#66d9ef">GRANT</span> <span style="color:#66d9ef">OPTION</span> <span style="color:#66d9ef">FROM</span> <span style="color:#e6db74">&#39;jeffrey&#39;</span><span style="color:#f92672">@</span><span style="color:#e6db74">&#39;localhost&#39;</span>;
+</code></pre></div></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备20006455号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

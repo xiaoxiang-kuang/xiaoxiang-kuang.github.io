@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>life on 小象的blog</title>
+    <link>/categories/life/</link>
+    <description>Recent content in life on 小象的blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Tue, 05 Apr 2022 12:21:52 +0800</lastBuildDate><atom:link href="/categories/life/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>hello</title>
+      <link>/life/hello/</link>
+      <pubDate>Tue, 05 Apr 2022 12:21:52 +0800</pubDate>
+      
+      <guid>/life/hello/</guid>
+      <description>人生如逆旅，我亦是行人</description>
+    </item>
+    
+  </channel>
+</rss>

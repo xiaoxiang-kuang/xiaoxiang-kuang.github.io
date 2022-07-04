@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>Internet协议 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.d1618bcc7dc3b2f814dad501e6e03731b06bd4540bd19265a8737f6e23228b96.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <span class="flex align-center"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </span>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/tags/">
+        分类
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/life/">
+        小记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql/">
+        mysql
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/%E5%85%B6%E4%BB%96/english/">
+        生僻单词
+      </a>
+  </li>
+  
+  <li>
+    <a href="http://tools.xiaoxiang.space">
+        工具
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents"></nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>Internet协议</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/tags/">
+        分类
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/life/">
+        小记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql/">
+        mysql
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/%E5%85%B6%E4%BB%96/english/">
+        生僻单词
+      </a>
+  </li>
+  
+  <li>
+    <a href="http://tools.xiaoxiang.space">
+        工具
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents"></nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/internet%E5%8D%8F%E8%AE%AE/">Internet协议</a>
+  </h1>
+  
+  <h5>April 14, 2022</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>
+  </div>
+  
+
+
+
+<p>ipv4头部
+
+  <img src="/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/internet%e5%8d%8f%e8%ae%ae/1.png" alt="ipv4头部" /></p>
+<p>TCP/IP头中所有二进制证书在网络中传输时的字节顺序为高位优先字节序，也叫网络字节序。即首先传<code>0~7</code>位，然后是<code>8~15</code>位，以此类推。</p>
+<ol>
+<li>第一个字段是版本字段，包含IP数据报的版本，IPv4的版本位4，IPv6的版本为6(IPv4和IPv6的头部是不一样的)。</li>
+<li>Internet头部长度(IHL)字段保存IPv4头部中32位字的数量。由于他是一个4位的字段，所以IPv4头部被限制最多15个32位字，即60字节。</li>
+<li>总长度字段是IPv4数据报的总长度(以字节为单位)，通过这个字段和IHL字段，可以知道数据报的数据从哪里开始以及数据的长度。由于它是一个16位的字段，所以IPv4数据的最大长度(包括头部)为65535字节。
+<ul>
+<li>因为一些低层协议可能会填充一些数据，所以需要提供总长度字段来确定IP数据报的长度。比如以太网帧的最小长度为64字节，最小有效载荷为46字节，所以如果长度不够，下层协议会填充数据到最小长度。通过总长度字段可以知道一个46字节的以太网帧是一个IP数据报还是一个经过填充的IP数据报。</li>
+<li>尽管可以发送一个65535字节的IP数据报，但是大多数链路层(如以太网)不能携带这么大的数据，除非将它拆分为更小的片。当一个IPv4数据报被分为多个更小的分片时，每个分片自身仍然是一个独立的IP数据报，总长度反应的时具体的分片长度。</li>
+<li>(没理解，后面补充)主机不需要接收大于576字节的IPv4数据报，很多UDP协议传输数据(如DNS、DHCP)，会限制数据大小为512字节，以避免576字节的限制。</li>
+</ul>
+</li>
+<li>标识字段帮助标识IPv4主机发送的数据报，为了避免将一个数据报分片和其他数据报分片混淆，发送主机通常在每次发送数据报时将一个内部计数器加1，并将此计数器值复制到IPv4标识字段。</li>
+<li>生存期(TTL)用于设置一个数据报可以经过的路由器数量的上线，发送方将他初始为一个值，如64、127、255，每台路由器在转发数据报时将该值减一，当这个字段为0时，该数据报被丢弃，并使用一个ICMP消息通知发送方。</li>
+<li>IPv4头部中的协议字段包含一个数字，表述数据报有效载荷部分的数据类型，最常用的为17(UDP)和6(TCP)。</li>
+<li>头部校验和仅计算IPv4头部，这意味着IPv4不检查数据报有效载荷(如TCP数据)的正确性，为了确保IP数据报的有效载荷部分已经正确传输，其他协议必须通过自己的数据完整性检验机制来检查重要数据。
+<ul>
+<li>当一个IPv4数据报经过一台路由器时，TTL字段减一带来的结果是其头部校验和必须修改。</li>
+</ul>
+</li>
+<li>每个IP数据报包含返送这的源IP地址和接收者的目的IP地址。</li>
+</ol>
+<!--5.2.2 Intemet校验和 127页 --></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备20006455号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

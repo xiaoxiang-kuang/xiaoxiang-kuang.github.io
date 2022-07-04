@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>tcp | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.d1618bcc7dc3b2f814dad501e6e03731b06bd4540bd19265a8737f6e23228b96.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <span class="flex align-center"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </span>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/tags/">
+        分类
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/life/">
+        小记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql/">
+        mysql
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/%E5%85%B6%E4%BB%96/english/">
+        生僻单词
+      </a>
+  </li>
+  
+  <li>
+    <a href="http://tools.xiaoxiang.space">
+        工具
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#tcp特性">TCP特性</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>tcp</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/tags/">
+        分类
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/life/">
+        小记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql/">
+        mysql
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/%E5%85%B6%E4%BB%96/english/">
+        生僻单词
+      </a>
+  </li>
+  
+  <li>
+    <a href="http://tools.xiaoxiang.space">
+        工具
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#tcp特性">TCP特性</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/tcp/">tcp</a>
+  </h1>
+  
+  <h5>March 27, 2020</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>
+  </div>
+  
+
+
+
+<h2 id="tcp特性">
+  TCP特性
+  <a class="anchor" href="#tcp%e7%89%b9%e6%80%a7">#</a>
+</h2>
+<ul>
+<li>应用数据被分割为TCP认为最适合发送的数据块</li>
+<li>当TCP发送一个段后，它启动一个定时器，等待目的端确认收到了这个报文段。如果不能及时收到一个确认，将重发这个报文段</li>
+<li>当TCP收到发自TCP连接的另一端的数据，它将发送一个确认，这个确认通常将推迟几分之一秒</li>
+<li>TCP将保持他首部和数据的检验和，目的是检测数据在传输过程中是否有变化</li>
+<li>如果必要TCP将对收到的数据进行重新排序，将收到的数据以正确的顺序交给应用层</li>
+<li>TCP的接收端会丢弃重复的数据</li>
+<li>TCP提供流量控制。TCP连接的每一方都有固定大小的缓存空间。TCP的接收端只允许另一端发送接收端所能接纳的数据</li>
+</ul>
+<img src="/img/网络/tcp/1.png"></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备20006455号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,1525 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>linux命令总结 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.d1618bcc7dc3b2f814dad501e6e03731b06bd4540bd19265a8737f6e23228b96.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <span class="flex align-center"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </span>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/tags/">
+        分类
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/life/">
+        小记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql/">
+        mysql
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/%E5%85%B6%E4%BB%96/english/">
+        生僻单词
+      </a>
+  </li>
+  
+  <li>
+    <a href="http://tools.xiaoxiang.space">
+        工具
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#linux指令执行过程">linux指令执行过程</a></li>
+            <li><a href="#linux进程">linux进程</a></li>
+            <li><a href="#vim-文本编辑工具">vim 文本编辑工具</a></li>
+            <li><a href="#nmcli-网络配置工具">nmcli 网络配置工具</a></li>
+            <li><a href="#firewall-cmd-centos7下的防火墙工具">firewall-cmd centos7下的防火墙工具</a></li>
+            <li><a href="#systemctl-管理unit">systemctl 管理unit</a></li>
+            <li><a href="#rpm-软件管理机制">RPM 软件管理机制</a></li>
+            <li><a href="#yum-包管理工具">yum 包管理工具</a></li>
+            <li><a href="#netstat-显示网络状态">netstat 显示网络状态</a></li>
+            <li><a href="#tcpdump-抓包命令">tcpdump 抓包命令</a></li>
+            <li><a href="#curl-强大的网络工具">curl 强大的网络工具</a></li>
+            <li><a href="#ps-获取当前时刻系统进程状态">ps 获取当前时刻系统进程状态</a></li>
+            <li><a href="#top-动态显示进程状态">top 动态显示进程状态</a></li>
+            <li><a href="#kill-向进程发送signal">kill 向进程发送signal</a></li>
+            <li><a href="#nohup和-后台执行">nohup和&amp; 后台执行</a></li>
+            <li><a href="#job和fg-前台执行">job和fg 前台执行</a></li>
+            <li><a href="#at与cron">at与cron</a></li>
+            <li><a href="#freeunamehostnamelocale查看和设置系统信息">free、uname、hostname、locale查看和设置系统信息</a></li>
+            <li><a href="#ls-列出文件">ls 列出文件</a></li>
+            <li><a href="#cattactailwc-查看文件">cat、tac、tail、wc 查看文件</a></li>
+            <li><a href="#重定向与管道">重定向与管道</a></li>
+            <li><a href="#grep-查找指定内容">grep 查找指定内容</a></li>
+            <li><a href="#whereiswhichlocale-查找文件">whereis、which、locale 查找文件</a></li>
+            <li><a href="#find查找工具">find：查找工具</a></li>
+            <li><a href="#tar-压缩与解压工具">tar 压缩与解压工具</a></li>
+            <li><a href="#useraddpassedusermoduserdel-用户账号管理">useradd、passed、usermod、userdel 用户账号管理</a></li>
+            <li><a href="#chgrpchownchmod-文件权限">chgrp、chown、chmod 文件权限</a></li>
+            <li><a href="#su-切换用户">su 切换用户</a></li>
+            <li><a href="#sudo-以其他用户执行指令">sudo 以其他用户执行指令</a></li>
+            <li><a href="#ulimit-限制系统资源">ulimit 限制系统资源</a></li>
+            <li><a href="#acl">ACL</a></li>
+            <li><a href="#df和du-查看磁盘信息">df和du 查看磁盘信息</a></li>
+            <li><a href="#mount-磁盘挂载">mount 磁盘挂载</a></li>
+            <li><a href="#manmanual用户手册">man（manual）用户手册</a></li>
+            <li><a href="#selinux">SELinux</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>linux命令总结</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/tags/">
+        分类
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/life/">
+        小记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql/">
+        mysql
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/%E5%85%B6%E4%BB%96/english/">
+        生僻单词
+      </a>
+  </li>
+  
+  <li>
+    <a href="http://tools.xiaoxiang.space">
+        工具
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#linux指令执行过程">linux指令执行过程</a></li>
+            <li><a href="#linux进程">linux进程</a></li>
+            <li><a href="#vim-文本编辑工具">vim 文本编辑工具</a></li>
+            <li><a href="#nmcli-网络配置工具">nmcli 网络配置工具</a></li>
+            <li><a href="#firewall-cmd-centos7下的防火墙工具">firewall-cmd centos7下的防火墙工具</a></li>
+            <li><a href="#systemctl-管理unit">systemctl 管理unit</a></li>
+            <li><a href="#rpm-软件管理机制">RPM 软件管理机制</a></li>
+            <li><a href="#yum-包管理工具">yum 包管理工具</a></li>
+            <li><a href="#netstat-显示网络状态">netstat 显示网络状态</a></li>
+            <li><a href="#tcpdump-抓包命令">tcpdump 抓包命令</a></li>
+            <li><a href="#curl-强大的网络工具">curl 强大的网络工具</a></li>
+            <li><a href="#ps-获取当前时刻系统进程状态">ps 获取当前时刻系统进程状态</a></li>
+            <li><a href="#top-动态显示进程状态">top 动态显示进程状态</a></li>
+            <li><a href="#kill-向进程发送signal">kill 向进程发送signal</a></li>
+            <li><a href="#nohup和-后台执行">nohup和&amp; 后台执行</a></li>
+            <li><a href="#job和fg-前台执行">job和fg 前台执行</a></li>
+            <li><a href="#at与cron">at与cron</a></li>
+            <li><a href="#freeunamehostnamelocale查看和设置系统信息">free、uname、hostname、locale查看和设置系统信息</a></li>
+            <li><a href="#ls-列出文件">ls 列出文件</a></li>
+            <li><a href="#cattactailwc-查看文件">cat、tac、tail、wc 查看文件</a></li>
+            <li><a href="#重定向与管道">重定向与管道</a></li>
+            <li><a href="#grep-查找指定内容">grep 查找指定内容</a></li>
+            <li><a href="#whereiswhichlocale-查找文件">whereis、which、locale 查找文件</a></li>
+            <li><a href="#find查找工具">find：查找工具</a></li>
+            <li><a href="#tar-压缩与解压工具">tar 压缩与解压工具</a></li>
+            <li><a href="#useraddpassedusermoduserdel-用户账号管理">useradd、passed、usermod、userdel 用户账号管理</a></li>
+            <li><a href="#chgrpchownchmod-文件权限">chgrp、chown、chmod 文件权限</a></li>
+            <li><a href="#su-切换用户">su 切换用户</a></li>
+            <li><a href="#sudo-以其他用户执行指令">sudo 以其他用户执行指令</a></li>
+            <li><a href="#ulimit-限制系统资源">ulimit 限制系统资源</a></li>
+            <li><a href="#acl">ACL</a></li>
+            <li><a href="#df和du-查看磁盘信息">df和du 查看磁盘信息</a></li>
+            <li><a href="#mount-磁盘挂载">mount 磁盘挂载</a></li>
+            <li><a href="#manmanual用户手册">man（manual）用户手册</a></li>
+            <li><a href="#selinux">SELinux</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">linux命令总结</a>
+  </h1>
+  
+  <h5>February 8, 2021</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/linux/">linux</a>
+  </div>
+  
+
+
+
+<h3 id="linux指令执行过程">
+  linux指令执行过程
+  <a class="anchor" href="#linux%e6%8c%87%e4%bb%a4%e6%89%a7%e8%a1%8c%e8%bf%87%e7%a8%8b">#</a>
+</h3>
+<ul>
+<li>linux在下达一个指令时，会按照以下的顺序寻找（所以当直接在bash中输入xxx.sh时是不会执行的）：
+<ol>
+<li>以相对/绝对路径执行指令如/bin/ls，或./ls。</li>
+<li><code>alias lm='ls -al'</code>：给命令设定别名；<code>alias</code>：可以查看系统的所有别名；使用<code>unalias lm</code>取消别名。</li>
+<li>由bash内建的指令来执行。</li>
+<li>通过$PATH这个变量的顺序搜寻到第一个指令来执行。</li>
+</ol>
+</li>
+<li>使用<code>which</code>指令可定位到程序的位置。</li>
+</ul>
+<h3 id="linux进程">
+  linux进程
+  <a class="anchor" href="#linux%e8%bf%9b%e7%a8%8b">#</a>
+</h3>
+<ul>
+<li>
+<p>进程（process）：程序被触发后，执行者的权限与属性、程序及程序所需的数据都会被加载到内存中，操作系统给与这个内存内的单元一个标识符PID。</p>
+</li>
+<li>
+<p>当登入系统后，会取得一个bash，当使用这个bash提供的接口去执行另一个指令时，另外执行的指令也会生成PID，这个新进程就是子进程，而原来的bash环境就是父进程。linux中进程通常由父进程以复制(fork)的方式产生一个一摸一样的子进程，然后被复制出来的子进程再以exec的方式来执行实际要进行的程序，最终就会成为一个子进程。</p>
+<ol>
+<li>系统先以fork的方式复制一个与父进程相同的暂存进程，这个进程与父进程唯一的差别就是PID不同，此外这个暂存进程还会多一个PPID（parient pid）的参数。</li>
+<li>暂存进程开始以exec的方式加载实际要执行的程序。</li>
+</ol>
+</li>
+<li>
+<p>常驻内存中的进程通常提供一些功能以服务用户，因此这些常驻程序就会被称为：服务（daemon）。</p>
+</li>
+</ul>
+<h3 id="vim-文本编辑工具">
+  vim 文本编辑工具
+  <a class="anchor" href="#vim-%e6%96%87%e6%9c%ac%e7%bc%96%e8%be%91%e5%b7%a5%e5%85%b7">#</a>
+</h3>
+<p>通过配置~/.vimrc（不建议修改/etc/vimrc）可以设定一些vim的属性，在vim的命令模式输入<code>:set all</code>可以查到</p>
+<ul>
+<li><code>ctrl+f</code>向下移动一页</li>
+<li><code>ctrl+b</code>向上移动一页</li>
+<li><code>0或者home</code>移动到这一列的最前面</li>
+<li><code>$或end</code>移到这一列最后一页</li>
+<li><code>G(注意是大写)</code>移到文件的最后一列</li>
+<li><code>gg</code>移到文件的第一行</li>
+<li><code>n+enter</code>光标向下移动n行</li>
+<li><code>/word</code>搜索为名称为word的字符串</li>
+<li><code>:1,2s/word1/word2/g</code>[第一行，第二行]中所有的word1被替换成word2</li>
+<li><code>:1,$s/word1/word2/g</code>第一行到最后一行所有word1被替换为word2</li>
+<li><code>:1,$s/word1/word2/gc</code>第一行到最后一行所有word1被替换为word2，且在取代前会提示字符给用户确认</li>
+<li><code>dd</code>删除当前一整行，<code>ndd</code> 删除光标所在的向下n行</li>
+<li><code>yy</code>复制一整行，<code>4yy </code>复制4行。</li>
+<li><code>p</code>将复制的数据在光标的下一行粘贴，<code>P</code>在光标的上一行粘贴</li>
+<li><code>u</code>复原前一个动作</li>
+<li><code>ctr+r</code>重复上一个动作</li>
+<li><code>:w [filename]</code>将文件另存为</li>
+<li><code>:set nu/nonu</code>开启/关闭行号</li>
+<li><code>:set ic</code> 忽视大小写</li>
+</ul>
+<h3 id="nmcli-网络配置工具">
+  nmcli 网络配置工具
+  <a class="anchor" href="#nmcli-%e7%bd%91%e7%bb%9c%e9%85%8d%e7%bd%ae%e5%b7%a5%e5%85%b7">#</a>
+</h3>
+<ul>
+<li>
+<p>目前主流网卡为使用以太网络协议开发出来的以太网卡（Ethernet），所以linux称呼这种网络接口为ethN（N为数字）。新的centos7对网卡的编号有另一套规则，网卡待会现在与网卡的来源有关：eno1（BIOS内建的网卡），ens1（BIOS内建的PCI-E网卡），enp2s0（PCI-E）界面的独立网卡。</p>
+</li>
+<li>
+<p>nmcli可用来设置ip、dns等配置，与直接修改/etc/sysconfig/network-scripts/ifcfg-xxx（centos7）、/etc/NetworkManager/system-connections/ethernet-xxx（ubuntu18）等效。</p>
+</li>
+<li>
+<p>一个网卡设备可以有多个配置，但是只能有一个为激活状态，多个配置可以在不同的网络环境中切换。比如小明在公司用静态IP的方式连接到网络，在家用DHCP的方式连接网络，可以创建两个connections，一个叫static-conn，另一个叫dhcp-conn，当需要使用DHCP的方式时，执行<code>nmcli con up dhcp-conn</code>激活配置，当使用静态IP的方式时，执行<code>nmcli con static-conn</code>激活配置。</p>
+</li>
+</ul>
+<p><code>nmcli connection {show | up |down| modify | add | edit |clone | delete |monitor | reload | load | import | export } ARGUMENTS...</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e">#为网卡enp0s8创建一个配置</span>
+nmcli connection add ifname enp0s8 type ethernet ipv4.method auto
+<span style="color:#75715e">#在一个交互式的窗口中为ethernet-enp0s8编写配置</span>
+nmcli connection edit ethernet-enp0s8
+<span style="color:#75715e">#修改ethernet-enp0s8的网络参数</span>
+nmcli connection modify enp0s8 <span style="color:#ae81ff">\ </span>
+    connection.autoconnect yes <span style="color:#ae81ff">\ </span><span style="color:#75715e">#是否开机就启动这个配置</span>
+    ipv4.method manual <span style="color:#ae81ff">\ </span><span style="color:#75715e">#自动（DHCP）还是手动设定网络参数</span>
+    ipv4.addresses 192.168.x.x/24 <span style="color:#ae81ff">\ </span><span style="color:#75715e">#设定地址</span>
+    ipv4.gateway 192.168.x.x <span style="color:#ae81ff">\ </span><span style="color:#75715e">#设定网关</span>
+    ipv4.dns 192.168.x.x <span style="color:#75715e">#设定DNS</span>
+<span style="color:#75715e">#移除某个配置，只需要将该配置的值置为空</span>
+nmcli con modify ethernet-enp0s8 ipv4.dns <span style="color:#e6db74">&#34;&#34;</span>
+<span style="color:#75715e">#为ethernet-enp0s8添加dns的配置（因为dns和ip能有多个配置，所以可以用+和-，不能有多个配置的不能用）</span>
+nmcli con modify ethernet-enp0s8 +ipv4.dns 8.8.8.8
+<span style="color:#75715e">#为ethernet-enp0s8删除ip的配置</span>
+nmcli con modify ethernet-enp0s8 -ipv4.addresses <span style="color:#e6db74">&#34;192.168.100.25/24&#34;</span>
+<span style="color:#75715e">#修改配置名称</span>
+nmcli connection modify ethernet-enp0s8 con-name 
+
+
+<span style="color:#75715e">#列出所有的配置。</span>
+nmcli connection show 
+<span style="color:#75715e">#仅列出激活状态的配置。</span>
+nmcli connection show --active
+<span style="color:#75715e">#列出ethernet-enp0s8的配置。</span>
+nmcli connection show ethernet-enp0s8 
+
+<span style="color:#75715e">#激活enp0s8设备的配置。</span>
+nmcli connection up ifname enp0s8
+<span style="color:#75715e">#激活名称为ethernet-enp0s8的配置。</span>
+nmcli connection up ethernet-enp0s8 
+
+<span style="color:#75715e">#删除ethernet-enp0s8的配置</span>
+nmcli connection delete ethernet-enp0s8
+
+<span style="color:#75715e">#导入一个openvpn的配置给networkmanager</span>
+nmcli con import type openvpn file ~/Downloads/frootvpn.ovpn
+</code></pre></div><h4 id="ifcfg-xxx配置介绍">
+  ifcfg-xxx配置介绍
+  <a class="anchor" href="#ifcfg-xxx%e9%85%8d%e7%bd%ae%e4%bb%8b%e7%bb%8d">#</a>
+</h4>
+<pre><code>#最小配置
+DEVICE=eth1  #网卡号，必须与文件名对应
+ONBOOT=yes	#是否默认启动，要联网必须要配置
+BOOTPROTO=none	#是否使用dhcp，是的话BOOTPROTO=dhcp
+HWADDR=08:00:27:35:2F:f2	#mac地址
+IPADDR=172.27.32.6	#ip地址
+NETMASK=255.255.255.0	#子网掩码
+GATEWAY=172.27.32.1	#网关
+</code></pre><h3 id="firewall-cmd-centos7下的防火墙工具">
+  firewall-cmd centos7下的防火墙工具
+  <a class="anchor" href="#firewall-cmd-centos7%e4%b8%8b%e7%9a%84%e9%98%b2%e7%81%ab%e5%a2%99%e5%b7%a5%e5%85%b7">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e">#查看防火墙的状态</span>
+systemctl status firewalld
+<span style="color:#75715e">#关闭防火墙并禁止开机自启</span>
+systemctl stop firewalld; systemctl disable firewalld
+<span style="color:#75715e">#启用防火墙并允许开机自启</span>
+systemctl start firewalld; systemctl enable firewalld
+</code></pre></div><ul>
+<li>
+<p>防火墙的服务名为firewalld，centos7使用firewall-cmd来管理防火墙。</p>
+</li>
+<li>
+<p>firewalld预先准备了几套防火墙策略集合（zone）。常见的zone：1. trusted允许所有的数据包；2. home；3. internal；4. work；5. public；6. external；7.dmz；8. block；9.drop。</p>
+</li>
+<li>
+<p>常见命令：</p>
+<ol>
+<li>&ndash;get-default-zone查询默认的zone；- -set-default-zone设置默认的zone，&ndash;get-zones显示可用的zone；</li>
+<li>&ndash;list-all显示当前区域的网卡配置参数、资源、端口及服务等信息； &ndash;list-all-zones显示所有区域的网卡配置参数、资源、端口及服务等信息；</li>
+<li>&ndash;add-service=服务名、&ndash;remove-service=服务名；</li>
+<li>&ndash;add-port=端口号/协议、&ndash;remove-port=端口号/协议；&ndash;list-ports列出已开放的端口。</li>
+<li>&ndash;add-forward-port=port=源端口号:proto=协议:toport=目标端口号:toaddr:目标ip地址。</li>
+<li>&ndash;panic-on/&ndash;panic-off启动/关闭应急状态，阻断一切网络连接。</li>
+</ol>
+</li>
+<li>
+<p>firewalld设置只在下次重启前有效，如果需要永久生效，需要加上&ndash;permanent模式，并执行firewall-cmd &ndash;reload。</p>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e">#永久放开3306端口，并立刻生效</span>
+firewall-cmd --add-port 3306/tcp --permanent
+firewall-cmd --reload
+<span style="color:#75715e">#永久拒绝192.168.10.0/24网段的所有用户访问本机的ssh服务。</span>
+firewall-cmd --permanent --zone<span style="color:#f92672">=</span>public --add-rich-rule<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;rule family=&#34;</span>ipv4<span style="color:#e6db74">&#34; source address=&#34;</span>192.168.10.0/24<span style="color:#e6db74">&#34; service name=&#34;</span>ssh<span style="color:#e6db74">&#34; reject&#34;</span>
+</code></pre></div><h3 id="systemctl-管理unit">
+  systemctl 管理unit
+  <a class="anchor" href="#systemctl-%e7%ae%a1%e7%90%86unit">#</a>
+</h3>
+<ul>
+<li>一般linux上的服务会在服务名后面加上一个d，这个d就表示daemon。</li>
+<li>systemd将daemon执行脚本称为的一个unit。一般情况下安装的应用的unit都会放到<code>/usr/lib/systemd/system/</code>下；而在<code>/etc/systemd/system/</code>目录下会存放unit的一些配置。</li>
+<li>unit有多种类型，包括 ①service：服务类型；②socket；③target：执行环境类型，是一群unit的集合；④mount、automount：文件系统挂载相关的服务；⑤path：侦测特定的文件或目录类型；⑥timer：循环执行的服务。常用的即使service和target，比如mysqld.service（mysql服务），firewalld.service（防火墙）。</li>
+<li>通过systemctl可以管理unit，格式如下：<code>systemctl [command] [unit]</code>，其中command如下：
+<ul>
+<li>start：启动。例 <code>systemctl start mysqld.service</code>。</li>
+<li>stop：停止。</li>
+<li>enable：开机启动。例 <code>systemctl enable mysqld.service</code>。</li>
+<li>disable：禁止开机启动。</li>
+<li>status：unit的状态。</li>
+<li>is-active：是否运行。</li>
+</ul>
+</li>
+<li>执行<code>systemctl status xxx</code>，会显示该unit的状态。结果的第二行表示该服务是否会开机启动，结果的第三行表示该服务的当前状态。</li>
+<li>一个daemon的预设状态有多个，包括：
+<ul>
+<li>enabled：这个daemon会在开机被执行。</li>
+<li>disabled：这个daemon在开机不会被执行。</li>
+<li>static：这个daemon不可以自己启动（即不能使用<code>systemctl enable xxx</code>来设置开机自启），但可以被其他的服务来唤醒。</li>
+<li>mask：注销状态，这个daemon无法被启动，可以通过<code>systemctl unmask xxx</code>改会原来的状态。</li>
+</ul>
+</li>
+<li><code>systemctl [list-units]</code>列出目前启动的unit；<code>systemctl list-units --all</code>列出所有的unit。<code>systemctl list-unit-files</code>列出所有已安装的unit。</li>
+</ul>
+<h4 id="unit文件说明">
+  unit文件说明
+  <a class="anchor" href="#unit%e6%96%87%e4%bb%b6%e8%af%b4%e6%98%8e">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#f92672">[</span>root@localhost ~<span style="color:#f92672">]</span><span style="color:#75715e"># cat /usr/lib/systemd/system/example.service </span>
+<span style="color:#75715e">#unit描述了该unit。</span>
+<span style="color:#f92672">[</span>Unit<span style="color:#f92672">]</span>
+<span style="color:#75715e">#当使用systemctl list-units，会输出的简单说明。</span>
+Description<span style="color:#f92672">=</span>You know, <span style="color:#66d9ef">for</span> example
+
+<span style="color:#75715e">#这里可以有其他的类型，如[Socket]、[Timer]、[Mount]、[Path]</span>
+<span style="color:#f92672">[</span>Service<span style="color:#f92672">]</span>
+<span style="color:#75715e">#执行此daemon的指令或脚本程序，只支持[指令 参数 参数...]的格式，不能接收&lt;、&gt;、|、&amp;等字符，很多的bash语法也不支持。</span>
+ExecStart<span style="color:#f92672">=</span>/bin/bash xxx.sh
+
+<span style="color:#75715e">#将此unit安装到哪个target里去</span>
+<span style="color:#f92672">[</span>Install<span style="color:#f92672">]</span>
+<span style="color:#75715e">#后面可以跟一个或多个unit，用空格分隔</span>
+<span style="color:#75715e">#通过systemctl enable example.service，可以将此unit安装到multi-user.target的/etc/systemd/system/multi-user.target.wants/目录下（即创建了此unit的一个符号链接）。</span>
+<span style="color:#75715e">#在multi-user.target启动后，会启动此unit。</span>
+WantedBy<span style="color:#f92672">=</span>multi-user.target
+
+<span style="color:#75715e">#一个sshd服务的案例</span>
+<span style="color:#f92672">[</span>Unit<span style="color:#f92672">]</span>
+Description<span style="color:#f92672">=</span>OpenSSH server daemon
+Documentation<span style="color:#f92672">=</span>man:sshd<span style="color:#f92672">(</span>8<span style="color:#f92672">)</span> man:sshd_config<span style="color:#f92672">(</span>5<span style="color:#f92672">)</span>
+After<span style="color:#f92672">=</span>network.target sshd-keygen.service
+Wants<span style="color:#f92672">=</span>sshd-keygen.service
+
+<span style="color:#f92672">[</span>Service<span style="color:#f92672">]</span>
+Type<span style="color:#f92672">=</span>simple
+<span style="color:#75715e">#EnvironmentFile=/etc/sysconfig/sshd</span>
+ExecStart<span style="color:#f92672">=</span>/usr/local/sbin/sshd -D $OPTIONS
+ExecReload<span style="color:#f92672">=</span>/bin/kill -HUP $MAINPID
+KillMode<span style="color:#f92672">=</span>process
+Restart<span style="color:#f92672">=</span>on-failure
+RestartSec<span style="color:#f92672">=</span>42s
+
+<span style="color:#f92672">[</span>Install<span style="color:#f92672">]</span>
+WantedBy<span style="color:#f92672">=</span>multi-user.target
+
+</code></pre></div><hr>
+<ul>
+<li>systemd取消了以前的runlevel概念，转而使用不同的target操作环境。常见的操作环境为multi-user.target（命令行界面）和graphical.target（图形界面）。不重新启动而转不同的操作环境使用<code>systemctl isolate unit.target</code>，设定预设的环境使用<code>systemctl set-default unit.target</code>。</li>
+</ul>
+<h3 id="rpm-软件管理机制">
+  RPM 软件管理机制
+  <a class="anchor" href="#rpm-%e8%bd%af%e4%bb%b6%e7%ae%a1%e7%90%86%e6%9c%ba%e5%88%b6">#</a>
+</h3>
+<ul>
+<li>
+<p>RPM全称：RedHat Package Manager</p>
+</li>
+<li>
+<p>RPM是通过预先编译打包成RPM文件格式后，再加以安装的一种方式。RPM在打包软件的同时会加入一些其他的信息，包括软件版本、作者、<strong>依赖的其他软件</strong>等。RPM会在linux系统上建立一个RPM软件数据库，当要安装某个软件时，RPM会去在数据库里检测是否已经存在相关软件，如果不存在就不能安装。</p>
+</li>
+<li>
+<p>当软件安装完毕后，该软件相关的信息就会被写入到<code>/var/lib/rpm</code>目录下的数据库文件中了。未来任何软件升级的需求，版本之间的比较都是来自于这个数据库。</p>
+</li>
+<li>
+<p><code>rpm -ivh package_name</code>安装软件</p>
+<ul>
+<li>-i install；-v查看安装信息界面；-h显示安装进度</li>
+<li>&ndash;force：强制安装，&ndash;test：测试一下该软件是否可以被安装到linux中</li>
+<li>&ndash;prefix 新路径：将软件安装到其他路径</li>
+</ul>
+</li>
+<li>
+<p><code>rpm -Uvh/-Fvh file-1.0-1.e17.x86_64.rpm</code> 更新软件</p>
+<ul>
+<li>-U：update后面的软件即使没有安装过，系统会直接安装，如果安装过旧版，系统会更新到新版。</li>
+<li>-F：freshen后面的软件如果没有安装就不安装，如果安装过旧版就更行到新版。</li>
+</ul>
+</li>
+<li>
+<p><code>rpm -qa</code>查询本机所有已安装软件</p>
+<ul>
+<li><code>rpm -q package_name</code>查询后面的软件是否被安装</li>
+<li><code>rpm -qi package_name</code>列出该软件的详细信息</li>
+<li><code>rpm -ql package_name</code>列出该软件所有文件与目录</li>
+<li><code>rpm -qR package_name</code>列出该软件依赖那些软件</li>
+<li><code>rpm -qpR file-1.0-1.e17.x86_64.rpm</code>查询某个rpm文件依赖了哪些文件，-p表示指定的是一个rpm文件。</li>
+<li>tips：在查询本机上已安装的软件时，只用加上软件的名称即可，版本号啥的都不需要。</li>
+</ul>
+</li>
+</ul>
+<h3 id="yum-包管理工具">
+  yum 包管理工具
+  <a class="anchor" href="#yum-%e5%8c%85%e7%ae%a1%e7%90%86%e5%b7%a5%e5%85%b7">#</a>
+</h3>
+<p>当客户端有软件安装需求时，客户端会主动下载yum服务器中该软件的依赖清单，将该清单与本机的RPM数据库进行比较，就能安装未安装的依赖了。</p>
+<p>yum提供了查找、安装、删除软件包的命令。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">yum <span style="color:#f92672">[</span>options<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>command<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>package ...<span style="color:#f92672">]</span>
+</code></pre></div><ul>
+<li>options：可选，-y表示安装过程全部为yes，-q白哦是不显示安装过程，-h表示帮助，&ndash;installroot=路径：将软件安装到指定路径中。</li>
+<li>command：要进行的操作，如search、list、info。</li>
+<li>package：包名。</li>
+</ul>
+<h4 id="常用命令">
+  常用命令
+  <a class="anchor" href="#%e5%b8%b8%e7%94%a8%e5%91%bd%e4%bb%a4">#</a>
+</h4>
+<ol>
+<li><code>yum check-update</code>列出所有可更新的软件。</li>
+<li><code>yum update</code>更新所有软件</li>
+<li><code>yum install package_name</code>安装指定的软件</li>
+<li><code>yum update package_name</code>更新指定的软件</li>
+<li><code>yum list </code>列出所有的可安装的软件
+<ul>
+<li><code>yum list packa*</code>寻找以packa开头的软件</li>
+</ul>
+</li>
+<li><code>yum remove package_name</code>删除软件</li>
+<li><code>yum search keyword_name</code>查找软件包命令</li>
+<li>yum会先下载软件库的清单到本机的<code>var/cache/yum</code>中，清除缓存命令如下
+<ul>
+<li><code>yum clean packages/headers/all</code>清楚缓存目录下的软件包/headers/所有软件库的数据。</li>
+</ul>
+</li>
+</ol>
+<h3 id="netstat-显示网络状态">
+  netstat 显示网络状态
+  <a class="anchor" href="#netstat-%e6%98%be%e7%a4%ba%e7%bd%91%e7%bb%9c%e7%8a%b6%e6%80%81">#</a>
+</h3>
+<ul>
+<li><code>netstat -tulnp</code>用来获取目前主机已启动的服务</li>
+<li>-t/-u显示tcp/udp传输协议的连接情况</li>
+<li>-l显示监听状态的的服务</li>
+<li><code>-a</code>显示所有连线中的socket</li>
+<li><code>-n </code>：显示数字而不是别名</li>
+<li>-p显示socket的pid/程序名</li>
+</ul>
+<h3 id="tcpdump-抓包命令">
+  tcpdump 抓包命令
+  <a class="anchor" href="#tcpdump-%e6%8a%93%e5%8c%85%e5%91%bd%e4%bb%a4">#</a>
+</h3>
+<ul>
+<li><code>-i interface</code>监听指定的interface，如果未指定此参数，tcpdump会搜索系统interface上数字最小的interface（如eth0）监控。可以用<code>-i any</code>来监控所有的interface（此参数不会在promiscuous mode下工作）。</li>
+<li><code>-X</code>显示原始16进制数据内容和ascii编码后的内容。</li>
+<li><code>-D</code> 列出系统上可用的网络接口。</li>
+<li><code>-A</code> 以ASCII的方式打印出每个包（不包括链路层头部）。</li>
+<li><code>-nn</code>显示原始的ip地址和端口。</li>
+<li><code>-v</code>产生详细的输出. 比如包的TTL，id标识，数据包长度，以及IP包的一些选项。</li>
+<li>
+  <a href="https://www.tcpdump.org/">tcpdump</a></li>
+<li>例子</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e">#以ASCII的形式显示在本机所有网卡、端口5140上监听的数据</span>
+tcpdump -A -i any -n port <span style="color:#ae81ff">5140</span>
+<span style="color:#75715e">#抓来源是10.0.1.81，目的端口是5140的数据</span>
+tcpdump -i any -nnA src host 10.0.1.81 and dst port <span style="color:#ae81ff">5140</span>
+<span style="color:#75715e">#同时指定两个端口</span>
+tcpdump -i any -nnA port <span style="color:#ae81ff">8848</span> or port <span style="color:#ae81ff">5140</span>
+tcpdump -i any -nnA port <span style="color:#ae81ff">8848</span> or <span style="color:#ae81ff">5140</span>
+<span style="color:#75715e">#指定端口范围</span>
+tcpdump -i any -nnA portrange 514-5140
+<span style="color:#75715e">#将抓到的数据保存到文件中</span>
+tcpdump icmp -w icmp.pcap
+tcpdump icmp  -r icmp.pcap
+</code></pre></div><h3 id="curl-强大的网络工具">
+  curl 强大的网络工具
+  <a class="anchor" href="#curl-%e5%bc%ba%e5%a4%a7%e7%9a%84%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7">#</a>
+</h3>
+<ul>
+<li>
+<p>（client url）通过指定的url上传或者下载数据。</p>
+</li>
+<li>
+<p><code>curl xiaoxiang.space</code>查看网页源码。</p>
+</li>
+<li>
+<p><code>curl -o [文件名] xiaoxiang.space</code>保存文件。</p>
+</li>
+<li>
+<p>使用<code>-L</code>参数，当有重定向时，会跳转到新的网址。</p>
+</li>
+<li>
+<p><code>-i</code>显示http response的头信息，同时也会显示网页代码。</p>
+</li>
+<li>
+<p><code>-I/--head</code>只显示http response。</p>
+</li>
+<li>
+<p><code>-v</code>显示一次http通信的整个过程。</p>
+</li>
+<li>
+<p>发送get请求和参数，直接把数据附加到网址后面就行。</p>
+</li>
+<li>
+<p><code>curl -X POST --data-urlencode &quot;data=xxx&quot; example.com/xxx</code>发送post请求。<code>-X</code>参数可以支持几个动词。</p>
+</li>
+<li>
+<p><code>--User-Agent</code>、<code>--cookie</code>等，<code>--header</code>增加一个头信息。</p>
+</li>
+<li>
+<p><code>--user name:password</code>http认证。</p>
+</li>
+<li>
+<p><code>-k</code>跳过ssl检测。</p>
+</li>
+<li>
+<p><code>--limit-rate</code>限制HTTP请求和回应的带宽。</p>
+</li>
+<li>
+<p><strong>参考链接：</strong>
+  <a href="https://www.ruanyifeng.com/blog/2011/09/curl.html">curl网站开发指南 - 阮一峰的网络日志 (ruanyifeng.com)</a></p>
+</li>
+<li>
+<p><strong>参考链接：</strong>
+  <a href="https://www.ruanyifeng.com/blog/2019/09/curl-reference.html">curl 的用法指南 - 阮一峰的网络日志 (ruanyifeng.com)</a></p>
+</li>
+</ul>
+<h3 id="ps-获取当前时刻系统进程状态">
+  ps 获取当前时刻系统进程状态
+  <a class="anchor" href="#ps-%e8%8e%b7%e5%8f%96%e5%bd%93%e5%89%8d%e6%97%b6%e5%88%bb%e7%b3%bb%e7%bb%9f%e8%bf%9b%e7%a8%8b%e7%8a%b6%e6%80%81">#</a>
+</h3>
+<ul>
+<li>
+<p><code>ps aux</code>查询所有系统运行的进程</p>
+<ul>
+<li>%CPU：使用的cpu资源百分比；%mem：使用的内存资源百分比；vsz：使用的虚拟内存Kb；rss：占用的固定内存Kb；tty：该进程是在哪个终端机上运行，如果于与终端机无关则显示？；stat：进程目前状态（R运行；S睡眠但可被唤醒；D不可被唤醒；T停止状态；Z僵尸状态）；time：实际使用cpu的时间。</li>
+<li><code>--sort +rss</code> 按照rss以递增[+]或者递减[-]的顺序排序 。</li>
+</ul>
+</li>
+<li>
+<p>使用<code>ps -lf</code>显示当前的bash的进程。</p>
+<ul>
+<li>-l时较详细的输出当前bash的信息，-f是更完整的输出。🤣</li>
+<li>输出中的S代表该进程的状态，主要的状态有：R running；S sleep；D 不可唤醒的睡眠状态，而可能是在等待I/O；T 停止状态；Z zombie僵尸状态。</li>
+<li>PRI/NI priority/nice 代表此进程被cpu所执行的优先级。PRI值越低代表优先级越高。优先级是由内核动态调整的，用户无法干涉，如果需要调整进程的优先执行次序时，可以通过修改Nice的值。一般来说有PRI(new)=PRI(old)+nice，但是最终的PRI也是有系统分析后决定的，nice的值有正有负，当nice为负数时，该进程就会降低pri值，所以会被较为优先的处理。nice的值的范围是<code>-10~19</code>。一般使用者仅可以调整自己进程的nice值，范围为<code>0~19</code>，且只能将nice调高。使用nice和renice调整。
+<ul>
+<li>nice：新执行的指令给予新的nice值 <code>nice [-n 数字] command</code>。</li>
+<li>renice：已存在进程的nice重新调整 <code>renice [-number] PID</code>。</li>
+</ul>
+</li>
+<li>ADDR/SZ/WCHAN  addr标识该进程在cpu的哪个部分，如果是running的进程，一般就会显示-，sz代表该进程用掉了多少的内存。wchaz代表进程目前是否在运行中。</li>
+<li>TIME代表使用掉的cpu的时间。</li>
+</ul>
+</li>
+<li>
+<p><code>ps axjf</code>可以列出来类似进程树的进程显示。</p>
+</li>
+<li>
+<p><code>pstree [-Apu]</code> -p显示每个进程的pid，-u显示每个进程的所属账号。-A各个进程之间以ascii字符来连接。</p>
+</li>
+<li>
+<p>相关文档 
+  <a href="http://www.linfo.org/ps.html">The ps Command</a></p>
+</li>
+</ul>
+<h3 id="top-动态显示进程状态">
+  top 动态显示进程状态
+  <a class="anchor" href="#top-%e5%8a%a8%e6%80%81%e6%98%be%e7%a4%ba%e8%bf%9b%e7%a8%8b%e7%8a%b6%e6%80%81">#</a>
+</h3>
+<ul>
+<li>
+<p><code>top [-d n]</code>每隔n秒（默认为5）更新一次</p>
+<ul>
+<li>第一行显示的是：当前时间、开机到现今经过的时间、登入系统的人数、系统在1、5、15分钟的平均工作负载</li>
+<li>第二行显示进程总量、进程状态；第三行显示cpu整体负载；第四行和第五行显示物理内存和虚拟内存的使用情况。</li>
+<li>第三行（%Cpus&hellip;）显示的是CPU的整体负载，wa表示I/O wait</li>
+<li>PR:priority，指进程的优先级、NI：Nice，于PR有关；TIME+表示CPU使用时间的累加</li>
+<li>执行过程中按下M表示以内存的使用来排序，N表示已PID来排序，P表示以CPU来排序，T表示以TIME+来排序，按下q可以离开top</li>
+<li><code>-p PID</code>观察指定PID</li>
+<li>在top执行过程中可以按下**<code>P</code>**使得以CPU的使用资源排序，按下**<code>M</code>**以内存的使用资源排序，按下**<code>N</code>**以PID来排序。按下<code>c</code>显示完整的路径和名称。</li>
+</ul>
+</li>
+</ul>
+<h3 id="kill-向进程发送signal">
+  kill 向进程发送signal
+  <a class="anchor" href="#kill-%e5%90%91%e8%bf%9b%e7%a8%8b%e5%8f%91%e9%80%81signal">#</a>
+</h3>
+<ul>
+<li><code>kill -9 PID</code>立刻强制删除一个工作</li>
+<li><code>kill  [-15] PID</code>以正常的方式结束一个工作</li>
+<li>例：当使用vim时，会产生一个.filename.swp文件，使用-15时，vim会以正常的步骤结束vi的工作，所以.filename.swp会被主动的移除，但如果使用-9，由于vim工作被强制移除了，所以.filename.swp就会继续存在文件系统中。</li>
+<li>当想要进程执行某些动作时，可以给该进程一个工作号码，可以使用<code>kill -l </code>或者<code>man 7 signal</code>查到，主要的信号与名称对应关系。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>signal</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 SIGHUP</td>
+<td>启动被终止的进程，可以让该PID重新读取自己的配置文件，类似于重新启动</td>
+</tr>
+<tr>
+<td>2 SIGINT</td>
+<td>相当于用键盘输入一个ctrl-c来中断一个进程的执行</td>
+</tr>
+<tr>
+<td>9 SIGKILL</td>
+<td>强制中断一个进程的进行</td>
+</tr>
+<tr>
+<td>15 SIGTERM</td>
+<td>以正常的结束进程来终止该进程</td>
+</tr>
+<tr>
+<td>19 SIGSTOP</td>
+<td>相当于使用键盘ctrl-z来暂停一个进程的执行。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>kill可以帮我们将signal传递给某个%jobnumber（参考下面的job和fg命令）或者某个PID。</li>
+</ul>
+<h3 id="nohup和-后台执行">
+  nohup和&amp; 后台执行
+  <a class="anchor" href="#nohup%e5%92%8c-%e5%90%8e%e5%8f%b0%e6%89%a7%e8%a1%8c">#</a>
+</h3>
+<ul>
+<li>nohup会将标准输入重定向到/dev/null，将标准输出重定向到nohup.out（一般情况）或$HOME/nohup.out文件，将标准错误输出重定向到标准输出。</li>
+<li><code>nohup COMMAND &gt; FILE</code> 保存输出内容到文件。</li>
+<li><code>nohup COMMAND &amp;</code> 后台执行命令。</li>
+<li>使用<code>&amp;</code>可以将任务丢到后台执行，但标准输出和标准错误输出仍然会被输出到屏幕上。</li>
+<li><code>&amp;</code>将进程放到了背景执行，但是当退出bash后，进程就会被终止掉，如果需要退出bash后进程仍然能继续执行，可以使用nohup。nohup能在退出bash后还能继续执行工作。</li>
+<li>例：<code>nohup java -jar xxx.jar &lt;/dev/null 2&gt;&amp;1 &amp;</code> 将java命令放到后台执行，标准输出和标准错误输出都重定向到/dev/null</li>
+</ul>
+<h3 id="job和fg-前台执行">
+  job和fg 前台执行
+  <a class="anchor" href="#job%e5%92%8cfg-%e5%89%8d%e5%8f%b0%e6%89%a7%e8%a1%8c">#</a>
+</h3>
+<ul>
+<li>可以使用<code>ctrl+z</code>将任务丢到背景，状态是暂停。</li>
+<li>使用 <code>jobs -l</code>可以观察当前背景中的任务。其中+代表最近被放到背景，-代表最近倒数第二个被放到背景。</li>
+<li>使用fg可以将背景工作拿到前台来执行。命令：<code>fg &amp;jobnumber</code>。</li>
+<li>删除背景中的工作。命令：<code>kill [-15 |-9] %jobnumber</code>。</li>
+</ul>
+<h3 id="at与cron">
+  at与cron
+  <a class="anchor" href="#at%e4%b8%8ecron">#</a>
+</h3>
+<h4 id="at-只执行一次的任务">
+  at 只执行一次的任务
+  <a class="anchor" href="#at-%e5%8f%aa%e6%89%a7%e8%a1%8c%e4%b8%80%e6%ac%a1%e7%9a%84%e4%bb%bb%e5%8a%a1">#</a>
+</h4>
+<ul>
+<li>要使用at，需要先启动atd。我们使用at这个指令来产生要运行的工作，并将这个工作以文本文件的方式写入到/var/spool/at/目录内，该工作就能等待atd这个服务的取用与执行。</li>
+<li>at会先寻找/etc/at.allow这个文件，写在这个文件中的使用者可以使用at，不在这个文件中的用户不能使用at，即使用户没有写在at.deny中。如果不在这个文件中，at会寻找/etc/at.deny这个文件，写在这个文件中的使用者不能用at，不在这个文件中的使用者可以使用（也就是说两个文件存在一个就可以）。如果两个文件都不存在，就只有root可以执行at。</li>
+<li>at会将所有的标准输出和标准错误输出传送到执行者的mailbox中，解决方法是<code>echo &quot;hello world&quot; &gt; /dev/tty1</code>。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">at <span style="color:#f92672">[</span>-ldv<span style="color:#f92672">]</span> TIME
+-l 相当于atq，列出当前系统上面所有当前用户的未执行的at排程。
+-d 相当于atrm，取消一个在at排程中的工作
+-c 列出后面接的第几项项工作的实际指令内容at -c <span style="color:#ae81ff">2</span>
+TIME: HH:MM <span style="color:#f92672">[</span>YYYY--MM-DD<span style="color:#f92672">]</span> 18:02 2021-10-29
+	  HH:MM <span style="color:#f92672">[</span>Month<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>Date<span style="color:#f92672">]</span> 18:02 October <span style="color:#ae81ff">29</span>
+	  HH:MM<span style="color:#f92672">[</span>am|pm<span style="color:#f92672">]</span> + number <span style="color:#f92672">[</span>minutes|hours|days|weeks<span style="color:#f92672">]</span>
+<span style="color:#75715e">#再过5分钟后执行，ctrl+d退出</span>
+at now + <span style="color:#ae81ff">5</span> minutes
+<span style="color:#75715e">#查询还没执行的任务</span>
+atq
+<span style="color:#75715e">#删除3这个任务</span>
+atrm <span style="color:#ae81ff">3</span>
+</code></pre></div><h4 id="cron-定时任务">
+  cron 定时任务
+  <a class="anchor" href="#cron-%e5%ae%9a%e6%97%b6%e4%bb%bb%e5%8a%a1">#</a>
+</h4>
+<ul>
+<li>与at类似，cron也有两个限制文件，/etc/cron.allow和/etc/cron.deny，/etc/cron.allow比deny要优先，两个文件只选择一个来限制，所以保留一个即可。系统默认保留/etc/cron.deny。</li>
+<li>当用户使用crontab指令来建立工作排程后，该项工作就会被记录到/var/spool/cron里面去，而且以账号来判别。cron执行的 每一项工作都会被记录到/var/log/cron这个文件中。</li>
+<li>下达指令最好使用绝对路径；cron会每分钟去读取一次/etc/crontab与/var/spool/cron里面的数据，所以编辑完文件后，cron会按照设定自动执行。</li>
+<li>放到<code>/etc/cron.hourly</code>目录内的所有执行文件（必须是shell脚本）会在每小时的一分钟开始后的5分钟内随机选择一个时间点来执行（详细请看/etc/cron.d/路径下的文件）。放到<code>/etc/cron.daily</code>、<code>/etc/cron.weekly</code>、<code>/etc/cron.monthly</code>下面的文件是由anacron执行的。而anacron执行方式是在<code>/etc/cron.hourly/0anacron</code>里面。</li>
+<li>crond预设有三个地方会有执行脚本配置文件，分别是<code>/etc/crontab</code> ,<code>/etc/cron.d/*</code>,<code>/var/spool/cron/*</code>。</li>
+<li>当执行项目有输出时，该数据会mail给MAILTO设定的账号，所以如果不是很重要，将输出重定向到/dev/null中。</li>
+<li>建议个人的话使用<code>crontab -e</code>来创建定时任务，系统维护人员直接使用<code>vim /etc/crontab</code>，开发的软件使用<code>vim /etc/cron.d/newfile</code>。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">crontab <span style="color:#f92672">[</span>-u username<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>-l | -e |-r<span style="color:#f92672">]</span>
+-u 只有root可以使用这个参数。
+-e 编辑crontab的工作内容
+-l 查阅crontab的工作内容
+-r 移除所有的crontab的工作内容，如果只移除一项，可以用-e编辑。
+</code></pre></div><ul>
+<li>每项工作的格式都是具有六个字段，这六个字段的意义为：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>分钟</th>
+<th>小时</th>
+<th>日期</th>
+<th>月份</th>
+<th>周</th>
+<th>指令</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0-59</td>
+<td>0-23</td>
+<td>1-31</td>
+<td>1-12</td>
+<td>0-7（0和7都表示星期天）</td>
+<td>指令</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>特殊符号</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>特殊符号</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>*</td>
+<td>代表任何时刻</td>
+</tr>
+<tr>
+<td>,</td>
+<td>代表该字段有多个参数，如每天3点和6点执行命令，为<code>0 3,6 * * * command</code></td>
+</tr>
+<tr>
+<td>-</td>
+<td>表示一段时间范围内，如8点到12点之间每小时的20分都进行一项工作，<code>20 8-12 * * * command</code></td>
+</tr>
+<tr>
+<td>/n</td>
+<td>n代表数字，表示每隔n单位的时间执行一此，如每隔5分钟执行一次，<code>*/5 * * * * command</code>，也可以写成<code>0-59/5 * * * * command</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>/etc/crontab</code></li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e">#使用哪种shell接口</span>
+SHELL<span style="color:#f92672">=</span>/bin/bash
+<span style="color:#75715e">#执行文件搜寻路径</span>
+PATH<span style="color:#f92672">=</span>/sbin:/bin:/usr/sbin:/usr/bin
+<span style="color:#75715e">#有输出时发给谁</span>
+MAILTO<span style="color:#f92672">=</span>root
+<span style="color:#75715e">#该文件中需要指定用户</span>
+<span style="color:#ae81ff">1</span> * * * * *  username command
+</code></pre></div><h4 id="anacron">
+  anacron
+  <a class="anchor" href="#anacron">#</a>
+</h4>
+<ul>
+<li>
+<p><code>/etc/cron.daily</code>各字段含义：</p>
+<ul>
+<li>天数：anacron 执行当下与时间戳 (/var/spool/anacron/ 内的时间纪录文件) 相差的天数，若超过此天数，就准备开始执行，若没有超过此天数，则不予执行后续的指令。</li>
+<li>延迟时间：超过天数导致要执行定时任务，延迟执行的时间。</li>
+<li>工作名称定义：通常与后续的目录资源名称相同即可。</li>
+<li>实际要进行的指令串。</li>
+</ul>
+</li>
+<li>
+<p>anacron执行流程（cron.daily)：</p>
+</li>
+</ul>
+<ol>
+<li>由 /etc/anacrontab 分析到 cron.daily 这项工作名称的天数为 1 天；</li>
+<li>由 /var/spool/anacron/cron.daily 取出最近一次执行 anacron 的时间戳；</li>
+<li>由上个步骤与目前的时间比较，若差异天数为 1 天以上 (含 1 天)，就准备进行指令；</li>
+<li>若准备进行指令，根据 /etc/anacrontab 的设定，将延迟 5 分钟 + 随机n分钟 (看RANDOM_DELAY 的 设定)；</li>
+<li>延迟时间过后，开始执行后续指令，亦即『 run-parts /etc/cron.daily 』这串指令；</li>
+<li>执行完毕后， anacron 程序结束。</li>
+</ol>
+<h3 id="freeunamehostnamelocale查看和设置系统信息">
+  free、uname、hostname、locale查看和设置系统信息
+  <a class="anchor" href="#freeunamehostnamelocale%e6%9f%a5%e7%9c%8b%e5%92%8c%e8%ae%be%e7%bd%ae%e7%b3%bb%e7%bb%9f%e4%bf%a1%e6%81%af">#</a>
+</h3>
+<ul>
+<li>
+<p><code>free -h</code>查看内存使用情况。</p>
+</li>
+<li>
+<p><code>uname [-asrmpi]</code> -a表示所有；-s 系统核心名称；-r 核心的版本；-m 本系统的硬件名称(x86_64)；-p CPU的类型；-i 硬件的平台。</p>
+</li>
+<li>
+<p><code>uptime</code>显示系统启动时间和工作负载。</p>
+</li>
+<li>
+<p><code>hostnamectl [set-hostname 主机名]</code> 修改主机名。</p>
+</li>
+<li>
+<p><code>timedatectl [list-timezones | set-timezone | set-time | set-ntp]</code> 列出系统上的失去、设定时区、设定时间、设定网络校时。</p>
+</li>
+<li>
+<p><code>localectl set-locale LANG=en_US.utf8</code>设置语系。通过<code>locale -a</code>可以查看linux支持了多少语系，通过<code>locale</code>来查看系统目前的语言环境。LC_ALL、LC_CTYPE、LANG这三个环境变量的值决定了操作系统当前使用的是哪种字符集，优先级是<code>LC_ALL&gt;LC_CTYPE&gt;LANG</code>。</p>
+</li>
+<li>
+<p>硬件数据收集：dmidecode(CPU型号、主板型号、内存相关型号等), gdisk, dmesg, vmstat（分析cpu、内存、io目前的状态）, lspci, lsusb,iostat。</p>
+</li>
+</ul>
+<h3 id="ls-列出文件">
+  ls 列出文件
+  <a class="anchor" href="#ls-%e5%88%97%e5%87%ba%e6%96%87%e4%bb%b6">#</a>
+</h3>
+<ul>
+<li>ls 列出指定的目录下的文件
+<ul>
+<li><code>-d 目录名</code>  列出目录名而不进入该目录。</li>
+</ul>
+</li>
+</ul>
+<h3 id="cattactailwc-查看文件">
+  cat、tac、tail、wc 查看文件
+  <a class="anchor" href="#cattactailwc-%e6%9f%a5%e7%9c%8b%e6%96%87%e4%bb%b6">#</a>
+</h3>
+<ul>
+<li>cat：从第一行开始显示文件内容
+<ul>
+<li><code>-n</code>标上行号</li>
+</ul>
+</li>
+<li>tac：从最后一行开始显示</li>
+<li>nl：显示的时候输出行号</li>
+<li>more：一页一页的显示文件内容</li>
+<li>less：与more类似，但是可以往前翻
+<ul>
+<li><code>/srting</code>，向下搜索string</li>
+<li><code>?string</code>，向上搜索string</li>
+</ul>
+</li>
+<li>head：只看头几行
+<ul>
+<li>默认是显示10行</li>
+<li><code>head -n -100 filename</code>文件后面100行不显示</li>
+</ul>
+</li>
+<li>tail：只看尾几行
+<ul>
+<li>默认是显示10行</li>
+<li><code>tail -f filename</code>文件内容如果有增加，输出增加的内容</li>
+<li><code>-n num filename</code>输出文件末尾的n行，默认是10行</li>
+<li><code>tail -n +100 filename</code>文件第100行（包括）以后都会被列出来</li>
+</ul>
+</li>
+<li>od：以二进制查看</li>
+<li>file：查看文件类型</li>
+<li>wc：查看文件里有多少字，多少行，多少字符。
+<ul>
+<li>wc [-lwm] -l表示列出多少行，-w表示列多多少字，-m表示列出多少字符。</li>
+</ul>
+</li>
+</ul>
+<h3 id="重定向与管道">
+  重定向与管道
+  <a class="anchor" href="#%e9%87%8d%e5%ae%9a%e5%90%91%e4%b8%8e%e7%ae%a1%e9%81%93">#</a>
+</h3>
+<ul>
+<li>标准输入<code>&lt;&lt;</code>或<code>&lt;</code>；标准输出<code>&gt;&gt;</code>或<code>&gt;</code>；标准错误输出<code>2&gt;</code>或<code>2&gt;&gt;</code>。</li>
+<li><code>&gt;</code>会覆盖原文件，<code>&gt;&gt;</code>会追加到文件中。如<code>find /home -name .bashrc &gt; list_right 2&gt; list_error</code>，将正确输出和错误输出存入到不同的文件中。</li>
+<li>黑洞装置<code>/dev/null</code>，可以吃掉任何导向这个装置的信息。</li>
+<li>将正确和错误输出都放到同一个文件中<code>find /home -name .bashrc &gt; list 2&gt;&amp;1</code>。对2&gt;&amp;1的理解，这里2表示错误输出，意思是将错误输出重定向到标准输出，&amp;1表示对标准输出的应用。</li>
+<li>管道<code>|</code>只会处理标准输出，会忽略标准错误输出。</li>
+<li>管道命令必须要接收上一个指令的标准输入，如less、more、head、tail时管道命令，而如ls、cp、mv就不是管道命令。</li>
+<li>管道后面第一个必须是指令。</li>
+<li>在管道中常常会使用前一个指令的输出作为后一个指令的输入，某些指令需要指定文件名来处理，该stdin和stdout可以使用<code>减号&quot;-&quot;</code>来替代。如<code>tar -cvf - /home | tar -xvf - -C /tmp/homeback</code>，这个命令是将/home里的文件打包，将打包的文件输出到stdout，后面的命令从stdin读取数据，所以我们就不需要文件名了，直接使用-代替。</li>
+<li><code>xargs [OPTION] COMMAND [R]</code>：读入stdin的数据，并以空格符作为分割，将stdin分割成参数。
+<ul>
+<li><code>xargs -n 1</code>表示每次执行指令值取一个参数。</li>
+<li><code>xargs -I R</code>将从标准输入获取到的数据替换后面命令的参数R。</li>
+<li>例：<code>ls *.jar | xargs -I {} -n 1 sh start.sh {}</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="grep-查找指定内容">
+  grep 查找指定内容
+  <a class="anchor" href="#grep-%e6%9f%a5%e6%89%be%e6%8c%87%e5%ae%9a%e5%86%85%e5%ae%b9">#</a>
+</h3>
+<ul>
+<li>
+<p>grep [-invAB]  &lsquo;搜索字符串&rsquo;  filename：查找文件或标准输出中的字符串，</p>
+<ul>
+<li>-i表示忽略大小写。</li>
+<li>-n表示输出行号。</li>
+<li><code>-v</code>：表示选择未匹配的行（反选）。</li>
+<li>-A：&ndash;after-context，输出查找字符串后面n行。</li>
+<li>-B：&ndash;before-context，输出查找字符串前面多少行</li>
+<li>-r：递归查找当前路径下的包含指定内容的文件，同时输出包含此内容的行，-l只输出文件名。如查找指定路径下包含auth的文件：<code>grep -rl auth</code>。</li>
+</ul>
+</li>
+</ul>
+<h3 id="whereiswhichlocale-查找文件">
+  whereis、which、locale 查找文件
+  <a class="anchor" href="#whereiswhichlocale-%e6%9f%a5%e6%89%be%e6%96%87%e4%bb%b6">#</a>
+</h3>
+<ul>
+<li>
+<p>whereis：针对几个特定目录查找文件，<code>whereis -l</code>查看这几个特定目录。</p>
+</li>
+<li>
+<p>which：根据PATH查看可执行文件。</p>
+</li>
+<li>
+<p>locate：根据/var/lib/mlocate内的数据库记载搜索文件（数据库未更新前搜索某新建的文件可能搜不到）。</p>
+</li>
+</ul>
+<h3 id="find查找工具">
+  find：查找工具
+  <a class="anchor" href="#find%e6%9f%a5%e6%89%be%e5%b7%a5%e5%85%b7">#</a>
+</h3>
+<ul>
+<li>
+<p>用法<code>find [PATH] [option] [action]</code>，PATH可以是多个目录，find查找会进入子目录。</p>
+<ul>
+<li>查看/home下3天内有修改的文件<code>find /home -mtime 3</code>（如果是+3表示大于等于3天前的文件名，-3表示小于等于3天内的文件名）；</li>
+<li>查看/home下属于bes的文件<code>find /home -user bes</code>，查看不属于任何人的文件<code>find / -nouser</code>；</li>
+<li>查到/home下文件名包含了passwd的文件名<code>find /home -name &quot;*passwd*&quot;</code>;</li>
+<li>查看/home下文件类型为普通文件的文件名<code>find /home -type f</code>;</li>
+<li>查看文件权限大于755的文件名<code>find -perm /755</code>；</li>
+<li><code>find / -perm /7000 -exec ls -l {} \;</code>其中{}表示find找到的内容会放到{}中；-exec到;是关键字，表示开始和结束。</li>
+<li>find查找会直接去查找磁盘，可能比较慢。</li>
+</ul>
+</li>
+</ul>
+<h3 id="tar-压缩与解压工具">
+  tar 压缩与解压工具
+  <a class="anchor" href="#tar-%e5%8e%8b%e7%bc%a9%e4%b8%8e%e8%a7%a3%e5%8e%8b%e5%b7%a5%e5%85%b7">#</a>
+</h3>
+<ul>
+<li><code>tar -xzvf xxx.tar.gz</code>解压文件
+<ul>
+<li>-x extract提取文件；-z通过gzip处理文件；-v：verbose显示执行过程；-f指定文件名</li>
+</ul>
+</li>
+<li><code>tar -cvzf 生成的文件名.tar.gz dir/</code>压缩文件
+<ul>
+<li>-c：create生成文件</li>
+<li>tips：-C（大写）将文件放到指定文件夹</li>
+</ul>
+</li>
+<li><code>tar</code>
+<ul>
+<li>-c建立打包文件；-v查看执行过程；-x解压缩；-t查看打包文件内的情况；-C在特定目录解压缩；-z使用gzip解压缩；-j使用bzip2解压缩；-J使用xz解压缩；-f后面要立刻接上要被处理的文件名；-p保留备份数据原本权限与属性；&ndash;exclude=FILE压缩过程中不打包FILE。</li>
+</ul>
+</li>
+<li><code>gzip -[cdv#]</code>：-c将压缩的数据输出到屏幕；-d解压缩；-v显示出原文件/压缩文件的压缩比等信息；-#表示数字，-1最快但压缩比最差，-9最慢但压缩比最慢，-6是默认。使用gzip压缩时，原文件会被压缩为***.gz，原文件就不存在了。</li>
+<li><code>bzip2 -[cdkzv#]</code>：-c将压缩的数据输出到屏幕上；-d解压缩；-k保留源文件；-z压缩（默认，可不加）；-v显示压缩比等信息；-#与gzip一样。文件名是xxx.bz2。</li>
+<li><code>xz [-dtlkc#]</code>：-d解压缩；-t测试压缩文件完整性；-l列出压缩文件相关信息；-k保留原文件不删除；-c数据输出到屏幕上；-#和bzip2一样。-T0指定线程数量和CPU的数量一样。</li>
+</ul>
+<h3 id="useraddpassedusermoduserdel-用户账号管理">
+  useradd、passed、usermod、userdel 用户账号管理
+  <a class="anchor" href="#useraddpassedusermoduserdel-%e7%94%a8%e6%88%b7%e8%b4%a6%e5%8f%b7%e7%ae%a1%e7%90%86">#</a>
+</h3>
+<ul>
+<li>默认情况下所有的系统上的账号和一般身份使用者，都记录在/etc/passwd这个文件中，个人密码记录在/etc/shadow文件下，所有组名都记录在/etc/group中。</li>
+<li>当输入账号密码登陆后，系统先1. 寻找/etc/passwd里面是否有输入的账号，有的话读取UID和GID以及该账号的home目录和shell；2. 进入/etc/shadow找出对应的账号与UID，然后和对密码是否相符；3. shell启动。</li>
+<li>查看已登录系统上的用户，可以使用<code>who</code>。</li>
+</ul>
+<h4 id="etcpasswd">
+  /etc/passwd
+  <a class="anchor" href="#etcpasswd">#</a>
+</h4>
+<ul>
+<li>每一行都代表一个账号，有几行就代表有几个账号在系统中。里面有很多账号本来就是系统正常运行所必需的，可以称之为系统账号。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e">#①账号名称:②x:③UID:④GID:⑤用户信息说明:⑥home目录:⑦shell</span>
+root:x:0:0:root:/root:/bin/bash
+<span style="color:#75715e">#账户名称需要和UID对应，UID就是使用者标识符，UID中0表示系统管理员；1～999表示系统账号（1～200表示系统自行建立的系统账号）；1000～60000就是给一般使用者使用的。一个UID可以包含多个用户</span>
+<span style="color:#75715e">#早期unix密码放在此文件中，后来放到了/etc/shadow中，这里用x替代。</span>
+<span style="color:#75715e">#GID与/etc/group有关。</span>
+<span style="color:#75715e">#当用户登陆系统后就会取得一个shell来与核心沟通。</span>
+</code></pre></div><h4 id="etcshadow">
+  /etc/shadow
+  <a class="anchor" href="#etcshadow">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e">#账号名称:密码:最近密码变动的日期:密码不可被更改的天数:密码需要修改的天数:密码需要变更前的警告天数:密码过期后多少天内还有效:账号失效日期:保留字段</span>
+<span style="color:#75715e">#第四个字段的0表示随时都可以修改密码</span>
+root:$6$xtr:18894:0:99999:7:::
+</code></pre></div><h4 id="etcgroup">
+  /etc/group
+  <a class="anchor" href="#etcgroup">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e">#组名:x:GID:此群组支持的账号名称</span>
+<span style="color:#75715e">#每个用户都可以有多个群组</span>
+root:x:0:dmtsai,alex
+</code></pre></div><ul>
+<li>在/etc/passwd中有个GID，即初始群组，初始群组不会加在/etc/group的第四个字段。</li>
+<li>使用<code>groups</code>命令可以获取当前账号所有的群组，输出的第一个群组为有效群组，新创建的一个文件使用的就是有效群组。通过<code>newgrp xxx</code>来切换有效群组。</li>
+<li>相关命令：<code>groupadd groupmod groupdel</code></li>
+</ul>
+<h4 id="useradd">
+  useradd
+  <a class="anchor" href="#useradd">#</a>
+</h4>
+<ul>
+<li><code>-g 初始群组</code> 该字段会被添加到/etc/passwd第四个字段。</li>
+<li><code>-u UID -G 次要群组 -c 说明信息(/etc/passwd第五个字段) -r 系统账号 -s /bin/bash(指定一个初始的shell)</code>。</li>
+<li>-M 不建立home目录(系统账号默认) ；-m 建立home目录(一般账号默认)。</li>
+<li>useradd参考的是/etc/default/useradd文件，默认值可以通过<code>useradd -D</code>查看；除此之外，还参考了/etc/login.defs文件。</li>
+<li>相关命令:<code>id chsh</code></li>
+</ul>
+<h4 id="passwd">
+  passwd
+  <a class="anchor" href="#passwd">#</a>
+</h4>
+<ul>
+<li>使用useradd建立了账号后，默认情况下无法使用该账号登陆，需要使用passwd设定密码。</li>
+<li><code>-l</code> lock，会在/etc/shadow第二栏最前面加!使得密码失效，<code>-u</code> unlock，与-l相反；<code>-S</code> 列出秘密相关参数；<code>-n</code> 多久不可修改密码；<code>-x</code> 多久内必须修改密码； <code>-w</code> 密码过期前多少天开始警告 ；<code>-i</code> 密码失效日期；<code>--stdin</code> 从控制台获取输入。</li>
+<li>其他命令<code>chage -l user</code>。</li>
+</ul>
+<h4 id="usermod">
+  usermod
+  <a class="anchor" href="#usermod">#</a>
+</h4>
+<ul>
+<li>修改账号的数据。</li>
+<li>添加群组<code>usermod -a -G wheel koal</code></li>
+</ul>
+<h4 id="userdel">
+  userdel
+  <a class="anchor" href="#userdel">#</a>
+</h4>
+<ul>
+<li>删除用户的相关数据。<code>-r</code>表示同时删除该用户的home目录。</li>
+</ul>
+<h3 id="chgrpchownchmod-文件权限">
+  chgrp、chown、chmod 文件权限
+  <a class="anchor" href="#chgrpchownchmod-%e6%96%87%e4%bb%b6%e6%9d%83%e9%99%90">#</a>
+</h3>
+<ul>
+<li>
+<p><code>chgrp [-R] 文件/文件夹</code> 改变文件的群组（必须是/etc/group中存在的）。</p>
+</li>
+<li>
+<p><code>chown [-R] name:groupname 文件或目录</code>来修改文件的拥有者，-R表示递归。</p>
+</li>
+<li>
+<p><code>chmod [-R] 文件/目录</code> 改变文件/目录的权限。</p>
+</li>
+</ul>
+<h3 id="su-切换用户">
+  su 切换用户
+  <a class="anchor" href="#su-%e5%88%87%e6%8d%a2%e7%94%a8%e6%88%b7">#</a>
+</h3>
+<ul>
+<li><code>su</code>单纯使用su切换为root身份时，表明切换为root身份。读取变量的设定方式为non-login shell的方式，这种方式很多原本的变量不会改变。</li>
+<li><code>su - username</code>使用该命令代表使用login-shell的变量文件来登入系统。</li>
+<li><code>su - -c 指令</code> 执行一次root的指令。</li>
+</ul>
+<h3 id="sudo-以其他用户执行指令">
+  sudo 以其他用户执行指令
+  <a class="anchor" href="#sudo-%e4%bb%a5%e5%85%b6%e4%bb%96%e7%94%a8%e6%88%b7%e6%89%a7%e8%a1%8c%e6%8c%87%e4%bb%a4">#</a>
+</h3>
+<ul>
+<li>
+<p><code>sudo</code> 并非所有人都能执行sudo，只有/etc/sudoers内的用户能执行sudo这个指令。</p>
+<ul>
+<li><code>sudo [-u 用户] 指令</code> 以某个用户的身份执行指令。不加该参数表示使用root执行指令。</li>
+<li>sudoers文件格式1：<code>使用者账号  登入者的来源主机名=（可切换的账号）  可下达的指令。</code> 可下达的指令必须使用绝对路径。</li>
+<li>sudoers文件格式2： <code>%群组  ALL=(ALL)  ALL</code></li>
+<li>sudoers文件格式3： <code>%群组  ALL=(ALL)  NOPASSWD:ALL</code></li>
+<li>sudoers文件格式4：<code>myuser1 All=(root) !/usr/bin/passwd, /usr/bin/passwd [A-Za-z]*,!/usr/bin/passwd root</code>。表示myuser1可以执行除了passwd和passwd root外的所有指令。</li>
+<li>创建别名：</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">#别名必须大写</span>
+User_Alias ADMPW<span style="color:#f92672">=</span>pro1,pro2,pro3 myuser1,myuser2
+Cmd_Alias ADMPWCOM<span style="color:#f92672">=</span>!/usr/bin/passwd, /usr/bin/passwd <span style="color:#f92672">[</span>A-Za-z<span style="color:#f92672">]</span>*,!/usr/bin/passwd root
+ADMPW ALL<span style="color:#f92672">=(</span>root<span style="color:#f92672">)</span> ADMPWCOM
+
+<span style="color:#75715e">#可以使用sudo搭配su，将用户身份转换为root</span>
+ADMPW ALL<span style="color:#f92672">=(</span>root<span style="color:#f92672">)</span> /bin/su -
+</code></pre></div><ul>
+<li>sudo时间间隔为5min。</li>
+</ul>
+</li>
+</ul>
+<h3 id="ulimit-限制系统资源">
+  ulimit 限制系统资源
+  <a class="anchor" href="#ulimit-%e9%99%90%e5%88%b6%e7%b3%bb%e7%bb%9f%e8%b5%84%e6%ba%90">#</a>
+</h3>
+<ul>
+<li><code>ulimit</code> 限制用户的某些系统资源（比如可以开启的文件数量）</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">ulimit -<span style="color:#f92672">[</span>SHacdfltu<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>配置<span style="color:#f92672">]</span>
+-H <span style="color:#75715e">#hard limit，严格的限制，必定不能超过这个设定的数值</span>
+-S <span style="color:#75715e">#soft limit，警告的设定，可以超过这个设定值，但超过则有警告。</span>
+-a <span style="color:#75715e">#可列出所有的限制，-标识没有限制。</span>
+-f <span style="color:#75715e">#此shell可以建立的最大文件大小，单位为KB。</span>
+-t <span style="color:#75715e">#可使用的最大CPU时间，单位为秒。</span>
+-u <span style="color:#75715e">#单一用户可以使用的最大程序的数量。</span>
+-d <span style="color:#75715e">#程序可以使用的最大segment容量。</span>
+-l <span style="color:#75715e">#可用于锁定（lock）的内存量。</span>
+
+<span style="color:#75715e">#一般身份如果设置了ulimit的值，通过注销再登录即可恢复，也可以重新设定</span>
+
+<span style="color:#75715e">#限制只能建立10MB以下容量的文件</span>
+ulimit -f <span style="color:#ae81ff">10240</span>
+</code></pre></div><ul>
+<li><code>limits.conf</code></li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e">#文件详细描述</span>
+vbird1 soft fsize <span style="color:#ae81ff">90000</span>
+<span style="color:#75715e">#第一个字段为账号，或者为群组，如果是群组需要加上@。如果使用群组，这个功能只对初始群组有效。</span>
+<span style="color:#75715e">#第二个字段为限制的模式，是严格hard还是警告soft。</span>
+<span style="color:#75715e">#第三个字段为限制，比如是限制文件容量等。</span>
+<span style="color:#75715e">#第四个字段为限制的值</span>
+
+<span style="color:#75715e">#限制prol这个群组每次只能有1个用户登录</span>
+@prol hard maxlogins
+
+<span style="color:#75715e">#文件修改后需要重新登录才会有效。</span>
+</code></pre></div><h3 id="acl">
+  ACL
+  <a class="anchor" href="#acl">#</a>
+</h3>
+<ul>
+<li>Access Control List，用来提供在owner、group，others的rwx之外的权限设定，可以针对单一使用者，单一文件或目录来进行rwx的权限规范。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e">#检查系统是否支持ACL</span>
+dmesg | grep -i acl
+
+<span style="color:#75715e">#设定acl参数</span>
+setfacl<span style="color:#f92672">[</span>-bkRd<span style="color:#f92672">]</span> <span style="color:#f92672">[{</span>-m | -x<span style="color:#f92672">}</span> acl参数<span style="color:#f92672">]</span> 目标文件名
+-m : 设定acl参数给文件使用
+-x : 删除后面的acl参数
+-b : 移除所有的acl参数设定
+-k : 移除预设的acl参数
+-R : 递归设定acl
+-d : 设定预设的acl参数，只对目录有效，在该目录新建的数据都会引用此默认值
+
+<span style="color:#75715e">#为xiaoxiang用户设定文件的权限为rwx</span>
+<span style="color:#75715e">#一个文件设定了ACL参数后，他的权限部分就会多出来一个+号。</span>
+setfacl -m u:xiaoxiang:rwx file1
+<span style="color:#75715e">#为文件使用者设定权限</span>
+setfacl -m u::rwx file2
+<span style="color:#75715e">#为群组设置权限</span>
+setfacl -m g:mygroup:rx file3
+<span style="color:#75715e">#为目录设置acl权限，未来文件的acl权限都继承此目录</span>
+setfacl -m d:u:xiaoxiang:rx /home/xiaoxiang/dir1
+<span style="color:#75715e">#让xiaoxiang无法使用该目录</span>
+setfacl -m u:xiaoxiang:- /home/xiaoxiang/dir2
+
+<span style="color:#75715e">#取消某个账号的ACL权限设定</span>
+setfacl -x u:xiaoxiang /home/xiaoxiang/file5
+
+<span style="color:#75715e">#获取file1的acl权限内容</span>
+getfacl file1
+<span style="color:#75715e">#结果中#开头的表示默认值</span>
+<span style="color:#75715e">#结果中的mask表示用来规范最大允许权限</span>
+</code></pre></div><h3 id="df和du-查看磁盘信息">
+  df和du 查看磁盘信息
+  <a class="anchor" href="#df%e5%92%8cdu-%e6%9f%a5%e7%9c%8b%e7%a3%81%e7%9b%98%e4%bf%a1%e6%81%af">#</a>
+</h3>
+<ul>
+<li><code>df -h</code>查看磁盘的信息。</li>
+<li><code>du [-hskm] 文件或目录名称</code> 查看文件系统的磁盘使用量。
+<ul>
+<li>-h 易读的方式显示。</li>
+<li>-s （summarize）列出总量。</li>
+<li>-d （&ndash;max-depth=N）：N表示深度，1表示输出子文件夹的大小，2表述输出子文件夹的子文件夹的大小。</li>
+<li>-a （&ndash;all） 不加该参数表示只统计文件夹，加该参数表示统计所有文件。</li>
+<li>-k和-m 以kB/mB显示。</li>
+</ul>
+</li>
+</ul>
+<h3 id="mount-磁盘挂载">
+  mount 磁盘挂载
+  <a class="anchor" href="#mount-%e7%a3%81%e7%9b%98%e6%8c%82%e8%bd%bd">#</a>
+</h3>
+<ul>
+<li>
+<p><code>mount [-alt]LABLE=''/UUID=''/装置文件名 挂载点/umount</code>挂载与卸载</p>
+<ul>
+<li><code>mount /d /dev/sda2</code>将/dev/sda2挂载到/d。</li>
+<li><code>umount [-f] 挂载点或装置文件名</code> -f强制删除。</li>
+<li>-n 不写入/etc/mtab。</li>
+<li>-o后面可以跟一些挂载时额外加上的参数；1. asyn，sync 此文件系统是否使用同步写入（sync）或异步（async）的内存机制。默认为async。2. atime，noatime 是否修订文件的读取时间。3. ro，rw 挂载文件系统为只读或可写。auto，noauto 允许此文件系统被以mount -a自动挂载（auto）。4. dev，nodev 是否允许此文件系统上可建立装置文件。5.suid，nosuid 是否允许此文件系统上有suid的文件格式。6. ecex，noexec 是否允许此文件系统上有可执行文件。7. user，nouser 是否允许此文件系统让任何使用者执行mount，一般mount只有root可以进行，但下达该命令后，一般user也能对其进行挂载。8. defaults 默认为rw，suid， dev，exec，auto，nouser，async。9. remount 重新挂载。</li>
+<li>-a 依照配置文件/etc/fstab的数据将所有未挂载的磁盘挂载。</li>
+<li>-t 要挂载的文件系统的类型。</li>
+</ul>
+</li>
+<li>
+<p>开机挂载(修改/etc/fstab[filesystem table]）</p>
+<ul>
+<li>参数格式：装置/UUID/LABEL 挂载点 文件系统 文件系统参数 dump fsck</li>
+<li>例：UUID=XXX（使用blkid查询） /d ntfs defaults 0 0</li>
+<li>/etc/fstab是开机时的配置文件，实际的filesystem的挂载记录到/etc/mtab和/proc/mounts这两个文件中。</li>
+</ul>
+</li>
+<li>
+<p><code>sh -c &quot;xxx&quot;</code> 将一个字符串作为完整的命令来执行。</p>
+</li>
+<li>
+<p><code>history  n</code>用来查询过去执行的指令，n表示显示最近n个命令。bash会记录使用过的指令，默认记录1000个，指令存放位置在~/.bash_history中。该文件会记录上一次登录之前的指令，而这一次登录所执行的指令都存在内存中，当注销后，这些指令才会记录到.bash_history中。</p>
+</li>
+<li>
+<p>使用write可以给linux上的其他用户发消息，通过<code>who</code>可以查看目前有谁在线。通过<code>write koal</code>给所有以koal登录的用户发消息。通过<code>mesg n</code>来关闭接收消息，但无法拒绝root的消息。通过<code>mesg y</code>来开启接收消息。使用wall可以对系统上所有的用户发送消息<code>wall &quot;hello world&quot;</code>。</p>
+</li>
+</ul>
+<h3 id="manmanual用户手册">
+  man（manual）用户手册
+  <a class="anchor" href="#manmanual%e7%94%a8%e6%88%b7%e6%89%8b%e5%86%8c">#</a>
+</h3>
+<ul>
+<li>man中有几个常用的数字的含义：1 用户在shell环境中可以操作的指令或可执行文件；4 装置文件的说明，通常在/dev下的文件；5 配置文件或者某些文件的格式；7 惯例与协议等；8 系统管理员可用的指令。例：<code>man 8 sudo</code>。</li>
+<li>man page一般包含：①NAME：简短的说明；②SYNOPSIS：简短的指令下达语法说明；③DESCRIPTION：较完整的说明；④OPTIONS；⑤COMMANDS：当这个程序执行的时候，可以在此程序中下达的指令。⑥FILES：关联的文件；⑦SEE ALSO：其他可以参考的信息；⑧EXAMPLE：一些可以参考的范例。</li>
+<li>快捷键：空格键:向下翻一页    [Page Up]:向上翻一页    [Page Down]:向下翻一页    [Home]:去第一页    [End]:去最后一页    /string:向下搜索string    ?string:向上搜索string    n/N:n表示下一个搜索，N表示上一个搜索。</li>
+</ul>
+<h3 id="selinux">
+  SELinux
+  <a class="anchor" href="#selinux">#</a>
+</h3>
+<ul>
+<li>全称是Security Enhanced Linux。SELinux是在进行进程、文件等细部权限设定依据的一个核心模块。SELinux提供了一些预设的策略（Policy），并在政策内提供了多个规则（rule）。</li>
+<li>自主式访问控制（Discretionary Access Control，DAC）是根据进程的拥有者与文件资源的rwx权限来决定有无存取的能力。</li>
+<li>委任式访问控制（Mandatory Access Control，MAC）可以根据特定的进程和特定的文件资源来进行权限的管控，即使是root，在使用不同的进程时，取得到的权限不一定是root，而要看当时进程的设定而定。控制的主体由使用者变成了进程。</li>
+<li>SELinux是通过MAC的方式来管控进程，控制的主体是进程，而目标是该进程能否读取的文件资源。
+<ul>
+<li>主体（Subject）：即进程。</li>
+<li>目标（Object）：主体目标能否存取的目标资源，一般就是文件系统。</li>
+<li>策略（Policy）：由于进程和文件数量庞大，SELinux会依据某些服务来制定基本的存取安全性策略，这些策略中由详细的规则（rule）来指定不同的服务开放某些资源的存取与否。Linux里提供了三个主要的策略，分别是：
+<ul>
+<li>targeted：针对网络服务限制多，针对本机限制少，是预设的策略。</li>
+<li>minimum：仅针对选择的进程来保护。</li>
+<li>mls：完整的SELinux限制，限制较为严格。</li>
+</ul>
+</li>
+<li>安全性本文（security context）：主体能不能存取目标除了策略指定外，主体和目标的安全性本文必须一致才能够顺利存取，安全性本文类似于文件系统的rwx。</li>
+</ul>
+</li>
+<li>主体如果要存取目标，首先需要通过SELinux政策内的规则；其次与目标资源的安全性本文对比；最后再检查目标的rwx权限。</li>
+</ul>
+<h4 id="安全性文本">
+  安全性文本
+  <a class="anchor" href="#%e5%ae%89%e5%85%a8%e6%80%a7%e6%96%87%e6%9c%ac">#</a>
+</h4>
+<ul>
+<li>文件的安全性文本是放到文件的inode内的，可以使用<code>ls -Z</code>去观察安全性文本。</li>
+<li>安全性文本主要用冒号分为三个字段。<code>identify:role:type</code>。</li>
+<li>身份识别（Identify），常见的有：
+<ul>
+<li>unconfined_u：不受限的用户，也就是说该文件来自于不受限的进程所产生的。</li>
+<li>system_u：系统用户，大部分就是系统自己产生的。</li>
+</ul>
+</li>
+<li>基本上如果是系统或软件本身所提供的文件，大多就是system_u这个身份名称，如果是用户透过bash自己建立的文件，大多数是不受限的unconfined_u，如果是网络服务所产生的文件，或者是系统服务运作过程中产生的文件，大部分的识别就会是system_u。</li>
+<li>角色（Role）
+<ul>
+<li>object_r：代表的是文件或目录等文件资源。</li>
+<li>system_r：代表的就是进程。</li>
+</ul>
+</li>
+<li>类型（Type），一个主体进程能不能读取到资源，与类型有关，类型在文件和进程中的定义不太相同。在文件资源上称为类型Type，在进程上称为领域domain。</li>
+</ul>
+<h4 id="selinux三种模式的启动关闭和观察">
+  SELinux三种模式的启动、关闭和观察
+  <a class="anchor" href="#selinux%e4%b8%89%e7%a7%8d%e6%a8%a1%e5%bc%8f%e7%9a%84%e5%90%af%e5%8a%a8%e5%85%b3%e9%97%ad%e5%92%8c%e8%a7%82%e5%af%9f">#</a>
+</h4>
+<ul>
+<li>SELinux目前共有三种模式，分别为：
+<ul>
+<li>enforcing：强制模式，代表SELinux正确的开始限制domain/type了。</li>
+<li>permissive：宽容模式，表示不会实际限制domain和type，但会有警告信息。</li>
+<li>disable：关闭，代表SELinux并没有实际运作。</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e">#获取当前的SELinux模式</span>
+getenforce
+<span style="color:#75715e">#查询当前的策略</span>
+sestatus 
+<span style="color:#75715e">#修改策略，修改/etc/selinux/config的SELINUX=enforcing</span>
+<span style="color:#75715e">#SELinux在enforcing和permissive之间切换无需重启</span>
+<span style="color:#75715e">#切换到disable或者从disable切换到其他需要重启</span>
+setenforce <span style="color:#f92672">[</span>0|1<span style="color:#f92672">]</span> <span style="color:#75715e">#0表示permissive，1表示Enforcing</span>
+</code></pre></div></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备20006455号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>nginx | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.d1618bcc7dc3b2f814dad501e6e03731b06bd4540bd19265a8737f6e23228b96.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<link rel="alternate" type="application/rss+xml" href="/tags/nginx/index.xml" title="小象的blog" />
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <span class="flex align-center"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </span>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/tags/">
+        分类
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/life/">
+        小记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql/">
+        mysql
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/%E5%85%B6%E4%BB%96/english/">
+        生僻单词
+      </a>
+  </li>
+  
+  <li>
+    <a href="http://tools.xiaoxiang.space">
+        工具
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  
+<nav>
+  <ul>
+  
+    
+	  
+	
+  
+    
+	  
+		
+		  <li>
+			<a href="/tags/javaee/"  class="flex justify-between">
+			  <span>javaee</span>
+			  <span>25</span>
+			</a>
+		  </li>
+		
+		  <li>
+			<a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"  class="flex justify-between">
+			  <span>计算机网络</span>
+			  <span>9</span>
+			</a>
+		  </li>
+		
+		  <li>
+			<a href="/tags/linux/"  class="flex justify-between">
+			  <span>linux</span>
+			  <span>10</span>
+			</a>
+		  </li>
+		
+		  <li>
+			<a href="/tags/nginx/"  class="flex justify-between">
+			  <span>nginx</span>
+			  <span>5</span>
+			</a>
+		  </li>
+		
+		  <li>
+			<a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"  class="flex justify-between">
+			  <span>数据库</span>
+			  <span>7</span>
+			</a>
+		  </li>
+		
+		  <li>
+			<a href="/tags/%E5%89%8D%E7%AB%AF/"  class="flex justify-between">
+			  <span>前端</span>
+			  <span>4</span>
+			</a>
+		  </li>
+		
+		  <li>
+			<a href="/tags/javase/"  class="flex justify-between">
+			  <span>javase</span>
+			  <span>28</span>
+			</a>
+		  </li>
+		
+		  <li>
+			<a href="/tags/%E5%85%B6%E4%BB%96/"  class="flex justify-between">
+			  <span>其他</span>
+			  <span>4</span>
+			</a>
+		  </li>
+		
+		  <li>
+			<a href="/tags/git/"  class="flex justify-between">
+			  <span>git</span>
+			  <span>3</span>
+			</a>
+		  </li>
+		
+		  <li>
+			<a href="/tags/spring/"  class="flex justify-between">
+			  <span>spring</span>
+			  <span>3</span>
+			</a>
+		  </li>
+		
+		  <li>
+			<a href="/tags/android/"  class="flex justify-between">
+			  <span>android</span>
+			  <span>4</span>
+			</a>
+		  </li>
+		
+		  <li>
+			<a href="/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/"  class="flex justify-between">
+			  <span>密码学</span>
+			  <span>2</span>
+			</a>
+		  </li>
+		
+		  <li>
+			<a href="/tags/http/"  class="flex justify-between">
+			  <span>http</span>
+			  <span>7</span>
+			</a>
+		  </li>
+		
+		  <li>
+			<a href="/tags/python/"  class="flex justify-between">
+			  <span>python</span>
+			  <span>6</span>
+			</a>
+		  </li>
+		
+		  <li>
+			<a href="/tags/jvm/"  class="flex justify-between">
+			  <span>jvm</span>
+			  <span>9</span>
+			</a>
+		  </li>
+		
+		  <li>
+			<a href="/tags/java%E5%B9%B6%E5%8F%91/"  class="flex justify-between">
+			  <span>java并发</span>
+			  <span>7</span>
+			</a>
+		  </li>
+		
+		  <li>
+			<a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"  class="flex justify-between">
+			  <span>设计模式</span>
+			  <span>10</span>
+			</a>
+		  </li>
+		
+		  <li>
+			<a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"  class="flex justify-between">
+			  <span>数据结构</span>
+			  <span>7</span>
+			</a>
+		  </li>
+		
+		  <li>
+			<a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"  class="flex justify-between">
+			  <span>操作系统</span>
+			  <span>5</span>
+			</a>
+		  </li>
+		
+		  <li>
+			<a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/"  class="flex justify-between">
+			  <span>计算机组成原理</span>
+			  <span>1</span>
+			</a>
+		  </li>
+		
+      
+	
+  
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>nginx</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/tags/">
+        分类
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/life/">
+        小记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql/">
+        mysql
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/%E5%85%B6%E4%BB%96/english/">
+        生僻单词
+      </a>
+  </li>
+  
+  <li>
+    <a href="http://tools.xiaoxiang.space">
+        工具
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  
+<nav>
+  <ul>
+  
+    
+	  
+	
+  
+    
+	  
+		
+		  <li>
+			<a href="/tags/javaee/"  class="flex justify-between">
+			  <span>javaee</span>
+			  <span>25</span>
+			</a>
+		  </li>
+		
+		  <li>
+			<a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"  class="flex justify-between">
+			  <span>计算机网络</span>
+			  <span>9</span>
+			</a>
+		  </li>
+		
+		  <li>
+			<a href="/tags/linux/"  class="flex justify-between">
+			  <span>linux</span>
+			  <span>10</span>
+			</a>
+		  </li>
+		
+		  <li>
+			<a href="/tags/nginx/"  class="flex justify-between">
+			  <span>nginx</span>
+			  <span>5</span>
+			</a>
+		  </li>
+		
+		  <li>
+			<a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"  class="flex justify-between">
+			  <span>数据库</span>
+			  <span>7</span>
+			</a>
+		  </li>
+		
+		  <li>
+			<a href="/tags/%E5%89%8D%E7%AB%AF/"  class="flex justify-between">
+			  <span>前端</span>
+			  <span>4</span>
+			</a>
+		  </li>
+		
+		  <li>
+			<a href="/tags/javase/"  class="flex justify-between">
+			  <span>javase</span>
+			  <span>28</span>
+			</a>
+		  </li>
+		
+		  <li>
+			<a href="/tags/%E5%85%B6%E4%BB%96/"  class="flex justify-between">
+			  <span>其他</span>
+			  <span>4</span>
+			</a>
+		  </li>
+		
+		  <li>
+			<a href="/tags/git/"  class="flex justify-between">
+			  <span>git</span>
+			  <span>3</span>
+			</a>
+		  </li>
+		
+		  <li>
+			<a href="/tags/spring/"  class="flex justify-between">
+			  <span>spring</span>
+			  <span>3</span>
+			</a>
+		  </li>
+		
+		  <li>
+			<a href="/tags/android/"  class="flex justify-between">
+			  <span>android</span>
+			  <span>4</span>
+			</a>
+		  </li>
+		
+		  <li>
+			<a href="/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/"  class="flex justify-between">
+			  <span>密码学</span>
+			  <span>2</span>
+			</a>
+		  </li>
+		
+		  <li>
+			<a href="/tags/http/"  class="flex justify-between">
+			  <span>http</span>
+			  <span>7</span>
+			</a>
+		  </li>
+		
+		  <li>
+			<a href="/tags/python/"  class="flex justify-between">
+			  <span>python</span>
+			  <span>6</span>
+			</a>
+		  </li>
+		
+		  <li>
+			<a href="/tags/jvm/"  class="flex justify-between">
+			  <span>jvm</span>
+			  <span>9</span>
+			</a>
+		  </li>
+		
+		  <li>
+			<a href="/tags/java%E5%B9%B6%E5%8F%91/"  class="flex justify-between">
+			  <span>java并发</span>
+			  <span>7</span>
+			</a>
+		  </li>
+		
+		  <li>
+			<a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"  class="flex justify-between">
+			  <span>设计模式</span>
+			  <span>10</span>
+			</a>
+		  </li>
+		
+		  <li>
+			<a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"  class="flex justify-between">
+			  <span>数据结构</span>
+			  <span>7</span>
+			</a>
+		  </li>
+		
+		  <li>
+			<a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"  class="flex justify-between">
+			  <span>操作系统</span>
+			  <span>5</span>
+			</a>
+		  </li>
+		
+		  <li>
+			<a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/"  class="flex justify-between">
+			  <span>计算机组成原理</span>
+			  <span>1</span>
+			</a>
+		  </li>
+		
+      
+	
+  
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<div style="display:flex; flex-wrap:wrap;">
+  
+  <article class="markdown" style="padding-bottom:1.25rem; width:20rem;">
+    <div><a href="/posts/nginx/%E7%9B%AE%E5%BD%95%E6%98%A0%E5%B0%84/" style="font-size:115%;">目录映射</a></div>
+    
+		<div>May 19, 2022</div>
+	
+  </article>
+  
+  <article class="markdown" style="padding-bottom:1.25rem; width:20rem;">
+    <div><a href="/posts/nginx/https%E9%85%8D%E7%BD%AE/" style="font-size:115%;">Https配置</a></div>
+    
+		<div>May 5, 2022</div>
+	
+  </article>
+  
+  <article class="markdown" style="padding-bottom:1.25rem; width:20rem;">
+    <div><a href="/posts/nginx/serve_name/" style="font-size:115%;">serve_name</a></div>
+    
+		<div>April 5, 2022</div>
+	
+  </article>
+  
+  <article class="markdown" style="padding-bottom:1.25rem; width:20rem;">
+    <div><a href="/posts/nginx/nginx%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" style="font-size:115%;">nginx负载均衡</a></div>
+    
+		<div>September 13, 2021</div>
+	
+  </article>
+  
+  <article class="markdown" style="padding-bottom:1.25rem; width:20rem;">
+    <div><a href="/posts/nginx/nginx/" style="font-size:115%;">nginx</a></div>
+    
+		<div>August 12, 2021</div>
+	
+  </article>
+  
+</div>
+  
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备20006455号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

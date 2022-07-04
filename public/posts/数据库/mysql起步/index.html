@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>mysql | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.d1618bcc7dc3b2f814dad501e6e03731b06bd4540bd19265a8737f6e23228b96.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <span class="flex align-center"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </span>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/tags/">
+        分类
+      </a>
+  </li>
+  
+  <li>
+    <a href="http://xiaoxiang.space:81">
+        工具
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/%E5%85%B6%E4%BB%96/english/">
+        生僻单词
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#linux上mysql布局">linux上mysql布局</a></li>
+            <li><a href="#mysql安装">mysql安装</a></li>
+            <li><a href="#mysql账户管理">MYSQL账户管理</a></li>
+            <li><a href="#mysql配置">mySQL配置</a></li>
+          </ul>
+        </li>
+        <li><a href="#基础sql">基础SQL</a>
+          <ul>
+            <li><a href="#数据类型">数据类型</a></li>
+            <li><a href="#database">DATABASE</a></li>
+            <li><a href="#table">TABLE</a></li>
+            <li><a href="#show">SHOW</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>mysql</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/tags/">
+        分类
+      </a>
+  </li>
+  
+  <li>
+    <a href="http://xiaoxiang.space:81">
+        工具
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/%E5%85%B6%E4%BB%96/english/">
+        生僻单词
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#linux上mysql布局">linux上mysql布局</a></li>
+            <li><a href="#mysql安装">mysql安装</a></li>
+            <li><a href="#mysql账户管理">MYSQL账户管理</a></li>
+            <li><a href="#mysql配置">mySQL配置</a></li>
+          </ul>
+        </li>
+        <li><a href="#基础sql">基础SQL</a>
+          <ul>
+            <li><a href="#数据类型">数据类型</a></li>
+            <li><a href="#database">DATABASE</a></li>
+            <li><a href="#table">TABLE</a></li>
+            <li><a href="#show">SHOW</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql%E8%B5%B7%E6%AD%A5/">mysql</a>
+  </h1>
+  
+  <h5>February 4, 2021</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
+  </div>
+  
+
+
+
+<ul>
+<li>查询版本和当前时间<code>select version(),current_date;</code></li>
+<li>mysql执行结束后会显示返回了多少行和用了多长时间，受网络其他因素影响</li>
+<li>当输入多行，打算不执行这句sql语句，输入<code>\c</code></li>
+<li>自带的的mysql database描述了用户的访问权限。</li>
+<li>unix下数据库名是大小写相关的。建议在创建数据库的时候要么全大写，要么全小写，可以在刚安装的时候修改my.cnf文件。</li>
+<li>相邻的带引号的多个字符串会拼接成一个字符串。下面这两个等价：</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#e6db74">&#39;a string&#39;</span>
+<span style="color:#e6db74">&#39;a&#39;&#39;string&#39;</span>
+</code></pre></div><ul>
+<li>
+<p>查看和设置系统变量<code>SET [GLOBAL| SESSION] 系统变量</code> ``SHOW [GLOBAL |SESSION] VARIABLES [LIKE XXX]<code>。状态变量是用来显示服务器程序运行状态的，只能查看</code>SHOW [GLOBAL|SESSION] STATUS [LIKE XXX]`。</p>
+</li>
+<li>
+<p>查看当前账户拥有的权限，可以使用<code>show grants for 'joe'@'home.example.com'</code>。</p>
+</li>
+</ul>
+<h3 id="linux上mysql布局">
+  linux上mysql布局
+  <a class="anchor" href="#linux%e4%b8%8amysql%e5%b8%83%e5%b1%80">#</a>
+</h3>
+<table>
+<thead>
+<tr>
+<th>文件资源</th>
+<th>位置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>客户端程序和脚本</td>
+<td>/usr/bin</td>
+</tr>
+<tr>
+<td>mysqld server</td>
+<td>/usr/sbin</td>
+</tr>
+<tr>
+<td>配置文件地址</td>
+<td>/etc/my.cnf</td>
+</tr>
+<tr>
+<td>数据存放目录</td>
+<td>/var/lib/mysql</td>
+</tr>
+<tr>
+<td>错误日志文件</td>
+<td>/var/log/mysqld.log</td>
+</tr>
+<tr>
+<td>secure_file_priv</td>
+<td>/var/lib/mysql-files</td>
+</tr>
+<tr>
+<td>System V init script</td>
+<td>/etc/init.d/mysqld</td>
+</tr>
+<tr>
+<td>Systemd服务</td>
+<td>mysqld</td>
+</tr>
+<tr>
+<td>Pid文件</td>
+<td>/var/run/mysql/mysqld.pid</td>
+</tr>
+<tr>
+<td>Socket</td>
+<td>/var/lib/mysql/mysql.sock</td>
+</tr>
+<tr>
+<td>使用手册</td>
+<td>/usr/share/man</td>
+</tr>
+<tr>
+<td>字符集文件等其他文件</td>
+<td>/usr/share/mysql</td>
+</tr>
+<tr>
+<td>库</td>
+<td>/usr/lib/mysql</td>
+</tr>
+<tr>
+<td><strong>参考链接：</strong></td>
+<td>
+  <a href="https://dev.mysql.com/doc/refman/8.0/en/linux-installation-rpm.html">MySQL :: MySQL 8.0 Reference Manual :: 2.5.4 Installing MySQL on Linux Using RPM Packages from Oracle</a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="mysql安装">
+  mysql安装
+  <a class="anchor" href="#mysql%e5%ae%89%e8%a3%85">#</a>
+</h3>
+<ul>
+<li><code>systemctl start mysqld</code>启动mysql。</li>
+<li>mysql安装后，会自动创建超级用户<code>'root'@'localhost'</code>，其密码在<code>/var/log/mysqld.log</code>，使用<code>grep 'temporary password' /var/log/mysqld.log</code>来寻找密码。</li>
+<li>修改密码<code>ALTER USER 'root'@'localhost' IDENTIFIED BY 'newPassword'</code>。</li>
+<li>mysql8修改成简单的密码会报错（试了下mysql5.7也会报错，解决方法一样）。解决流程如下：
+<ol>
+<li>mysql8增加了一组变量来控制密码的长度、强度等。通过<code>SHOW VARIABLES LIKE 'validate_password%'</code>来查看。</li>
+<li>validate_password.length用来要求密码的最小长度，这个参数不得小于<code>validate_password.number_count+validate_password.special_char_count+2*validate_password.mixed_case_count)</code>。</li>
+<li>validate_password.policy会影响validate_password的其他变量是否有效（除validate_password.check_user_name），它的值可以为0(LOW)，1(MEDIUM)，2(STRONG)。为0则只检查length这个变量。</li>
+<li>更改策略：<code>set global validate_password.policy=0;set global validate_password.number=4;</code></li>
+<li><strong>参考链接：</strong>
+  <a href="https://dev.mysql.com/doc/refman/8.0/en/validate-password-options-variables.html">MySQL :: MySQL 8.0 Reference Manual :: 6.4.3.2 Password Validation Options and Variables</a></li>
+</ol>
+</li>
+</ul>
+<h3 id="mysql账户管理">
+  MYSQL账户管理
+  <a class="anchor" href="#mysql%e8%b4%a6%e6%88%b7%e7%ae%a1%e7%90%86">#</a>
+</h3>
+<ul>
+<li>mysql将账户存储在mysq数据库的user表中。</li>
+<li><code>CREATE USER</code>用于创建性的mysql用户；账户首次创建没有特权，需要使用<code>GRANT</code>分配特权。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#f92672">#</span><span style="color:#960050;background-color:#1e0010">如果不指定主机，默认就是</span><span style="color:#e6db74">&#39;%&#39;</span><span style="color:#960050;background-color:#1e0010">（所有</span>ip都能访问<span style="color:#960050;background-color:#1e0010">）</span>
+<span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">USER</span> <span style="color:#e6db74">&#39;jeffrey&#39;</span><span style="color:#f92672">@</span><span style="color:#e6db74">&#39;localhost&#39;</span> IDENTIFIED <span style="color:#66d9ef">BY</span> <span style="color:#e6db74">&#39;password&#39;</span>;
+
+<span style="color:#f92672">#</span><span style="color:#960050;background-color:#1e0010">删除用户。</span>
+<span style="color:#66d9ef">DROP</span> <span style="color:#66d9ef">USER</span> <span style="color:#e6db74">&#39;jeffrey&#39;</span><span style="color:#f92672">@</span><span style="color:#e6db74">&#39;localhost&#39;</span>;
+<span style="color:#f92672">#</span><span style="color:#960050;background-color:#1e0010">重命名现有的账户</span>,<span style="color:#960050;background-color:#1e0010">可以用来解决账号只能在本地访问的问题。</span>
+<span style="color:#66d9ef">RENAME</span> <span style="color:#66d9ef">USER</span> <span style="color:#e6db74">&#39;jeffrey&#39;</span><span style="color:#f92672">@</span><span style="color:#e6db74">&#39;localhost&#39;</span> <span style="color:#66d9ef">TO</span> <span style="color:#e6db74">&#39;jeff&#39;</span><span style="color:#f92672">@</span><span style="color:#e6db74">&#39;%&#39;</span>
+</code></pre></div><ul>
+<li><code>ALTER USER</code>修改账户的信息（如修改密码）。不推荐使用<code>SET PASSWORD</code>来修改密码。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#f92672">#</span><span style="color:#960050;background-color:#1e0010">修改自己的密码，</span><span style="color:#66d9ef">USER</span>()<span style="color:#960050;background-color:#1e0010">会返回当前登录用户的用户名和主机名</span>
+<span style="color:#66d9ef">ALTER</span> <span style="color:#66d9ef">USER</span> <span style="color:#66d9ef">USER</span>() IDENTIFIED <span style="color:#66d9ef">BY</span> <span style="color:#e6db74">&#39;password&#39;</span>;
+<span style="color:#f92672">#</span><span style="color:#960050;background-color:#1e0010">锁定账户</span>
+<span style="color:#66d9ef">ALTER</span> <span style="color:#66d9ef">USER</span> <span style="color:#e6db74">&#39;jeffrey&#39;</span><span style="color:#f92672">@</span><span style="color:#e6db74">&#39;localhost&#39;</span> ACCOUNT <span style="color:#66d9ef">LOCK</span>;
+<span style="color:#66d9ef">ALTER</span> <span style="color:#66d9ef">USER</span> <span style="color:#e6db74">&#39;jeffrey&#39;</span><span style="color:#f92672">@</span><span style="color:#e6db74">&#39;localhost&#39;</span> ACCOUNT UNLOCK;
+</code></pre></div><ul>
+<li><code>GRANT</code>用来对账户进行授权，<code>REVOKE</code>用来撤销账户特权。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#f92672">#</span><span style="color:#960050;background-color:#1e0010">授予除</span>GRANT和PROXY外的所有特权
+<span style="color:#f92672">#</span><span style="color:#960050;background-color:#1e0010">还可以授予</span><span style="color:#66d9ef">ALTER</span><span style="color:#960050;background-color:#1e0010">、</span><span style="color:#66d9ef">CREATE</span><span style="color:#960050;background-color:#1e0010">、</span><span style="color:#66d9ef">DELETE</span><span style="color:#960050;background-color:#1e0010">、</span><span style="color:#66d9ef">DROP</span><span style="color:#960050;background-color:#1e0010">、</span><span style="color:#66d9ef">SELECT</span><span style="color:#960050;background-color:#1e0010">、</span><span style="color:#66d9ef">UPDATE</span><span style="color:#960050;background-color:#1e0010">、</span><span style="color:#66d9ef">GRANT</span> <span style="color:#66d9ef">OPTION</span>
+<span style="color:#66d9ef">GRANT</span> <span style="color:#66d9ef">ALL</span> <span style="color:#66d9ef">ON</span> db1.<span style="color:#f92672">*</span> <span style="color:#66d9ef">TO</span> <span style="color:#e6db74">&#39;jeffrey&#39;</span><span style="color:#f92672">@</span><span style="color:#e6db74">&#39;localhost&#39;</span>;
+<span style="color:#66d9ef">REVOKE</span> <span style="color:#66d9ef">INSERT</span> <span style="color:#66d9ef">ON</span> <span style="color:#f92672">*</span>.<span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> <span style="color:#e6db74">&#39;jeffrey&#39;</span><span style="color:#f92672">@</span><span style="color:#e6db74">&#39;localhost&#39;</span>;
+<span style="color:#66d9ef">REVOKE</span> <span style="color:#66d9ef">ALL</span> [<span style="color:#66d9ef">PRIVILEGES</span>], <span style="color:#66d9ef">GRANT</span> <span style="color:#66d9ef">OPTION</span> <span style="color:#66d9ef">FROM</span> <span style="color:#e6db74">&#39;jeffrey&#39;</span><span style="color:#f92672">@</span><span style="color:#e6db74">&#39;localhost&#39;</span>;
+</code></pre></div><h3 id="mysql配置">
+  mySQL配置
+  <a class="anchor" href="#mysql%e9%85%8d%e7%bd%ae">#</a>
+</h3>
+<ul>
+<li>mysql配置文件被划分为多个组，每个组有一个组名，用[]括起来。</li>
+</ul>
+<pre><code>[mysqld]
+default-storage-engine=InnoDB
+validate_password=OFF
+</code></pre><h2 id="基础sql">
+  基础SQL
+  <a class="anchor" href="#%e5%9f%ba%e7%a1%80sql">#</a>
+</h2>
+<h3 id="数据类型">
+  数据类型
+  <a class="anchor" href="#%e6%95%b0%e6%8d%ae%e7%b1%bb%e5%9e%8b">#</a>
+</h3>
+<ol>
+<li>整数数据类型 tinyint（1字节）、smallint（2字节）、mediumint（3字节）、int（4字节）、bigint（8字节）。</li>
+<li>定点数据类型 <code>decimal(5,2)</code>，其中5是精度，表示有效位数；2表示小数点后几位。</li>
+<li>浮点类型 float（4字节）、double（8字节）。</li>
+<li>日期和时间类型 DATE（YYYY-MM-DD）、DATETIME（YYYY-MM-DD hh:mm:ss）、TIMESTAMP（范围是UTC1970-01-01 00:00:01-UTC2038-01-19 03:14:07)、TIME（范围-838:59:59-838:59:59）、YEAR（范围是1901-2155）</li>
+<li>字符串类型 CHAR（长度为声明时的长度，范围0-255）、VARCHAR（可变长度，范围时0-65535）、4种TEXT。</li>
+<li>字节串类型 BINARY、VARCHAR、四种BLOB。</li>
+</ol>
+<ul>
+<li>可以把BLOB看作VARBINARY，把TEXT看作VARCHAR，但它们有一点点不同：①对于BLOB和TEXT列上的索引，必须要指定缩影前缀长度，对应VARBINARY和VARCHAR，这是可选的；②BLOB和TEXT所在的列不能有默认值。<strong>参考链接：</strong>
+  <a href="https://dev.mysql.com/doc/refman/5.7/en/blob.html">MySQL :: MySQL 5.7 Reference Manual :: 11.3.4 The BLOB and TEXT Types</a></li>
+</ul>
+<h3 id="database">
+  DATABASE
+  <a class="anchor" href="#database">#</a>
+</h3>
+<ul>
+<li>创建数据库</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">CRATE <span style="color:#66d9ef">DATABASE</span> db_name [[<span style="color:#66d9ef">DEFAULT</span>] <span style="color:#66d9ef">CHARACTER</span> <span style="color:#66d9ef">SET</span> [<span style="color:#f92672">=</span>] utf8];
+</code></pre></div><h3 id="table">
+  TABLE
+  <a class="anchor" href="#table">#</a>
+</h3>
+<ul>
+<li>克隆和复制。</li>
+</ul>
+<pre><code>#从origin_tb1克隆一个新表（只有结构，没有数据）。
+CREATE TABLE new_tb1 LIKE origin_tb1;
+#复制origin_tb1表，（结构和数据都复制了）。
+CREATE TABLE new_tb1 AS SELECT * FROM origin_tb1;
+</code></pre><h4 id="alter">
+  ALTER
+  <a class="anchor" href="#alter">#</a>
+</h4>
+<pre><code>#单个alter table可以跟多个修改语句，用逗号隔开
+#删除
+ALTER TABLE t2 DROP COLUMN c, DROP COLUMN d;
+</code></pre><h5 id="changemodifyalter">
+  change、modify、alter
+  <a class="anchor" href="#changemodifyalter">#</a>
+</h5>
+<ul>
+<li>change可以重命名列、修改列的定义。配合FIRST或AFTER，可以指定列的位置。</li>
+<li>MODIFY可以修改列的定义，但无法修改它的名字。配合FIRST或AFTER能指定列的名字。</li>
+<li>ALTER只能修改列的默认值。</li>
+</ul>
+<pre><code>#将a的名字改为b，修改定义
+ALTER TABLE t1 CHANGE a b BIGINT NOT NULL;
+#不修改a的名字，只修改定义
+ALTER TABLE t1 CHANGE a a BIGINT NOT NULL;
+#修改b的定义
+ALTER TABLE t1 MODIFY b INT NOT NULL;
+#如果只想要修改b的名字而不去修改它的定义，就需要将定义再写一遍
+ALTER TABLE t1 CHANGE b a INT NOT NULL;
+#除了如PRIMARY KEY或UNIQUE属性，其他的如DEFAULT COMMENT等需要在修改时带上，否则修改后的列是没有这些属性。
+#使用CHANGE或MODIFY，myslq会尝试将列中数据转化未新的类型。
+#当使用CHANGE修改列名后，使用了该列的VIEW需要修改。
+#ALTER TABLE xxx ALTER ...SET DEFAULT xxx或ALTER ... DROP DEFAULT。如果旧的默认值被删除而列不可以为NULL，mysql将为其分配默认值（数字类型默认为0，如果指定了AUTO_INCREMENT，默认值是序列中的下一个值，对于EMUM，默认值为第一个枚举值，对于其他字符串类型，默认值为空字符串）。
+</code></pre><ul>
+<li>
+  <a href="https://dev.mysql.com/doc/refman/5.7/en/alter-table.html">MySQL :: MySQL 5.7 Reference Manual :: 13.1.8 ALTER TABLE Statement</a></li>
+</ul>
+<h3 id="show">
+  SHOW
+  <a class="anchor" href="#show">#</a>
+</h3>
+<pre><code>#显示属性
+SHOW COLUMNS FROM MYSQL.USER;
+#显示建库语句，例：
+SHOW CREATE DATABASE MYSQL;
+#显示建表语句，例：
+SHOW CREATE TABLE MYSQL.USER;
+#显示创建该用户的语句
+SHOW CREATE USER root;
+#显示分配个某用户的特权
+SHOW GRANTS [FOR user];
+</code></pre></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备20006455号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

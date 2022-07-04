@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>git分支 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.d1618bcc7dc3b2f814dad501e6e03731b06bd4540bd19265a8737f6e23228b96.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <span class="flex align-center"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </span>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/tags/">
+        分类
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/life/">
+        小记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql/">
+        mysql
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/%E5%85%B6%E4%BB%96/english/">
+        生僻单词
+      </a>
+  </li>
+  
+  <li>
+    <a href="http://tools.xiaoxiang.space">
+        工具
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#开始">开始</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>git分支</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/tags/">
+        分类
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/life/">
+        小记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql/">
+        mysql
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/%E5%85%B6%E4%BB%96/english/">
+        生僻单词
+      </a>
+  </li>
+  
+  <li>
+    <a href="http://tools.xiaoxiang.space">
+        工具
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#开始">开始</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/git/git%E5%88%86%E6%94%AF/">git分支</a>
+  </h1>
+  
+  <h5>January 28, 2021</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/git/">git</a>
+  </div>
+  
+
+
+
+<ul>
+<li>在git提交时，会保存一个commit对象，该对象包含指向本次提交内容快照的指针和0个或多个指向该其父对象（之前提交的）的指针。普通提交有一个父对象，分支合并提交有多个父对象。</li>
+</ul>
+<h3 id="开始">
+  开始
+  <a class="anchor" href="#%e5%bc%80%e5%a7%8b">#</a>
+</h3>
+<ul>
+<li>git分支，是一个指向commit对象的可变指针，它在每次提交后都会指向当前的commit对象。git有一个名为HEAD的特别指针，它是一个指向当前工作的本地分支的指针。</li>
+<li>
+  <img src="/img/git/1.png" alt="" /></li>
+<li>创建一个新的分支<code>git branch testing</code>，这会在当前commit对象上新建一个分支指针。
+
+  <img src="/img/git/3.png" alt="" /></li>
+<li>切换到其他分支<code>git checkout testing</code>，这样HEAD就指向了testing分支。
+
+  <img src="/img/git/4.png" alt="" /></li>
+<li>当在该testing支下修改文件并提交后，会新建一个commit对象，testing指向了该对象。而在我们切换回master分支时，master仍然指向上一个commit对象
+
+  <img src="/img/git/5.png" alt="" /></li>
+<li>当在master分支下修改文件并提交后：
+
+  <img src="/img/git/6.png" alt="" /></li>
+</ul>
+<h4 id="tips">
+  tips
+  <a class="anchor" href="#tips">#</a>
+</h4>
+<ul>
+<li>只有在本地修改或者产生了文件才会创建主分支master，这个时候才能创建新分支。</li>
+<li><code>git branch</code>查看所有的分支，<code>*</code>表示当前分支。</li>
+<li><code>git checkout -b testing</code>相当于<code>git branch testing 和 git checkout testing</code></li>
+<li>删除分支<code>git branch -d testing</code></li>
+<li>分支的合并：在当前分支下（如master），执行<code>git merge testing</code>，会创建新的commit对象，master也会指向他。该commit对象有两个父指针。</li>
+<li>分支的合并会用两个分支的末端以及他们的共同祖先进行一次的三方合并，当两个分支在同一个commit链上时，旧一点的那个分支发起合并，则将其直接指向了新一点的那个分支。</li>
+<li>有时候分支合并会失败，比如两个分支同时修改了相同的文件。这个时候<code>git merge testing</code>仍然做了合并，但是没有提交，可以使用<code>git status</code>查看，此时就需要手动合并了。</li>
+<li><code>git branch --merged</code>查看那些分支已被并入当前分支。<code>git branch --no-merged</code>查看尚未合并的分支。</li>
+<li>删除远程分支<code>git push [远程名] [分支名] --delete</code> 。</li>
+<li>分支的衍合（rebase），<code>git rebase master</code>。他的结果和直接使用merge一样。<strong>谨慎使用该方式</strong></li>
+</ul>
+<p><strong>参考链接：
+  <a href="http://git.oschina.net/progit/3-Git-%E5%88%86%E6%94%AF.html">Pro Git</a></strong>
+<strong>参考链接：
+  <a href="https://gitee.com/opensource-guide/git_tutorial/Git%20%E5%91%BD%E4%BB%A4%E8%AF%A6%E8%A7%A3/%E5%B8%B8%E7%94%A8%20Git%20%E5%91%BD%E4%BB%A4/#git-%E5%91%BD%E4%BB%A4%E6%89%8B%E5%86%8C">开源指北</a></strong></p></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备20006455号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

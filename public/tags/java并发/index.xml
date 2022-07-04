@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>java并发 on 小象的blog</title>
+    <link>/tags/java%E5%B9%B6%E5%8F%91/</link>
+    <description>Recent content in java并发 on 小象的blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Tue, 24 Nov 2020 15:57:57 +0000</lastBuildDate><atom:link href="/tags/java%E5%B9%B6%E5%8F%91/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>java内存模型</title>
+      <link>/posts/javase/java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/</link>
+      <pubDate>Tue, 24 Nov 2020 15:57:57 +0000</pubDate>
+      
+      <guid>/posts/javase/java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;原子性：保证指令不会受到线程上下文切换的影响&lt;/li&gt;
+&lt;li&gt;可见性：保证指令不会受到cpu缓存的影响
+&lt;ul&gt;
+&lt;li&gt;synchronized和volatile都可以保证可见性&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;有序性：保证指令不会受到cpu指令并行优化的影响&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;volatile&#34;&gt;
+  volatile
+  &lt;a class=&#34;anchor&#34; href=&#34;#volatile&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;它可以用来修饰成员变量和静态成员变量，避免线程从自己的工作缓存中查找变量的值，必须到主存中获取它的值，线程操作volatile变量都是直接操作主存。&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>join和park</title>
+      <link>/posts/javase/join%E5%92%8Cpark/</link>
+      <pubDate>Thu, 19 Nov 2020 15:48:31 +0000</pubDate>
+      
+      <guid>/posts/javase/join%E5%92%8Cpark/</guid>
+      <description>&lt;h3 id=&#34;join源码分析&#34;&gt;
+  join源码分析
+  &lt;a class=&#34;anchor&#34; href=&#34;#join%e6%ba%90%e7%a0%81%e5%88%86%e6%9e%90&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;join()是等待一个线程运行结束&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Thread&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;implements&lt;/span&gt; Runnable &lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;
+    &lt;span style=&#34;color:#75715e&#34;&gt;//底层是使用wait()实现
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;final&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;synchronized&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;join&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;long&lt;/span&gt; millis&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;throws&lt;/span&gt; InterruptedException &lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;long&lt;/span&gt; base &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; System&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;currentTimeMillis&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;();&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//开始时间
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;long&lt;/span&gt; now &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; 0&lt;span style=&#34;color:#f92672&#34;&gt;;&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//已经等待的时间
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;millis &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt; 0&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;
+            &lt;span style=&#34;color:#66d9ef&#34;&gt;throw&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; IllegalArgumentException&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;timeout value is negative&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;);&lt;/span&gt;
+        &lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
+
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;millis &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; 0&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//参数为0时会一直等待线程结束
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;while&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;isAlive&lt;span style=&#34;color:#f92672&#34;&gt;())&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;
+                wait&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;0&lt;span style=&#34;color:#f92672&#34;&gt;);&lt;/span&gt;
+            &lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
+        &lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;
+            &lt;span style=&#34;color:#66d9ef&#34;&gt;while&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;isAlive&lt;span style=&#34;color:#f92672&#34;&gt;())&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;
+                &lt;span style=&#34;color:#75715e&#34;&gt;//防止虚假唤醒，因为wait会被notify和notifyAll唤醒
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;                &lt;span style=&#34;color:#75715e&#34;&gt;//唤醒后需要等待的时间是millis减去已经等待的时间
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;                &lt;span style=&#34;color:#66d9ef&#34;&gt;long&lt;/span&gt; delay &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; millis &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; now&lt;span style=&#34;color:#f92672&#34;&gt;;&lt;/span&gt;
+                &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;delay &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;=&lt;/span&gt; 0&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;
+                    &lt;span style=&#34;color:#66d9ef&#34;&gt;break&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;;&lt;/span&gt;
+                &lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
+                wait&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;delay&lt;span style=&#34;color:#f92672&#34;&gt;);&lt;/span&gt;
+                now &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; System&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;currentTimeMillis&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; base&lt;span style=&#34;color:#f92672&#34;&gt;;&lt;/span&gt;
+            &lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
+        &lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
+    &lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
+    
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;final&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;join&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;throws&lt;/span&gt; InterruptedException &lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;
+        join&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;0&lt;span style=&#34;color:#f92672&#34;&gt;);&lt;/span&gt;
+    &lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;park&#34;&gt;
+  park
+  &lt;a class=&#34;anchor&#34; href=&#34;#park&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;LockSupport.park();//暂停当前线程&lt;/li&gt;
+&lt;li&gt;LockSupport.unpark(暂停线程对象);//恢复某个线程的运行&lt;/li&gt;
+&lt;li&gt;对应的线程状态还是wait状态&lt;/li&gt;
+&lt;li&gt;unpark可以在park之前执行，仍然可以恢复线程的执行&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>synchronized</title>
+      <link>/posts/javase/synchronized/</link>
+      <pubDate>Tue, 13 Oct 2020 18:10:25 +0000</pubDate>
+      
+      <guid>/posts/javase/synchronized/</guid>
+      <description>&lt;h3 id=&#34;轻量级锁&#34;&gt;
+  轻量级锁
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e8%bd%bb%e9%87%8f%e7%ba%a7%e9%94%81&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;使用场景：如果一个对象虽然有多线程访问，但多线程的访问时间是错开的（也就是没有竞争），那么可以使用轻量级锁来优化。&lt;/li&gt;
+&lt;li&gt;使用线程的栈中的锁记录充当锁。&lt;/li&gt;
+&lt;li&gt;轻量级锁对使用者是透明的，即语法仍然是synchronized。&lt;/li&gt;
+&lt;li&gt;轻量级锁在没有竞争时，每次重入仍需要执行CAS操作。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;锁膨胀&#34;&gt;
+  锁膨胀
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e9%94%81%e8%86%a8%e8%83%80&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;如果在尝试加轻量级锁的过程中，CAS操作无法成功，这时一种情况就是有其他线程为此对象加上了轻量级锁（有竞争），这时需要进行锁膨胀，将轻量级锁变为重量级锁。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;自旋优化&#34;&gt;
+  自旋优化
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e8%87%aa%e6%97%8b%e4%bc%98%e5%8c%96&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;重量级锁竞争的时候，还可以使用自旋来优化，如果当前线程自旋成功（即这时候持锁线程已经退出了同步块，释放了锁），这时当前线程就可以避免阻塞。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;偏向锁&#34;&gt;
+  偏向锁
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%81%8f%e5%90%91%e9%94%81&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;只有在第一次使用CAS将线程ID设置到对象头的Mark Word中，之后发现这个线程ID是自己的就表示没有竞争，不用重新CAS。以后只要不发生竞争，这个对象就归该线程所有。&lt;/li&gt;
+&lt;li&gt;调用对象的hashCode()会禁用该对象的偏向锁；当有其他线程使用偏向锁对象时，会将偏向锁升级为轻量级锁；调用wait/notify会转化为重量级锁。&lt;/li&gt;
+&lt;li&gt;批量重偏向：如果对象虽然被多个线程访问，但是没有竞争，这时候偏向了t1的线程的对象仍有机会重新偏向t2，重偏向会重置对象的ThreadID。当撤销偏向锁&lt;strong&gt;阈值超过20次&lt;/strong&gt;后，jvm会觉得：我是不是偏向错了呢，于是会在给这些对象加锁时重新偏向至加锁线程。&lt;/li&gt;
+&lt;li&gt;批量撤销：当撤销偏向锁阈值超过40次后，jvm会觉得：自己确实错了，根本就不应该偏向。于是整个类的所有对象都会变成不可偏向的，新建的对象也是不可偏向的，针对类的优化。&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>Monitor</title>
+      <link>/posts/javase/Monitor/</link>
+      <pubDate>Mon, 12 Oct 2020 19:18:56 +0000</pubDate>
+      
+      <guid>/posts/javase/Monitor/</guid>
+      <description>&lt;h3 id=&#34;java对象头&#34;&gt;
+  java对象头
+  &lt;a class=&#34;anchor&#34; href=&#34;#java%e5%af%b9%e8%b1%a1%e5%a4%b4&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;32位虚拟机下&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;普通对象&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;
+  &lt;img src=&#34;/img/Monitor/1.jpg&#34; alt=&#34;普通对象&#34; /&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;数组对象&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;
+  &lt;img src=&#34;/img/Monitor/2.jpg&#34; alt=&#34;数组对象&#34; /&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;mark word结构&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;
+  &lt;img src=&#34;/img/Monitor/3.jpg&#34; alt=&#34;mark word结构&#34; /&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;64位虚拟机下mark word结构&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;
+  &lt;img src=&#34;/img/Monitor/4.jpg&#34; alt=&#34;64位虚拟机下mark word结构&#34; /&gt;&lt;/p&gt;
+&lt;h3 id=&#34;monitor&#34;&gt;
+  Monitor
+  &lt;a class=&#34;anchor&#34; href=&#34;#monitor&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;每个java对象都可以关联一个monitor对象，monitor对象由操作系统提供。如果使用synchronized给对象上锁（重量级）后，该对象对象头的mark word中的数据就会清空（不包括标志位，但标志位会发生改变），然后指向一个monitor对象。&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>java线程的6种状态</title>
+      <link>/posts/javase/java%E7%BA%BF%E7%A8%8B%E7%9A%846%E7%A7%8D%E7%8A%B6%E6%80%81/</link>
+      <pubDate>Thu, 08 Oct 2020 21:28:45 +0000</pubDate>
+      
+      <guid>/posts/javase/java%E7%BA%BF%E7%A8%8B%E7%9A%846%E7%A7%8D%E7%8A%B6%E6%80%81/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;操作系统层面线程有5种状态&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;在 java中，Thread.State 将线程分为六种状态&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;enum&lt;/span&gt; State &lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;
+        &lt;span style=&#34;color:#75715e&#34;&gt;// 线程刚被创建，但是还没调用start方法
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;        NEW&lt;span style=&#34;color:#f92672&#34;&gt;,&lt;/span&gt;
+
+        &lt;span style=&#34;color:#75715e&#34;&gt;/**
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;         * 该状态的线程在jvm中是执行状态，但是在操作系统中可能是在等待其他的资源。
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;         * 此状态涵盖了操作系统中的 运行态、就绪态、阻塞态
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;         */&lt;/span&gt;
+        RUNNABLE&lt;span style=&#34;color:#f92672&#34;&gt;,&lt;/span&gt;
+
+        &lt;span style=&#34;color:#75715e&#34;&gt;/**
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;         * 此状态的线程会等待一个monitor lock。
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;         * A thread in the blocked state is waiting for a monitor lock 
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;         * to enter a synchronized block/method or
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;         * reenter a synchronized block/method after calling Object.wait
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;         */&lt;/span&gt;
+        BLOCKED&lt;span style=&#34;color:#f92672&#34;&gt;,&lt;/span&gt;
+
+        &lt;span style=&#34;color:#75715e&#34;&gt;/**
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;         * Thread state for a waiting thread.
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;         * 以下方法可使线程进入此状态：
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;         * 	 Object.wait with no timeout
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;         * 	 Thread.join with no timeout 
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;         * 	 LockSupport.park
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;         * 该状态的线程会等待其他线程通过特定的动作唤醒。
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;         */&lt;/span&gt;
+        WAITING&lt;span style=&#34;color:#f92672&#34;&gt;,&lt;/span&gt;
+
+        &lt;span style=&#34;color:#75715e&#34;&gt;/**
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;         * Thread state for a waiting thread with a specified(特定的) waiting time.
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;         * 以下方法可使线程进入此状态：
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;         * 	 Thread.sleep
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;         * 	 Object.wait with timeout
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;         * 	 Thread.join with timeout
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;         * 	 LockSupport.parkNanos
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;         * 	 LockSupport.parkUntil
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;         */&lt;/span&gt;
+        TIMED_WAITING&lt;span style=&#34;color:#f92672&#34;&gt;,&lt;/span&gt;
+
+        &lt;span style=&#34;color:#75715e&#34;&gt;// 线程已经完成了执行，终止了的状态。
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;        TERMINATED&lt;span style=&#34;color:#f92672&#34;&gt;;&lt;/span&gt;
+    &lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+    </item>
+    
+    <item>
+      <title>并发相关信息</title>
+      <link>/posts/javase/%E5%B9%B6%E5%8F%91%E7%9B%B8%E5%85%B3%E4%BF%A1%E6%81%AF/</link>
+      <pubDate>Thu, 08 Oct 2020 18:56:39 +0000</pubDate>
+      
+      <guid>/posts/javase/%E5%B9%B6%E5%8F%91%E7%9B%B8%E5%85%B3%E4%BF%A1%E6%81%AF/</guid>
+      <description>&lt;h3 id=&#34;thread方法&#34;&gt;
+  Thread方法
+  &lt;a class=&#34;anchor&#34; href=&#34;#thread%e6%96%b9%e6%b3%95&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;sleep：让当前线程休眠n毫秒，休眠时让出cpu的时间片给其他线程。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;join：等待某个线程运行结束。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;yield：提示线程调度器让出当前线程对 CPU的使用。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;interrupt()：打断线程，可能会产生打断标记（看下面的介绍）。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;可以使用isInterrupted()判断线程是否被打断。&lt;/li&gt;
+&lt;li&gt;如果线程正在sleep、wait、join会导致被打断的线程抛出InterruptedException，并清除打断标记。&lt;/li&gt;
+&lt;li&gt;如果打断正在运行的线程，则会设置打断标记。&lt;/li&gt;
+&lt;li&gt;interrupted()方法能返回打断标记的状态，并将打断标记设置为假。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;同步&#34;&gt;
+  同步
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%90%8c%e6%ad%a5&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;同步：需要等待结果返回，才能继续运行就是同步。&lt;/li&gt;
+&lt;li&gt;异步：不需要等待结果返回，就能继续运行就是异步。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;常见线程安全类&#34;&gt;
+  常见线程安全类
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%b8%b8%e8%a7%81%e7%ba%bf%e7%a8%8b%e5%ae%89%e5%85%a8%e7%b1%bb&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;String  Integer  StringBuffer  Random  Vector  Hashtable  java.util.concurrent&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>wait和notify</title>
+      <link>/posts/javase/wait%E5%92%8Cnotify/</link>
+      <pubDate>Tue, 06 Oct 2020 19:40:01 +0000</pubDate>
+      
+      <guid>/posts/javase/wait%E5%92%8Cnotify/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;在调用wait方法时，线程必须要持有被调用对象的锁，当调用wait方法之后，线程就会释放掉该对象的锁。&lt;/li&gt;
+&lt;li&gt;在调用Thread类的sleep方法时，线程是&lt;strong&gt;不会释放掉对象的锁&lt;/strong&gt;的。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li&gt;当调用wait方法时，首先要确保调用了wait方法的线程已经持有了对象的锁。&lt;/li&gt;
+&lt;li&gt;当调用了wait后，该线程就会释放掉这个对象的锁，然后进入等待状态，该线程进入对象的等待集合中（wait set）。&lt;/li&gt;
+&lt;li&gt;当线程调用了wait后进入到等待状态时，它就等待其他线程调用相同对象的notify和notifyAll方法来使得自己被唤醒。&lt;/li&gt;
+&lt;li&gt;调用wait方法的代码片段需要放在一个synchronized块或者被synchronized修饰的方法中。&lt;/li&gt;
+&lt;li&gt;当调用了对象的notify方法时，它会随机唤醒该对象等待集合中（wait set）的任意一个线程，当某个线程被唤醒后，它就会与其他线程一同竞争对象的锁。&lt;/li&gt;
+&lt;li&gt;当调用对象的notifyAll方法时，它会唤醒该对象等待集合中（wait set）中所有的线程，这些线程被唤醒后，又会开始竞争对象的锁。&lt;/li&gt;
+&lt;li&gt;某一时刻，只有唯一的一个线程拥有对象的锁。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;具体案例&#34;&gt;
+  具体案例
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%85%b7%e4%bd%93%e6%a1%88%e4%be%8b&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;Demon对象有一个int类型的属性counter，该值初始为0；
+创建四个线程，两个线程对该值增1，两个线程对该值减1；
+输出counter每次变化后的结果，要求输出结果为1010101010&amp;hellip;。&lt;/p&gt;
+&lt;h5 id=&#34;包含counter的demon类&#34;&gt;
+  包含counter的Demon类
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%8c%85%e5%90%abcounter%e7%9a%84demon%e7%b1%bb&#34;&gt;#&lt;/a&gt;
+&lt;/h5&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//该对象提供加1和减1的操作
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Demon&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;
+    &lt;span style=&#34;color:#75715e&#34;&gt;//counter
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; counter&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;0&lt;span style=&#34;color:#f92672&#34;&gt;;&lt;/span&gt;
+	&lt;span style=&#34;color:#75715e&#34;&gt;//对方法加锁，当一个线程要调用该方法时，需要先获取该对象的锁
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;synchronized&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;inc&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(){&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//counter加1
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;//此处必须使用while而不是if，防止被其他不相关的线程唤醒
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;while&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;counter&lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt;0&lt;span style=&#34;color:#f92672&#34;&gt;){&lt;/span&gt;
+            &lt;span style=&#34;color:#66d9ef&#34;&gt;try&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;
+                wait&lt;span style=&#34;color:#f92672&#34;&gt;();&lt;/span&gt;
+            &lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;catch&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;InterruptedException e&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;
+                e&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;printStackTrace&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;();&lt;/span&gt;
+            &lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
+        &lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
+        counter&lt;span style=&#34;color:#f92672&#34;&gt;++;&lt;/span&gt;
+        System&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;out&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;print&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;counter&lt;span style=&#34;color:#f92672&#34;&gt;);&lt;/span&gt;
+        &lt;span style=&#34;color:#75715e&#34;&gt;/*此处必须使用notifyAll，notify会从等待队列中
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;        随机选择一个线程唤醒，可能会导致程序一直阻塞*/&lt;/span&gt;
+        notifyAll&lt;span style=&#34;color:#f92672&#34;&gt;();&lt;/span&gt;
+    &lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
+	&lt;span style=&#34;color:#75715e&#34;&gt;//counter减1
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;synchronized&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dec&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(){&lt;/span&gt;
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;while&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;counter&lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt;1&lt;span style=&#34;color:#f92672&#34;&gt;){&lt;/span&gt;
+            &lt;span style=&#34;color:#66d9ef&#34;&gt;try&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;
+                wait&lt;span style=&#34;color:#f92672&#34;&gt;();&lt;/span&gt;
+            &lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;catch&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;InterruptedException e&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;
+                e&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;printStackTrace&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;();&lt;/span&gt;
+            &lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
+        &lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
+        counter&lt;span style=&#34;color:#f92672&#34;&gt;--;&lt;/span&gt;
+        System&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;out&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;print&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;counter&lt;span style=&#34;color:#f92672&#34;&gt;);&lt;/span&gt;
+        notifyAll&lt;span style=&#34;color:#f92672&#34;&gt;();&lt;/span&gt;
+    &lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;关键代码如上，剩余的代码也都比较简单，就省略了。如果你需要所有代码，可以通过&lt;code&gt;ctrl+u&lt;/code&gt;查看网页源代码，并使用&lt;code&gt;ctrl+f&lt;/code&gt;快捷键搜索&amp;quot;黑魔仙变身&amp;quot;即可找到完整代码。手机需要使用能查看网页源代码的浏览器，如via等。&lt;/strong&gt;&lt;/p&gt;
+&lt;!--
+//黑魔仙变身
+//该对象提供加1和减1的操作
+class Demon{
+    //counter
+    private int counter=0;
+	//对方法加锁，当一个线程要调用该方法时，需要先获取该对象的锁
+    public synchronized void inc(){//counter加1
+        //此处必须使用while而不是if，防止被其他不相关的线程唤醒
+        while(counter!=0){
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        counter++;
+        System.out.print(counter);
+        /*此处必须使用notifyAll，notify会从等待队列中
+        随机选择一个线程唤醒，可能会导致程序一直阻塞*/
+        notifyAll();
+    }
+	//counter减1
+    public synchronized void dec(){
+        while(counter!=1){
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        counter--;
+        System.out.print(counter);
+        notifyAll();
+    }
+}
+//执行counter++
+class IncThread implements Runnable{
+    private Demon demon;
+    public IncThread(Demon demon){
+        this.demon=demon;
+    }
+    //实现Runnable的run方法
+    public void run() {
+        for(int i=0;i&lt;30;i++) {
+            demon.inc();
+        }
+    }
+}
+//执行counter--
+class DecThread implements Runnable{
+    private Demon demon;
+    public DecThread(Demon demon){
+        this.demon=demon;
+    }
+    public void run() {
+        for(int i=0;i&lt;30;i++) {
+            demon.dec();
+        }
+    }
+}
+//测试类
+public class test {
+    public static void main(String[] args) throws InterruptedException {
+        Demon demon=new Demon();
+        Thread t1=new Thread(new IncThread(demon));
+        Thread t2=new Thread(new IncThread(demon));
+        Thread t3=new Thread(new DecThread(demon));
+        Thread t4=new Thread(new DecThread(demon));
+        t1.start();
+        t2.start();
+        t3.start();
+        t4.start();
+    }
+}
+--&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

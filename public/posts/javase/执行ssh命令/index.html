@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>执行ssh命令 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.d1618bcc7dc3b2f814dad501e6e03731b06bd4540bd19265a8737f6e23228b96.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <span class="flex align-center"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </span>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/tags/">
+        分类
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/life/">
+        小记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql/">
+        mysql
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/%E5%85%B6%E4%BB%96/english/">
+        生僻单词
+      </a>
+  </li>
+  
+  <li>
+    <a href="http://tools.xiaoxiang.space">
+        工具
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents"></nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>执行ssh命令</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/tags/">
+        分类
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/life/">
+        小记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql/">
+        mysql
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/%E5%85%B6%E4%BB%96/english/">
+        生僻单词
+      </a>
+  </li>
+  
+  <li>
+    <a href="http://tools.xiaoxiang.space">
+        工具
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents"></nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/javase/%E6%89%A7%E8%A1%8Cssh%E5%91%BD%E4%BB%A4/">执行ssh命令</a>
+  </h1>
+  
+  <h5>April 19, 2021</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/javase/">javase</a>
+  </div>
+  
+
+
+
+<ul>
+<li>如何使用ssh连接linux执行shell命令？</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">package</span> space.xiaoxiang<span style="color:#f92672">;</span>
+
+<span style="color:#f92672">import</span> com.jcraft.jsch.ChannelExec<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> com.jcraft.jsch.JSch<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> com.jcraft.jsch.JSchException<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> com.jcraft.jsch.Session<span style="color:#f92672">;</span>
+
+<span style="color:#f92672">import</span> java.io.BufferedReader<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> java.io.IOException<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> java.io.InputStream<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> java.io.InputStreamReader<span style="color:#f92672">;</span>
+
+<span style="color:#75715e">/**
+</span><span style="color:#75715e"> * 通过ssh连接到linux主机，并执行一些shell命令，需要导入JSch这个包
+</span><span style="color:#75715e"> */</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">App</span> <span style="color:#f92672">{</span>
+
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> String host <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;localhost&#34;</span><span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">int</span> port <span style="color:#f92672">=</span> 22<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> String username <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;xiaoxiang&#34;</span><span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> String password <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;asdf&#34;</span><span style="color:#f92672">;</span>
+
+    <span style="color:#75715e">//连接到linux主机
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">public</span> Session <span style="color:#a6e22e">connect</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">throws</span>  JSchException <span style="color:#f92672">{</span>
+        JSch jsch <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> JSch<span style="color:#f92672">();</span>
+        Session session <span style="color:#f92672">=</span> jsch<span style="color:#f92672">.</span><span style="color:#a6e22e">getSession</span><span style="color:#f92672">(</span>username<span style="color:#f92672">,</span> host<span style="color:#f92672">,</span> port<span style="color:#f92672">);</span>
+        session<span style="color:#f92672">.</span><span style="color:#a6e22e">setPassword</span><span style="color:#f92672">(</span>password<span style="color:#f92672">);</span>
+        session<span style="color:#f92672">.</span><span style="color:#a6e22e">setConfig</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;StrictHostKeyChecking&#34;</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;no&#34;</span><span style="color:#f92672">);</span>
+        <span style="color:#75715e">//开启会话
+</span><span style="color:#75715e"></span>        session<span style="color:#f92672">.</span><span style="color:#a6e22e">connect</span><span style="color:#f92672">();</span>
+        <span style="color:#66d9ef">return</span> session<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#75715e">//执行shell命令
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">execCommand</span><span style="color:#f92672">(</span>Session session<span style="color:#f92672">,</span> String command<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> JSchException<span style="color:#f92672">,</span> IOException <span style="color:#f92672">{</span>
+        ChannelExec channelExec <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>ChannelExec<span style="color:#f92672">)</span> session<span style="color:#f92672">.</span><span style="color:#a6e22e">openChannel</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;exec&#34;</span><span style="color:#f92672">);</span>
+        InputStream in <span style="color:#f92672">=</span> channelExec<span style="color:#f92672">.</span><span style="color:#a6e22e">getInputStream</span><span style="color:#f92672">();</span>
+        channelExec<span style="color:#f92672">.</span><span style="color:#a6e22e">setCommand</span><span style="color:#f92672">(</span>command<span style="color:#f92672">);</span>
+        BufferedReader reader <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> BufferedReader<span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> InputStreamReader<span style="color:#f92672">(</span>channelExec<span style="color:#f92672">.</span><span style="color:#a6e22e">getInputStream</span><span style="color:#f92672">()));</span>
+        channelExec<span style="color:#f92672">.</span><span style="color:#a6e22e">connect</span><span style="color:#f92672">();</span>
+        String line<span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">while</span><span style="color:#f92672">((</span>line <span style="color:#f92672">=</span> reader<span style="color:#f92672">.</span><span style="color:#a6e22e">readLine</span><span style="color:#f92672">())</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">){</span>
+            System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>line<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+        channelExec<span style="color:#f92672">.</span><span style="color:#a6e22e">disconnect</span><span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span><span style="color:#f92672">(</span>String<span style="color:#f92672">[]</span> args<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> IOException<span style="color:#f92672">,</span> JSchException <span style="color:#f92672">{</span>
+        App app <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> App<span style="color:#f92672">();</span>
+        Session session <span style="color:#f92672">=</span> app<span style="color:#f92672">.</span><span style="color:#a6e22e">connect</span><span style="color:#f92672">();</span>
+        app<span style="color:#f92672">.</span><span style="color:#a6e22e">execCommand</span><span style="color:#f92672">(</span>session<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;ls -l&#34;</span><span style="color:#f92672">);</span>
+        System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;----------&#34;</span><span style="color:#f92672">);</span>
+        app<span style="color:#f92672">.</span><span style="color:#a6e22e">execCommand</span><span style="color:#f92672">(</span>session<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;df -h&#34;</span><span style="color:#f92672">);</span>
+        session<span style="color:#f92672">.</span><span style="color:#a6e22e">disconnect</span><span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+
+</code></pre></div></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备20006455号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

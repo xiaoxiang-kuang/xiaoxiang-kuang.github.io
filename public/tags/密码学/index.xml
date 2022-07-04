@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>密码学 on 小象的blog</title>
+    <link>/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/</link>
+    <description>Recent content in 密码学 on 小象的blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Wed, 25 Aug 2021 12:00:39 +0000</lastBuildDate><atom:link href="/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>对称密钥</title>
+      <link>/posts/%E5%AF%86%E7%A0%81%E5%AD%A6/%E5%AF%B9%E7%A7%B0%E5%AF%86%E9%92%A5/</link>
+      <pubDate>Wed, 25 Aug 2021 12:00:39 +0000</pubDate>
+      
+      <guid>/posts/%E5%AF%86%E7%A0%81%E5%AD%A6/%E5%AF%B9%E7%A7%B0%E5%AF%86%E9%92%A5/</guid>
+      <description>&lt;p&gt;用相同的密钥进行加密和解密&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;异或（XOR）（exclusive or）⊕&lt;/li&gt;
+&lt;li&gt;如果将01001100记为A，10101010记为B，A于B的xor运算结果为（不进位）11100110。将结果在xorB，又得到了A。只选择一个合适的B，仅仅使用XOR就能得到一个高强度的密文。&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>密码学起步</title>
+      <link>/posts/%E5%AF%86%E7%A0%81%E5%AD%A6/%E5%AF%86%E7%A0%81%E5%AD%A6%E8%B5%B7%E6%AD%A5/</link>
+      <pubDate>Wed, 25 Aug 2021 10:58:28 +0000</pubDate>
+      
+      <guid>/posts/%E5%AF%86%E7%A0%81%E5%AD%A6/%E5%AF%86%E7%A0%81%E5%AD%A6%E8%B5%B7%E6%AD%A5/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;信息安全面临的威胁：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;机密性：秘密被泄露&lt;/li&gt;
+&lt;li&gt;完整性：信息被篡改&lt;/li&gt;
+&lt;li&gt;认证：伪装成发送者&lt;/li&gt;
+&lt;li&gt;不可否认性：事后否认自己没做&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;密码的常识：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;不要使用保密的密码算法&lt;/li&gt;
+&lt;li&gt;使用低强度的密码比不进行任何加密更危险&lt;/li&gt;
+&lt;li&gt;任何密码总有一天都会被破解&lt;/li&gt;
+&lt;li&gt;密码只是信息安全的一部分&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;报文的最初形式称为&lt;strong&gt;明文&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;使用&lt;strong&gt;加密算法&lt;/strong&gt;加密明文，生成的加密报文称为&lt;strong&gt;密文&lt;/strong&gt;，加密算法往往是已知的。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;密钥&lt;/strong&gt;K&lt;sub&gt;A&lt;/sub&gt;是一串数字或者字符，加密算法以密钥和明文报文m为输入，生成的密文为输出。用K&lt;sub&gt;A&lt;/sub&gt;(m)表示。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;解密算法使用密钥K&lt;sub&gt;B&lt;/sub&gt;和密文作为输入，通过计算K&lt;sub&gt;B&lt;/sub&gt;(K&lt;sub&gt;A&lt;/sub&gt;(m))得到m。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;对称密码&lt;/strong&gt;（symmetric cryptography）是指在加密和解密时使用同一密钥的方式。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;公钥密码&lt;/strong&gt;（pulbic-key cryptography）是指在加密和解密时使用不同密钥的方式。又称为非对称密码（asymmetric cryptography）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;混合密码系统（hybrid cryptosystem）是将对称密钥和公钥密码结合起来的密码方式。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;单向散列函数&lt;/strong&gt;（one-way hash function）是一种保证完整性的密码技术。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;消息认证码&lt;/strong&gt;（message authentication code）是一种能够保证消息完整性和提供认证的密码技术。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;数字签名&lt;/strong&gt;（digital signature）是一种能确保完整性、提供认证并防止否认的密码技术。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;伪随机数生成器&lt;/strong&gt;（Pseudo Random Number Generator，PRNG）是一种能够模拟产生随机数列的算法，随机数承担着密钥生成的重要职责，在web中进行SSL/TLS通信时，会生成一个仅用于当前通信的临时密钥，这个密钥是基于伪随机数器生成的。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;凯撒密码&#34;&gt;
+  凯撒密码
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%87%af%e6%92%92%e5%af%86%e7%a0%81&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;将明文报文中的每个字母用字母表中该字母后第k个字母进行替换，允许回绕。&lt;/li&gt;
+&lt;li&gt;密钥空间（keyspace）是指能够使用的“所有密钥的集合”，所有可以使用的密钥的总数越大，密钥空间越大，凯撒密码的密钥空间的大小是25。&lt;/li&gt;
+&lt;li&gt;很容易进行暴力破解。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;简单替换密码&#34;&gt;
+  简单替换密码
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e7%ae%80%e5%8d%95%e6%9b%bf%e6%8d%a2%e5%af%86%e7%a0%81&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;将字母表中的26个字母，分别将这26个字母本身建立一对一对应关系（替换表）。加密过程是依次将明文中的每一个字母按照替换表替换成另一个字母。&lt;/li&gt;
+&lt;li&gt;很难通过暴力破解，因为它的密钥总数是26x25x24&amp;hellip;x2x1。&lt;/li&gt;
+&lt;li&gt;通过频率分析，就能破解。其利用明文中的字母出现的频率和密文中的字母出现的频率一致的特性。&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

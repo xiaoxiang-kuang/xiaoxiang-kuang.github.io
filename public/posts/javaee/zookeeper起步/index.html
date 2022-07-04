@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>zookeeper起步 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.d1618bcc7dc3b2f814dad501e6e03731b06bd4540bd19265a8737f6e23228b96.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <span class="flex align-center"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </span>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/tags/">
+        分类
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/life/">
+        小记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql/">
+        mysql
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/%E5%85%B6%E4%BB%96/english/">
+        生僻单词
+      </a>
+  </li>
+  
+  <li>
+    <a href="http://tools.xiaoxiang.space">
+        工具
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#znode">Znode</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>zookeeper起步</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/tags/">
+        分类
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/life/">
+        小记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql/">
+        mysql
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/%E5%85%B6%E4%BB%96/english/">
+        生僻单词
+      </a>
+  </li>
+  
+  <li>
+    <a href="http://tools.xiaoxiang.space">
+        工具
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#znode">Znode</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/javaee/zookeeper%E8%B5%B7%E6%AD%A5/">zookeeper起步</a>
+  </h1>
+  
+  <h5>March 27, 2021</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/javaee/">javaee</a>
+  </div>
+  
+
+
+
+<ul>
+<li>
+<p><code>zkCli.sh -server localhost:2181</code>：连接到zookeeper</p>
+</li>
+<li>
+<p>复制模式下的配置小结（以3台linux举例）</p>
+<ol>
+<li>为每一台linux安装上zookeeper</li>
+<li>修改他们的配置文件zoo.cfg（3份可以一样）</li>
+<li>在dataDir路径下创建myid文件，里面写一个数字，与server.x的x对应</li>
+<li>每一台都启动zookeeper</li>
+</ol>
+</li>
+</ul>
+<pre><code class="language-properties" data-lang="properties">#zookeeper使用的基本时间单位
+tickTime=2000
+#存储内存数据库快照的位置
+dataDir=/var/lib/zookeeper
+#对client端提供服务
+clientPort=2181
+#超时
+initLimit=5
+#限制服务器与领导者之间过时的距离
+syncLimit=2
+#server.X格式列出了组成zookeeper服务的服务器。服务器启动时，它通过在数据目录中查找文件myid*来知道它是哪台服务器。
+#2888集群内机器通信使用，3888选举leader使用
+server.1=zoo1:2888:3888
+server.2=zoo2:2888:3888
+server.3=zoo3:2888:3888
+</code></pre><ul>
+<li><code>zkServer.sh start</code>：启动zookeeper</li>
+<li><code>zkServer.sh status</code>：查看当前状态</li>
+<li><code>zkCli.sh -server 127.0.0.1:2181</code>：连接到zookeeper
+<ul>
+<li><code>ls /</code></li>
+<li><code>create /zk_test my_data</code>：创建一个新的znode，并将字符串my_data与该节点关联</li>
+<li><code>get /zk_test</code>：验证数据是否与znode关联</li>
+<li><code>set /zk_test junk</code>：来更改与zk_test相关的数据</li>
+<li><code>delete /zk_test</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="znode">
+  Znode
+  <a class="anchor" href="#znode">#</a>
+</h2>
+<ul>
+<li>组成
+<ul>
+<li>data：Znode存储的数据信息</li>
+<li>stat：包含Znode的各种元数据，如事务ID、版本号、时间戳、大小等</li>
+<li>child：当前节点的子节点引用</li>
+<li>acl：<code>access control list</code>访问控制表，表示哪些人或哪些ip可以访问本节点</li>
+</ul>
+</li>
+<li>Znode是用来存储少量的状态和配置信息，每个节点的数据最大不能超过1MB</li>
+</ul></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备20006455号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

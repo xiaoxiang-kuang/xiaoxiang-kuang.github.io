@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>spring on 小象的blog</title>
+    <link>/tags/spring/</link>
+    <description>Recent content in spring on 小象的blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Sat, 16 Oct 2021 15:27:12 +0000</lastBuildDate><atom:link href="/tags/spring/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>spring注解</title>
+      <link>/posts/javaee/spring/spring%E6%B3%A8%E8%A7%A3/</link>
+      <pubDate>Sat, 16 Oct 2021 15:27:12 +0000</pubDate>
+      
+      <guid>/posts/javaee/spring/spring%E6%B3%A8%E8%A7%A3/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;@Autowired默认按照Bean的类型进行装配，如果要按照名称来装配，则需要和@Qualifier注解一起使用。&lt;/li&gt;
+&lt;li&gt;@Qualifier与@Autowired注解配合使用，Bean的实例的名称由@Qualifier注解的参数指定。&lt;/li&gt;
+&lt;li&gt;@Resource和@Autowired的功能一样，区别在于该注解默认按照名称来装配注入的，只有当找不到与名称匹配的Bean时才会按照类型来装配注入。&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>springaop</title>
+      <link>/posts/javaee/spring/springaop/</link>
+      <pubDate>Tue, 12 Oct 2021 14:52:08 +0000</pubDate>
+      
+      <guid>/posts/javaee/spring/springaop/</guid>
+      <description>&lt;h3 id=&#34;通知类型&#34;&gt;
+  通知类型
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e9%80%9a%e7%9f%a5%e7%b1%bb%e5%9e%8b&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;环绕通知@Around：在目标方法执行前和执行后实施增强；&lt;/li&gt;
+&lt;li&gt;前置通知@Before：在目标方法执行前实施增强；&lt;/li&gt;
+&lt;li&gt;后置返回通知@AfterReturning：在目标方法执行&lt;strong&gt;成功&lt;/strong&gt;后实施增强；&lt;/li&gt;
+&lt;li&gt;后置通知@After：在目标方法执行后实施增强，不论是否发生异常都执行该类通知；&lt;/li&gt;
+&lt;li&gt;异常通知@AfterThrowing：方法抛出异常后实施增强；&lt;/li&gt;
+&lt;li&gt;引入通知：在目标类中添加一些新的方法和属性，用于修改目标类。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;
+  &lt;img src=&#34;/img/javaee/springaop/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>springboot配置</title>
+      <link>/posts/javaee/spring/springboot%E9%85%8D%E7%BD%AE/</link>
+      <pubDate>Wed, 01 Sep 2021 15:21:57 +0000</pubDate>
+      
+      <guid>/posts/javaee/spring/springboot%E9%85%8D%E7%BD%AE/</guid>
+      <description>&lt;h2 id=&#34;springboot配置&#34;&gt;
+  springboot配置
+  &lt;a class=&#34;anchor&#34; href=&#34;#springboot%e9%85%8d%e7%bd%ae&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;配置加载顺序&#34;&gt;
+  配置加载顺序
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e9%85%8d%e7%bd%ae%e5%8a%a0%e8%bd%bd%e9%a1%ba%e5%ba%8f&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;优先级从高到低&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;命令行传入的参数。&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;SPRING_APPLICATION_JSON中的属性，是以JSON格式配置在系统环境变量中的内容。&lt;/li&gt;
+&lt;li&gt;java:comp/env中的JNDI属性。&lt;/li&gt;
+&lt;li&gt;java的系统属性，可以通过System.getProperties()获得的内容。&lt;/li&gt;
+&lt;li&gt;操作系统的环境变量。&lt;/li&gt;
+&lt;li&gt;通过random.*配置的随机属性。&lt;/li&gt;
+&lt;li&gt;**位于当前jar包之外，针对于特定的环境的而指定的配置文件。**如application-prod.yml。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;位于当前jar包内，针对于特定环境的而指定配置文件。&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;位于当前jar包外的application.properties和yml文件。&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;位于当前jar包内的application.properties和yml文件。&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;在@Configuration注解修饰的类中，通过@PropertySource注解定义的属性。&lt;/li&gt;
+&lt;li&gt;应用默认属性，使用SpringAppication.setDefaultProperties定义的内容。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;注入到类&#34;&gt;
+  注入到类
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%b3%a8%e5%85%a5%e5%88%b0%e7%b1%bb&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;resources/properties/person.properties&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;language-properties&#34; data-lang=&#34;properties&#34;&gt;person.name=xiaoxiang
+person.age=21
+person.sex=1
+person.weight=67
+person.height=177
+&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;java/space/xiaoxiang/properties/Person&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;@Component&lt;/span&gt;
+&lt;span style=&#34;color:#a6e22e&#34;&gt;@PropertySource&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;value &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;classpath:properties/person.properties&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;,&lt;/span&gt;ignoreResourceNotFound &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;false&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color:#a6e22e&#34;&gt;@ConfigurationProperties&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;prefix &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;person&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color:#a6e22e&#34;&gt;@Data&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;//必须要有setter方法，否则无法注入
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Person&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;private&lt;/span&gt; String name&lt;span style=&#34;color:#f92672&#34;&gt;;&lt;/span&gt;
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; age&lt;span style=&#34;color:#f92672&#34;&gt;;&lt;/span&gt;
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; sex&lt;span style=&#34;color:#f92672&#34;&gt;;&lt;/span&gt;
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;double&lt;/span&gt; weight&lt;span style=&#34;color:#f92672&#34;&gt;;&lt;/span&gt;
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;double&lt;/span&gt; height&lt;span style=&#34;color:#f92672&#34;&gt;;&lt;/span&gt;
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;private&lt;/span&gt; String description&lt;span style=&#34;color:#f92672&#34;&gt;;&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;controller中注入&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;@Autowired&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;private&lt;/span&gt; Person person&lt;span style=&#34;color:#f92672&#34;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;注入某个字段&#34;&gt;
+  注入某个字段
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%b3%a8%e5%85%a5%e6%9f%90%e4%b8%aa%e5%ad%97%e6%ae%b5&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;application.yml&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;sbl&lt;/span&gt;:
+  &lt;span style=&#34;color:#f92672&#34;&gt;hostname&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;xiaoxiang.space&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;controller&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;@RestController&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;IndexController&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;
+
+    &lt;span style=&#34;color:#75715e&#34;&gt;//注入
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#a6e22e&#34;&gt;@Value&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;${sbl.hostname}&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;private&lt;/span&gt; String sblHostname&lt;span style=&#34;color:#f92672&#34;&gt;;&lt;/span&gt;
+	
+    &lt;span style=&#34;color:#75715e&#34;&gt;//...
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;参数引用&#34;&gt;
+  参数引用
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%8f%82%e6%95%b0%e5%bc%95%e7%94%a8&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;在application.yml中的各个参数之间，可以通过placeholder的方式进行引用。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;sbl&lt;/span&gt;:
+  &lt;span style=&#34;color:#f92672&#34;&gt;hostname&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;${hostname}&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;hostname&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;xiaoxiang.space&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;使用随机数&#34;&gt;
+  使用随机数
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e4%bd%bf%e7%94%a8%e9%9a%8f%e6%9c%ba%e6%95%b0&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#随机字符串&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;value1&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;${random.value}&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;#随机int&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;value2&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;${random.int}&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;#随机long&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;value3&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;${random.long}&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;#10以内的随机数&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;value4&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;${random.int(10)}&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;#10-20的随机数&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;value5&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;${random.int[10,20]}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;参考链接：&lt;/strong&gt;
+  &lt;a href=&#34;https://blog.didispace.com/spring-boot-learning-21-1-3/&#34;&gt;Spring Boot 2.x基础教程：配置文件详解 | 程序猿DD&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
