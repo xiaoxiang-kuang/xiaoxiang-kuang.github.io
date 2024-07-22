@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>linux开机 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#流程如下">流程如下</a></li>
+            <li><a href="#biosuefimbrgptbootloader">BIOS（UEFI）、MBR（GPT）、bootloader</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>linux开机</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#流程如下">流程如下</a></li>
+            <li><a href="#biosuefimbrgptbootloader">BIOS（UEFI）、MBR（GPT）、bootloader</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/linux/linux%E5%BC%80%E6%9C%BA/">linux开机</a>
+  </h1>
+  
+  <h5>2021-09-24</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/linux/">linux</a>
+  </div>
+  
+
+
+
+<h3 id="流程如下">
+  流程如下
+  <a class="anchor" href="#%e6%b5%81%e7%a8%8b%e5%a6%82%e4%b8%8b">#</a>
+</h3>
+<ol>
+<li>加载BIOS的硬件信息、进行自我测试，根据设定取得第一个可开机的装置；</li>
+<li>读取并执行第一个开机装置内的MBR的bootloader（如grub2）；</li>
+<li>依据bootloader的设定载入kernel，kernel会开始侦测硬件和载入驱动程序；</li>
+<li>在硬件驱动成功后，kernel会主动呼叫systemd程序，并以default.target流程开机；
+<ol>
+<li>systemd执行sysinit.target初始化系统及basic.target准备操作系统；</li>
+<li>systemd启动multi-user.target下的服务；</li>
+<li>systemd执行multi-user.target下的/etc/rc.d/rc.local文件；</li>
+<li>systemd执行multi-user.target下的getty.target及登入服务；</li>
+<li>systed执行graphical需要的服务。</li>
+</ol>
+</li>
+</ol>
+<h3 id="biosuefimbrgptbootloader">
+  BIOS（UEFI）、MBR（GPT）、bootloader
+  <a class="anchor" href="#biosuefimbrgptbootloader">#</a>
+</h3>
+<ul>
+<li>BIOS（固件）是开机的时候，计算机系统会主动执行的第一个程序。通过BIOS去加载CMOS的信息，通过CMOS内的设置取得主机的各项硬件设置。例：CPU与周边设备的沟通时钟、开机设备的搜寻顺序、硬盘的大小和类型等，取得这些信息后，BIOS还会进行开机自测试（Power-on Self Test），然后开始执行硬件侦测的初始化，并设定PnP设备。之后再定义出可开机设备顺序，接下来就会开始进行开机设备的读取了。BIOS通过硬件的INT13中断功能来读取MBR，只要BIOS能检测到硬盘，就能通过INT13来读取磁盘的第一个磁区内的MBR软件。</li>
+<li>UEFI（Unified Extension Firmware Interface）是取代BIOS的。</li>
+<li>整颗磁盘的第一个扇区特别重要，它记录了整颗磁盘的重要信息，早期磁盘的第一个扇区的包含重要的分区格式MBR（master boot record），后来多了一个新的磁盘分区格式，称为GPT（guid partition table）。</li>
+<li>MBR可以安装开机管理程序，其和分区表通常放在磁盘的第一个扇区，这个扇区通常是512字节。开机管理程序占446字节，分区表占64字节。分区表最多只能有四组记录。</li>
+<li>GPT将磁盘的所有区块以LBA（logical block address，预设为512字节）来规划，GPT使用34个LBA区块来记录分区信息，整个磁盘的最后33个LBA拿来作为备份。</li>
+<li>boot loader的功能：①提供菜单；②装入核心文件；③转交其他loader。每个文件系统都会保留一块开机扇区提供操作系统安装bootloader，通常操作系统会安装一份boot loader到他自己的文件系统中。</li>
+</ul>
+<p>
+  <img src="/img/linux/linux%e5%9f%ba%e7%a1%80%e8%ae%be%e5%ae%9a/1.png" alt="" /></p>
+<ul>
+<li>
+<p>当boot loader开始读取内核文件后，linux会将核心解压到内存中，并使用核心的功能，开始测试cpu、网卡、声卡等装置，此时linux核心会以自己的功能重新侦测一次硬件。一般来说，核心文件被放在/boot中，并取名为/boot/vmlinuz。linux核心可以动态加载模块，这些核心模块放在/lib/modules目录中，开机过程中根目录采用只读方式挂载。虚拟文件系统（Initial RAM Filesystem）一般使用的文件名为/boot/initrd或/boot/initramfs。</p>
+</li>
+<li>
+<p>linux预设情况下会提供6个终端让使用者登陆，切换方式为[ctrl]+[alt]+[f1]~[f6]，6个终端命名为tty1～tty6。在centos7中，开机后系统只会提供一个tty，其他的是不存在的，当要切换时，系统才产生额外的tty2，tty3&hellip;。</p>
+</li>
+</ul></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

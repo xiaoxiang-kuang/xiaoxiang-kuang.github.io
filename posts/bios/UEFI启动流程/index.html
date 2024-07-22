@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>UEFI启动流程 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#bios在计算机系统中的作用">BIOS在计算机系统中的作用</a></li>
+        <li><a href="#uefi系统组成">UEFI系统组成</a></li>
+        <li><a href="#uefi系统的启动过程">UEFI系统的启动过程</a>
+          <ul>
+            <li><a href="#1-sec阶段security-phase">1. SEC阶段(Security Phase)</a></li>
+            <li><a href="#2-pei阶段pre-efi-initialization">2. PEI阶段(Pre-EFI Initialization)</a></li>
+            <li><a href="#3-dxe阶段drier-execution-environment">3. DXE阶段(Drier Execution Environment)</a></li>
+            <li><a href="#4-bds阶段boot-device-selection">4. BDS阶段(Boot Device Selection)</a></li>
+            <li><a href="#5-tsl阶段transient-system-load">5. TSL阶段（Transient System Load）</a></li>
+            <li><a href="#6-rt阶段run-time">6. RT阶段（Run Time)</a></li>
+            <li><a href="#7-al阶段after-life">7. AL阶段（After Life）</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>UEFI启动流程</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#bios在计算机系统中的作用">BIOS在计算机系统中的作用</a></li>
+        <li><a href="#uefi系统组成">UEFI系统组成</a></li>
+        <li><a href="#uefi系统的启动过程">UEFI系统的启动过程</a>
+          <ul>
+            <li><a href="#1-sec阶段security-phase">1. SEC阶段(Security Phase)</a></li>
+            <li><a href="#2-pei阶段pre-efi-initialization">2. PEI阶段(Pre-EFI Initialization)</a></li>
+            <li><a href="#3-dxe阶段drier-execution-environment">3. DXE阶段(Drier Execution Environment)</a></li>
+            <li><a href="#4-bds阶段boot-device-selection">4. BDS阶段(Boot Device Selection)</a></li>
+            <li><a href="#5-tsl阶段transient-system-load">5. TSL阶段（Transient System Load）</a></li>
+            <li><a href="#6-rt阶段run-time">6. RT阶段（Run Time)</a></li>
+            <li><a href="#7-al阶段after-life">7. AL阶段（After Life）</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/bios/UEFI%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/">UEFI启动流程</a>
+  </h1>
+  
+  <h5>2023-03-17</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/bios/">bios</a>
+  </div>
+  
+
+
+
+<h2 id="bios在计算机系统中的作用">
+  BIOS在计算机系统中的作用
+  <a class="anchor" href="#bios%e5%9c%a8%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%b3%bb%e7%bb%9f%e4%b8%ad%e7%9a%84%e4%bd%9c%e7%94%a8">#</a>
+</h2>
+<ul>
+<li>BIOS全称为基本输入输出系统，时存储在主板ROM中的一组程序代码，包括：
+<ul>
+<li>加电自检程序，用于开机时对硬件的检测。</li>
+<li>系统初始化代码，包括硬件设备的初始化等。</li>
+<li>基本的外围I/O处理的子程序代码。</li>
+<li>CMOS设置程序。</li>
+</ul>
+</li>
+</ul>
+<h2 id="uefi系统组成">
+  UEFI系统组成
+  <a class="anchor" href="#uefi%e7%b3%bb%e7%bb%9f%e7%bb%84%e6%88%90">#</a>
+</h2>
+<ul>
+<li>UEFI提供给操作系统的接口包括启动服务（Boot Services，BS）和运行时服务（Runtime Service，RT）以及丰富的Protocol。</li>
+<li>从OS Loader被加载，到OS Loader执行ExitBootServices这段时间内，是从UEFI环境向操作系统过渡的过程。这个过程中，OS Loader通过BS和RT使用UEFI提供的服务，将计算机系统资源逐渐转移到自己手中，这个过程称为TSL。</li>
+<li>当OS Loader完全掌握了计算机系统资源时，BS也完成了使命。OS Loader调用ExitBootServices结束BS并回收BS占用的资源，之后计算机系统进入UEFI Runtime阶段。</li>
+<li>在Runtime阶段只有RT继续为OS提供服务，BS已经从计算机系统中销毁。</li>
+</ul>
+<hr>
+<ul>
+<li>UEFI Images 包含可执行代码的二进制文件。</li>
+<li>UEFI Services 是平台调用接口的集合，允许UEFI程序和操作系统调用。</li>
+<li>UEFI Protocol 是一种数据结构，包含全局唯一标识符GUID、接口数据结构和服务。</li>
+<li>UEFI System Table 所有UEFI镜像都会接到一个指向UEFI系统表的指针，通过它可以访问固件提供的UEFI Protocol。</li>
+<li>启动服务提供的服务项包括：
+<ul>
+<li>Event服务：允许程序进行异步操作。</li>
+<li>Timer（定时器）服务：配合Event提供定时器的功能。</li>
+<li>内存管理：提供内存的分配和释放服务，管理系统的内存映射。</li>
+<li>Protocol服务：</li>
+<li>Image服务：</li>
+<li>其他服务：</li>
+</ul>
+</li>
+<li>运行时服务提供的服务项包括：
+<ul>
+<li>系统变量服务：读取或设置系统变量。</li>
+<li>时间服务：提供读取和设定系统时间的功能。</li>
+<li>内存虚拟地址服务：提供将内存的物理地址转换为虚拟地址的服务。</li>
+<li>其他服务：如重启系统、更新BIOS等。</li>
+</ul>
+</li>
+</ul>
+<h2 id="uefi系统的启动过程">
+  UEFI系统的启动过程
+  <a class="anchor" href="#uefi%e7%b3%bb%e7%bb%9f%e7%9a%84%e5%90%af%e5%8a%a8%e8%bf%87%e7%a8%8b">#</a>
+</h2>
+<ul>
+<li>
+  <img src="/img/book/uefi/1.jpg" alt="" /></li>
+</ul>
+<h3 id="1-sec阶段security-phase">
+  1. SEC阶段(Security Phase)
+  <a class="anchor" href="#1-sec%e9%98%b6%e6%ae%b5security-phase">#</a>
+</h3>
+<ul>
+<li>UEFI系统开机或重启进入SEC阶段，它执行以下四种任务：
+<ul>
+<li>接收并处理系统启动和重启信号。</li>
+<li>初始化临时存储区域：系统运行在SEC阶段时，仅CPU初始化，各种外部设备和内存都没有被初始化，因此系统需要一些临时的RAM区域。 临时RAM只能位于CPU内部。</li>
+<li>作为可信系统的根：作为取得对系统控制权的第一部分，SEC阶段是整个可信系统的根。</li>
+<li>传递系统参数给下一阶段：SEC阶段的一切工作都是为PEI阶段准备，最终将控制权交给PEI，同时要将现阶段的成果汇报给PEI。汇报的手段是将如下信息作为参数传递到PEI的入口函数。
+<ul>
+<li>系统当前状态。</li>
+<li>可启动固件的地址和大小。</li>
+<li>临时RAM区域的地址和大小。</li>
+<li>栈的地址和大小。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-pei阶段pre-efi-initialization">
+  2. PEI阶段(Pre-EFI Initialization)
+  <a class="anchor" href="#2-pei%e9%98%b6%e6%ae%b5pre-efi-initialization">#</a>
+</h3>
+<ul>
+<li>PEI主要是为DXE准备执行环境，PEI的执行流程如下：</li>
+<li>
+  <img src="/img/book/uefi/2.jpg" alt="" /></li>
+<li>从功能上来讲，PEI可以分为：
+<ul>
+<li>PEI内核（PEI Foundation）：负责PEI基础服务和流程。</li>
+<li>PEIM（PEI Module）派遣器：找到系统中所有的PEI模块，并根据依赖关系按顺序执行PEIM。PEI阶段对系统的初始化主要是由PEIM完成的。</li>
+</ul>
+</li>
+<li>PEIM之间的通信是通过PPI（PEIM-to-PEIM Interfaces）完成。</li>
+<li>在PEI阶段会初始化内存。</li>
+</ul>
+<h3 id="3-dxe阶段drier-execution-environment">
+  3. DXE阶段(Drier Execution Environment)
+  <a class="anchor" href="#3-dxe%e9%98%b6%e6%ae%b5drier-execution-environment">#</a>
+</h3>
+<ul>
+<li>DXE阶段内存可以完全被使用，DXE执行阶段的流程如下：</li>
+<li>
+  <img src="/img/book/uefi/3.jpg" alt="" /></li>
+<li>DXE从功能上可以分为以下两部分：
+<ul>
+<li>DXE内核：负责DXE基础服务和执行流程。</li>
+<li>DXE派遣器：负责调度执行DXE驱动，初始化系统设备。</li>
+</ul>
+</li>
+<li>每个DXE驱动是一个独立的模块，DXE驱动之间通过Protocol通信。Protocol是一个特殊的结构体，每个Protocol对应一个GUID。</li>
+<li>当所有的Driver都执行完后，系统完成初始化，调用BDS的入口函数，进入到BDS阶段。</li>
+</ul>
+<h3 id="4-bds阶段boot-device-selection">
+  4. BDS阶段(Boot Device Selection)
+  <a class="anchor" href="#4-bds%e9%98%b6%e6%ae%b5boot-device-selection">#</a>
+</h3>
+<ul>
+<li>主要功能是执行启动策略：
+<ul>
+<li>初始化控制台设备。</li>
+<li>加载必要的设备驱动。</li>
+<li>根据系统设置加载和执行启动项。</li>
+</ul>
+</li>
+<li>用户选中的某个启动项后，OS Loader启动，系统进入TSL阶段。</li>
+</ul>
+<h3 id="5-tsl阶段transient-system-load">
+  5. TSL阶段（Transient System Load）
+  <a class="anchor" href="#5-tsl%e9%98%b6%e6%ae%b5transient-system-load">#</a>
+</h3>
+<ul>
+<li>TSL是OS Loader执行的第一阶段，在这个阶段OS Loader作为一个UEFI应用程序运行，系统资源仍由UEFI内核控制。</li>
+<li>当启动服务的ExitBootServices服务被调用后，系统进入Run Time阶段。</li>
+<li>TSL阶段被称为临时系统，它存在的目的就是为操作系统加载器准备执行环境。</li>
+</ul>
+<h3 id="6-rt阶段run-time">
+  6. RT阶段（Run Time)
+  <a class="anchor" href="#6-rt%e9%98%b6%e6%ae%b5run-time">#</a>
+</h3>
+<ul>
+<li>系统进入RT阶段后，系统的控制权从UEFI内核转交到OS Loader手中，UEFI占用的各种资源被回收到OS Loader，仅有UEFI运行时服务保留给OS Loader和OS使用。</li>
+<li>随着OS Loader的执行，OS最终取得对系统的控制权。</li>
+</ul>
+<h3 id="7-al阶段after-life">
+  7. AL阶段（After Life）
+  <a class="anchor" href="#7-al%e9%98%b6%e6%ae%b5after-life">#</a>
+</h3>
+<ul>
+<li>在RT阶段，如果系统遇到灾难性错误，固件需要提供错误处理和灾难恢复机制。</li>
+</ul></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

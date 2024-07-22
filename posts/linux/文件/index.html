@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>文件 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#目录介绍">目录介绍</a>
+          <ul>
+            <li><a href="#根目录">根目录</a></li>
+            <li><a href="#usr">/usr</a></li>
+            <li><a href="#var">/var</a></li>
+            <li><a href="#proc">/proc</a></li>
+          </ul>
+        </li>
+        <li><a href="#linux文件信息">Linux文件信息</a>
+          <ul>
+            <li><a href="#tips">tips</a></li>
+          </ul>
+        </li>
+        <li><a href="#文件系统">文件系统</a>
+          <ul>
+            <li><a href="#ext2">Ext2</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>文件</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#目录介绍">目录介绍</a>
+          <ul>
+            <li><a href="#根目录">根目录</a></li>
+            <li><a href="#usr">/usr</a></li>
+            <li><a href="#var">/var</a></li>
+            <li><a href="#proc">/proc</a></li>
+          </ul>
+        </li>
+        <li><a href="#linux文件信息">Linux文件信息</a>
+          <ul>
+            <li><a href="#tips">tips</a></li>
+          </ul>
+        </li>
+        <li><a href="#文件系统">文件系统</a>
+          <ul>
+            <li><a href="#ext2">Ext2</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/linux/%E6%96%87%E4%BB%B6/">文件</a>
+  </h1>
+  
+  <h5>2021-01-27</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/linux/">linux</a>
+  </div>
+  
+
+
+
+<h2 id="目录介绍">
+  目录介绍
+  <a class="anchor" href="#%e7%9b%ae%e5%bd%95%e4%bb%8b%e7%bb%8d">#</a>
+</h2>
+<h3 id="根目录">
+  根目录
+  <a class="anchor" href="#%e6%a0%b9%e7%9b%ae%e5%bd%95">#</a>
+</h3>
+<table>
+<thead>
+<tr>
+<th>目录</th>
+<th>介绍</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/bin</td>
+<td>（binary）存放很多可执行的指令，该路径下的指令可以被root和一般账号所使用，比如cat，chmod，mv，bash等</td>
+</tr>
+<tr>
+<td>/boot</td>
+<td>存放开机会使用到的文件，如/boot/grub</td>
+</tr>
+<tr>
+<td>/dev</td>
+<td>linux中任何外部设备都是以文件的形态存在于这个目录中</td>
+</tr>
+<tr>
+<td>/etc</td>
+<td>系统主要的配置文件几乎都在这个目录中，</td>
+</tr>
+<tr>
+<td>/lib</td>
+<td>存放开机时会用到的库，以及在/bin或/sbin下面命令会调用的函数库。（/lib64：用来存放于/lib不同格式的支持64位的二进制函数库）</td>
+</tr>
+<tr>
+<td>/media</td>
+<td>存放的是可移除的设备，如光盘、dvd等，能暂时挂载到这里</td>
+</tr>
+<tr>
+<td>/mnt</td>
+<td>可以用来暂时挂载某些额外的设备</td>
+</tr>
+<tr>
+<td>/opt</td>
+<td>如果自行安装（不使用apt或yum命令安装的）可以放到这里，但一般还是习惯放到/usr/local中</td>
+</tr>
+<tr>
+<td>/run</td>
+<td>规定开机后所产生的各项信息要放到该文件夹中</td>
+</tr>
+<tr>
+<td>/sbin</td>
+<td>设置系统环境的，包括了开机、修复、还原系统所需要的指令。某些服务器软件程序一般放到/usr/sbin中，而向本机自行安装的软件所产生的系统执行文件，则放置在/usr/local/sbin中。</td>
+</tr>
+<tr>
+<td>/srv</td>
+<td>（service）是一些网络服务启动后，这些服务所需要取用的数据目录</td>
+</tr>
+<tr>
+<td>/tmp</td>
+<td>暂时放置文件的位置</td>
+</tr>
+<tr>
+<td>/home</td>
+<td>系统默认的使用者主文件夹。如bes用户的默认文件夹就是/home/bes</td>
+</tr>
+<tr>
+<td>/root</td>
+<td>root的主文件夹</td>
+</tr>
+<tr>
+<td>/lost+found</td>
+<td>使用ext文件系统格式才会产生的目录，目的是当文件系统发生错误时，将一些遗失的片段放到这</td>
+</tr>
+<tr>
+<td>/proc</td>
+<td>这个目录下的数据都在内存中，所以本身不占磁盘空间。如/proc/cpuinfo等。</td>
+</tr>
+<tr>
+<td>/sys</td>
+<td>主要记录与核心与系统硬件信息较相关的信息。不占磁盘空间</td>
+</tr>
+<tr>
+<td>/usr</td>
+<td>（unix software resource）与软件安装有关；</td>
+</tr>
+<tr>
+<td>/var</td>
+<td>（variable）与系统运行过程有关。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="usr">
+  /usr
+  <a class="anchor" href="#usr">#</a>
+</h3>
+<table>
+<thead>
+<tr>
+<th>目录</th>
+<th>介绍</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/usr/bin</td>
+<td>一般用户能使用的指令放到这。centos7已经将全部的用户指令放到这里，使用链接的方式将/bin链接于此。</td>
+</tr>
+<tr>
+<td>/usr/lib</td>
+<td>与/lib功能相同，/lib就是链接到此目录中的。</td>
+</tr>
+<tr>
+<td>/usr/local</td>
+<td>在本机自行安装自己下载的软件，建议安装到此目录。</td>
+</tr>
+<tr>
+<td>/usr/sbin</td>
+<td>/sbin就是链接到此目录。</td>
+</tr>
+<tr>
+<td>/usr/share</td>
+<td>好多文档都在这里。如/usr/share/man（在线说明文件）</td>
+</tr>
+<tr>
+<td>/usr/include</td>
+<td>c/c++等头文件和include文件的放置位置</td>
+</tr>
+<tr>
+<td>/usr/src</td>
+<td>源代码建议放到这里。</td>
+</tr>
+<tr>
+<td>/usr/libexec</td>
+<td>某些不被一般用户惯用的执行文件或脚本等都放在此目录。例如大部分x视窗下的操作指令很多都放在此目录下。</td>
+</tr>
+<tr>
+<td>/usr/lib64</td>
+<td>/lib64就是链接过来的</td>
+</tr>
+</tbody>
+</table>
+<h3 id="var">
+  /var
+  <a class="anchor" href="#var">#</a>
+</h3>
+<table>
+<thead>
+<tr>
+<th>目录</th>
+<th>介绍</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/var/cache</td>
+<td>应用程序运行过程产生的一些暂存盘</td>
+</tr>
+<tr>
+<td>/var/lib</td>
+<td>程序本身执行的过程中，需要使用到的数据文件放置的目录</td>
+</tr>
+<tr>
+<td>/var/lock</td>
+<td>某些设备或者是文件资源一次只能被一个应用程序所使用。</td>
+</tr>
+<tr>
+<td>/var/log</td>
+<td>登陆文件放置的目录</td>
+</tr>
+<tr>
+<td>/var/run</td>
+<td>某些应用程序启动后，会将他们的pid放置到该目录，这个目录链接到了/run</td>
+</tr>
+</tbody>
+</table>
+<h3 id="proc">
+  /proc
+  <a class="anchor" href="#proc">#</a>
+</h3>
+<table>
+<thead>
+<tr>
+<th>目录</th>
+<th>介绍</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>目前主机上的各个进程的PID都是以目录的形态存在/proc中，如PID为1的所有相关信息都写入在/proc/1/文件夹下。</td>
+</tr>
+<tr>
+<td>/proc/cmdline</td>
+<td>加载 kernel 时所下达的相关指令与参数！</td>
+</tr>
+<tr>
+<td>/proc/cpuinfo</td>
+<td>本机的cpu相关信息，包含频率、类型。</td>
+</tr>
+<tr>
+<td>/proc/devices</td>
+<td>这个文件记录了系统各个主要装置的主要装置代号</td>
+</tr>
+<tr>
+<td>/proc/filesystems</td>
+<td>目前系统已经加载的文件系统</td>
+</tr>
+<tr>
+<td>/proc/meminfo</td>
+<td>使用 free 列出的内存信息，在这里也能够查阅到！</td>
+</tr>
+<tr>
+<td>/proc/loadavg</td>
+<td>top 以及 uptime 的三个平均数值就是记录在此！</td>
+</tr>
+<tr>
+<td>/proc/modules</td>
+<td>目前我们的 Linux 已经加载的驱动程序</td>
+</tr>
+<tr>
+<td>/proc/mounts</td>
+<td>系统已经挂载的数据，就是用 mount 这个指令呼叫出来的数据啦！</td>
+</tr>
+<tr>
+<td>/proc/swaps</td>
+<td>到底系统挂加载的内存在哪里？使用掉的 partition 就记录在此。</td>
+</tr>
+<tr>
+<td>/proc/partitions</td>
+<td>使用 fdisk -l 会出现目前所有的 partition ，在这个文件当中也有纪录。</td>
+</tr>
+<tr>
+<td>/proc/version</td>
+<td>核心的版本，就是用 uname -a 显示的内容</td>
+</tr>
+<tr>
+<td>/proc/bus/*</td>
+<td>一些总线的装置，还有 USB 的装置也记录在此</td>
+</tr>
+</tbody>
+</table>
+<h2 id="linux文件信息">
+  Linux文件信息
+  <a class="anchor" href="#linux%e6%96%87%e4%bb%b6%e4%bf%a1%e6%81%af">#</a>
+</h2>
+<p><code>-rw-r--r-- 1 bes bes  2625 Jan 27 11:11 _config.yml</code></p>
+<ul>
+<li>第一栏表示文件类型和权限；
+<ul>
+<li>第一个字符代表该文件的类型，-表示文件，d表示目录，l表示链接文件（link），b表示区块文件如硬盘，在/dev/sda（block），c表示字符设备文件，如鼠标键盘（character），s表示数据接口文件（sockets），p表示数据输送档（FIFO,pipe）。</li>
+<li>下来9个字符每三个为一组（r表示可读，w表示可写，x表示可执行，-表示无该权限）：
+<ul>
+<li>第一组表示文件拥有者可具备的权限；</li>
+<li>第二组表示加入此群组的账号的权限；</li>
+<li>第三组为非本人且没有加入本群组的其他账号的权限。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>第二栏表示有多少文件名链接到此节点（i-node）；</li>
+<li>第三栏表示该文件所属的用户，第四栏表示所属群组；</li>
+<li>第五栏表示容量大小，第六栏表示最近的修改时间，第七栏为文件名。</li>
+</ul>
+<h3 id="tips">
+  tips
+  <a class="anchor" href="#tips">#</a>
+</h3>
+<ul>
+<li>如果用户对一个目录只有只读权限，那么是无法进入此目录的，他必须持有执行权限。</li>
+<li>对目录有只读权限表示它可以查看该目录下的文件名数据（用ls+目录名）。</li>
+<li>对目录有写权限表示它可以对该目录下的文件或目录执行：①新建文件和目录；②删除文件和目录（不论该文件的权限是什么）；③修改文件或目录名；④移动文件和目录。</li>
+<li>root不受权限限制。</li>
+<li>文件的写权限指可以编辑文件，但不包含删除文件。</li>
+<li>umask：查看和设置文件权限。如002，表示user和group拥有全部权限，others拥有r和x权限。</li>
+<li>特殊权限（有些文件或目录会出现rws或rwt的情况，这就是特殊权限。注意：当S或者T为大写的时候，表示无效，因为使用者没有该程序的执行权限）
+<ul>
+<li>SUID（s）：只对二进制文件（可执行的程序）有效；执行者要对该程序具有x的权限；在执行该程序时，执行者将短暂获得该程序拥有者（比如root）的权限。</li>
+<li>SGID（s）：可以针对二进制文件或目录来设置。对二进制文件：执行者要对该程序具有x的权限，在执行该程序时，执行者将获得该程序所在群组的支持。对目录：代表使用者在这个目录下面新建的文件的文件群组都会与该目录的群组名称相同。</li>
+<li>SBIT（t）：只针对目录有效，当使用者对该目录有w和x权限，只有自己和root才能删掉自己创建的文件或目录。</li>
+<li>权限和数字存在对应，SUID为4，SGID为2，SBIT为1。</li>
+</ul>
+</li>
+</ul>
+<h2 id="文件系统">
+  文件系统
+  <a class="anchor" href="#%e6%96%87%e4%bb%b6%e7%b3%bb%e7%bb%9f">#</a>
+</h2>
+<p>传统磁盘中，一个分区就是一个文件系统，但现在并不准确。文件系统通常将权限和属性放在inode中，将实际数据放到data block中。另外，有一个superblock记录整个文件系统的整体信息。</p>
+<ul>
+<li>superblock：记录此文件系统的整体信息，包括inode/block的总量、使用量、剩余量，以及文件系统的格式与相关信息等；</li>
+<li>inode：记录文件的属性（rwx、群组、时间参数等），一个文件占用一个inode，同时记录此文件数据所在的block号码；</li>
+<li>block：实际记录文件的内容，若文件太大时，会占用多个block。
+每个inode和block都有编号，inode内有文件数据的block号码。</li>
+<li>索引文件系统：上面的数据存取方法就是。</li>
+<li>FAT：没有inode存在，每个block号码都记录在前一个block中，像一条链子一样。</li>
+</ul>
+<h3 id="ext2">
+  Ext2
+  <a class="anchor" href="#ext2">#</a>
+</h3>
+<p>EXT2设置多个区块群组，每个区块群组都有独立的inode/block/superblock系统。
+每个区块群组有6个部分：</p>
+<ol>
+<li>data block（数据区块）：存放文件内容。Ext2中支持的block大小有1k，2k及4k，在格式化的时候就固定了，每个block只能放一个文件的数据。</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>1kB</th>
+<th>2kB</th>
+<th>4kB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>最大单一文件限制</td>
+<td>16GB</td>
+<td>256GB</td>
+<td>2TB</td>
+</tr>
+<tr>
+<td>最大文件系统容量</td>
+<td>2TB</td>
+<td>8TB</td>
+<td>16TB</td>
+</tr>
+</tbody>
+</table>
+<ol start="2">
+<li>inode table（inode 表格）：记录的数据：存取模式（rwx）；拥有者和群组；文件的大小；文件创建时间，修改时间；读取时间；定义文件特性的flag；该文件内容的指向。
+<ul>
+<li>inode数量和大小在格式化时就固定了。</li>
+<li>每个inode大小固定为128B（新的ext4和xfs可以设置到256B）；</li>
+<li>每个文件只会占用一个inode；所以文件系统能创建的文件数量与inode的数量有关；</li>
+<li>系统读取文件时需要先找到inode，在分析权限后，才进行下一步；</li>
+</ul>
+</li>
+</ol></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

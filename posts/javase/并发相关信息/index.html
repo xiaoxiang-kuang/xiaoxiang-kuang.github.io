@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>并发相关信息 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#thread方法">Thread方法</a></li>
+            <li><a href="#同步">同步</a></li>
+            <li><a href="#常见线程安全类">常见线程安全类</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>并发相关信息</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#thread方法">Thread方法</a></li>
+            <li><a href="#同步">同步</a></li>
+            <li><a href="#常见线程安全类">常见线程安全类</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/javase/%E5%B9%B6%E5%8F%91%E7%9B%B8%E5%85%B3%E4%BF%A1%E6%81%AF/">并发相关信息</a>
+  </h1>
+  
+  <h5>2020-10-08</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">java</a>
+  </div>
+  
+
+
+
+<h3 id="thread方法">
+  Thread方法
+  <a class="anchor" href="#thread%e6%96%b9%e6%b3%95">#</a>
+</h3>
+<ul>
+<li>
+<p>sleep：让当前线程休眠n毫秒，休眠时让出cpu的时间片给其他线程。</p>
+</li>
+<li>
+<p>join：等待某个线程运行结束。</p>
+</li>
+<li>
+<p>yield：提示线程调度器让出当前线程对 CPU的使用。</p>
+</li>
+<li>
+<p>interrupt()：打断线程，可能会产生打断标记（看下面的介绍）。</p>
+<ul>
+<li>可以使用isInterrupted()判断线程是否被打断。</li>
+<li>如果线程正在sleep、wait、join会导致被打断的线程抛出InterruptedException，并清除打断标记。</li>
+<li>如果打断正在运行的线程，则会设置打断标记。</li>
+<li>interrupted()方法能返回打断标记的状态，并将打断标记设置为假。</li>
+</ul>
+</li>
+</ul>
+<h3 id="同步">
+  同步
+  <a class="anchor" href="#%e5%90%8c%e6%ad%a5">#</a>
+</h3>
+<ul>
+<li>同步：需要等待结果返回，才能继续运行就是同步。</li>
+<li>异步：不需要等待结果返回，就能继续运行就是异步。</li>
+</ul>
+<h3 id="常见线程安全类">
+  常见线程安全类
+  <a class="anchor" href="#%e5%b8%b8%e8%a7%81%e7%ba%bf%e7%a8%8b%e5%ae%89%e5%85%a8%e7%b1%bb">#</a>
+</h3>
+<p>String  Integer  StringBuffer  Random  Vector  Hashtable  java.util.concurrent</p></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

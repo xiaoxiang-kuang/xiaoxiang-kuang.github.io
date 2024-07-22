@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>网络层 数据平面 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#概述">概述</a></li>
+        <li><a href="#路由器的工作原理">路由器的工作原理</a>
+          <ul>
+            <li><a href="#输入端口处理和基于目的地的转发">输入端口处理和基于目的地的转发</a></li>
+            <li><a href="#交换">交换</a></li>
+            <li><a href="#输出端口处理">输出端口处理</a></li>
+          </ul>
+        </li>
+        <li><a href="#网际协议">网际协议</a>
+          <ul>
+            <li><a href="#ipv4数据报分片">IPv4数据报分片</a></li>
+            <li><a href="#ip路由选择">IP路由选择</a></li>
+            <li><a href="#ipv4地址">IPv4地址</a></li>
+            <li><a href="#dhcp">DHCP</a></li>
+            <li><a href="#nat">NAT</a></li>
+            <li><a href="#ipv6">IPv6</a></li>
+            <li><a href="#icmp">ICMP</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>网络层 数据平面</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#概述">概述</a></li>
+        <li><a href="#路由器的工作原理">路由器的工作原理</a>
+          <ul>
+            <li><a href="#输入端口处理和基于目的地的转发">输入端口处理和基于目的地的转发</a></li>
+            <li><a href="#交换">交换</a></li>
+            <li><a href="#输出端口处理">输出端口处理</a></li>
+          </ul>
+        </li>
+        <li><a href="#网际协议">网际协议</a>
+          <ul>
+            <li><a href="#ipv4数据报分片">IPv4数据报分片</a></li>
+            <li><a href="#ip路由选择">IP路由选择</a></li>
+            <li><a href="#ipv4地址">IPv4地址</a></li>
+            <li><a href="#dhcp">DHCP</a></li>
+            <li><a href="#nat">NAT</a></li>
+            <li><a href="#ipv6">IPv6</a></li>
+            <li><a href="#icmp">ICMP</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E5%B1%82-%E6%95%B0%E6%8D%AE%E5%B9%B3%E9%9D%A2/">网络层 数据平面</a>
+  </h1>
+  
+  <h5>2022-09-06</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>
+  </div>
+  
+
+
+
+<h2 id="概述">
+  概述
+  <a class="anchor" href="#%e6%a6%82%e8%bf%b0">#</a>
+</h2>
+<ul>
+<li>网络中的每一台主机和路由器中都有一个网络层部分。</li>
+<li>网络层能被分解为两个相互作用的部分，即数据平面和控制平面，数据平面的功能时决定到达路由器输入链路的数据报如何转发到该路由器的输出链路之一。控制平面讲述网络范围的逻辑，控制平面控制数据报沿着从源主机到目的主机的端到端路径中路由器之间的路由方式。</li>
+<li>传统网络层控制平面路由选择协议和数据平面转发功能已被时限为一个整体，位于一台路由器中。SDN（软件定义网络）将控制平面作为一种单独服务，明确的分离数据平面和控制平面，控制平面通常置于一台远程“控制器”中。</li>
+<li>转发：是将分组从一个输入链路接口转移到适当的输出链路接口的路由器本地动作。转发通常使用硬件实现。</li>
+<li>路由选择：指确定分组从源到目的地所采取的端到端路径的网络范围处理过程。</li>
+<li>每台网络路由器中有一个关键元素是它的转发表，路由器检查到达分组首部的一个或多个字段值，进而使用这些首部值在其转发表中索引，通过这种方式来转发分组。</li>
+<li>网络服务模型（network service model）定义了分组在发送与接收端系统之间的端到端的运输特性。</li>
+<li>因特网的网络层提供了尽力而为服务（best-effort service）。</li>
+</ul>
+<h2 id="路由器的工作原理">
+  路由器的工作原理
+  <a class="anchor" href="#%e8%b7%af%e7%94%b1%e5%99%a8%e7%9a%84%e5%b7%a5%e4%bd%9c%e5%8e%9f%e7%90%86">#</a>
+</h2>
+<ul>
+<li>
+  <img src="/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e7%bd%91%e7%bb%9c%e5%b1%82/1.jpg" alt="路由器架构" /></li>
+<li>输入端口包含物理层、链路层和网络层转发的作用。通过查询转发表来决定分组的输出端口。分组会通过路由器的交换结构到达输出端口，当到达分组的速率大于转发速率，分组会存储在队列中。</li>
+<li>
+  <img src="/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e7%bd%91%e7%bb%9c%e5%b1%82/2.jpg" alt="路由器架构" /></li>
+<li>交换结构将路由器的输入端口连接到它的输出端口。</li>
+<li>输出端口存储从交换结构接收到的分组，并通过执行必要的链路层和物理层功能在输出链路上传输这些分组。</li>
+<li>路由选择处理器处于控制平面，在传统路由器中，执行路由选择协议，维护路由选择表与关联链路状态信息，并为该路由器计算转发表。在SDN路由器中，路由选择处理器负责与远程控制器通信，接收远程控制器计算的转发表项。</li>
+</ul>
+<h3 id="输入端口处理和基于目的地的转发">
+  输入端口处理和基于目的地的转发
+  <a class="anchor" href="#%e8%be%93%e5%85%a5%e7%ab%af%e5%8f%a3%e5%a4%84%e7%90%86%e5%92%8c%e5%9f%ba%e4%ba%8e%e7%9b%ae%e7%9a%84%e5%9c%b0%e7%9a%84%e8%bd%ac%e5%8f%91">#</a>
+</h3>
+<ul>
+<li>路由器在输入端口使用转发表来查找输出端口，使得到达的分组通过交换结构转发到输出端口。转发表是由路由选择处理器计算和更新的或者是接收来自远程的SDN控制器的内容。转发决策在每个输入端口本地做出。</li>
+<li>路由器使用分组目的地址的前缀和转发表的表项进行匹配，如果存在一个匹配项，则路由器向该匹配项相关联的链路转发分组。当存在多个匹配时，路由器使用最长前缀匹配规则，寻找表中的最长的匹配项，并向与最长前缀匹配相关联的链路接口转发分组。</li>
+<li>
+  <img src="/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e7%bd%91%e7%bb%9c%e5%b1%82/3.jpg" alt="转发表" /></li>
+<li>查找转发表要求很快，实践中常常使用三态内容可寻址存储器（TCAM），查询时间通常为常数级。</li>
+<li>当有其他输入端口在使用交换结构时，一个分组可能会在进入交换结构时被暂时阻塞，因此，一个被阻塞的分组必须要在输入端口排队，并等待稍后被调度以通过交换结构。输入端口除了查找和发送外，还需要①检查分组的版本号、检验和寿命字段，并且重写后两个字段；②更新用于网络管理的计数器；③要有物理层和链路层处理。</li>
+</ul>
+<h3 id="交换">
+  交换
+  <a class="anchor" href="#%e4%ba%a4%e6%8d%a2">#</a>
+</h3>
+<ul>
+<li>
+  <img src="/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e7%bd%91%e7%bb%9c%e5%b1%82/4.jpg" alt="" /></li>
+<li>经内存交换：在CPU的控制下进行交换，包会从输入端口拷贝到内存中，在从内存中拷贝到输出端口。速度受限于内存带宽。</li>
+<li>经总线交换：数据报经过bus总线从输入端口到输出端口。速度受限于bus带宽。</li>
+<li>
+  <img src="/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e7%bd%91%e7%bb%9c%e5%b1%82/5.jpg" alt="" /></li>
+<li>经互联网络交换：克服了总线的带宽限制。纵横式交换机是一种由2N条总线组成的互联网络，连接N条输入端口和N个输出端口。当某个分组到达输入端口A，要到达输出端口Y时，交换结构闭合A和Y之间的交叉点，然后A就可以传递数据报。此时如果B向Z传输分组，则闭合B和Z之间的交叉点即可。因为A到Y和B到X使用了不同的输入输出总线。但同一时刻只能有一个数据报发给Y。</li>
+</ul>
+<h3 id="输出端口处理">
+  输出端口处理
+  <a class="anchor" href="#%e8%be%93%e5%87%ba%e7%ab%af%e5%8f%a3%e5%a4%84%e7%90%86">#</a>
+</h3>
+<ul>
+<li>
+  <img src="/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e7%bd%91%e7%bb%9c%e5%b1%82/6.jpg" alt="" /></li>
+</ul>
+<h2 id="网际协议">
+  网际协议
+  <a class="anchor" href="#%e7%bd%91%e9%99%85%e5%8d%8f%e8%ae%ae">#</a>
+</h2>
+<ul>
+<li>TCP/IP首部中的所有二进制整数再网络中传输都要求大端（最高位在左边，最低为在右边），这种字节序又叫网络字节序。</li>
+<li>
+  <img src="/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e7%bd%91%e7%bb%9c%e5%b1%82/7.jpg" alt="" /></li>
+<li>协议版本号是4。</li>
+<li>首部长度通常为20个字节。所以这里的值一般是<code>0101</code>。</li>
+<li>服务类型包括一个3bit的优先权子字段，4bit的TOS字段和1bit未用的字段。4bit的TOS分别代表：最小时延、最大吞吐量、最高可靠性和最小费用。</li>
+<li>总长度字段是指整个IP数据报的长度（首部加上数据）。</li>
+<li>标识、标志和偏移量和IP分片有关。</li>
+<li>TTL（time-to-live）生存时间字段设置了数据报可以经过最多的路由器数。它指定了数据报的生存时间。初始值由源主机设置（通常为32或64），一旦经过一个处理它的路由器，它的值就减去1。当该字段的值为1时，数据报就被丢弃，并发送ICMP报文通知源主机。</li>
+<li>协议指要把分组交给哪个传输层协议。</li>
+<li>首部检验和字段是根据ip首部计算的检验和码。</li>
+<li>每一份IP数据报都包含源ip和目的ip。</li>
+<li>任选项是数据报中一个可变长的可选信息，IPv6中去掉了选项。</li>
+</ul>
+<h3 id="ipv4数据报分片">
+  IPv4数据报分片
+  <a class="anchor" href="#ipv4%e6%95%b0%e6%8d%ae%e6%8a%a5%e5%88%86%e7%89%87">#</a>
+</h3>
+<ul>
+<li>链路层能承载的网络层分组长度是有限的，比如以太网能承载不超过1500字节的数据。一个链路层能承载的最大数据量叫MTU（最大传输单元，Maximum Transmission Unit）。</li>
+<li>为了传输超出MTU的IP数据报，将IP数据报中的数据分片成多个较小的IP数据报，用单独的链路帧来封装这些较小的IP数据报。每个这些较小的IP数据报被称为片（fragment）。</li>
+<li>IP分片可发生在发送端和路由器上。而重新组装是在端系统中，路由器不会组装分片。</li>
+<li>为了让接收端确定收到的数据报是一些较大数据报的片还是单独的数据报，IP将标识、标志和片偏移字段放到IP数据报的首部中。</li>
+<li>发送主机通常将发送的每个数据报的标识位加1，如果多个片来源于同一个数据报，那么它们的标识位是相同的，为了让目的主机确认收到了数据报的最后一片，最后一片的标志置为0，其他的标志置为1，同时还使用片偏移量来确认片在数据报里的位置。</li>
+<li>
+  <img src="/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e7%bd%91%e7%bb%9c%e5%b1%82/8.jpg" alt="" /></li>
+</ul>
+<h3 id="ip路由选择">
+  IP路由选择
+  <a class="anchor" href="#ip%e8%b7%af%e7%94%b1%e9%80%89%e6%8b%a9">#</a>
+</h3>
+<ul>
+<li>IP层在内存中有一个路由表，当收到一份数据报并进行发送时，他都要对该表搜索一次。
+<ul>
+<li>路由表的每一项都包含：①目的IP地址；②下一跳的路由器的IP地址，或者直接连接网络IP地址；下一站路由器是指一个在直接相连完了上的路由器，通过它可以转发数据；③标志；其中一个标志指明目的IP地址是网络地址还是主机地址，另一个标志指明下一站路由器是否为真正的下一站路由器，还是一个直接相连的接口；④为数据报的传输指定一个网络接口。</li>
+</ul>
+</li>
+<li>当数据报来自某个网络接口时，IP首先检查目的IP地址是否为本机IP地址之一或者IP广播地址。如果确实是这样，数据报就被送到由IP首部协议字段所指定的协议模块进行处理。</li>
+<li>如果数据报的目的IP是其他的地址，并且IP层被设置为路由器的功能，那么就对数据报进行转发。</li>
+<li>IP路由选择主要完成：①搜索路由表，寻找能与目的IP地址网络号和主机号完全匹配的表目，如果找到，则把表目发给指定的下一站路由器或者直接相连的网络接口；②搜索路由表，找到能与目的网络号匹配的表，如果找到，将表目发给该表目指定的下一站路由器或者直接相连的网络接口；③搜索路由表，寻找标为&quot;默认&quot;的表目；④如果以上步骤都没成功，那么该数据报就不能被传送。</li>
+</ul>
+<h3 id="ipv4地址">
+  IPv4地址
+  <a class="anchor" href="#ipv4%e5%9c%b0%e5%9d%80">#</a>
+</h3>
+<ul>
+<li>因特网的地址分配策略被称为无类别域间路由选择（Classless Interdomain Routing CIDR）。</li>
+<li>通过IP可以区分网络号和主机号，通过子网掩码可以区分子网号和主机号。子网掩码中的1表示IP地址中的网络前缀，子网掩码中的0表示IP地址中的主机号。</li>
+<li>通过IP地址和子网掩码的与运算，可以计算出IP属于哪一个子网。</li>
+<li>广播地址255.255.255.255，当一个主机向目的地址为255.255.255.255发送数据时，该报文会发送给同一个网络中的所有主机。</li>
+</ul>
+<h3 id="dhcp">
+  DHCP
+  <a class="anchor" href="#dhcp">#</a>
+</h3>
+<ul>
+<li>动态主机配置协议（dynamic host configuration ），此协议允许主机能自动被分配到一个IP地址；此外，通过DHCP，主机还能得到如第一跳路由器信息、DNS服务器地址等。</li>
+<li>对于一台新到达的主机，通过如下4个步骤获取IP地址。
+<ul>
+<li>DHCP服务器发现：客户端通过向UDP67端口发送DHCP发现报文(DHCP discover message)，其中源IP地址为0.0.0.0，目标IP地址为255.255.255.255，链路层随后将该帧光波导该网络中的所有主机。</li>
+<li>DHCP服务器响应：DHCP服务器向网络中广播DHCP提供报文（DHCP offer message），因为此时客户端没有IP地址，所以使用广播。因为子网中可能存在多个DHCP服务器，客户端可以进行选择。DHCP报文中包含推荐给客户端的IP地址，发现报文的事务ID，网络掩码及IP地址的租用期。</li>
+<li>DHCP请求：客户端从一个或多个服务器中选一个，向选中的服务器发送DHCP请求报文（DHCP request message）。</li>
+<li>DHCP ACK：服务器用DHCP ACK报文（DHCP ACK message）进行响应，证实请求的参数。</li>
+</ul>
+</li>
+<li>
+  <img src="/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e7%bd%91%e7%bb%9c%e5%b1%82/9.jpg" alt="" /></li>
+<li>
+  <img src="/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e7%bd%91%e7%bb%9c%e5%b1%82/9.1.jpg" alt="" /></li>
+</ul>
+<h3 id="nat">
+  NAT
+  <a class="anchor" href="#nat">#</a>
+</h3>
+<ul>
+<li>网络地址转换(Network Address Translation)能解决IPv4地址匮乏的问题，从广域网到NAT路由器的所有数据报都有相同的目的IP地址，NAT路由器维护一个NAT转换表（NAT translation table）表中包含了端口号及IP地址。</li>
+<li>如果一个用户的内网地址是172.20.20.2，请求的web服务地址为xiaoxiang.space，当发送该数据报到NAT主机前，源IP为172.20.20.2，源端口为30306（源端口不重要），当此数据报到NAT路由器时，路由器将修改源端口号为3456，源IP为外网IP，并在NAT转换表生成一条记录。当收到web服务的响应时，再根据NAT表中的记录还原IP和端口。</li>
+<li>
+  <img src="/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e7%bd%91%e7%bb%9c%e5%b1%82/10.jpg" alt="" /></li>
+<li>IDS是入侵检测设备，通常位于网络的边界，它不仅检查数据报的首部，还检查载荷。IDS具有一个特征数据库。</li>
+</ul>
+<h3 id="ipv6">
+  IPv6
+  <a class="anchor" href="#ipv6">#</a>
+</h3>
+<ul>
+<li>IPv6地址为128位。数据报格式如下：</li>
+<li>
+  <img src="/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e7%bd%91%e7%bb%9c%e5%b1%82/11.jpg" alt="" />
+<ul>
+<li>版本：为6</li>
+<li>流量类型，和IPv4的TOS类似。</li>
+<li>流标签：</li>
+<li>有效载荷长度：载荷部分的字节数量。</li>
+<li>下一个首部：如UDP或TCP。</li>
+<li>源地址和目标地址：</li>
+</ul>
+</li>
+<li>IPv6中引入了任播地址，允许将数据报发给一组主机中的任意一个。</li>
+<li>IPv6中的中间路由器不能对数据报进行分片。这种操作只能在源和目的端进行。如果路由器收到的数据报太大时，路由器会丢掉该数据报，并发送一个分组太大的ICMP差错报文。</li>
+<li>IPV6去掉了首部检验和，在IPV4中，每经过一个路由器，IP头部的TTL就会减一，所以在每个路由器上都需要计算检验和。IPV6不需要了。</li>
+<li>将IPV4迁移到IPv6可以通过建隧道，将整个IPv6数据报放在IPV4数据包的有效载荷中，如图所示。</li>
+<li>
+  <img src="/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e7%bd%91%e7%bb%9c%e5%b1%82/12.jpg" alt="" /></li>
+</ul>
+<h3 id="icmp">
+  ICMP
+  <a class="anchor" href="#icmp">#</a>
+</h3>
+<ul>
+<li>因特网控制报文协议（Internet Control Messages Protocol）。被主机和路由器用来交流网络层之间的信息。最典型的用途是差错报告。</li>
+<li>ICMP是承载在IP载荷中，当一个主机收到一个指明上层协议为ICMP的IP数据报时，它分解该数据报的内容给ICMP。</li>
+<li>ICMP报文有一个类型字段和一个编码字段，介绍如下图：</li>
+<li>
+  <img src="/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e7%bd%91%e7%bb%9c%e5%b1%82/13.jpg" alt="" /></li>
+<li>ping程序会发送一个类型8编码0的报文到指定主机，目的主机会发回一个类型0编码0的ICMP回答。</li>
+<li>
+  <img src="/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e7%bd%91%e7%bb%9c%e5%b1%82/14.jpg" alt="" /></li>
+<li>windows上的traceroute程序也是ICMP实现，源主机向目的主机发送一系列的Ping数据报，第一个数据报的TTL为1，第二个数据报的TTL为2，以此类推。当第n个数据到到达第n个路由器时，这个数据报的TTL正好过期，此时路由器会丢弃该报文并向源主机发生用一个类型11编码0的ICMP报文。当路由器收到一个类型0编码0的报文时，就知道已经到达了目的主机，就可以停止发送数据报。</li>
+<li>
+  <img src="/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e7%bd%91%e7%bb%9c%e5%b1%82/15.jpg" alt="" /></li>
+</ul></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>InnoDB | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#innodb">InnoDB</a>
+          <ul>
+            <li><a href="#compact行格式">COMPACT行格式</a></li>
+            <li><a href="#innodb数据页结构">innodb数据页结构</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>InnoDB</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#innodb">InnoDB</a>
+          <ul>
+            <li><a href="#compact行格式">COMPACT行格式</a></li>
+            <li><a href="#innodb数据页结构">innodb数据页结构</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/InnoDB/">InnoDB</a>
+  </h1>
+  
+  <h5>2022-03-20</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
+  </div>
+  
+
+
+
+<h2 id="innodb">
+  InnoDB
+  <a class="anchor" href="#innodb">#</a>
+</h2>
+<ul>
+<li>mysql服务器中负责对表中的数据读取和写入工作的部分是存储引擎，真实数据在不同存储引擎中存放的格式一般是不同的。</li>
+<li>innodb会将数据划分为若干个页，以页作为磁盘和内存交互的基本单位，页也是innodb管理存储空间的基本单位，页的默认大小为16KB。一般情况下，一次最少从磁盘中读取16KB的内容到内存中，一次最少把内存中的16KB内容刷新到磁盘中。</li>
+<li>innodb有4中行格式COMPACT、PEDUNDANT、DYNAMIC、COMPRESSED。</li>
+</ul>
+<pre tabindex="0"><code>CREATE TABLE 表名(列的信息) ROW_FORMAT=行格式名称;
+ALTER TABLE 表名 ROW_FORMAT=行格式名称;
+</code></pre><h3 id="compact行格式">
+  COMPACT行格式
+  <a class="anchor" href="#compact%e8%a1%8c%e6%a0%bc%e5%bc%8f">#</a>
+</h3>
+<p>
+  <img src="/img/%e6%95%b0%e6%8d%ae%e5%ba%93/mysql/1.jpg" alt="COMPACT行格式" /></p>
+<ol>
+<li>记录的额外信息，包含3个部分：变长字段的长度列表、NULL值列表和记录头信息。
+<ol>
+<li>mysql支持一些变长的数据类型，如varchar、text和blob，变长数据类型占用的字节数也是不固定的，所以在存储数据时要把这些数据占用的字节数也存起来。一个变长的数据占用的存储空间分为两部分：真正的数据内容和该数据占用的字节数。各变长字段的真实数据占用的字节数按照列的顺序逆序存放。</li>
+<li>当使用定长编码的字符集时（如ascii），CHAR(10)列所占用的字节数不会被加到变长字段长度列表中，而当采用变长编码的字符集时，CHAR(10)列所占用的字节数就会被加到变长字段的长度列表中。此外，采用变长编码字符集的CHAR(M)至少占用M个字节，而VARCHAR(M)没有这个要求。</li>
+</ol>
+</li>
+</ol>
+<ul>
+<li>记录头信息由固定的5字节组成。</li>
+</ul>
+<p>
+  <img src="/img/%e6%95%b0%e6%8d%ae%e5%ba%93/mysql/2.jpg" alt="" /></p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>大小(bit)</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>deleted_flag</td>
+<td>1</td>
+<td>标识该记录是否被删除。所有被删除的记录会组成一个垃圾链表，之后若有新的记录插入到表中，他们就可能覆盖掉这些记录所占用的存储空间。</td>
+</tr>
+<tr>
+<td>min_rec_flag</td>
+<td>1</td>
+<td>B+树每层非叶子节点中的最小的目录项记录都会添加该标记</td>
+</tr>
+<tr>
+<td>n_owned</td>
+<td>4</td>
+<td>一个页面中的记录会被分为多个组，每个组的最后那条记录会在n_owned中记录该组内由几条记录。其他的记录中该字段为0</td>
+</tr>
+<tr>
+<td>heap_no</td>
+<td>13</td>
+<td>表示当前记录在页面堆中的相对位置</td>
+</tr>
+<tr>
+<td>record_type</td>
+<td>3</td>
+<td>表示当前记录的类型，0表示普通记录，1表示B+树非叶节点的目录项，2表示Infimum记录，3表示Supremum记录</td>
+</tr>
+<tr>
+<td>next_record</td>
+<td>16</td>
+<td>表示下一条记录的相对位置。下一条记录指的是按照主键值从小到大的顺序排列的下一条记录。infimum记录的下一条记录就是本页中主键最小的记录，本页中主键最大的记录的下一条记录就是supremum记录。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p>mysql默认会为每个记录添加一些隐藏列。innodb的主键生成策略：优先使用用户自定义的主键作为主键，如果没有主键，就选取一个不允许存储为NULL的UNIQUE键作为主键，如果没有，innodb会为表默认添加一个名为row_id的隐藏列作为主键。</p>
+<table>
+<thead>
+<tr>
+<th>列名</th>
+<th>占用空间</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>row_id(DB_ROW_ID)</td>
+<td>6字节</td>
+<td>非必须，行ID，唯一标识一条记录</td>
+</tr>
+<tr>
+<td>trx_id(DB_TRX_ID)</td>
+<td>6字节</td>
+<td>必须，事务ID</td>
+</tr>
+<tr>
+<td>roll_pointer(DB_ROLL_PTR)</td>
+<td>7字节</td>
+<td>必须，回滚指针。</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>innodb是以页为基本单位来管理存储空间的，一个页的大小通常是16KB，有时候一个页存不了一条记录，所以mysql中会有溢出列的概念。</p>
+</li>
+<li>
+<p>COMPACT和REDUNDANT行格式中，对于存储占用的空间非常多的列，在记录的真实数据处只会存储该列的一部分数据，而把剩余的数据分散存储到其他的几个页中，然后在记录真实数据处用20字节存储指向这些页的地址和这些页的数据占用的字节数。溢出列之间是使用链表连接起来的。</p>
+</li>
+<li>
+<p>DYNAMIC和COMPRESSED类似于COMPACT行格式，但是在处理溢出列有点差异，他们不会在记录真实数据处存储列真实数据的前768字节，而是把所有的列都存到溢出页中。COMPRESSED行格式会采用压缩算法对页面进行压缩。</p>
+</li>
+</ul>
+<h3 id="innodb数据页结构">
+  innodb数据页结构
+  <a class="anchor" href="#innodb%e6%95%b0%e6%8d%ae%e9%a1%b5%e7%bb%93%e6%9e%84">#</a>
+</h3>
+<ul>
+<li>一个数据页可以被划分为7个部分，分别如下：
+<ul>
+<li>File Header：表示页的一些通用信息，占固定的38字节。</li>
+<li>Page Header：表示数据页专有的一些信息，占固定的56字节。</li>
+<li>Infimum和Supremum：两个虚拟的伪记录，分别表示页中最小记录和最大记录，占固定的26字节。</li>
+<li>User Records：真正存储插入的记录，大小不固定。</li>
+<li>Free Space：页中尚未使用的部分，大小不固定。</li>
+<li>Page Directory：页中某些记录的相对位置，是各个槽对应的记录在页面中的地址偏移量；大小不固定，插入的记录越多，这部分占用的空间越多。</li>
+<li>File Trailer：用于检验页是否完整，占固定的8字节。</li>
+</ul>
+</li>
+<li>一条完整的记录时可以比大小的，比较记录的大小就是比较主键的大小。</li>
+<li>User Records中的记录之间亲密物件的排列，这种结构称为堆(heap)。把一条记录在堆中的相对位置称为heap_no，靠前的heap_no相对较小，innodb会自动给每个页中加上两条记录，这两条记录一条为最小记录(infimum)，一条为页面的最大记录(supremum)。这两条记录的heap_no最小。堆中的heap_no在分配之后就不会发生改变了，即使之后删除了堆中的某条记录。</li>
+<li>每个记录的头信息中都有一个next_record属性，可以是页面中的所有记录串联成一个单向链表。</li>
+<li>Innodb会把页中的记录划分为若干个组，每个组的最后一个记录的地址偏移量作为一个槽，存放在Page Directory中，一个槽占用2字节。</li>
+<li>在一个页中根据主键查找记录是非常快的，步骤为：通过二分法确定该记录所在分组对应的槽，并找到改槽所在分组中主键值最小的那条记录；通过记录的next_record遍历改槽所在组中的各个记录。</li>
+<li>每个数据页的File Header都有上一页和下一页的编号，所有的数据页会组成一个双向链表。</li>
+</ul></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>PCI Express体系结构导读 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li><a href="#第1章-pci总线的基本知识">第1章 PCI总线的基本知识</a>
+      <ul>
+        <li><a href="#11-pci总线的组成结构">1.1 PCI总线的组成结构</a>
+          <ul>
+            <li><a href="#111-host主桥">1.1.1 HOST主桥</a></li>
+            <li><a href="#112-pci总线">1.1.2 PCI总线</a></li>
+            <li><a href="#113-pci设备">1.1.3 PCI设备</a></li>
+            <li><a href="#114-host处理器">1.1.4 HOST处理器</a></li>
+            <li><a href="#115-pci总线的负载">1.1.5 PCI总线的负载</a></li>
+          </ul>
+        </li>
+        <li><a href="#12-pci总线的信号定义">1.2 PCI总线的信号定义</a>
+          <ul>
+            <li><a href="#121-地址和数据总线">1.2.1 地址和数据总线</a></li>
+            <li><a href="#122-接口控制信号">1.2.2 接口控制信号</a></li>
+            <li><a href="#123-仲裁信号">1.2.3 仲裁信号</a></li>
+            <li><a href="#124-中断请求等其他信号">1.2.4 中断请求等其他信号</a></li>
+          </ul>
+        </li>
+        <li><a href="#13-pci总线的存储器读写总线事务">1.3 PCI总线的存储器读写总线事务</a>
+          <ul>
+            <li><a href="#131-pci总线事务的时许">1.3.1 PCI总线事务的时许</a></li>
+            <li><a href="#132-posted和non-posted传送方式">1.3.2 Posted和Non-Posted传送方式</a></li>
+            <li><a href="#133-host处理器访问pci设备">1.3.3 HOST处理器访问PCI设备</a></li>
+            <li><a href="#134-pci设备读写主存储器">1.3.4 PCI设备读写主存储器</a></li>
+            <li><a href="#135-delayed传送方式">1.3.5 Delayed传送方式</a></li>
+          </ul>
+        </li>
+        <li><a href="#14-pci总线的中断机制">1.4 PCI总线的中断机制</a>
+          <ul>
+            <li><a href="#141-中断信号和中断控制器的连接关系">1.4.1 中断信号和中断控制器的连接关系</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>PCI Express体系结构导读</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li><a href="#第1章-pci总线的基本知识">第1章 PCI总线的基本知识</a>
+      <ul>
+        <li><a href="#11-pci总线的组成结构">1.1 PCI总线的组成结构</a>
+          <ul>
+            <li><a href="#111-host主桥">1.1.1 HOST主桥</a></li>
+            <li><a href="#112-pci总线">1.1.2 PCI总线</a></li>
+            <li><a href="#113-pci设备">1.1.3 PCI设备</a></li>
+            <li><a href="#114-host处理器">1.1.4 HOST处理器</a></li>
+            <li><a href="#115-pci总线的负载">1.1.5 PCI总线的负载</a></li>
+          </ul>
+        </li>
+        <li><a href="#12-pci总线的信号定义">1.2 PCI总线的信号定义</a>
+          <ul>
+            <li><a href="#121-地址和数据总线">1.2.1 地址和数据总线</a></li>
+            <li><a href="#122-接口控制信号">1.2.2 接口控制信号</a></li>
+            <li><a href="#123-仲裁信号">1.2.3 仲裁信号</a></li>
+            <li><a href="#124-中断请求等其他信号">1.2.4 中断请求等其他信号</a></li>
+          </ul>
+        </li>
+        <li><a href="#13-pci总线的存储器读写总线事务">1.3 PCI总线的存储器读写总线事务</a>
+          <ul>
+            <li><a href="#131-pci总线事务的时许">1.3.1 PCI总线事务的时许</a></li>
+            <li><a href="#132-posted和non-posted传送方式">1.3.2 Posted和Non-Posted传送方式</a></li>
+            <li><a href="#133-host处理器访问pci设备">1.3.3 HOST处理器访问PCI设备</a></li>
+            <li><a href="#134-pci设备读写主存储器">1.3.4 PCI设备读写主存储器</a></li>
+            <li><a href="#135-delayed传送方式">1.3.5 Delayed传送方式</a></li>
+          </ul>
+        </li>
+        <li><a href="#14-pci总线的中断机制">1.4 PCI总线的中断机制</a>
+          <ul>
+            <li><a href="#141-中断信号和中断控制器的连接关系">1.4.1 中断信号和中断控制器的连接关系</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+  <article class="markdown"><h1 id="第1章-pci总线的基本知识">
+  第1章 PCI总线的基本知识
+  <a class="anchor" href="#%e7%ac%ac1%e7%ab%a0-pci%e6%80%bb%e7%ba%bf%e7%9a%84%e5%9f%ba%e6%9c%ac%e7%9f%a5%e8%af%86">#</a>
+</h1>
+<ul>
+<li>
+<p>简称：PCI Express总线简称为PCIe总线，PCI-to-PCI简称为PCI桥，PCI Express-to-PCI简称为PCIe桥，Host-to-PCI主桥简称为HOST主桥。</p>
+</li>
+<li>
+<p>PCI总线的特点：</p>
+<ol>
+<li>PCI总线空间与处理器空间隔离。PCI设备具有独立的地址空间。</li>
+<li>可扩展性，1棵PCI总线树上，最多能挂接256个PCI设备。（包括PCI桥）</li>
+<li>动态配置机制，PCI设备使用的地址可以根据需要由系统软件动态分配。</li>
+<li>总线带宽。</li>
+<li>共享总线机制，PCI设备通过仲裁获取PCI总线的使用权后，才能进行数据传送。在PCI总线上进行数据传送，不需要处理器的参与。</li>
+<li>中断机制，PCI总线上的设备可以通过四根中断请求信号INTA~D#向处理器提交中断请求。</li>
+</ol>
+</li>
+</ul>
+<h2 id="11-pci总线的组成结构">
+  1.1 PCI总线的组成结构
+  <a class="anchor" href="#11-pci%e6%80%bb%e7%ba%bf%e7%9a%84%e7%bb%84%e6%88%90%e7%bb%93%e6%9e%84">#</a>
+</h2>
+<ul>
+<li>
+  <img src="/img/book/pcie/1.jpg" alt="" /></li>
+</ul>
+<h3 id="111-host主桥">
+  1.1.1 HOST主桥
+  <a class="anchor" href="#111-host%e4%b8%bb%e6%a1%a5">#</a>
+</h3>
+<ul>
+<li>HOST主桥的主要功能是隔离处理器系统的存储器域与处理器系统的PCI总线域，管理PCI总线域，并完成处理器与PCI设备间的数据交换。</li>
+<li>在一个处理器系统中，每一个HOST主线都管理了一颗PCI总线树，在同·一棵PCI总线树上的所有PCI设备属于同一个PCI总线域。</li>
+<li>HOST主桥x下的PCI设备属于PCI总线x域，HOST主桥y下的PCI设备属于PCI总线y域。</li>
+</ul>
+<h3 id="112-pci总线">
+  1.1.2 PCI总线
+  <a class="anchor" href="#112-pci%e6%80%bb%e7%ba%bf">#</a>
+</h3>
+<ul>
+<li>在一颗PCI总线树上可能具有多条PCI总线。</li>
+<li>如图1.1所示，PCI总线x树具有两条PCI总线，分别为PCI总线x0和PCI总线x1，在PCI总线y树中只有一条PCI总线。</li>
+<li>在一个处理器系统中，可以通过PCI桥扩展PCI总线，这样就形成了具有血缘关系的多级PCI总线。</li>
+</ul>
+<h3 id="113-pci设备">
+  1.1.3 PCI设备
+  <a class="anchor" href="#113-pci%e8%ae%be%e5%a4%87">#</a>
+</h3>
+<ul>
+<li>PCI总线中有三类设备：PCI主设备、PCI从设备和桥设备。</li>
+<li>PCI从设备只能被动地接受来自HOST主桥或者其他PCI设备的读写请求。</li>
+<li>PCI主设备可以通过总线仲裁获取到PCI总线的使用权，主动地向其他PCI设备或者主存储器发起存储器读写请求。</li>
+<li>桥设备的主要作用是管理下游的PCI总线，并转发上下游总线之间的总线事务。</li>
+<li>一个PCI设备既可以是主设备也可以是从设备，但在同一时刻，只能是其中一个。</li>
+<li>PCI总线规范将PCI主从设备统称为PCI Agent设备，常见的PCI网卡、显卡、声卡等都属于PCI Agent设备。</li>
+</ul>
+<h3 id="114-host处理器">
+  1.1.4 HOST处理器
+  <a class="anchor" href="#114-host%e5%a4%84%e7%90%86%e5%99%a8">#</a>
+</h3>
+<ul>
+<li>PCI总线规定在同一时刻，在一棵PCI总线树上有且只有一个HOST处理器。这个HOST处理器可以通过HOST主桥，发起PCI总线的配置请求总线十五，并对PCI总线上的设备和桥片进行配置。</li>
+<li>在PCI总线中，设置了很多的寄存器，HOST处理器通过操作这些寄存器来管理PCI设备。如在X86处理器的HOST主桥中设置了0XCF8和0XCFC这两个I/O端口访问PCI设备的配置空间。</li>
+</ul>
+<h3 id="115-pci总线的负载">
+  1.1.5 PCI总线的负载
+  <a class="anchor" href="#115-pci%e6%80%bb%e7%ba%bf%e7%9a%84%e8%b4%9f%e8%bd%bd">#</a>
+</h3>
+<ul>
+<li>PCI总线能挂接的负载域总线频率相关，总线频率越高，能挂接的负载越少，整条总线能提供的带宽越大。</li>
+</ul>
+<h2 id="12-pci总线的信号定义">
+  1.2 PCI总线的信号定义
+  <a class="anchor" href="#12-pci%e6%80%bb%e7%ba%bf%e7%9a%84%e4%bf%a1%e5%8f%b7%e5%ae%9a%e4%b9%89">#</a>
+</h2>
+<ul>
+<li>PCI总线是一条共享总线，在一条PCI总线上可以挂接多个PCI设备。</li>
+<li>PCI总线是一个同步总线，每一个设备都具有一个CLK信号，其发送设备与接收设备使用这个CLK信号进行同步数据传输。</li>
+</ul>
+<h3 id="121-地址和数据总线">
+  1.2.1 地址和数据总线
+  <a class="anchor" href="#121-%e5%9c%b0%e5%9d%80%e5%92%8c%e6%95%b0%e6%8d%ae%e6%80%bb%e7%ba%bf">#</a>
+</h3>
+<ul>
+<li>在PCI总线中，与地址和数据相关的信号如下所示：
+<ol>
+<li>AD[31:0]信号。PCI总线复用地址和数据信号，PCI总线事务在启动后的第一个时钟周期传送地址，这个地址是PCI总线域的存储器地址或者I/O地址，而在下一个时钟周期传送数据。</li>
+<li>PAR信号。PCI总线使用奇偶校验机制，保证地址和数据信号在进行数据传递时的正确性。</li>
+<li>C/BE[3:0]#信号。PCI总线复用命令与字节选通引脚。</li>
+</ol>
+</li>
+</ul>
+<h3 id="122-接口控制信号">
+  1.2.2 接口控制信号
+  <a class="anchor" href="#122-%e6%8e%a5%e5%8f%a3%e6%8e%a7%e5%88%b6%e4%bf%a1%e5%8f%b7">#</a>
+</h3>
+<ul>
+<li>接口控制信号的作用是保证数据的正常传输，并根据PCI主从设备的状态，暂停、终止或者正常完成当前的总线事务。主要信号如下：
+<ol>
+<li>FRAME#信号：指示一个PCI总线事务的开始和结束。</li>
+<li>IRDY#信号：该信号由PCI主设备（包括HOST主桥）驱动，该信号有效时表示PCI主设备的数据已经准备完毕。</li>
+<li>TRDY#信号：该信号由目标设备驱动，该信号有效时表示目标设备已经将数据准备完毕。</li>
+<li>STOP#信号：该信号有效时，表示目标设备请求主设备停止当前PCI总线事务。</li>
+<li>IDSEL信号：PCI总线在进行配置读写总线事务时，使用该信号选择PCI目标设备。</li>
+<li>DEVSEL信号：该信号有效时表示PCI总线的目标设备准备好。</li>
+<li>LOCK#信号：PCI主设备可以使用该信号，将目标设备的某个存储器或者I/O资源锁定，以禁止其他PCI主设备访问此资源，直到锁定这个资源的主设备将其释放。</li>
+</ol>
+</li>
+</ul>
+<h3 id="123-仲裁信号">
+  1.2.3 仲裁信号
+  <a class="anchor" href="#123-%e4%bb%b2%e8%a3%81%e4%bf%a1%e5%8f%b7">#</a>
+</h3>
+<ul>
+<li>PCI设备使用该组信号进行总线仲裁，并获得PCI总线的使用权。</li>
+<li>
+  <img src="/img/book/pcie/2.jpg" alt="" /></li>
+<li>每一个PCI主设备都具有独立的总线仲裁信号，并和PCI总线仲裁器一一相连。总线仲裁器需要保证在同一个时间段内，只有一个PCI设备可以使用当前总线。</li>
+<li>一条PCI总线可以挂接的PCI主设备的数目除了和负载能力有关，还和PCI总线仲裁器能够提供的仲裁数目直接相关。</li>
+<li>PCI主设备使用PCI总线进行数据传递时，需要先设置REQ#信号有效，向PCI总线仲裁器发出总线申请，当总线仲裁器允许PCI主设备获得PCI总线的使用权后，将GNT#信号设置为有效，并将其发送给指定的PCI主设备。PCI主设备在获得总线的使用权后，可以置FRAME#信号有效，从而与PCI从设备进行数据通信。</li>
+</ul>
+<h3 id="124-中断请求等其他信号">
+  1.2.4 中断请求等其他信号
+  <a class="anchor" href="#124-%e4%b8%ad%e6%96%ad%e8%af%b7%e6%b1%82%e7%ad%89%e5%85%b6%e4%bb%96%e4%bf%a1%e5%8f%b7">#</a>
+</h3>
+<ul>
+<li>PCI总线提供了INTA#、INTB#、INTC#和INTD#四个中断请求信号，PCI设备借助这些中断请求信号，使用电平触发方式向处理器提交中断请求服务。</li>
+</ul>
+<h2 id="13-pci总线的存储器读写总线事务">
+  1.3 PCI总线的存储器读写总线事务
+  <a class="anchor" href="#13-pci%e6%80%bb%e7%ba%bf%e7%9a%84%e5%ad%98%e5%82%a8%e5%99%a8%e8%af%bb%e5%86%99%e6%80%bb%e7%ba%bf%e4%ba%8b%e5%8a%a1">#</a>
+</h2>
+<ul>
+<li>PCI总线的基本任务是实现数据传送，将一组数据从一个设备传送到另一个设备。</li>
+<li>PCI总线使用单端并行数据线，采用地址译码方式进行数据传递，采用ID译码方式进行配置信息的传递。</li>
+<li>地址译码方式使用地址信号，ID译码使用PCI设备的ID号，包括Bus Number、Device Number、Function Number和Register Number。</li>
+<li>当PCI设备的配置空间被初始化后，该设备在当前的PCI总线树上将拥有一个独立的PCI总线地址空间，即BAR寄存器所描述的空间。</li>
+<li>处理器与PCI设备进行数据交换或者PCI设备之间进行存储器数据交换时，都将通过PCI总线地址完成。</li>
+<li>PCI设备与主存储器进行DMA操作时，使用的也是PCI总线域的地址，而不是存储器的地址，此时HOST主桥将完成PCI总线地址到存储器域地址的转换。</li>
+<li>PCI总线支持以下几类存储器读写事务。
+<ul>
+<li>HOST处理器对PCI设备的BAR孔金进行数据读写，BAR空间可以使用存储器或I/O译码方式。</li>
+<li>PCI设备之间的数据传递。</li>
+<li>PCI设备对主存储器进行读写，即DMA读写操作。</li>
+</ul>
+</li>
+</ul>
+<h3 id="131-pci总线事务的时许">
+  1.3.1 PCI总线事务的时许
+  <a class="anchor" href="#131-pci%e6%80%bb%e7%ba%bf%e4%ba%8b%e5%8a%a1%e7%9a%84%e6%97%b6%e8%ae%b8">#</a>
+</h3>
+<ul>
+<li>
+  <img src="/img/book/pcie/3.jpg" alt="" /></li>
+<li>当一个PCI主设备需要使用PCI总线时，首先需要发送REQ#信号，通过总线仲裁器获得总线的使用权后，即GNT#信号有效后，使用以下步骤完成一个完整的PCI总线事务。
+<ol>
+<li>当PCI主设备获得PCI总线的使用权后，将在CLK1的上升沿置FRAME#信号有效，启动PCI总线事务。</li>
+<li>PCI总线的第一个时钟周期（CLK1的上升沿到CLK2的上升沿之间）为地址周期。在地址周期中，PCI主设备将访问的目的地址和总线命令分别驱动到AD[31:0]之间和C/BE#信号上。</li>
+<li>当IRDY# TRDY#和DEVSEL#信号都有效后，总线事务将使用数据周期进行数据传递。当IRDY#和TRDY#信号没有同时有效后，PCI总线不能进行数据传输，PCI总线使用这两个信号进行传送控制。</li>
+<li>PCI总线支持突发周期，因此在地址周期之后可以有多个数据周期，可以传送多组数据。</li>
+</ol>
+</li>
+</ul>
+<h3 id="132-posted和non-posted传送方式">
+  1.3.2 Posted和Non-Posted传送方式
+  <a class="anchor" href="#132-posted%e5%92%8cnon-posted%e4%bc%a0%e9%80%81%e6%96%b9%e5%bc%8f">#</a>
+</h3>
+<ul>
+<li>Posted总线事务指PCI目标设备进行数据传递时，当数据到达PCI桥后，由PCI桥接管来自上游总线的总线事务，并将其转发到下游总线。采用这种数据传送方式，在数据还没有到达最终的目的地之前，PCI总线就可以结束当前总线事务，从而在一定程度上解决了PCI总线的拥塞问题。</li>
+<li>Non-Posted总线事务指PCI主设备向PCI目标设备进行数据传递时，数据必须到达目的地后，才能结束当前总线事务。</li>
+<li>PCI总线规定只有存储器写请求可以采用Posted总线事务，PMW(Posted Memory Write Posted存储器写请求)，而存储器读请求、I/O读写请求、配置读写请求只能采用Non-Posted总线事务。</li>
+</ul>
+<h3 id="133-host处理器访问pci设备">
+  1.3.3 HOST处理器访问PCI设备
+  <a class="anchor" href="#133-host%e5%a4%84%e7%90%86%e5%99%a8%e8%ae%bf%e9%97%aepci%e8%ae%be%e5%a4%87">#</a>
+</h3>
+<ul>
+<li>HOST处理器对PCI设备的数据访问主要包括：1. 处理器向PCI设备发起存储器和I/O读写请求；2. 处理器对PCI设备进行配置读写。</li>
+<li>在PCI设备的配置空间中，共有6个BAR寄存器，每一个BAR寄存器都和PCI设备使用的一组PCI总线地址空间对应，BAR寄存器记录这组地址空间的基地址。BAR寄存器中存放的是PCI设备使用的PCI总线域的物理地址，而不是存储器域的物理地址。</li>
+<li>PCI设备能直接使用的地址是PCI总线域的地址，在PCI总线事务中出现的地址也是PCI总线域的地址，而处理器能直接使用的地址是存储器域的地址。</li>
+<li>一个案例：如图一所示，处理器通过HOST主桥x和PCI桥x1对PCI设备11进行存储器写操作。存储器写总线事务采用Posted传送方式，因此数据通过PCI桥后都将结束上一级总线的PCI总线事务。
+<ol>
+<li>处理器将要传递的数据放到通用寄存器中，之后向PCI设备11<strong>映射到的存储器域</strong>的地址进行写操作。（处理器必须通过HOST主桥将存储器域的数据访问转换为PCI总线事务才能对PCI总线地址空间进行访问。）</li>
+<li>HOST主桥x接收来自处理器的存储器写请求，之后处理器结束当前存储器写操作，释放系统总线。</li>
+<li>PCI总线x0上的PCI设备01、PCI设备02和PCI桥1同时监听这个PCI写总线事务。最后PCI桥x1接收这个写总线事务，并结束来自PCI总线x0的PCI总线事务。</li>
+<li>PCI总线x1上的PCI设备11和PCI设备12同时监听这个PCI写总线事务。最后PCI设备11通过地址译码的方式接收这个写总线事务，并结束来自PCI总线x1上的PCI总线事务。</li>
+</ol>
+</li>
+<li>处理器对PCI设备11进行存储器读，采用Non-Posted方式（未使用Delayed）
+<ol>
+<li>处理器准备接收数据使用的通用寄存器，之后向PCI设备11映射到的存储器域的地址进行读操作。</li>
+<li>HOST主桥x接收来自处理器的存储器读请求。HOST主桥x进行存储器地址到PCI总线地址的转换，之后向PCI总线x0发起存储器读总线事务。</li>
+<li>PCI总线x0上的PCI设备01、PCI设备02和PCI桥x1将监听这个存储器读请求，之后PCI桥1接收这个存储器读请求。然后PCI桥x1向PCI总线x1发起新的PCI总线读请求。</li>
+<li>PCI总线x1上的PCI设备11和PCI设备12监听这个PCI读请求总线事务。最后PCI设备11接收这个存储器读请求总线事务，并将这个读请求总线事务转换为存储器读完成总线事务后，将数据传送到PCI桥x1，并结束来自PCI总线x1上的PCI总线事务。</li>
+<li>PCI桥x1将接收到的数据通过PCI总线x0，继续上传到HOST主桥x，并结束PCI总线x0上的PCI总线事务。</li>
+<li>HOST主桥x将数据传递给处理器，最终结束处理器的存储器读操作。</li>
+</ol>
+</li>
+</ul>
+<h3 id="134-pci设备读写主存储器">
+  1.3.4 PCI设备读写主存储器
+  <a class="anchor" href="#134-pci%e8%ae%be%e5%a4%87%e8%af%bb%e5%86%99%e4%b8%bb%e5%ad%98%e5%82%a8%e5%99%a8">#</a>
+</h3>
+<ul>
+<li>
+<p>PCI设备域存储器直接进行数据交换的过程也被称为DMA。</p>
+</li>
+<li>
+<p>PCI设备进行DMA操作时，需要获得数据传送的目的地址和传送大小。</p>
+</li>
+<li>
+<p>PCI总线在进行DMA操作时，使用的目的地址时PCI总线域的物理地址，PCI设备并不能识别存储器域的物理地址。</p>
+</li>
+<li>
+<p>HOST主桥负责PCI总线地址到存储器域地址的转换。HOST主桥需要进行设置，将存储器的地址空间映射到PCI总线之后，PCI设备才能对这段存储器空间进行DMA操作。</p>
+</li>
+<li>
+<p>例：PCI设备11向主存储器写数据</p>
+<ol>
+<li>PCI设备11将存储器写请求发送给PCI总线x1，写请求使用的地址时PCI总线域的地址。</li>
+<li>PCI总线x1上的所有设备监听这个请求。</li>
+<li>PCI桥x1发现当前总线事务使用的PCI总线地址不是其下游设备使用的PCI总线地址，则接收这个数据请求。PCI桥x1结束来自PCI设备11的Posted存储器写请求，并将这个数据推到上游PCI总线上，即PCI总线x0上。</li>
+<li>PCI总线x0上所有PCI设备包括HOST主桥监听这个请求。HOST主桥x接收这个数据请求，并结束PCI桥x1的Posted存储器写请求。</li>
+<li>HOST主桥x发现这个数据请求发向存储器，则将来自PCI总线x0的PCI总线地址转化为存储器地址，之后通过存储器控制器将数据写入存储器，完成PCI设备的DMA写操作。</li>
+</ol>
+</li>
+<li>
+<p>PCI设备进行DMA读过程只能使用No-Posted总线事务：</p>
+<ol>
+<li>PCI设备11将存储器读请求发向PCI总线x1。</li>
+<li>PCI总线x1上的所有设备监听这个请求，PCI桥x1发现下游PCI总线没有设备接收这个数据请求，则接收这个数据请求，将这个数据请求推送到上游PCI总线上。</li>
+<li>PCI总线x0上的设备监听这个请求，PCI总线x0上的设备也不会接收这个数据请求，最后用这个数据请求将由HOST主桥x接收。</li>
+<li>HOST主桥x发现这个数据是发向主存储器的，则将来自PCI总线x0的PCI总线地址转化为存储器地址，之后通过存储器控制器将其数据读出，并转发到HOST主桥x</li>
+<li>HOST主桥x将数据经由PCI桥x1传递到PCI设备11，PCI设备11接收到这个数据后结束DMA读。</li>
+</ol>
+</li>
+<li>
+<p>PCI总线还允许PCI设备之间进行数据传递，以PCI设备11将数据写入PCI设备01的过程：</p>
+<ol>
+<li>PCI设备11将PCI写总线事务发向PCI总线x1上，PCI桥x1和PCI设备12同时监听到这个写总线事务。</li>
+<li>PCI桥x1将接收这个PCI写请求总线事务，并将这个PCI写总线事务推到PCI总线x0</li>
+<li>PCI总线x0上的所有设备监听这个PCI写总线事务，最后由PCI设备01接收这个数据请求，并完成PCI写事务。</li>
+</ol>
+</li>
+</ul>
+<h3 id="135-delayed传送方式">
+  1.3.5 Delayed传送方式
+  <a class="anchor" href="#135-delayed%e4%bc%a0%e9%80%81%e6%96%b9%e5%bc%8f">#</a>
+</h3>
+<ul>
+<li>Non-Posted效率不行，PCI总线规定只能Non-Posted总线事务可以使用Delayed总线事务。</li>
+<li>PCI总线的Delay总线事务由Delay读写请求和Delay读写完成总线事务组成，当delay读写请求到达目的后，将被转换为Delay读写完成总线事务。</li>
+<li>
+  <img src="/img/book/pcie/4.jpg" alt="图1-4" /></li>
+<li>假设处理器通过存储器读访问PCI设备22时，流程如下：
+<ol>
+<li>HOST主桥完成存储器域到PCI总线域的转换，然后启动PCI读总线事务。</li>
+<li>PCI桥1接收这个读总线事务，并首先使用Retry周期，使HOST主桥择时重新发起相同的总线周期。</li>
+<li>PCI桥1使用Delayed总线请求继续访问PCI设备22.</li>
+<li>PCI桥2接收这个总线请求，并将这个Delayed继续传递。</li>
+<li>这个数据请求最终到达PCI设备22，如果PCI设备22没有将数据准备好，也可以使用Retry周期，使PCI桥2择时重新发起相同的总线周期；如果数据已经准备好，PCI设备22将接收这个数据请求，并将这个Delayed总线请求转化为Delayed总线完成事务。</li>
+<li>Delayed总线完成事务将”数据或完成信息“传递给PCI桥2，当PCI桥1重新发出No-Posted总线请求时，PCI桥2将这个&quot;数据或者完成信息“传递给PCI桥1。</li>
+<li>HOST主桥重新发出整个存储器读总线事务时，PCI桥1将”数据或者完成信息“传递给HOST总桥，最终完成这个PCI总线事务。</li>
+</ol>
+</li>
+</ul>
+<h2 id="14-pci总线的中断机制">
+  1.4 PCI总线的中断机制
+  <a class="anchor" href="#14-pci%e6%80%bb%e7%ba%bf%e7%9a%84%e4%b8%ad%e6%96%ad%e6%9c%ba%e5%88%b6">#</a>
+</h2>
+<h3 id="141-中断信号和中断控制器的连接关系">
+  1.4.1 中断信号和中断控制器的连接关系
+  <a class="anchor" href="#141-%e4%b8%ad%e6%96%ad%e4%bf%a1%e5%8f%b7%e5%92%8c%e4%b8%ad%e6%96%ad%e6%8e%a7%e5%88%b6%e5%99%a8%e7%9a%84%e8%bf%9e%e6%8e%a5%e5%85%b3%e7%b3%bb">#</a>
+</h3>
+<ul>
+<li>X86处理器使用APIC中断控制器（Advanced Programmable Interrupt Controller）。</li>
+<li>PCI总线规范没有规定PCI设备的INTx信号如何与中断控制器的IRQ_PINx#信号相连。为此系统软件使用中断路由表存放PCI设备的INTx信号与中断控制器的连接关系。在X86处理器系统中，BISO提供这个中断路由表。</li>
+</ul>
+</article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

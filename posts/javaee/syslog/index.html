@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>Syslog | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#rfc5424">rfc5424</a>
+          <ul>
+            <li><a href="#介绍">介绍</a></li>
+            <li><a href="#例子">例子</a></li>
+            <li><a href="#log4j2配置">log4j2配置</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>Syslog</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#rfc5424">rfc5424</a>
+          <ul>
+            <li><a href="#介绍">介绍</a></li>
+            <li><a href="#例子">例子</a></li>
+            <li><a href="#log4j2配置">log4j2配置</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/javaee/syslog/">Syslog</a>
+  </h1>
+  
+  <h5>2022-01-07</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">java</a>
+  </div>
+  
+
+
+
+<h2 id="rfc5424">
+  rfc5424
+  <a class="anchor" href="#rfc5424">#</a>
+</h2>
+<h3 id="介绍">
+  介绍
+  <a class="anchor" href="#%e4%bb%8b%e7%bb%8d">#</a>
+</h3>
+<p>格式：<code>PRI VERSION TIMESTAMP HOSTNAME APP-NAME PROCID MSGID STRUCTURED-DATA MSG</code></p>
+<ul>
+<li>消息头
+<ul>
+<li>PRI 优先级</li>
+<li>VERSION 版本</li>
+<li>TIMESTAMP 时间</li>
+<li>HOSTNAME 主机名</li>
+<li>APP-NAME APP名称</li>
+<li>PROCID 进程的ID</li>
+<li>MSGID 消息ID</li>
+</ul>
+</li>
+<li>STRUCTURED-DATA</li>
+<li>消息体</li>
+</ul>
+<h4 id="pri">
+  PRI
+  <a class="anchor" href="#pri">#</a>
+</h4>
+<ul>
+<li>PRI（priority）代表两个值（Facility）和日志级别（serverity）。PRI必须是类似<code>&lt;14&gt;</code>的格式。中间的值的计算公式为<code>priority = facility x 8 + serverity</code>。</li>
+<li>Facility的值是<code>[0,23]</code>。各个值的含义如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>数字</th>
+<th>介绍</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>内核消息</td>
+</tr>
+<tr>
+<td>1</td>
+<td>用户级别消息</td>
+</tr>
+<tr>
+<td>2</td>
+<td>邮件系统</td>
+</tr>
+<tr>
+<td>3</td>
+<td>系统守护进程</td>
+</tr>
+<tr>
+<td>4</td>
+<td>安全/认证消息</td>
+</tr>
+<tr>
+<td>5</td>
+<td>syslogd内部生成的消息</td>
+</tr>
+<tr>
+<td>6</td>
+<td>line printer subsystem</td>
+</tr>
+<tr>
+<td>7</td>
+<td>network news subsystem</td>
+</tr>
+<tr>
+<td>8</td>
+<td>UUCP subsystem</td>
+</tr>
+<tr>
+<td>9</td>
+<td>时钟守护程序</td>
+</tr>
+<tr>
+<td>10</td>
+<td>安全/认证消息</td>
+</tr>
+<tr>
+<td>11</td>
+<td>FTP守护程序</td>
+</tr>
+<tr>
+<td>12</td>
+<td>NTF子系统</td>
+</tr>
+<tr>
+<td>13</td>
+<td>log audit</td>
+</tr>
+<tr>
+<td>14</td>
+<td>log alert</td>
+</tr>
+<tr>
+<td>15</td>
+<td>clock daemon (note 2)</td>
+</tr>
+<tr>
+<td>16</td>
+<td>本地用户0（LOCAL0）</td>
+</tr>
+<tr>
+<td>17</td>
+<td>本地用户1（LOCAL1）</td>
+</tr>
+<tr>
+<td>18</td>
+<td>本地用户2（LOCAL2）</td>
+</tr>
+<tr>
+<td>19</td>
+<td>本地用户3（LOCAL3）</td>
+</tr>
+<tr>
+<td>20</td>
+<td>本地用户4（LOCAL4）</td>
+</tr>
+<tr>
+<td>21</td>
+<td>本地用户5（LOCAL5）</td>
+</tr>
+<tr>
+<td>22</td>
+<td>本地用户6（LOCAL6）</td>
+</tr>
+<tr>
+<td>23</td>
+<td>本地用户7（LOCAL7）</td>
+</tr>
+</tbody>
+</table>
+<h4 id="serverity">
+  Serverity
+  <a class="anchor" href="#serverity">#</a>
+</h4>
+<table>
+<thead>
+<tr>
+<th>数字</th>
+<th>介绍</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>emergency紧急，系统无法使用</td>
+</tr>
+<tr>
+<td>1</td>
+<td>alert警告，必须立即采取措施</td>
+</tr>
+<tr>
+<td>2</td>
+<td>critical</td>
+</tr>
+<tr>
+<td>3</td>
+<td>error</td>
+</tr>
+<tr>
+<td>4</td>
+<td>warning</td>
+</tr>
+<tr>
+<td>5</td>
+<td>notice；正常但是重要的情况</td>
+</tr>
+<tr>
+<td>6</td>
+<td>informational；普通信息</td>
+</tr>
+<tr>
+<td>7</td>
+<td>debug；</td>
+</tr>
+</tbody>
+</table>
+<h3 id="例子">
+  例子
+  <a class="anchor" href="#%e4%be%8b%e5%ad%90">#</a>
+</h3>
+<pre tabindex="0"><code>&lt;165&gt;1 2003-08-24T05:14:15.000003-07:00 192.0.2.1 myproc 8710 - - %% It&#39;s time to make the do-nuts
+&lt;165&gt;1 2003-10-11T22:14:15.003Z mymachine.example.com evntslog - ID47 [exampleSDID@32473 iut=&#34;3&#34; eventSource=&#34;Application&#34; eventID=&#34;1011&#34;] BOMAn
+&lt;165&gt;1 2003-10-11T22:14:15.003Z mymachine.example.com evntslog - ID47 [exampleSDID@32473 iut=&#34;3&#34; eventSource=&#34;Application&#34; eventID=&#34;1011&#34;][examplePriority@32473 class=&#34;high&#34;]
+</code></pre><h3 id="log4j2配置">
+  log4j2配置
+  <a class="anchor" href="#log4j2%e9%85%8d%e7%bd%ae">#</a>
+</h3>
+<pre tabindex="0"><code>&lt;Syslog name=&#34;RFC5424&#34; format=&#34;RFC5424&#34; host=&#34;10.2.4.31&#34; port=&#34;5140&#34; protocol=&#34;UDP&#34; 
+appName=&#34;auditSyslogDemo&#34; facility=&#34;LOCAL0&#34; newLine=&#34;true&#34; messageId=&#34;Audit&#34; id=&#34;App&#34;/&gt;
+</code></pre><p>参考链接：
+  <a href="https://www.rfc-editor.org/rfc/rfc5424.html">RFC 5424: The Syslog Protocol (rfc-editor.org)</a></p>
+<p>参考链接：
+  <a href="https://logging.apache.org/log4j/2.x/manual/appenders.html#SyslogAppender">Log4j – Log4j 2 Appenders (apache.org)</a></p></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

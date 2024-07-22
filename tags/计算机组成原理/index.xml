@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>计算机组成原理 on 小象的blog</title>
+    <link>/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/</link>
+    <description>Recent content in 计算机组成原理 on 小象的blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Fri, 27 Mar 2020 15:02:20 +0000</lastBuildDate><atom:link href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>浮点数</title>
+      <link>/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/%E6%B5%AE%E7%82%B9%E6%95%B0/</link>
+      <pubDate>Fri, 27 Mar 2020 15:02:20 +0000</pubDate>
+      
+      <guid>/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/%E6%B5%AE%E7%82%B9%E6%95%B0/</guid>
+      <description>&lt;h2 id=&#34;浮点数&#34;&gt;
+  浮点数
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%b5%ae%e7%82%b9%e6%95%b0&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;浮点表示法：把一个数的有效数字和数的范围在计算机的一个存储单元中分别予以表示的方法。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;32位浮点数&#34;&gt;
+  32位浮点数
+  &lt;a class=&#34;anchor&#34; href=&#34;#32%e4%bd%8d%e6%b5%ae%e7%82%b9%e6%95%b0&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;数的量级在1x2&lt;sup&gt;-126&lt;/sup&gt;至1.11&amp;hellip;x2&lt;sup&gt;127&lt;/sup&gt;之间，大概就是1.19x10&lt;sup&gt;-38&lt;/sup&gt;至3.40x10&lt;sup&gt;38&lt;/sup&gt;之间，如果有一个数为10&lt;sup&gt;40&lt;/sup&gt;，就不能使用float来存了。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;0--100-0001-0--011-0110-0000-0000-0000-0000&#34;&gt;
+  &lt;code&gt;0 | 100 0001 0 | 011 0110 0000 0000 0000 0000&lt;/code&gt;
+  &lt;a class=&#34;anchor&#34; href=&#34;#0--100-0001-0--011-0110-0000-0000-0000-0000&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;第一部分表示符号位，0为正数，1为负数&lt;/li&gt;
+&lt;li&gt;第二部分共8位，表示阶码（指数），需要减去127&lt;/li&gt;
+&lt;li&gt;第三部分（23位）表示尾数（小数点后面的数）。&lt;/li&gt;
+&lt;li&gt;0表示为正数，100 0001 0减127为3，剩余23位放在1.的后面，即1.011011，所以结果为1.011011x2&lt;sup&gt;3&lt;/sup&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;64位浮点数&#34;&gt;
+  64位浮点数
+  &lt;a class=&#34;anchor&#34; href=&#34;#64%e4%bd%8d%e6%b5%ae%e7%82%b9%e6%95%b0&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;阶码宽度为11位，&lt;/li&gt;
+&lt;li&gt;位数宽度为52位&lt;/li&gt;
+&lt;li&gt;数的量级在1x2&lt;sup&gt;-1022&lt;/sup&gt; 至 (2-2&lt;sup&gt;-52&lt;/sup&gt;)x2&lt;sup&gt;1023&lt;/sup&gt;之间，大概就是10&lt;sup&gt;-308&lt;/sup&gt;至10&lt;sup&gt;308&lt;/sup&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;程序计数器&#34;&gt;
+  程序计数器
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e7%a8%8b%e5%ba%8f%e8%ae%a1%e6%95%b0%e5%99%a8&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;PC总是存储将要执行的下一条指令的地址&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

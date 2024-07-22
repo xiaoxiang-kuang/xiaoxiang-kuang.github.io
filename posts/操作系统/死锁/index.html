@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>死锁 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#系统资源">系统资源</a></li>
+            <li><a href="#死锁产生的必要条件">死锁产生的必要条件</a></li>
+            <li><a href="#死锁的预防">死锁的预防</a></li>
+            <li><a href="#死锁的避免">死锁的避免</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>死锁</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#系统资源">系统资源</a></li>
+            <li><a href="#死锁产生的必要条件">死锁产生的必要条件</a></li>
+            <li><a href="#死锁的预防">死锁的预防</a></li>
+            <li><a href="#死锁的避免">死锁的避免</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%AD%BB%E9%94%81/">死锁</a>
+  </h1>
+  
+  <h5>2020-04-12</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+  </div>
+  
+
+
+
+<h3 id="系统资源">
+  系统资源
+  <a class="anchor" href="#%e7%b3%bb%e7%bb%9f%e8%b5%84%e6%ba%90">#</a>
+</h3>
+<ol>
+<li>可抢占资源：某进程获得该类资源后，该资源可以被系统或其他进程访问。比如CPU、内存。</li>
+<li>不可抢占资源：某进程获得该类资源后，该资源不能被其他进程抢占，只能在进程使用完毕后由该进程自己释放。<strong>讨论死锁所指的资源一般指不可抢占资源</strong>。</li>
+</ol>
+<h3 id="死锁产生的必要条件">
+  死锁产生的必要条件
+  <a class="anchor" href="#%e6%ad%bb%e9%94%81%e4%ba%a7%e7%94%9f%e7%9a%84%e5%bf%85%e8%a6%81%e6%9d%a1%e4%bb%b6">#</a>
+</h3>
+<ol>
+<li>互斥条件：任一时刻一个资源仅被一个进程占用。</li>
+<li>请求和保持条件：一个进程请求资源得不到满足而阻塞自己时，并不释放已经分配给它的资源。</li>
+<li>不剥夺条件：进程获得的资源在未使用完毕不可能被其他进程占有，只能由该进程自己释放。</li>
+<li>循环等待：若干进程形成一个循环等待链，链中每一个进程都在等待改链中下一个进程占有的资源。</li>
+</ol>
+<h3 id="死锁的预防">
+  死锁的预防
+  <a class="anchor" href="#%e6%ad%bb%e9%94%81%e7%9a%84%e9%a2%84%e9%98%b2">#</a>
+</h3>
+<ol>
+<li>破坏请求和保持条件：每个进程在运行之前一次性申请他所需要的全部资源，并在资源未满足时不运行。</li>
+<li>破坏不剥夺：当一个已经占有资源的进程又提出新的资源请求，而并没有得到满足时，则必须释放他所获取的所有资源而进入阻塞状态。</li>
+<li>破坏循环等待：采用资源有序分配策列，将系统中的资源进行编号，进程必须按照顺序去申请资源。</li>
+</ol>
+<h3 id="死锁的避免">
+  死锁的避免
+  <a class="anchor" href="#%e6%ad%bb%e9%94%81%e7%9a%84%e9%81%bf%e5%85%8d">#</a>
+</h3>
+<ul>
+<li><strong>安全状态</strong>是指在某一时刻，系统中存在一个包含所有进程的进程序列，按照该进程序列的顺序为所有进程分配资源，则所有进程的资源需求都可以得到满足。</li>
+</ul>
+<h4 id="银行家算法">
+  银行家算法
+  <a class="anchor" href="#%e9%93%b6%e8%a1%8c%e5%ae%b6%e7%ae%97%e6%b3%95">#</a>
+</h4>
+<ul>
+<li>在进程提出资源申请时，先判断此次分配是否会导致系统进入不安全状态。如果会进入不安全状态，就暂时不答应这次请求，让进程先阻塞。</li>
+</ul></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

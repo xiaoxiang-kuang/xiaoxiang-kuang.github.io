@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>微型计算机的组成 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents"></nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>微型计算机的组成</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents"></nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/bios/%E5%BE%AE%E5%9E%8B%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%9A%84%E7%BB%84%E6%88%90/">微型计算机的组成</a>
+  </h1>
+  
+  <h5>2023-10-09</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/bios/">bios</a>
+  </div>
+  
+
+
+
+<ul>
+<li>冯●诺伊曼计算机的基本思想：
+<ul>
+<li>采用二进制形式表示数据和指令，指令由操作码和地址码组成。</li>
+<li>将程序和数据存放在存储器中，计算机工作时从存储器取出指令来执行。</li>
+<li>指令的执行时顺序的，程序分支由转移指令实现。</li>
+<li>计算机由存储器、控制器、运算器、输入设备和输出设备组成。</li>
+</ul>
+</li>
+<li>现代计算机讲5大部件成为了3个硬件子系统：处理器、存储系统、输入输出系统。处理器包括运算器和控制器；存储系统由寄存器、高速缓冲存储器和辅助存储器几个层次组成。输入输出设备统称为外部设备，简称外设或I/O设备。</li>
+<li>冯●诺伊曼计算机采用二进制表示数据和指令，指令是控制计算机操作的指令，指令的二进制编码规则形成了指令的代码格式，指令由操作码和地址码组成。指令的操作码表示指令的操作，如加法操作、操作数是参与操作的数据，主要以寄存器或者存储器地址形式指明数据的来源，所以也成为地址码。</li>
+<li>程序和数据在执行前需要存放在主存储器中，在执行时才从主存储器进入处理器。现代计算机中，主存储器是字节可寻址的，主存储器的每个存储单元都具有一个地址，保存一个字节的信息。只要指定了地址就能进行存取的方式被称为随机存取。</li>
+<li>处理器的主要功能是从主存储器取指令，翻译指令代码的功能（译码），然后执行指令规定的操作。当一条指令执行完后，处理器会自动地去取下一条将要执行的指令，重复上述过程直到整个程序执行完毕。</li>
+<li>为了简化各个部件的相互连接，现代计算机使用总线结构。微处理器内集成了控制器、运算器和若干高速存储单元（寄存器）。</li>
+<li>存储系统由处理器内部的寄存器、高速缓冲存储器（Cache）、主存储器（即内存）和辅助存储器构成（如磁盘）。</li>
+<li>I/O设备指的是输入设备和输出设备（外设），由于各种外设的工作速度、驱动方法差别很大，需要一个I/O接口充当外设和主机间的桥梁。较复杂的I/O接口电路通常制成独立的电路板。</li>
+<li>总线用于多个部件的相互连接。系统总线指的是微机系统中，处理器与存储器和I/O设备进行信息交换的公共通道。总线有几十条到上百条信号线，总线信号一般可以分为3组：
+<ul>
+<li>地址总线：在该组信号线上，处理器单向输出将要访问的主存单元或I/O端口的地址信息。地址线的多少决定了系统能够直接寻址存储器的容量大小和外设端口范围。</li>
+<li>数据总线：数据总线的多少决定了一次能够传输数据的位数。处理器进行读操作时，主存或者外设的数据通过该组信号线输入处理器，处理器进行写操作时，处理器的数据通过该组信号线输出到主存或者外设。</li>
+<li>控制总线：控制总线用于协调系统中各个部件的操作。各类总线的特点主要取决于控制总线。</li>
+</ul>
+</li>
+<li>中断是处理器正常执行程序的流程被某种原因打断并暂时停止，转向执行事先安排好的一段处理程序（中断处理程序），待处理程序结束后仍返回被中断的指令处继续执行的过程。中断来自处理器内部就是内部中断，也称为异常（Exception）；中断来自外部就是外部中断。例：指令的调试需要利用中断，PC以中断的方式响应键盘输入。</li>
+<li>DMA(Direct Memory Access，直接存储器读取)指主存储器和外设间直接的、不通过处理器的高速数据传输方式。</li>
+<li>控制芯片组（即多个控制芯片）提供主板上的关键逻辑电路，如主存控制单元、中断控制器、DMA控制器等，控制芯片决定主板的特性，如支持的主存类型和容量、支持的处理器类型。</li>
+</ul></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

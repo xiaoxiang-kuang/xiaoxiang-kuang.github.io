@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>计算机网络 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#数据交换">数据交换</a></li>
+        <li><a href="#网络性能指标">网络性能指标</a></li>
+        <li><a href="#osi参考模型和tcpip参考模型">OSI参考模型和TCP/IP参考模型</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>计算机网络</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#数据交换">数据交换</a></li>
+        <li><a href="#网络性能指标">网络性能指标</a></li>
+        <li><a href="#osi参考模型和tcpip参考模型">OSI参考模型和TCP/IP参考模型</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>
+  </h1>
+  
+  <h5>2021-08-27</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>
+  </div>
+  
+
+
+
+<ul>
+<li>Internet是全球最大的互联网络，是一个世界范围的计算机网络，互联了遍及全世界的数以亿计的计算设备的网络。</li>
+<li>主机（host）：也叫端系统。是与因特网相连的计算机和其他设备，如PC、服务器、手机等。主机通过通信链路（电缆、光纤、无线电等）和分组交换机（路由器、链路层交换机）连接到一起。当一台主机向另一台主机发送数据，发送主机将数据分组（将数据分段，每段加上首部字节）。分组交换机从他的一条入通信链路接收到达的分组，从它的出通信链路转发该分组。路由器通常位于网络核心，链路层交换机位于接入网中。</li>
+<li>ISP(Internet Service Provider)：因特网服务提供商。主机通过ISP介入到因特网，每个交换机由多个通信链路和分组交换机组成。</li>
+</ul>
+<blockquote class="book-hint info">
+  <ul>
+<li>协议：计算机网络中数据交换必须遵守事先约定的规则。协议规定了网络中所有信息发送和接收过程。协议的三要素：
+<ol>
+<li>语法，数据和控制信息的结构或格式。</li>
+<li>语义，需要发出何种控制信息；完成何种动作及做出何种响应；以及差错控制。</li>
+<li>时许，事件的顺序；速度匹配。</li>
+</ol>
+</li>
+<li>报文指的是发送信息的整体，比如一个文件、一首音乐。</li>
+<li>分组是报文分拆出来的一系列相对较小的数据包。</li>
+</ul>
+
+</blockquote>
+
+<ul>
+<li>接入网络：①DSL(Digital Subscriber Line)，即数字电话线；②电缆网络；③无线局域网和广域无线接入。</li>
+<li>计算机网络结构：
+<ul>
+<li>网络边缘，指主机和网络应用。</li>
+<li>接入网络，有线和无线通信链路。</li>
+<li>网络核心(核心网络)，互联的路由器。网络核心的关键功能是路由和转发，路由是确定分组从源到目的的传输路径，转发是将分组从路由器的输入端交换至正确的输出端口。</li>
+</ul>
+</li>
+</ul>
+<h2 id="数据交换">
+  数据交换
+  <a class="anchor" href="#%e6%95%b0%e6%8d%ae%e4%ba%a4%e6%8d%a2">#</a>
+</h2>
+<ul>
+<li>网络核心需要通过数据交换将数据从源主机发送到目的主机，数据交换有以下类型：1. 电路交换。2. 报文交换。3. 分组交换。</li>
+<li>电路交换的三个阶段是：1. 建立通信；2. 通信；3. 释放连接。会独占资源。为了共享中继线，引入了多路复用(Multiplexing)。典型的多路复用有：1. 频分多路复用(FDM)；2. 时分多路复用(TDM)；3. 波分多路复用(WDM)；4. 码分多路复用(CDM)。</li>
+<li>频分多路复用是各用户占用不同的频率带宽。用户在分派到一定的频带后，在通信过程中始终占用此频带。</li>
+<li>
+  <img src="/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/1.png" alt="FDM" /></li>
+<li>时分复用则是将时间划分为一段段等长的时分复用帧（TDM 帧），每个用户在每个TDM帧中占用固定序号的时隙。时分复用的所有用户是在不同的时间占用相同的频带宽度。</li>
+<li>
+  <img src="/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/2.png" alt="TDM" /></li>
+<li>波分复用就是光的频分复用。</li>
+<li>
+  <img src="/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/3.png" alt="WDM" /></li>
+<li>码分多路复用是为每个用户分配一个唯一的mbit码片序列，各用户码片序列相互正交。</li>
+<li>报文交换和分组交换均采用存储转发的方式交换数据，报文交换以完整的报文进行存储转发，分组交换以较小的分组进行存储转发。</li>
+<li>分组交换的报文的交付时间:</li>
+<li>
+  <img src="/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/4.png" alt="FDM" /></li>
+<li>分组交换和电路交换的比较：
+<ol>
+<li>分组交换适合突发数据传输网络。</li>
+<li>电路交换会独占资源，分组交换不会，所以分组交换可能产生拥堵和分组丢失。</li>
+</ol>
+</li>
+</ul>
+<h2 id="网络性能指标">
+  网络性能指标
+  <a class="anchor" href="#%e7%bd%91%e7%bb%9c%e6%80%a7%e8%83%bd%e6%8c%87%e6%a0%87">#</a>
+</h2>
+<ol>
+<li>速率或比特率，使用单位时间中传输信息的比特量。1Gbps=10^3Mbps=10^6kbps=10^9bps</li>
+<li>带宽指的是数字信道所能传输的最高数据率。单位是bps</li>
+<li>分组交换可能会发生丢包和时延。因为分组在路由器缓存中排队时，如果分组到达速率超过输出链路容量时就会丢包；分组排队等待输出链路可用时就会产生时延，时延包括节点处理延迟(通常小于毫秒级别)、数据报排队延迟、路由器中传输延迟和物理链路传播延迟。</li>
+<li>时延带宽积又被称为以比特为单位的链路长度，时延带宽积=传播时延x带宽。</li>
+<li>丢包率=丢包数/已发分组数。</li>
+<li>吞吐量标识在发送端和接收端之间传送数据速率。吞吐量取决于链路上最小的带宽。</li>
+</ol>
+<h2 id="osi参考模型和tcpip参考模型">
+  OSI参考模型和TCP/IP参考模型
+  <a class="anchor" href="#osi%e5%8f%82%e8%80%83%e6%a8%a1%e5%9e%8b%e5%92%8ctcpip%e5%8f%82%e8%80%83%e6%a8%a1%e5%9e%8b">#</a>
+</h2>
+<ul>
+<li>现实中基本上都用的TCP/IP参考模型。</li>
+<li>每一层都会封装上层的数据，增加一些控制信息用来构建协议数据单元(PDU)。</li>
+<li>
+  <img src="/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/5.png" alt="OSI参考模型" />
+<ul>
+<li>物理层定义了接口特性、传输模式、比特编码、比特同步和数据率。</li>
+<li>数据链路层是相邻网络元素（主机、交换机、路由器等）的数据传输，负责节点之间的数据传输、组帧、物理寻址、流量控制、差错控制和访问控制(决定某一时刻哪个设备拥有物理介质的使用权)。</li>
+<li>网络层负责源主机到目的主机的数据分组路由与转发以及逻辑寻址。</li>
+<li>传输层负责进程间完整报文的传输。包括分段与重组、SAP寻址、连接控制、流量控制、差错控制。</li>
+<li>会话层负责对话的建立、维护和同步。</li>
+<li>表示层负责数据的加密解密、压缩解压等。</li>
+<li>应用层支持用户通过用户代理(如浏览器)或网络接口使用网络。</li>
+</ul>
+</li>
+</ul></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

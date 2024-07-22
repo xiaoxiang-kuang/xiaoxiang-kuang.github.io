@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>CSS Flex | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#flexbox的轴线">flexbox的轴线</a>
+          <ul>
+            <li><a href="#主轴">主轴</a></li>
+            <li><a href="#交叉轴">交叉轴</a></li>
+            <li><a href="#起始线和终止线">起始线和终止线</a></li>
+          </ul>
+        </li>
+        <li><a href="#flex容器">flex容器</a>
+          <ul>
+            <li><a href="#flex-wrap实现多行flex容器">flex-wrap实现多行flex容器</a></li>
+            <li><a href="#flex-flow">flex-flow</a></li>
+            <li><a href="#align-items">align-items</a></li>
+            <li><a href="#justify-content">justify-content</a></li>
+          </ul>
+        </li>
+        <li><a href="#flex元素">flex元素</a>
+          <ul>
+            <li><a href="#flex-basis">flex-basis</a></li>
+            <li><a href="#flex-grow">flex-grow</a></li>
+            <li><a href="#flex-shrink">flex-shrink</a></li>
+            <li><a href="#flex属性的简写">flex属性的简写</a></li>
+            <li><a href="#align-self">align-self</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>CSS Flex</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#flexbox的轴线">flexbox的轴线</a>
+          <ul>
+            <li><a href="#主轴">主轴</a></li>
+            <li><a href="#交叉轴">交叉轴</a></li>
+            <li><a href="#起始线和终止线">起始线和终止线</a></li>
+          </ul>
+        </li>
+        <li><a href="#flex容器">flex容器</a>
+          <ul>
+            <li><a href="#flex-wrap实现多行flex容器">flex-wrap实现多行flex容器</a></li>
+            <li><a href="#flex-flow">flex-flow</a></li>
+            <li><a href="#align-items">align-items</a></li>
+            <li><a href="#justify-content">justify-content</a></li>
+          </ul>
+        </li>
+        <li><a href="#flex元素">flex元素</a>
+          <ul>
+            <li><a href="#flex-basis">flex-basis</a></li>
+            <li><a href="#flex-grow">flex-grow</a></li>
+            <li><a href="#flex-shrink">flex-shrink</a></li>
+            <li><a href="#flex属性的简写">flex属性的简写</a></li>
+            <li><a href="#align-self">align-self</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/%E5%89%8D%E7%AB%AF/css-flex/">CSS Flex</a>
+  </h1>
+  
+  <h5>2022-01-04</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/%E5%89%8D%E7%AB%AF/">前端</a>
+  </div>
+  
+
+
+
+<h2 id="flexbox的轴线">
+  flexbox的轴线
+  <a class="anchor" href="#flexbox%e7%9a%84%e8%bd%b4%e7%ba%bf">#</a>
+</h2>
+<ul>
+<li>使用flex布局时，flex有两根轴线：主轴和交叉轴，主轴由flex-direction定义，另一根轴垂直于它。</li>
+</ul>
+<h3 id="主轴">
+  主轴
+  <a class="anchor" href="#%e4%b8%bb%e8%bd%b4">#</a>
+</h3>
+<ul>
+<li>主轴由flex-direction定义，有四个值：
+<ul>
+<li>row</li>
+<li>row-reverse</li>
+<li>column</li>
+<li>column-reverse</li>
+</ul>
+</li>
+<li>当选择了row或者row-reverse，主轴将沿着水平方向延伸。</li>
+</ul>
+<p>
+  <img src="/img/%e5%89%8d%e7%ab%af/css-flex/1.png" alt="" /></p>
+<ul>
+<li>当选择了column或者column-reverse，主轴就会沿着上下方向延伸。</li>
+</ul>
+<p>
+  <img src="/img/%e5%89%8d%e7%ab%af/css-flex/2.png" alt="" /></p>
+<h3 id="交叉轴">
+  交叉轴
+  <a class="anchor" href="#%e4%ba%a4%e5%8f%89%e8%bd%b4">#</a>
+</h3>
+<ul>
+<li>交叉轴始终垂直于主轴。</li>
+</ul>
+<h3 id="起始线和终止线">
+  起始线和终止线
+  <a class="anchor" href="#%e8%b5%b7%e5%a7%8b%e7%ba%bf%e5%92%8c%e7%bb%88%e6%ad%a2%e7%ba%bf">#</a>
+</h3>
+<ul>
+<li>如果flex-direction是row，那么主轴的起始线是左边，终止线是右边。</li>
+</ul>
+<p>
+  <img src="/img/%e5%89%8d%e7%ab%af/css-flex/3.png" alt="" /></p>
+<h2 id="flex容器">
+  flex容器
+  <a class="anchor" href="#flex%e5%ae%b9%e5%99%a8">#</a>
+</h2>
+<ul>
+<li>采用了flexbox的区域就叫做flex容器，通过将一个标签的display属性改为<code>flex</code>或<code>inline-flex</code>来创建一个flex容器，这样容器内的直系子元素就会变成flex元素。所有的css属性都会有一个初始行为（假设元素未设置width、height、margin等属性）：
+<ul>
+<li>元素排列成一行（flex-direction属性的初始值为row）。</li>
+<li>元素从主轴线的起始线开始。</li>
+<li>元素不会在主轴方向不会被拉伸，但可能会缩小。</li>
+<li>元素会被拉伸来填充交叉轴的大小。</li>
+<li>flex-basis的属性为auto。</li>
+<li>flex-wrap属性为nowrap。</li>
+</ul>
+</li>
+</ul>
+<h3 id="flex-wrap实现多行flex容器">
+  flex-wrap实现多行flex容器
+  <a class="anchor" href="#flex-wrap%e5%ae%9e%e7%8e%b0%e5%a4%9a%e8%a1%8cflex%e5%ae%b9%e5%99%a8">#</a>
+</h3>
+<ul>
+<li>当项目太大而无法全部显示在一行中，添加<code>flex-wrap:wrap</code>，项目就会换行显示。这样每一行都相当于是一个新的flex容器，在该行上发生的空间分布不会影响其他行。</li>
+<li>当<code>flew-wrap</code>设置为<code>unwrap</code>，所有的flex元素都不会换行，它们将缩小以适配容器。如果项目的子元素无法缩小，使用<code>nowrap</code>会导致溢出。</li>
+</ul>
+<h3 id="flex-flow">
+  flex-flow
+  <a class="anchor" href="#flex-flow">#</a>
+</h3>
+<ul>
+<li><code>flex-direction</code>和<code>flex-wrap</code>可以组合简写为属性<code>flex-flow</code>第一个值为<code>flex-direction</code>，第二个值为<code>flex-wrap</code>。如<code>flex-flow: row wrap</code>。</li>
+</ul>
+<h3 id="align-items">
+  align-items
+  <a class="anchor" href="#align-items">#</a>
+</h3>
+<ul>
+<li><code>align-items</code>设置元素在交叉轴方向上对齐，默认值为<code>stretch</code>。</li>
+<li>相应的值：
+<ul>
+<li><code>stretch</code>  拉伸以贴到交叉轴的起始线和终止线。</li>
+<li><code>flex-start</code> 贴着交叉轴的起始线。</li>
+<li><code>flex-end</code> 贴着交叉轴的终止线。</li>
+<li><code>center</code> 交叉轴方向上居中。</li>
+<li><code>baseline</code></li>
+</ul>
+</li>
+</ul>
+<p>图中<code>flex-direction: row</code>。</p>
+<p>
+  <img src="/img/%e5%89%8d%e7%ab%af/css-flex/4.png" alt="" /></p>
+<h3 id="justify-content">
+  justify-content
+  <a class="anchor" href="#justify-content">#</a>
+</h3>
+<ul>
+<li><code>justify-content</code>属性用来使元素在主轴方向上对齐，默认值是<code>flex-start</code>。</li>
+<li>相应的值：
+<ul>
+<li><code>stretch</code></li>
+<li><code>flex-start</code> 沿着主轴的起始线对齐。</li>
+<li><code>flex-end</code> 沿着主轴的终止线对齐。</li>
+<li><code>center</code> 主轴方向上居中</li>
+<li><code>space-around</code> 使每个元素的左右空间相等，第一个和最后一个元素距离起始线和终止线的距离是其他元素间隔的1/2。</li>
+<li><code>space-between</code> 使每个元素的左右空间相等，第一个和最后一个元素贴上起始线和终止线。</li>
+</ul>
+</li>
+</ul>
+<p>图中<code>flex-direction: row</code>。</p>
+<p>
+  <img src="/img/%e5%89%8d%e7%ab%af/css-flex/5.png" alt="" /></p>
+<h2 id="flex元素">
+  flex元素
+  <a class="anchor" href="#flex%e5%85%83%e7%b4%a0">#</a>
+</h2>
+<ul>
+<li>flex容器里除了元素所占的空间以外的空间就是<strong>可用空间</strong>。</li>
+</ul>
+<h3 id="flex-basis">
+  flex-basis
+  <a class="anchor" href="#flex-basis">#</a>
+</h3>
+<ul>
+<li>flex-basis定义了该元素的空间大小，该属性的默认值是元素内容的尺寸（auto）。</li>
+</ul>
+<h3 id="flex-grow">
+  flex-grow
+  <a class="anchor" href="#flex-grow">#</a>
+</h3>
+<ul>
+<li>
+<p>处理flex元素在主轴上增加空间的问题。</p>
+</li>
+<li>
+<p>该值被设定为一个正数时，flex会以flex-basis为基础，按照比例沿着主轴方向扩展尺寸。</p>
+</li>
+<li>
+<p>当给flex中所有的元素设定flex-grow为1时，容器中的可用空间会被这些元素平分，他们会延展以填充主轴方向上的空间。</p>
+</li>
+</ul>
+<h3 id="flex-shrink">
+  flex-shrink
+  <a class="anchor" href="#flex-shrink">#</a>
+</h3>
+<ul>
+<li>处理flex元素在主轴上收缩的问题。</li>
+<li>如果容器中没有足够排列flex元素的空间，就可以设置flex-shrink属性为正整数来缩小它占用的空间到flex-shrink以下。</li>
+<li>给flex-shrink属性更大的数值可以比赋值小数值的同级元素收缩程度更大。</li>
+</ul>
+<h3 id="flex属性的简写">
+  flex属性的简写
+  <a class="anchor" href="#flex%e5%b1%9e%e6%80%a7%e7%9a%84%e7%ae%80%e5%86%99">#</a>
+</h3>
+<ul>
+<li><code>flex-grow、flex-shrink、flex-basis</code>可以简写为flex，顺序也是<code>flex-grow、flex-shrink、flex-basis</code>。</li>
+<li><code>flex</code>有预定义的简写形式：
+<ul>
+<li><code>flex:initial</code> 相当于<code>flex: 0 1 auto</code> ，<code>flex-grow</code>的值为0，所以flex元素不会超过他们的<code>flex-basis</code>尺寸，<code>flex-shrink</code>为1，可以缩小flex元素来防止他们溢出。</li>
+<li><code>flex: auto</code> 相当于<code>flex: 1 1 auto</code>，和上面的<code>flex: initial</code>基本相同，但是flex元素在需要的时候既可以拉伸也可以伸缩。</li>
+<li><code>flex: none</code> 相当于<code>flex: 0 0 auto</code>，元素既不能拉伸也不能收缩。</li>
+<li><code>flex: 1</code>或<code>flex: 2</code> 相当于<code>flex: 1 1 0</code>。</li>
+</ul>
+</li>
+</ul>
+<h3 id="align-self">
+  align-self
+  <a class="anchor" href="#align-self">#</a>
+</h3>
+<ul>
+<li><code>align-self</code>设置元素在交叉轴方向上的排列方式，会覆盖已有的<code>align-items</code>元素。</li>
+<li>值：
+<ul>
+<li><code>auto</code>设置为父元素的<code>align-items</code>的值</li>
+<li><code>stretch</code> 拉伸贴上交叉轴的起始线和终止线。</li>
+<li><code>center</code> 交叉轴方向上居中。</li>
+<li><code>flex-start</code> 贴上交叉轴起始线。</li>
+<li><code>flex-end</code>  贴上交叉轴终止线。</li>
+</ul>
+</li>
+</ul>
+<p>参考链接：
+  <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_Flexible_Box_Layout/Basic_Concepts_of_Flexbox">flex 布局的基本概念 - CSS（层叠样式表） | MDN (mozilla.org)</a></p>
+<p>参考链接：
+  <a href="http://www.ruanyifeng.com/blog/2015/07/flex-grammar.html?utm_source=tuicool">Flex 布局教程：语法篇 - 阮一峰的网络日志 (ruanyifeng.com)</a></p></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

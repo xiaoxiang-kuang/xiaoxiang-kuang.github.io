@@ -1,0 +1,1437 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>计算机网络 on 小象的blog</title>
+    <link>/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/</link>
+    <description>Recent content in 计算机网络 on 小象的blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Tue, 06 Sep 2022 21:45:14 +0800</lastBuildDate><atom:link href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>网络层 数据平面</title>
+      <link>/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E5%B1%82-%E6%95%B0%E6%8D%AE%E5%B9%B3%E9%9D%A2/</link>
+      <pubDate>Tue, 06 Sep 2022 21:45:14 +0800</pubDate>
+      
+      <guid>/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E5%B1%82-%E6%95%B0%E6%8D%AE%E5%B9%B3%E9%9D%A2/</guid>
+      <description>&lt;h2 id=&#34;概述&#34;&gt;
+  概述
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%a6%82%e8%bf%b0&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;网络中的每一台主机和路由器中都有一个网络层部分。&lt;/li&gt;
+&lt;li&gt;网络层能被分解为两个相互作用的部分，即数据平面和控制平面，数据平面的功能时决定到达路由器输入链路的数据报如何转发到该路由器的输出链路之一。控制平面讲述网络范围的逻辑，控制平面控制数据报沿着从源主机到目的主机的端到端路径中路由器之间的路由方式。&lt;/li&gt;
+&lt;li&gt;传统网络层控制平面路由选择协议和数据平面转发功能已被时限为一个整体，位于一台路由器中。SDN（软件定义网络）将控制平面作为一种单独服务，明确的分离数据平面和控制平面，控制平面通常置于一台远程“控制器”中。&lt;/li&gt;
+&lt;li&gt;转发：是将分组从一个输入链路接口转移到适当的输出链路接口的路由器本地动作。转发通常使用硬件实现。&lt;/li&gt;
+&lt;li&gt;路由选择：指确定分组从源到目的地所采取的端到端路径的网络范围处理过程。&lt;/li&gt;
+&lt;li&gt;每台网络路由器中有一个关键元素是它的转发表，路由器检查到达分组首部的一个或多个字段值，进而使用这些首部值在其转发表中索引，通过这种方式来转发分组。&lt;/li&gt;
+&lt;li&gt;网络服务模型（network service model）定义了分组在发送与接收端系统之间的端到端的运输特性。&lt;/li&gt;
+&lt;li&gt;因特网的网络层提供了尽力而为服务（best-effort service）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;路由器的工作原理&#34;&gt;
+  路由器的工作原理
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e8%b7%af%e7%94%b1%e5%99%a8%e7%9a%84%e5%b7%a5%e4%bd%9c%e5%8e%9f%e7%90%86&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e7%bd%91%e7%bb%9c%e5%b1%82/1.jpg&#34; alt=&#34;路由器架构&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;输入端口包含物理层、链路层和网络层转发的作用。通过查询转发表来决定分组的输出端口。分组会通过路由器的交换结构到达输出端口，当到达分组的速率大于转发速率，分组会存储在队列中。&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e7%bd%91%e7%bb%9c%e5%b1%82/2.jpg&#34; alt=&#34;路由器架构&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;交换结构将路由器的输入端口连接到它的输出端口。&lt;/li&gt;
+&lt;li&gt;输出端口存储从交换结构接收到的分组，并通过执行必要的链路层和物理层功能在输出链路上传输这些分组。&lt;/li&gt;
+&lt;li&gt;路由选择处理器处于控制平面，在传统路由器中，执行路由选择协议，维护路由选择表与关联链路状态信息，并为该路由器计算转发表。在SDN路由器中，路由选择处理器负责与远程控制器通信，接收远程控制器计算的转发表项。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;输入端口处理和基于目的地的转发&#34;&gt;
+  输入端口处理和基于目的地的转发
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e8%be%93%e5%85%a5%e7%ab%af%e5%8f%a3%e5%a4%84%e7%90%86%e5%92%8c%e5%9f%ba%e4%ba%8e%e7%9b%ae%e7%9a%84%e5%9c%b0%e7%9a%84%e8%bd%ac%e5%8f%91&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;路由器在输入端口使用转发表来查找输出端口，使得到达的分组通过交换结构转发到输出端口。转发表是由路由选择处理器计算和更新的或者是接收来自远程的SDN控制器的内容。转发决策在每个输入端口本地做出。&lt;/li&gt;
+&lt;li&gt;路由器使用分组目的地址的前缀和转发表的表项进行匹配，如果存在一个匹配项，则路由器向该匹配项相关联的链路转发分组。当存在多个匹配时，路由器使用最长前缀匹配规则，寻找表中的最长的匹配项，并向与最长前缀匹配相关联的链路接口转发分组。&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e7%bd%91%e7%bb%9c%e5%b1%82/3.jpg&#34; alt=&#34;转发表&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;查找转发表要求很快，实践中常常使用三态内容可寻址存储器（TCAM），查询时间通常为常数级。&lt;/li&gt;
+&lt;li&gt;当有其他输入端口在使用交换结构时，一个分组可能会在进入交换结构时被暂时阻塞，因此，一个被阻塞的分组必须要在输入端口排队，并等待稍后被调度以通过交换结构。输入端口除了查找和发送外，还需要①检查分组的版本号、检验和寿命字段，并且重写后两个字段；②更新用于网络管理的计数器；③要有物理层和链路层处理。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;交换&#34;&gt;
+  交换
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e4%ba%a4%e6%8d%a2&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e7%bd%91%e7%bb%9c%e5%b1%82/4.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;经内存交换：在CPU的控制下进行交换，包会从输入端口拷贝到内存中，在从内存中拷贝到输出端口。速度受限于内存带宽。&lt;/li&gt;
+&lt;li&gt;经总线交换：数据报经过bus总线从输入端口到输出端口。速度受限于bus带宽。&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e7%bd%91%e7%bb%9c%e5%b1%82/5.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;经互联网络交换：克服了总线的带宽限制。纵横式交换机是一种由2N条总线组成的互联网络，连接N条输入端口和N个输出端口。当某个分组到达输入端口A，要到达输出端口Y时，交换结构闭合A和Y之间的交叉点，然后A就可以传递数据报。此时如果B向Z传输分组，则闭合B和Z之间的交叉点即可。因为A到Y和B到X使用了不同的输入输出总线。但同一时刻只能有一个数据报发给Y。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;输出端口处理&#34;&gt;
+  输出端口处理
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e8%be%93%e5%87%ba%e7%ab%af%e5%8f%a3%e5%a4%84%e7%90%86&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e7%bd%91%e7%bb%9c%e5%b1%82/6.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;网际协议&#34;&gt;
+  网际协议
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e7%bd%91%e9%99%85%e5%8d%8f%e8%ae%ae&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;TCP/IP首部中的所有二进制整数再网络中传输都要求大端（最高位在左边，最低为在右边），这种字节序又叫网络字节序。&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e7%bd%91%e7%bb%9c%e5%b1%82/7.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;协议版本号是4。&lt;/li&gt;
+&lt;li&gt;首部长度通常为20个字节。所以这里的值一般是&lt;code&gt;0101&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;服务类型包括一个3bit的优先权子字段，4bit的TOS字段和1bit未用的字段。4bit的TOS分别代表：最小时延、最大吞吐量、最高可靠性和最小费用。&lt;/li&gt;
+&lt;li&gt;总长度字段是指整个IP数据报的长度（首部加上数据）。&lt;/li&gt;
+&lt;li&gt;标识、标志和偏移量和IP分片有关。&lt;/li&gt;
+&lt;li&gt;TTL（time-to-live）生存时间字段设置了数据报可以经过最多的路由器数。它指定了数据报的生存时间。初始值由源主机设置（通常为32或64），一旦经过一个处理它的路由器，它的值就减去1。当该字段的值为1时，数据报就被丢弃，并发送ICMP报文通知源主机。&lt;/li&gt;
+&lt;li&gt;协议指要把分组交给哪个传输层协议。&lt;/li&gt;
+&lt;li&gt;首部检验和字段是根据ip首部计算的检验和码。&lt;/li&gt;
+&lt;li&gt;每一份IP数据报都包含源ip和目的ip。&lt;/li&gt;
+&lt;li&gt;任选项是数据报中一个可变长的可选信息，IPv6中去掉了选项。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;ipv4数据报分片&#34;&gt;
+  IPv4数据报分片
+  &lt;a class=&#34;anchor&#34; href=&#34;#ipv4%e6%95%b0%e6%8d%ae%e6%8a%a5%e5%88%86%e7%89%87&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;链路层能承载的网络层分组长度是有限的，比如以太网能承载不超过1500字节的数据。一个链路层能承载的最大数据量叫MTU（最大传输单元，Maximum Transmission Unit）。&lt;/li&gt;
+&lt;li&gt;为了传输超出MTU的IP数据报，将IP数据报中的数据分片成多个较小的IP数据报，用单独的链路帧来封装这些较小的IP数据报。每个这些较小的IP数据报被称为片（fragment）。&lt;/li&gt;
+&lt;li&gt;IP分片可发生在发送端和路由器上。而重新组装是在端系统中，路由器不会组装分片。&lt;/li&gt;
+&lt;li&gt;为了让接收端确定收到的数据报是一些较大数据报的片还是单独的数据报，IP将标识、标志和片偏移字段放到IP数据报的首部中。&lt;/li&gt;
+&lt;li&gt;发送主机通常将发送的每个数据报的标识位加1，如果多个片来源于同一个数据报，那么它们的标识位是相同的，为了让目的主机确认收到了数据报的最后一片，最后一片的标志置为0，其他的标志置为1，同时还使用片偏移量来确认片在数据报里的位置。&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e7%bd%91%e7%bb%9c%e5%b1%82/8.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;ip路由选择&#34;&gt;
+  IP路由选择
+  &lt;a class=&#34;anchor&#34; href=&#34;#ip%e8%b7%af%e7%94%b1%e9%80%89%e6%8b%a9&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;IP层在内存中有一个路由表，当收到一份数据报并进行发送时，他都要对该表搜索一次。
+&lt;ul&gt;
+&lt;li&gt;路由表的每一项都包含：①目的IP地址；②下一跳的路由器的IP地址，或者直接连接网络IP地址；下一站路由器是指一个在直接相连完了上的路由器，通过它可以转发数据；③标志；其中一个标志指明目的IP地址是网络地址还是主机地址，另一个标志指明下一站路由器是否为真正的下一站路由器，还是一个直接相连的接口；④为数据报的传输指定一个网络接口。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;当数据报来自某个网络接口时，IP首先检查目的IP地址是否为本机IP地址之一或者IP广播地址。如果确实是这样，数据报就被送到由IP首部协议字段所指定的协议模块进行处理。&lt;/li&gt;
+&lt;li&gt;如果数据报的目的IP是其他的地址，并且IP层被设置为路由器的功能，那么就对数据报进行转发。&lt;/li&gt;
+&lt;li&gt;IP路由选择主要完成：①搜索路由表，寻找能与目的IP地址网络号和主机号完全匹配的表目，如果找到，则把表目发给指定的下一站路由器或者直接相连的网络接口；②搜索路由表，找到能与目的网络号匹配的表，如果找到，将表目发给该表目指定的下一站路由器或者直接相连的网络接口；③搜索路由表，寻找标为&amp;quot;默认&amp;quot;的表目；④如果以上步骤都没成功，那么该数据报就不能被传送。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;ipv4地址&#34;&gt;
+  IPv4地址
+  &lt;a class=&#34;anchor&#34; href=&#34;#ipv4%e5%9c%b0%e5%9d%80&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;因特网的地址分配策略被称为无类别域间路由选择（Classless Interdomain Routing CIDR）。&lt;/li&gt;
+&lt;li&gt;通过IP可以区分网络号和主机号，通过子网掩码可以区分子网号和主机号。子网掩码中的1表示IP地址中的网络前缀，子网掩码中的0表示IP地址中的主机号。&lt;/li&gt;
+&lt;li&gt;通过IP地址和子网掩码的与运算，可以计算出IP属于哪一个子网。&lt;/li&gt;
+&lt;li&gt;广播地址255.255.255.255，当一个主机向目的地址为255.255.255.255发送数据时，该报文会发送给同一个网络中的所有主机。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;dhcp&#34;&gt;
+  DHCP
+  &lt;a class=&#34;anchor&#34; href=&#34;#dhcp&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;动态主机配置协议（dynamic host configuration ），此协议允许主机能自动被分配到一个IP地址；此外，通过DHCP，主机还能得到如第一跳路由器信息、DNS服务器地址等。&lt;/li&gt;
+&lt;li&gt;对于一台新到达的主机，通过如下4个步骤获取IP地址。
+&lt;ul&gt;
+&lt;li&gt;DHCP服务器发现：客户端通过向UDP67端口发送DHCP发现报文(DHCP discover message)，其中源IP地址为0.0.0.0，目标IP地址为255.255.255.255，链路层随后将该帧光波导该网络中的所有主机。&lt;/li&gt;
+&lt;li&gt;DHCP服务器响应：DHCP服务器向网络中广播DHCP提供报文（DHCP offer message），因为此时客户端没有IP地址，所以使用广播。因为子网中可能存在多个DHCP服务器，客户端可以进行选择。DHCP报文中包含推荐给客户端的IP地址，发现报文的事务ID，网络掩码及IP地址的租用期。&lt;/li&gt;
+&lt;li&gt;DHCP请求：客户端从一个或多个服务器中选一个，向选中的服务器发送DHCP请求报文（DHCP request message）。&lt;/li&gt;
+&lt;li&gt;DHCP ACK：服务器用DHCP ACK报文（DHCP ACK message）进行响应，证实请求的参数。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e7%bd%91%e7%bb%9c%e5%b1%82/9.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e7%bd%91%e7%bb%9c%e5%b1%82/9.1.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;nat&#34;&gt;
+  NAT
+  &lt;a class=&#34;anchor&#34; href=&#34;#nat&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;网络地址转换(Network Address Translation)能解决IPv4地址匮乏的问题，从广域网到NAT路由器的所有数据报都有相同的目的IP地址，NAT路由器维护一个NAT转换表（NAT translation table）表中包含了端口号及IP地址。&lt;/li&gt;
+&lt;li&gt;如果一个用户的内网地址是172.20.20.2，请求的web服务地址为xiaoxiang.space，当发送该数据报到NAT主机前，源IP为172.20.20.2，源端口为30306（源端口不重要），当此数据报到NAT路由器时，路由器将修改源端口号为3456，源IP为外网IP，并在NAT转换表生成一条记录。当收到web服务的响应时，再根据NAT表中的记录还原IP和端口。&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e7%bd%91%e7%bb%9c%e5%b1%82/10.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;IDS是入侵检测设备，通常位于网络的边界，它不仅检查数据报的首部，还检查载荷。IDS具有一个特征数据库。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;ipv6&#34;&gt;
+  IPv6
+  &lt;a class=&#34;anchor&#34; href=&#34;#ipv6&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;IPv6地址为128位。数据报格式如下：&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e7%bd%91%e7%bb%9c%e5%b1%82/11.jpg&#34; alt=&#34;&#34; /&gt;
+&lt;ul&gt;
+&lt;li&gt;版本：为6&lt;/li&gt;
+&lt;li&gt;流量类型，和IPv4的TOS类似。&lt;/li&gt;
+&lt;li&gt;流标签：&lt;/li&gt;
+&lt;li&gt;有效载荷长度：载荷部分的字节数量。&lt;/li&gt;
+&lt;li&gt;下一个首部：如UDP或TCP。&lt;/li&gt;
+&lt;li&gt;源地址和目标地址：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;IPv6中引入了任播地址，允许将数据报发给一组主机中的任意一个。&lt;/li&gt;
+&lt;li&gt;IPv6中的中间路由器不能对数据报进行分片。这种操作只能在源和目的端进行。如果路由器收到的数据报太大时，路由器会丢掉该数据报，并发送一个分组太大的ICMP差错报文。&lt;/li&gt;
+&lt;li&gt;IPV6去掉了首部检验和，在IPV4中，每经过一个路由器，IP头部的TTL就会减一，所以在每个路由器上都需要计算检验和。IPV6不需要了。&lt;/li&gt;
+&lt;li&gt;将IPV4迁移到IPv6可以通过建隧道，将整个IPv6数据报放在IPV4数据包的有效载荷中，如图所示。&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e7%bd%91%e7%bb%9c%e5%b1%82/12.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;icmp&#34;&gt;
+  ICMP
+  &lt;a class=&#34;anchor&#34; href=&#34;#icmp&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;因特网控制报文协议（Internet Control Messages Protocol）。被主机和路由器用来交流网络层之间的信息。最典型的用途是差错报告。&lt;/li&gt;
+&lt;li&gt;ICMP是承载在IP载荷中，当一个主机收到一个指明上层协议为ICMP的IP数据报时，它分解该数据报的内容给ICMP。&lt;/li&gt;
+&lt;li&gt;ICMP报文有一个类型字段和一个编码字段，介绍如下图：&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e7%bd%91%e7%bb%9c%e5%b1%82/13.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;ping程序会发送一个类型8编码0的报文到指定主机，目的主机会发回一个类型0编码0的ICMP回答。&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e7%bd%91%e7%bb%9c%e5%b1%82/14.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;windows上的traceroute程序也是ICMP实现，源主机向目的主机发送一系列的Ping数据报，第一个数据报的TTL为1，第二个数据报的TTL为2，以此类推。当第n个数据到到达第n个路由器时，这个数据报的TTL正好过期，此时路由器会丢弃该报文并向源主机发生用一个类型11编码0的ICMP报文。当路由器收到一个类型0编码0的报文时，就知道已经到达了目的主机，就可以停止发送数据报。&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e7%bd%91%e7%bb%9c%e5%b1%82/15.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>传输层</title>
+      <link>/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E4%BC%A0%E8%BE%93%E5%B1%82/</link>
+      <pubDate>Sun, 05 Jun 2022 21:22:12 +0800</pubDate>
+      
+      <guid>/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E4%BC%A0%E8%BE%93%E5%B1%82/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;传输层为运行在不同的主机上的进程提供了一种逻辑通信机制。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;发送方将应用递交的消息分成一个或多个segment，并向下传给网络层；接收方将接收到的segment组成消息，向上交给应用层。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;传输层协议分类：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;可靠、按序的交付服务（TCP），提供拥塞控制、流量控制和连接建立。&lt;/li&gt;
+&lt;li&gt;不可靠的交付服务（UDP），基于尽力而为的网络层没有做可靠性方面的扩展。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;接收端进行多路复用，传输层依据头部信息将接收到的segment交给正确的socket；发送端进行多路复用，多个socket为每个数据块封装头部信息，生成segment，交给网络层。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;每个数据报携带源IP地址、目的IP地址，每个数据报携带一个传输层的端（Segment），每个段携带源端口和目的端口。主机收到segment后，传输层协议提取IP地址和端口信息，将segemnt导向相应的socket。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;UDP的SOCKET用二元组标识（目的IP地址，目的端口号），来自不同源IP地址和端口号的IP数据报被导向同一个Socket，TCP的SOCKET用四元组标识（源地址，源端口，目的地址，目的端口）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;udp&#34;&gt;
+  UDP
+  &lt;a class=&#34;anchor&#34; href=&#34;#udp&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e4%bc%a0%e8%be%93%e5%b1%82/1.png&#34; alt=&#34;UDP&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;UDP(USER DATAGRAM PROTOCOL)基于IP协议，简单的包装了下IP协议，提供了传输层的复用、分用，同时提供了简单的错误校验。&lt;/li&gt;
+&lt;li&gt;UDP段可能会丢失、错序。常用于流媒体应用。&lt;/li&gt;
+&lt;li&gt;UDP校验和提供了差错校验功能。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;可靠数据传输&#34;&gt;
+  可靠数据传输
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%8f%af%e9%9d%a0%e6%95%b0%e6%8d%ae%e4%bc%a0%e8%be%93&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;可靠指的是不错、不丢失、不乱序。&lt;/li&gt;
+&lt;li&gt;通过使用校验和来检查位错误来保证不错，同时使用ACK（acknowledgement）来显式的告诉发送方已经正确的接收分组。&lt;/li&gt;
+&lt;li&gt;重传可用保证不丢失，对于未收到ACK的分组，进行重传，重传需要使用定时器，当超过一定时间未收到ACK则重传。&lt;/li&gt;
+&lt;li&gt;简单的重传可能会导致重复分组或乱序，需要使用序列号，发送方给每个分组增加序列号，接收方通过序列号来确定分组顺序。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;流水线机制&#34;&gt;
+  流水线机制
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%b5%81%e6%b0%b4%e7%ba%bf%e6%9c%ba%e5%88%b6&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;简单的停-等协议效率很低，需要使用流水线机制来提高资源的利用率。&lt;/li&gt;
+&lt;li&gt;例：1Gbps(R)的链路，15ms(RTT)的端到端的传播延迟，8Kb(L)分组。&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e4%bc%a0%e8%be%93%e5%b1%82/2.png&#34; alt=&#34;停等协议&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;使用流水线机制&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e4%bc%a0%e8%be%93%e5%b1%82/3.png&#34; alt=&#34;流水线机制&#34; /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;滑动窗口协议&#34;&gt;
+  滑动窗口协议
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%bb%91%e5%8a%a8%e7%aa%97%e5%8f%a3%e5%8d%8f%e8%ae%ae&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;包括GBN（go back N）和SR（selective repeat）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;gbn&#34;&gt;
+  GBN
+  &lt;a class=&#34;anchor&#34; href=&#34;#gbn&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;分组的头部中包含K-bit的序列号。窗口尺寸为N，最多允许N个分组未确认。ACK(n)表示序列号n(包括n)之前的分组均已被正确接收。&lt;/li&gt;
+&lt;li&gt;只为序列号最小的那个未收到ACK的分组设置计时器。&lt;/li&gt;
+&lt;li&gt;当发生了超时事件，即序列号n的分组未收到对应的ack时，会重传序列号大于等于n的所有分组。&lt;/li&gt;
+&lt;li&gt;GBN发送方的FSM。base表示当前滑动窗口的起始位置，nextseqnum表示发送的分组的位置，下面的介绍是并行进行的。
+&lt;ul&gt;
+&lt;li&gt;当序列号小于滑动窗口的右边界时，会持续发送分组，直到达到滑动窗口的右边界。此时会启动定时器并拒绝上层协议发来的数据。&lt;/li&gt;
+&lt;li&gt;当定时器超时时，会重新发送滑动窗口左边界开始的窗口中的所有数据。&lt;/li&gt;
+&lt;li&gt;当正确接收到ack时，滑动窗口会向右移动，同时重新启动定时器；当数据已经发完了时，会关闭定时器。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e4%bc%a0%e8%be%93%e5%b1%82/4.png&#34; alt=&#34;GBN-sender&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;GBN接收方的FSM
+&lt;ul&gt;
+&lt;li&gt;GBN只发送拥有最高序列号的、已被正确接收的分组的ACK，这就意味着序号为n的分组被正确接收时，序号小于n的所有分组都被成功接收。&lt;/li&gt;
+&lt;li&gt;对于乱序到达的分组，接收方会直接丢弃，并且为最近按序接收的、序列号最大的分组重新发送一个ACK。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e4%bc%a0%e8%be%93%e5%b1%82/5.png&#34; alt=&#34;GBN-sender&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;案例
+&lt;ul&gt;
+&lt;li&gt;分组0和分组1均被正确接收，分组2由于丢失了。发送方发送过去的分组3、分组4、分组5，接收方均重发ACK(1)，当一段事件后发送方一直未收到ACK(2)，所以会重新发送分组2、分组3、分组4、分组5。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e4%bc%a0%e8%be%93%e5%b1%82/6.png&#34; alt=&#34;GBN-example&#34; /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;sr&#34;&gt;
+  SR
+  &lt;a class=&#34;anchor&#34; href=&#34;#sr&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;GBN单个分组的差错就能引起大量分组的重传。选择重传能仅让发送方重传个别它怀疑在接收方出错的分组，避免了不必要的重传。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;SR接收方确认一个正确接收的分组而不管其是否按序，失序的分组将被缓存直到所有的丢失分组（序号更小的分组）都被收到为止。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e4%bc%a0%e8%be%93%e5%b1%82/7.png&#34; alt=&#34;SR-example&#34; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;序列号的空间大小必须大于等于窗口长度的两倍。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;例：当窗口大小为4，序号大小也为4，发送方连续发送4个分组，接收方收到4个分组后，返回4个ACK，窗口已经向右滑动了4个。此时假如4个ACK都丢了，发送方超时后重新发送4个分组，此时接收方把分组0、1、2、3当作新的分组，就会导致错误。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e4%bc%a0%e8%be%93%e5%b1%82/8.png&#34; alt=&#34;SR-4-4&#34; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;例：当窗口大小为4，序号大小为5，发送方连续发送4个分组，接收方收到4个分组后，返回4个ACK，窗口已经向右滑动了4个。此时假如4个ACK都丢了，发送方超时后重新发送4个分组，此时接收方把分组0、1、2当作新的分组，就会导致错误。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e4%bc%a0%e8%be%93%e5%b1%82/9.png&#34; alt=&#34;SR-4-5&#34; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;例：当窗口大小为4，序号大小为7，发送方连续发送4个分组，接收方收到4个分组后，返回4个ACK，窗口已经向右滑动了4个。此时假如4个ACK都丢了，发送方超时后重新发送4个分组，此时接收方把分组0当作新的分组，就会导致错误。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e4%bc%a0%e8%be%93%e5%b1%82/10.png&#34; alt=&#34;SR-4-7&#34; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;tcp&#34;&gt;
+  TCP
+  &lt;a class=&#34;anchor&#34; href=&#34;#tcp&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;一个应用进程向另一个应用进程发送数据之前，会现在两个进程之间建立一条逻辑链路。当一端通过套接字传递数据，TCP将这些数据引导到该连接的发送缓存中，发送缓存时三次握手期间设置的缓存之一。接下来TCP会不时从发送缓存中取出一块数据，并将数据传送到网络层。&lt;/li&gt;
+&lt;li&gt;TCP从缓存中取出并放入段中的数据大小受限于MSS(maximum segment size，即最大报文段长度)。MSS通常根据MTU（maximum Transmission Unit，最大传输单元）来设置。通常MTU为1500字节，TCP首部一般20字节，IP首部一般20字节，所以MSS是一般情况为1440字节。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;tcp报文段结构&#34;&gt;
+  TCP报文段结构
+  &lt;a class=&#34;anchor&#34; href=&#34;#tcp%e6%8a%a5%e6%96%87%e6%ae%b5%e7%bb%93%e6%9e%84&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;img src=&#34;/img/计算机网络/传输层/11.png&#34;&gt;
+&lt;ul&gt;
+&lt;li&gt;32位的序号和确认号用来实现可靠数据传输。&lt;/li&gt;
+&lt;li&gt;16位的接受窗口字段用来进行流量控制。&lt;/li&gt;
+&lt;li&gt;4位的首部长度用来指示以32bit的字为单位的TCP首部的长度。&lt;/li&gt;
+&lt;li&gt;可选和变长的选项字段，在协商MSS或调节窗口因子时使用。&lt;/li&gt;
+&lt;li&gt;6位的标志字段。ACK用于指示确认号的值是有效的，即该报文段包含一个对已被接收报文段的确认。RST、SYN、FIN用于连接的建立和拆除。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;序号和确认号&#34;&gt;
+  序号和确认号
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%ba%8f%e5%8f%b7%e5%92%8c%e7%a1%ae%e8%ae%a4%e5%8f%b7&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;一个报文段的序号是报文段首字节的编号，TCP连接双方都会随机地选择初始序号。例：假如MSS为1000，一个数据流的大小为5000字节，初始序号为234。则第一个报文段的序号为234，第二个报文段的序号为1234，第三个报文段的序号为2234。&lt;/li&gt;
+&lt;li&gt;确认号是接收方期望从发送方接收到的下一个字节的序号。TCP是累计确认的，如果收到了确认号为2234的报文段，则说明2234（不包含2234）之前的报文段都被成功接收。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;往返时间的估计和超时&#34;&gt;
+  往返时间的估计和超时
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%be%80%e8%bf%94%e6%97%b6%e9%97%b4%e7%9a%84%e4%bc%b0%e8%ae%a1%e5%92%8c%e8%b6%85%e6%97%b6&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;TCP采用超时重传机制来处理报文段的丢失问题。超时时间间隔必须大于连接的往返时间（RTT），否则会造成丢包。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;SampleRTT是某报文段从发出到对该报文段的确认被收到之间的时间量&lt;/strong&gt;。大多数TCP的实现是在某个时刻为一个已发送但未被确认的报文段估计SampleRTT，TCP不会对已被重传的报文段计算sampleRTT。&lt;/li&gt;
+&lt;li&gt;由于sampleRTT可能会有大的波动，TCP会维持一个EstimatedRTT，一旦获取一个新的sampleRTT，TCP会按照如下公式更新EstimatedRTT。α的推荐值为0.125。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;EstimatedRTT = ( 1 - α ) * EstimateRTT + α * SampleRTT
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;DevRTT用来计算sampleRTT偏离EstimatedRTT的程度, β的推荐值为0.25。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;DevRTT = ( 1 - β ) * DevRTT + β * | SampleRTT - EstimatedRTT |
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;超时时间TimeoutInterval&lt;/strong&gt;的计算如下，推荐初始的TimeoutInterval为1秒。当收到报文段并更新EstimatedRTT时，就会更新TimeoutInterval。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;TimeoutInterval = EstimatedRTT + 4 * DevRTT
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;当出现超时后，会直接把TimeoutInterval加倍。例：假设当前的过期时间为0.75,当定时器超时后，TCP会重传报文段，并把过期时间设置为1.5s，当再次过期时，TCP会重传报文段，并将过期时间设置为3s。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;可靠数据传输-1&#34;&gt;
+  可靠数据传输
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%8f%af%e9%9d%a0%e6%95%b0%e6%8d%ae%e4%bc%a0%e8%be%93-1&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;快速重传是指如果TCP发送方接收到对相同数据的3个冗余ACK，即收到了一个正常的ACK（n）和三个冗余的ACK（n）时，TCP会重传序号为n的段，即使当前未超时。&lt;/li&gt;
+&lt;li&gt;
+&lt;img src=&#34;/img/计算机网络/传输层/12.png&#34;&gt;
+&lt;/li&gt;
+&lt;li&gt;TCP采用累积确认，当受到ACK(n)则说明n之前的字节(不包括n)都已成功收到，存在如下的三种情况。&lt;/li&gt;
+&lt;li&gt;
+&lt;img src=&#34;/img/计算机网络/传输层/13.png&#34;&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;img src=&#34;/img/计算机网络/传输层/14.png&#34;&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;流量控制&#34;&gt;
+  流量控制
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%b5%81%e9%87%8f%e6%8e%a7%e5%88%b6&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;一台TCP连接的每一侧主机都为该连接设置了接受缓存，为了防止缓存溢出，TCP提供了流量控制服务（flow-control service）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;TCP的发送方也可能因为IP网络的拥塞而遏制，这种控制方式为拥塞控制（congestion service）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;TCP通过让发送方维护一个叫接收窗口（Receive Window)的变量来提供流量控制，该字段是接收方的剩余缓存空间大小。因为TCP是全双工的，连接两端都会维护接收窗口。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;假设主机A向主机B发送一个文件，主机B的接收缓存大小为RcvBuffer，LastByteRead用来表示主机B的应用程序从缓存中读到的最后一个字节编号，LastByteRcvd用来表示主机A发送到主机B且放入到接收缓存的最后一个字节的编号。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;接收窗口rwnd&lt;/strong&gt;的大小的计算如下，该字段是动态变化的，最开始rwnd等于RcvBuffer。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#接收窗口大小 = 接收缓存总大小 - 已接收但是未读的数据
+# 1. 如果发的数据快，但是读数据慢，接收方来不及处理时，导致接收窗口变小
+rwnd = RcvBuffer - ( LastByteRecvd - LastByteRead )
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;主机B通过把rwnd放到它发送给主机A报文段的接收窗口字段中，通知A该连接中还存在多少的可用缓存。主机A会跟踪两个变量，LastByteSent用来表示最后发送的一个字节编号，LastByteAcked用来表示最后一个确认的字节编号，通过如下关系来保证发送的数据不会造成缓存溢出。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#接收窗口大小 &amp;gt;= 未确认的数据
+# 1. 当接收窗口变小后，发送方已发送但未确认的这部分数据减少
+# 2. 当接收窗口大小为0时，发送方停止向接收方发送数据，但是还是会发送特殊的段，以便获取rwnd。
+LastByteSent - LastByteAcked ≤ rwnd
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;为了避免主机B的接收缓存已满，然后发送给主机A rwnd=0，此时主机A不会在给主机B发送数据的情况，TCP要求当主机B的缓存已满时，主机A继续发送只有一个字节数据的报文段。这些报文段会被接收方确认，等主机B的缓存空间不为0时，会发送给主机A非0的rwnd值。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;tcp连接管理&#34;&gt;
+  TCP连接管理
+  &lt;a class=&#34;anchor&#34; href=&#34;#tcp%e8%bf%9e%e6%8e%a5%e7%ae%a1%e7%90%86&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;三次握手&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;img src=&#34;/img/计算机网络/传输层/15.png&#34;&gt;
+&lt;ol&gt;
+&lt;li&gt;客户端会像服务端发送一个特殊的报文段，该报文段不携带任何数据，SYN标志位被置为1，并且会随机选择一个序号client_isn，发送给服务器。该报文段被称为SYN报文段。&lt;/li&gt;
+&lt;li&gt;当该服务端收到SYN报文段后，为TCP连接分配缓存和变量，并向客户端发送报文段，该报文段SYN标志位置为1，并随即生成一个序号server_isn，同时ACK标志位置为1，确认号填client_isn+1，改报文段不包含任何数据。该报文段被称为SYNACK报文段。&lt;/li&gt;
+&lt;li&gt;客户端收到SYNACK后，为TCP连接分配缓存和变量，向服务端发送报文段，该报文段可以携带数据，SYN标志位被置为0（因为连接已建立）。同时ACK标志位置为1，确认号填server_isn+1。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;TCP连接关闭&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;img src=&#34;/img/计算机网络/传输层/16.png&#34;&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol&gt;
+&lt;li&gt;当客户端发起关闭连接时（服务端也可以发起），会向服务端发送一个特殊报文段，该报文段的FIN报文段被置为1，同时生成一个seq序号y，发给服务端。其实此时ACK标志位也会被置为1，用来确认上一次发来的数据。&lt;/li&gt;
+&lt;li&gt;服务端收到后，会将ACK标志位置为1，ack填y+1。&lt;/li&gt;
+&lt;li&gt;服务端会重复1~2步。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;一次HTTP请求的连接过程，第三次握手时就已经开始带上数据了。&lt;/li&gt;
+&lt;li&gt;
+&lt;img src=&#34;/img/计算机网络/传输层/17.png&#34;&gt;
+&lt;/li&gt;
+&lt;li&gt;洪范攻击(SYN flood attack)指攻击者发送大量的TCP SYN段，却不完成第三次握手，由于服务端在第二次握手就开始分配资源，导致服务端资源被消耗殆尽。一种有效的防御机制SYN cookies能解决这个问题，】工作方式如下：
+&lt;ul&gt;
+&lt;li&gt;当服务端收到一个SYN段时，它不会开启一个半开的连接。它会根据源和目标的IP和端口以及秘密数通过散列函数来生成一个初始的TCP序号，这个序号被称为&amp;quot;cookie&amp;quot;，服务端将这个特殊的SYNACK段发给客户端。&lt;/li&gt;
+&lt;li&gt;当服务端收到一个ACK时，通过散列函数来计算一个值，如果该值加1等于ACK，则说明改ACK是对之前的某个SYNACK的确认，服务端会生成一个具有套接字的全开链接。&lt;/li&gt;
+&lt;li&gt;如果客户端没有返回一个ACK，对服务器也没有影响。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;当一台服务器接收到了一个TCP报文段，该报文段的目的端口或源IP与服务器上的套接字都不匹配时，服务器会向源发送一个特殊的重置段，该段的RST标志位被置为1。当一台主机接收到了一个UDP分组，它的目的端口与主机上的套接字都不符合，主机会发送一个ICMP数据报。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;tcp拥塞控制&#34;&gt;
+  TCP拥塞控制
+  &lt;a class=&#34;anchor&#34; href=&#34;#tcp%e6%8b%a5%e5%a1%9e%e6%8e%a7%e5%88%b6&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;运行在发送方的TCP拥塞控制机制跟踪一个额外的变量&lt;strong&gt;拥塞窗口cwnd&lt;/strong&gt;（congestion window），它对TCP发送方能向网络中发送的流量进行了限制，即：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;LastByteSent - LastByteAcked ≤ min { rwnd, cwnd }
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;TCP拥塞控制算法：1. 慢启动；2. 拥塞避免；3. 快速恢复。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;慢启动&#34;&gt;
+  慢启动
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%85%a2%e5%90%af%e5%8a%a8&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;当TCP连接开始时，cwnd通常设置为MSS（存疑），这使得初始的发送速率约为MSS/RTT；&lt;/li&gt;
+&lt;li&gt;TCP向网络中发送第一个报文段并等待一个确认，当确认到达时，将cwnd增加一个MSS；并发送出两个段，当着两个段被确认时，每个确认都将使cwnd增加一个MSS，这使得现在cwnd变成了4个MSS。总结：每经过一个RTT，&lt;code&gt;cwnd = cwnd * 2&lt;/code&gt;。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;img src=&#34;/img/计算机网络/传输层/18.png&#34;&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;拥塞窗口不会无限增大：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;如果发生了丢包事件，TCP发送方将cwnd设置为1并重新开始慢启动过程，并设置ssthresh（慢启动阈值）的值为cwnd/2，当达到ssthresh后，cwnd线性增长；&lt;/li&gt;
+&lt;li&gt;如果检测到3个冗余ACK（连续收到4个相同的ACK，重复的ACK表示网络有能力来传输段）时，cwnd减半，并开始线性增长。（&lt;strong&gt;TCP RENO&lt;/strong&gt;）&lt;/li&gt;
+&lt;li&gt;如果检测到3个冗余ACK，将cwnd设置为1（&lt;strong&gt;TCP Tahoe&lt;/strong&gt;）&lt;/li&gt;
+&lt;li&gt;
+&lt;img src=&#34;/img/计算机网络/传输层/19.png&#34;&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>应用层</title>
+      <link>/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E5%BA%94%E7%94%A8%E5%B1%82/</link>
+      <pubDate>Thu, 05 May 2022 21:50:36 +0800</pubDate>
+      
+      <guid>/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E5%BA%94%E7%94%A8%E5%B1%82/</guid>
+      <description>&lt;h2 id=&#34;http&#34;&gt;
+  HTTP
+  &lt;a class=&#34;anchor&#34; href=&#34;#http&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;网页包含多个对象，如HTML文件、JPEG图片、视频文件、动态脚本等，基本HTML文件包含对其他对象引用的链接。通过URL可以进行对象的寻址。&lt;/li&gt;
+&lt;li&gt;HTTP协议流程：
+&lt;ol&gt;
+&lt;li&gt;服务器在80端口等待客户的请求&lt;/li&gt;
+&lt;li&gt;浏览器发起到服务器的TCP连接（创建套接字Socket）&lt;/li&gt;
+&lt;li&gt;浏览器与Web服务器交换HTTP消息&lt;/li&gt;
+&lt;li&gt;关闭TCP连接&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;HTTP是无状态的协议，即服务器不维护任何有关客户端过去所发请求的信息。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;http连接&#34;&gt;
+  HTTP连接
+  &lt;a class=&#34;anchor&#34; href=&#34;#http%e8%bf%9e%e6%8e%a5&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;HTTP包含非持久性连接和持久性连接
+&lt;ul&gt;
+&lt;li&gt;非持久性连接指的是每个TCP连接最多允许传输一个对象，HTTP1.0使用非持久性连接。&lt;/li&gt;
+&lt;li&gt;持久性连接指每个TCP连接可以传输多个对象，HTTP1.1默认使用持久性连接。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;http消息格式&#34;&gt;
+  HTTP消息格式
+  &lt;a class=&#34;anchor&#34; href=&#34;#http%e6%b6%88%e6%81%af%e6%a0%bc%e5%bc%8f&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;HTTP有两类消息，请求消息（request）和响应消息（response）。&lt;/li&gt;
+&lt;li&gt;HTTP请求消息的格式如下：&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e5%ba%94%e7%94%a8%e5%b1%82/1.png&#34; alt=&#34;HTTP请求格式&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;HTTP响应消息的格式如下：&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e5%ba%94%e7%94%a8%e5%b1%82/2.png&#34; alt=&#34;HTTP请求格式&#34; /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;web缓存&#34;&gt;
+  Web缓存
+  &lt;a class=&#34;anchor&#34; href=&#34;#web%e7%bc%93%e5%ad%98&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;如果浏览器缓存过数据，当下次发送相同请求时，浏览器向服务器发送HTTP请求，并带上&lt;code&gt;If-modified-since: &amp;lt;date&amp;gt;&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;如果对象未改变，则返回&lt;code&gt;304 Not Modified&lt;/code&gt;，不反会对象，表示对象未被修改。&lt;/li&gt;
+&lt;li&gt;如果对象发生改变，服务器会返回对象。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;dns&#34;&gt;
+  DNS
+  &lt;a class=&#34;anchor&#34; href=&#34;#dns&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;DNS的是分布式数据库。提供了域名向IP地址的翻译、主机别名等功能。&lt;/li&gt;
+&lt;li&gt;一般来说是本地域名解析服务器代替进行域名解析的，当主机进行DNS查询时，查询会被发送到本地域名服务器，当本地域名服务器无法解析域名时，就会访问根域名服务器。全球共13个根域名服务器。&lt;/li&gt;
+&lt;li&gt;顶级域名服务器（TLD，top-level domain），负责com、org、net等顶级域名和国家顶级域名，如cn、uk等。&lt;/li&gt;
+&lt;li&gt;权威域名服务器是组织的域名解析服务器，提供组织内部服务器的解析服务。&lt;/li&gt;
+&lt;li&gt;当&lt;code&gt;cis.poly.edu&lt;/code&gt;想获取&lt;code&gt;gaia.cs.umass.edu&lt;/code&gt;的IP地址时，迭代查询流程如下&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e5%ba%94%e7%94%a8%e5%b1%82/3.png&#34; alt=&#34;迭代查询流程&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;递归查询的流程如下（将域名解析的任务交给所联系的服务器）&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e5%ba%94%e7%94%a8%e5%b1%82/4.png&#34; alt=&#34;递归查询流程&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;只要域名解析服务器获得域名时，就会缓存这一映射，一段时间后缓存条目才会失效。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;dns记录&#34;&gt;
+  DNS记录
+  &lt;a class=&#34;anchor&#34; href=&#34;#dns%e8%ae%b0%e5%bd%95&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;资源记录格式为(name, value, type, ttl)，类型如下&lt;/li&gt;
+&lt;li&gt;type=A，Name为主机域名，Value为IP地址&lt;/li&gt;
+&lt;li&gt;type=NS，Name为域（如edu.cn），value为该域权威域名解析服务器的主机域名。&lt;/li&gt;
+&lt;li&gt;type=CNAME，name为某一真实域名的别名，value为真实域名&lt;/li&gt;
+&lt;li&gt;type=MX，value是与name对应的邮件服务器。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;dns协议消息格式&#34;&gt;
+  DNS协议消息格式
+  &lt;a class=&#34;anchor&#34; href=&#34;#dns%e5%8d%8f%e8%ae%ae%e6%b6%88%e6%81%af%e6%a0%bc%e5%bc%8f&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;DNS查询（query）和回复（reply消息）的格式相同。&lt;/li&gt;
+&lt;li&gt;消息头部
+&lt;ul&gt;
+&lt;li&gt;Identification：16为查询编号，回复使用相同的编号。&lt;/li&gt;
+&lt;li&gt;flags表示查询或回复、期望递归、递归可用、权威回答。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e5%ba%94%e7%94%a8%e5%b1%82/5.png&#34; alt=&#34;DNS查询流程&#34; /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;socket&#34;&gt;
+  socket
+  &lt;a class=&#34;anchor&#34; href=&#34;#socket&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;对外通过IP地址+端口号表示通信端点。&lt;/li&gt;
+&lt;li&gt;操作系统通过套接字描述符（socket descriptor）来管理套接字。&lt;/li&gt;
+&lt;li&gt;socket类似于文件，当应用进程创建套接字时，操作系统分配一个数据结构存储该套接字相关信息。&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e5%ba%94%e7%94%a8%e5%b1%82/6.png&#34; alt=&#34;socket描述符表&#34; /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;地址结构&#34;&gt;
+  地址结构
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%9c%b0%e5%9d%80%e7%bb%93%e6%9e%84&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;使用TCP/IP协议簇的网络应用程序声明端点地址变量时，使用结构socketaddr_in&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; sockaddr_in
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  u_char sin_len; &lt;span style=&#34;color:#75715e&#34;&gt;/*地址长度 */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  u_char sin_family; &lt;span style=&#34;color:#75715e&#34;&gt;/*地址族(TCP/IP：AF_INET) */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  u_short sin_port; &lt;span style=&#34;color:#75715e&#34;&gt;/*端口号 */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; in_addr sin_addr; &lt;span style=&#34;color:#75715e&#34;&gt;/*IP地址 */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#66d9ef&#34;&gt;char&lt;/span&gt; sin_zero[&lt;span style=&#34;color:#ae81ff&#34;&gt;8&lt;/span&gt;]; &lt;span style=&#34;color:#75715e&#34;&gt;/*未用(置0) */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;socket-api函数&#34;&gt;
+  socket api函数
+  &lt;a class=&#34;anchor&#34; href=&#34;#socket-api%e5%87%bd%e6%95%b0&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;h4 id=&#34;socket函数&#34;&gt;
+  socket函数
+  &lt;a class=&#34;anchor&#34; href=&#34;#socket%e5%87%bd%e6%95%b0&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;sd = socket(protofamily,type,proto);&lt;/code&gt; 创建套接字并返回套接字描述符。&lt;/li&gt;
+&lt;li&gt;第一个参数指定协议族：protofamily=PF_INET(TCP/IP)&lt;/li&gt;
+&lt;li&gt;第二个参数指定套接字类型：SOCK_STREAM（TCP）, SOCK_DGRAM（UDP）, SOCK_RAW（面向网络层）&lt;/li&gt;
+&lt;li&gt;第三个参数指定协议号：0为默认&lt;/li&gt;
+&lt;li&gt;例&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; protoent &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;p;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;p&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;getprotobyname&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;tcp&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;SOCKET sd&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;socket&lt;/span&gt;(PF_INET,SOCKET_STREAM,p&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;p_proto);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;close&#34;&gt;
+  close
+  &lt;a class=&#34;anchor&#34; href=&#34;#close&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;int close(SOCKET sd)&lt;/code&gt; 关闭一个描述符为sd的套接字&lt;/li&gt;
+&lt;li&gt;如果多个进程共享一个套接字，调用close将套接字引用计数减1，减至0才关闭。&lt;/li&gt;
+&lt;li&gt;一个进程中的多线程对一个套接字的使用无计数。&lt;/li&gt;
+&lt;li&gt;返回值 0：成功，SOCKET_ERROR：失败。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;bind&#34;&gt;
+  bind
+  &lt;a class=&#34;anchor&#34; href=&#34;#bind&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;int bind(sd,localaddr,addrlen);&lt;/code&gt; 绑定套接字的本地端点地址&lt;/li&gt;
+&lt;li&gt;客户端一般不必调用bind函数，一般由服务端调用。&lt;/li&gt;
+&lt;li&gt;一台机器可能由多个网卡，可用使用地址通配符INADDR_ANY来绑定。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;listen&#34;&gt;
+  listen
+  &lt;a class=&#34;anchor&#34; href=&#34;#listen&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;int listen(sd,queuesize);&lt;/code&gt;置服务器端的流套接字处理处于监听状态。&lt;/li&gt;
+&lt;li&gt;仅服务端调用，仅用于面向连接的流套接字。&lt;/li&gt;
+&lt;li&gt;queuesize表示连接请求的队列大小。&lt;/li&gt;
+&lt;li&gt;返回值 0：成功，SOCKET_ERROR：失败。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;connect&#34;&gt;
+  connect
+  &lt;a class=&#34;anchor&#34; href=&#34;#connect&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;connect(sd,saddr,saddrlen)&lt;/code&gt; 客户端调用connect函数来使客户端套接字（sd）与特定计算机的特定端口（saddr）的套接字服务进行连接。&lt;/li&gt;
+&lt;li&gt;仅用于客户端，可用于TCP客户端也可以用于UDP客户端。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;accept&#34;&gt;
+  accept
+  &lt;a class=&#34;anchor&#34; href=&#34;#accept&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;newsock = accept(sd,caddr,caddrlen);&lt;/code&gt;服务程序调用accept函数从处于监听状态的流套接字sd的客户端连接请求队列中取出排在最前的一个客户请求，并且创建一个新的套接字来与客户套接字创建连接通道。&lt;/li&gt;
+&lt;li&gt;仅用于TCP套接字，仅用于服务器。&lt;/li&gt;
+&lt;li&gt;服务器会利用新创建的套接字（newsock）与客户端通信。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;send&#34;&gt;
+  send
+  &lt;a class=&#34;anchor&#34; href=&#34;#send&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;send(sd,*buf,len,flags);&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;sendto(sd,*buf,len,flags,destaddr,addrlen);&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;send：发送数据（用于TCP套接字或连接模式（调用了connect函数）的客户端UDP套接字）&lt;/li&gt;
+&lt;li&gt;sendto函数用于UDP服务器端套接字与未调用connect函数的UDP客户端套接字发送数据&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;recv&#34;&gt;
+  recv
+  &lt;a class=&#34;anchor&#34; href=&#34;#recv&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;recv(sd,buffer,len,flags);&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;recvfrom(sd,buf,len,flags,senderaddr,saddrlen);&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;recv函数从TCP连接的另一端接收数据，或者从调用了connect函数的UDP客户端套接接收服务器发来的数据&lt;/li&gt;
+&lt;li&gt;recvfrom函数用于从UDP服务器端套接字与未调用connect函数的UDP客户端套接字接收对端数据&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;setsockoptgetsockopt&#34;&gt;
+  setsockopt,getsockopt
+  &lt;a class=&#34;anchor&#34; href=&#34;#setsockoptgetsockopt&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;int setsockopt(int sd, int level, int optname, *optval, int optlen);&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;int setsockopt(int sd, int level, int optname, *optval, int optlen);&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;setsockopt()函数用来设置套接字sd的选项参数&lt;/li&gt;
+&lt;li&gt;getsockopt()函数用于获取任意类型、任意状态套接口的选项当前值，并把结果存入optval&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;网络字节序&#34;&gt;
+  网络字节序
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e7%bd%91%e7%bb%9c%e5%ad%97%e8%8a%82%e5%ba%8f&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;网络字节序采用大端排序方式（低位低地址，高位高地址）&lt;/li&gt;
+&lt;li&gt;某些Socket API函数的参数需要存储为网络字节顺序（如IP地址、端口号等）&lt;/li&gt;
+&lt;li&gt;转换函数
+&lt;ul&gt;
+&lt;li&gt;htons: 本地字节顺序→网络字节顺序(16bits)&lt;/li&gt;
+&lt;li&gt;ntohs: 网络字节顺序→本地字节顺序(16bits)&lt;/li&gt;
+&lt;li&gt;htonl: 本地字节顺序→网络字节顺序(32bits)&lt;/li&gt;
+&lt;li&gt;ntohl: 网络字节顺序→本地字节顺序(32bits)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;解析服务器ip地址&#34;&gt;
+  解析服务器IP地址
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e8%a7%a3%e6%9e%90%e6%9c%8d%e5%8a%a1%e5%99%a8ip%e5%9c%b0%e5%9d%80&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;客户端可能使用域名或IP地址标识服务器，IP协议需要使用32为二进制IP地址，需要将函数名或IP地址转换为32为IP地址。&lt;/li&gt;
+&lt;li&gt;inet_addr可用实现点分十进制IP地址到32位IP地址转换。&lt;/li&gt;
+&lt;li&gt;gethostbyname实现域名到32位IP地址转换。会返回一个指向结构hostent的指针。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; hostent {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;char&lt;/span&gt; FAR&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; h_name; &lt;span style=&#34;color:#75715e&#34;&gt;/*official host name */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;char&lt;/span&gt; FAR&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; FAR&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; h_aliases; &lt;span style=&#34;color:#75715e&#34;&gt;/*other aliases */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;short&lt;/span&gt; h_addrtype; &lt;span style=&#34;color:#75715e&#34;&gt;/*address type */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;short&lt;/span&gt; h_lengty; &lt;span style=&#34;color:#75715e&#34;&gt;/*address length */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;char&lt;/span&gt; FAR&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; FAR&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; h_addr_list; &lt;span style=&#34;color:#75715e&#34;&gt;/*list of address */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;};
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#define h_addr h_addr_list[0] 
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;解析服务器端口号&#34;&gt;
+  解析服务器端口号
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e8%a7%a3%e6%9e%90%e6%9c%8d%e5%8a%a1%e5%99%a8%e7%ab%af%e5%8f%a3%e5%8f%b7&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;客户端可能使用服务名（如HTTP）标识服务器端口，需要将服务名转换为熟知端口号&lt;/li&gt;
+&lt;li&gt;getservbyname会返回一个指向结构servent的指针。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; servent {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;char&lt;/span&gt; FAR&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; s_name; &lt;span style=&#34;color:#75715e&#34;&gt;/*official service name */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;char&lt;/span&gt; FAR&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; FAR&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; s_aliases; &lt;span style=&#34;color:#75715e&#34;&gt;/*other aliases */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;short&lt;/span&gt; s_port; &lt;span style=&#34;color:#75715e&#34;&gt;/*port for this service */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;char&lt;/span&gt; FAR&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; s_proto; &lt;span style=&#34;color:#75715e&#34;&gt;/*protocol to use */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}; 
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;解析协议号&#34;&gt;
+  解析协议号
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e8%a7%a3%e6%9e%90%e5%8d%8f%e8%ae%ae%e5%8f%b7&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;客户端可能使用协议名来指定协议，需要将协议名转换为协议号&lt;/li&gt;
+&lt;li&gt;函数getprotobyname实现协议名到协议号的转换。会返回一个protoent的指针。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; protoent {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;char&lt;/span&gt; FAR&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; p_name; &lt;span style=&#34;color:#75715e&#34;&gt;/*official protocol name */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;char&lt;/span&gt; FAR&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; FAR&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; p_aliases; &lt;span style=&#34;color:#75715e&#34;&gt;/*list of aliases allowed */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;short&lt;/span&gt; p_proto; &lt;span style=&#34;color:#75715e&#34;&gt;/*official protocol number*/&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; }; 
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;tcp客户端软件流程&#34;&gt;
+  TCP客户端软件流程
+  &lt;a class=&#34;anchor&#34; href=&#34;#tcp%e5%ae%a2%e6%88%b7%e7%ab%af%e8%bd%af%e4%bb%b6%e6%b5%81%e7%a8%8b&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;确定服务器IP地址和端口号&lt;/li&gt;
+&lt;li&gt;创建套接字&lt;/li&gt;
+&lt;li&gt;分配本地端点地址（可选）&lt;/li&gt;
+&lt;li&gt;连接服务器（套接字）&lt;/li&gt;
+&lt;li&gt;遵循应用层协议进行通信&lt;/li&gt;
+&lt;li&gt;关闭/释放连接&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;udp客户端软件流程&#34;&gt;
+  UDP客户端软件流程
+  &lt;a class=&#34;anchor&#34; href=&#34;#udp%e5%ae%a2%e6%88%b7%e7%ab%af%e8%bd%af%e4%bb%b6%e6%b5%81%e7%a8%8b&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;确定服务器IP地址与端口号&lt;/li&gt;
+&lt;li&gt;创建套接字&lt;/li&gt;
+&lt;li&gt;分配本地端点地址（IP地址+端口号）&lt;/li&gt;
+&lt;li&gt;指定服务器端点地址，构造UDP数据报&lt;/li&gt;
+&lt;li&gt;遵循应用层协议进行通信&lt;/li&gt;
+&lt;li&gt;关闭/释放套接字&lt;/li&gt;
+&lt;/ol&gt;</description>
+    </item>
+    
+    <item>
+      <title>链路层</title>
+      <link>/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E9%93%BE%E8%B7%AF%E5%B1%82/</link>
+      <pubDate>Wed, 24 Nov 2021 19:34:25 +0000</pubDate>
+      
+      <guid>/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E9%93%BE%E8%B7%AF%E5%B1%82/</guid>
+      <description>&lt;h2 id=&#34;概述&#34;&gt;
+  概述
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%a6%82%e8%bf%b0&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;链路层有两种不同类型的链路层信道，第一种是广播信道，因为许多主机与相同的广播信道相连，需要使用媒体访问协议来协调传输帧。第二种类型是点对点通信联络，由链路一端的单个发送方和链路另一端的单个接收方组成，许多链路层协议都是为点对点链路设计的，如点对点协议（PPP）和高级数据链路控制（HDLC）。&lt;/li&gt;
+&lt;li&gt;媒体访问控制协议（MAC）规定了帧在链路上传输的规则，对于在链路的一端只有一个发送方，链路的另一端仅有一个接收方的点对点链路，MAC协议比较简单，任何时刻发送方都能发送帧；当多个节点共享单个广播链路时，MAC协议需要协调多个节点的帧传输。&lt;/li&gt;
+&lt;li&gt;链路层的主体部分是在网络适配器中（也叫网络接口卡Network Interface Card NIC）实现，链路层控制器的很多功能使用硬件实现。&lt;/li&gt;
+&lt;li&gt;在发送端，控制器取得了由协议栈高层生成并存储在主机内存的数据报，在链路层帧中封装该数据报，然后遵循协议将该帧传入到链路中；在接收端接收整个帧，抽出网络层数据包，如果链路层执行差错检测，则需要发宋控制器在该帧的首部设置差错检测比特，由接收控制器执行差错检测。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;crc校验&#34;&gt;
+  CRC校验
+  &lt;a class=&#34;anchor&#34; href=&#34;#crc%e6%a0%a1%e9%aa%8c&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Cyclic Redundancy Check循环冗余检测。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;原理是&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;发送方和接收方先协商个数G，接收方在发送的数据D后添加数据R，使得DR（如D为11011101，R为1100，则DR为110111011100）能被G整除。并要求G的最左边位置为1，G比R多一位。&lt;/li&gt;
+&lt;li&gt;接收方收到数据后，用G除以DR&amp;rsquo;，如果余数为0，则数据正确，否则数据错误。&lt;/li&gt;
+&lt;li&gt;R可以通过G和D计算，计算方法如下：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e9%93%be%e8%b7%af%e5%b1%82/1.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;多路访问协议&#34;&gt;
+  多路访问协议
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%a4%9a%e8%b7%af%e8%ae%bf%e9%97%ae%e5%8d%8f%e8%ae%ae&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;广播信道中的所有节点都能传输帧，这可能会导致碰撞，通常当碰撞发生时，没有一个节点能有效地获得任何传输的帧。为了确保广播信道能执行有用的工作，需要使用某种方式来协调节点的数据传输。&lt;/li&gt;
+&lt;li&gt;时隙ALOHA：
+&lt;ul&gt;
+&lt;li&gt;所有的帧由L比特组成，事件被划分为L/R秒的时隙；一个时隙等于传输一帧的时间；节点只在时隙起点开始传输帧；&lt;/li&gt;
+&lt;li&gt;当节点有一个新的帧要发送时，他等到下一个时隙开始传输整个帧；&lt;/li&gt;
+&lt;li&gt;如果没有碰撞，该节点成功传输它的帧。&lt;/li&gt;
+&lt;li&gt;如果有碰撞，该节点检测到这次碰撞，并在后续中该节点以概率p（0&amp;lt;p&amp;lt;1）在每个时隙中重传他的帧，直到该帧被传输出去。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;具有碰撞检测的载波侦听多路访问协议（CSMA/CD）是指一个节点在传输前先监听信道，当存在其他节点正在信道上传输帧时，节点等待直到检测到没有数据传输时才开始传输；节点传输时会一直侦听信道，当它检测到另一个节点也在传输帧时，它就停止传输，并等待一个时间后重新传输。&lt;/li&gt;
+&lt;li&gt;CSMA/CD等待的时间使用的是二进制指数后退算法，该算法如下：当传输一个帧是，在该帧尽力了一连串的n次碰撞后，节点随机地从[0, 1, 2, &amp;hellip;, 2 &lt;sup&gt;n&lt;/sup&gt;-1]中选择一个K值。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;mac地址&#34;&gt;
+  MAC地址
+  &lt;a class=&#34;anchor&#34; href=&#34;#mac%e5%9c%b0%e5%9d%80&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;并不是主机具有链路层地址，而是他们的网络接口具有链路层地址；具有多个网络接口的主机具有多个链路层地址。&lt;/li&gt;
+&lt;li&gt;链路层交换机的任务是在主机和路由器之间承载数据报，主机或者路由器不必明确的将帧发送到交换机。&lt;/li&gt;
+&lt;li&gt;MAC地址共2&lt;sup&gt;48&lt;/sup&gt;位，通常采用十六进制表示，如1A-23-F9-CD-06-9B。&lt;/li&gt;
+&lt;li&gt;当某些适配器向目的适配器发送一个帧时，发送适配器将目的适配器的MAC地址插入到该帧中， 并将该帧发送到局域网上。&lt;/li&gt;
+&lt;li&gt;有一个特殊的MAC广播地址，FF-FF-FF-FF-FF-FF，适用于发送适配器需要让其他局域网上的其他适配器接收并处理它发送的帧。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;arp&#34;&gt;
+  ARP
+  &lt;a class=&#34;anchor&#34; href=&#34;#arp&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Address Resolution Protocol，地址解析协议。&lt;/li&gt;
+&lt;li&gt;ARP为在同一个子网上的主机和路由器接口解析IP地址，获得MAC地址。&lt;/li&gt;
+&lt;li&gt;每台主机或路由器中都有一个ARP表，包含了IP地址到MAC地址的映射关系。该表也包含了一个TTL，表示从表中删除映射的时间。通常的过期时间是20分钟。&lt;/li&gt;
+&lt;li&gt;ARP的处理流程如下：
+&lt;ul&gt;
+&lt;li&gt;A主机向子网中广播一个ARP分组，该分组中包含源和目的IP地址,源MAC地址，目的MAC地址为FF-FF-FF-FF-FF-FF。&lt;/li&gt;
+&lt;li&gt;由于是广播地址，每个适配器都将该帧中的ARP分组向上传递给ARP模块，ARP模块检查它的IP地址是否和ARP分组中的目的IP地址是否匹配。&lt;/li&gt;
+&lt;li&gt;如果匹配，将向A主机发送一个带有A主机需要的目的MAC地址的ARP分组。&lt;/li&gt;
+&lt;li&gt;A主机更新他的ARP表。&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e9%93%be%e8%b7%af%e5%b1%82/2.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;以太网&#34;&gt;
+  以太网
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e4%bb%a5%e5%a4%aa%e7%bd%91&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;早期使用总线拓扑的以太网是一种广播局域网，即所有传输的帧都会被该总线上所有的适配器处理。&lt;/li&gt;
+&lt;li&gt;集线器（hub）是一种物理层设备，作用与各个比特，当一个0或1的比特到达一个接口时，集线器只会重新生成这个比特，将其能量强度放大，并向其他的所有接口传输出去。采用基于集线器的星形拓扑的以太网实际上也是一个广播局域网。当某集线器同时从两个不同的接口接收到帧时，将出现一次碰撞。&lt;/li&gt;
+&lt;li&gt;交换机（switch）是链路层设备，使用交换机的以太网安装采用星形拓扑，交换机不仅是无碰撞的，也是“存储-转发”。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;以太网帧格式&#34;&gt;
+  以太网帧格式
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e4%bb%a5%e5%a4%aa%e7%bd%91%e5%b8%a7%e6%a0%bc%e5%bc%8f&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e9%93%be%e8%b7%af%e5%b1%82/3.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;前导字段前7个字节是用来确定一个帧的到达时间，并确定编码位之间的时间量。最后一个字节固定值为0xAB。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;源地址和目的地址都指的是适配器的地址，当接收方收到一个帧，如果帧的内容是自身的地址或者是广播地址，它会将帧的数据字段传递给网络层，如果它收到了具有任何其他MAC地址的帧，则丢弃。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;类型字段指定以太网上层使用的协议。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;数据字段最小是46字节，如果IP数据报小于46字节，数据包必须被填充到46字节。当采用填充时，传递到网络层的数据报还包括填充部分，网络层使用IP数据包首部中的长度字段来去除填充部分。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;CRC的目的是使得接收适配器检测帧中是否引入了差错。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;以太网采用无连接服务，向网络层提供不可靠服务，当适配器收到一个帧后，它对该帧执行CRC校验，当该帧不通过CRC校验时，设配器只会丢弃该帧而不会通知发送端。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;链路层交换机&#34;&gt;
+  链路层交换机
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e9%93%be%e8%b7%af%e5%b1%82%e4%ba%a4%e6%8d%a2%e6%9c%ba&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;交换机对子网中的主机和路由器是透明的，这意味这当某主机向另一台主机发送一个帧，并不知道某交换机会接收该帧并把它转发到另一个节点。交换机输出接口设置有缓存。&lt;/li&gt;
+&lt;li&gt;使用交换机能消除碰撞，交换机将链路彼此隔离。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;转发和过滤&#34;&gt;
+  转发和过滤
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e8%bd%ac%e5%8f%91%e5%92%8c%e8%bf%87%e6%bb%a4&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;过滤决定一个帧是否应该转发到某个接口还是应当将其丢弃。&lt;/li&gt;
+&lt;li&gt;转发决定一个帧应该被导向哪个接口，并把该帧移动到哪些接口上。&lt;/li&gt;
+&lt;li&gt;交换机的过滤和转发基于交换机表（switch table）实现，该交换机表包含局域网上某些主机和路由器但不必是全部的表项。交换机表中包含：1. MAC地址；2MAC地址对应的接口；3. 该信息放到交换机表中的时间。&lt;/li&gt;
+&lt;li&gt;交换机的工作流程如下，假设A帧从x接口到达，目的地址为DD-DD-DD-DD-DD-DD：
+&lt;ul&gt;
+&lt;li&gt;如果表中没有DD-DD-DD-DD-DD-DD，则交换机向除x外所有的接口广播该帧。&lt;/li&gt;
+&lt;li&gt;如果表中有DD-DD-DD-DD-DD-DD，并且对应的接口为x，则交换机丢弃该帧。&lt;/li&gt;
+&lt;li&gt;如果表中有DD-DD-DD-DD-DD-DD，并且对应的接口不为x，则交换机将该帧转发到接口y上。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;交换机表是自学习的，通过如下方式实现：
+&lt;ol&gt;
+&lt;li&gt;交换机表初始为空。&lt;/li&gt;
+&lt;li&gt;对于每个接口收到的入帧，该交换机在其表中存储该帧源MAC地址、该帧到达的接口和当前时间。&lt;/li&gt;
+&lt;li&gt;如果一段时间（老化期）后，交换机没有收到源MAC地址在该表里的数据后，就从该表里删除这个地址。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;交换机是即用即插设备，不需要网络管理员手动维护。交换机是全双工的，任何接口都能同时发送和接收。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;无线局域网ieee80211wi-fi&#34;&gt;
+  无线局域网IEEE802.11(Wi-Fi)
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%97%a0%e7%ba%bf%e5%b1%80%e5%9f%9f%e7%bd%91ieee80211wi-fi&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Wi-Fi（无线保真），一个接入点（AP）网络下面可以包含多个站（STA），一个AP和相关的站被称为一个基本服务集（BSS)。AP之间使用一种有线的分布式服务（称为DS），形成一个扩展服务集（ESS），这种方式通常被称为基础设施模式。&lt;/p&gt;
+&lt;h3 id=&#34;80211帧&#34;&gt;
+  802.11帧
+  &lt;a class=&#34;anchor&#34; href=&#34;#80211%e5%b8%a7&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e9%93%be%e8%b7%af%e5%b1%82/802.11.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;物理层会聚程序（PLCP）头部以独立于物理层的方式提供特定的物理层信息。&lt;/li&gt;
+&lt;li&gt;MPDU的帧控制字包括三种类型：管理帧、控制帧和数据帧。MPDU的剩余字段由帧类型来决定。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;管理帧&#34;&gt;
+  管理帧
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e7%ae%a1%e7%90%86%e5%b8%a7&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;管理帧用于创建维持、终止站和接入点之间的连接。&lt;/li&gt;
+&lt;li&gt;管理帧也被确定是否采用加密，传输网络名称（SSID或ESSID），支持哪种传输速率，以及采用的时间数据库等。&lt;/li&gt;
+&lt;li&gt;当一个Wi-Fi接口”扫描“临近的接入点时，这些帧被用于提供必要的信息。&lt;/li&gt;
+&lt;li&gt;扫描是一个站发现可用的网络以及相关配置信息的过程。一个站可以主动侦测网络，在扫描时传输一个特殊的管理帧（&amp;ldquo;探测请求&amp;rdquo;)。这些探测请求有一定的限制，以保证802.11流量不在非802.11频率上传输。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;控制帧&#34;&gt;
+  控制帧
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%8e%a7%e5%88%b6%e5%b8%a7&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;控制帧和帧确认被用于一种流量的控制方式，流量控制有助于接收方是一个过快的发送方降低发送速度，帧确认有助于发送方知道哪些帧已被正确接收。&lt;/li&gt;
+&lt;li&gt;802.11网络支持可选的请求发送/明确发送（RTS/CTS），通过放缓传输来进行流量控制。当RTS/CTS启用时，一个站在发送数据帧之前发送一个RTS帧，当接收方愿意接收额外的流量时，这个站会开启一个时间窗口，用于向确认接受的站发送数据帧。&lt;/li&gt;
+&lt;li&gt;RTS和CTS帧比较短，因此他们不会长期使用信道。如果一个分组的大小足够大，AP通常为每个分组启动一次RTS/CTS交换。通常AP都提供一个称为分组大小阈值的配置选项，超过阈值的帧将会导致一个RTS帧优先于数据帧发送。大多数设备生产商设置的默认值是500字节。&lt;/li&gt;
+&lt;li&gt;802.11采用一种重传/确认的方法来重传。确认是对预期在一定时间内接受的一个单播帧（802.11a/b/g）或一组帧(802.11n/e)的响应。组播和广播帧没有相关的确认，在指定时间内没有收到对应的ACK会导致帧的重传。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;数据帧分片和聚合&#34;&gt;
+  数据帧、分片和聚合
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%95%b0%e6%8d%ae%e5%b8%a7%e5%88%86%e7%89%87%e5%92%8c%e8%81%9a%e5%90%88&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;通常802.11帧和链路层（LLC）帧之间存在一对一关系，他们保证更高层协议是可用的。但是802.11支持帧分片，可将一个帧分为多个分片。根据802.11n的规定，它也支持帧聚合，可将多个帧合并发送以减少开销。&lt;/li&gt;
+&lt;li&gt;当使用帧分片时，每个分片都有自己的MAC头部和尾部的CRC，并且他们独立于其他分片处理。当信道有明显的干扰时，分片有助于提高性能。分片仅用于目的地址为单播的帧，为了具备这种能力，顺序控制字段包含一个分片号（4位）和一个序列号（12位）。如果一个帧经过分片，所有分片包含相同的序列号值，没相邻的分片的分片号之差为1。由于分片号字段长度为4位，同一帧最多可能有15个分片。帧控制字中的更多标志字段表示更多分片还没有到达。最后一个分片将这个位置设置为0。接收方将接收的同一序列号的分片根据分片号重组成原始帧。当所有包含同一序列号的分片被接收，并且最后一个分片将更多标志字段设为0时，这个帧被重组并交给更高层协议来处理。&lt;/li&gt;
+&lt;li&gt;分片并不常使用，分片大小通常可设为256字节至2048字节，并作为一个阈值，只要超过了阈值的帧才被分片。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;环回地址&#34;&gt;
+  环回地址
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e7%8e%af%e5%9b%9e%e5%9c%b0%e5%9d%80&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;通常使用一个虚拟的环回网络接口来实现。它像一个真正的网络接口，但实际上是一个由操作系统提供的专用软件。&lt;/li&gt;
+&lt;li&gt;以127开头的IPv4地址被保留位环回地址，linux为环回地址分配的IPv4地址为127.0.0.1（IPv6为::1），为它分配的名称为localhost。&lt;/li&gt;
+&lt;li&gt;传输层和网络层对数据执行完整的处理流程，在数据离开网络层时将其回送给网络层协议栈。在linux中环回接口被称为lo。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;mtu和路径mtu&#34;&gt;
+  MTU和路径MTU
+  &lt;a class=&#34;anchor&#34; href=&#34;#mtu%e5%92%8c%e8%b7%af%e5%be%84mtu&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;在很多链路层中，携带的高层协议PDU的帧大小是有限的，以太网的有效载荷通常被限制为1500字节。这种特征被称为最大传输单元(MTU)。&lt;/li&gt;
+&lt;li&gt;当两台主机之间跨越多个网络通信时，每条链路可能由不同大小的MTU，最小的MTU被称为路径MTU。&lt;/li&gt;
+&lt;li&gt;任何两台主机之间的路径MTU可能会改变。路径MTU不需要在两个方向上相同。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;隧道&#34;&gt;
+  隧道
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e9%9a%a7%e9%81%93&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;一般来说，隧道是在高层（或同等层）中携带低层数据。如在IPv4分组中携带IPv4数据，在一个UDP分组中携带以太网数据。&lt;/li&gt;
+&lt;li&gt;隧道转变了严格分层的思路。&lt;/li&gt;
+&lt;li&gt;用于建立隧道的常用协议包括：通用路由封装（GRE）、点对点隧道协议（PPTP）和第二层隧道协议（L2TP）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;与链路层相关的攻击&#34;&gt;
+  与链路层相关的攻击
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e4%b8%8e%e9%93%be%e8%b7%af%e5%b1%82%e7%9b%b8%e5%85%b3%e7%9a%84%e6%94%bb%e5%87%bb&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;在传统的有线以太网中，接口可以被设置为混杂模式，这允许它接收目的地不是自己的流量。当介质是共享电缆时，该功能允许任意一台连接以太网的电力计算机获取到别人的帧并检查内容。在使用交换机后，这变的不容易了。&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>概述</title>
+      <link>/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E6%A6%82%E8%BF%B0/</link>
+      <pubDate>Wed, 24 Nov 2021 10:42:41 +0000</pubDate>
+      
+      <guid>/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E6%A6%82%E8%BF%B0/</guid>
+      <description>&lt;h2 id=&#34;协议&#34;&gt;
+  协议
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%8d%8f%e8%ae%ae&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;计算机会执行各种协议，一系列相关的协议的集合称为一个协议族。&lt;/li&gt;
+&lt;li&gt;指定一个协议族中的各种协议之间的相互关系并划分需要完成任务的设计，称为协议族的体系结构或参考模型。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;分层&#34;&gt;
+  分层
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%88%86%e5%b1%82&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;th&gt;介绍&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;应用层&lt;/td&gt;
+&lt;td&gt;Telnet、FTP和e-mail等&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;运输层&lt;/td&gt;
+&lt;td&gt;TCP和UDP&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;网络层&lt;/td&gt;
+&lt;td&gt;IP、ICMP和IGMP&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;链路层&lt;/td&gt;
+&lt;td&gt;设备驱动程序和接口卡&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;ol&gt;
+&lt;li&gt;链路层：也叫数据链路层或者网络接口层，包括操作系统中的设备驱动程序和计算机中对应的网络接口卡（网卡），他们一起处理与电缆（或其他传输媒介）的物理接口细节。&lt;/li&gt;
+&lt;li&gt;网络层：处理分组在网络中的活动。&lt;/li&gt;
+&lt;li&gt;运输层：未两台主机上的应用程序提供端到端的通信。TCP的工作是把应用程序交给他的数据分为合适的小块交给下面的网络层，确认接收到的文组，设置发送最后确认分组的超时时钟等。UDP把称作数据报的分组从一台主机发送到另一台主机，不保证该数据报能到达另一端。&lt;/li&gt;
+&lt;li&gt;应用层负责处理特定的应用程序细节。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;一般来应用层的程序通常是一个用户进程，而下三层一般在操作系统内核中执行。&lt;/li&gt;
+&lt;li&gt;多个网络通过IP路由器（IP Router）进行连接。从历史来说，路由器也叫做网关，但现在网关这个术语只用来表示应用层网关：一个连接两种不同协议族的进程。&lt;/li&gt;
+&lt;li&gt;网桥是在链路层上对网络进行互联，而路由器则是在网络层上对网络进行互联。网桥使得多个局域网组合在一起，这样对上层来说就好像是一个局域网。&lt;/li&gt;
+&lt;li&gt;TCP/IP的每层都是用地址和标识符，用于区分不同协议或相同协议不同关联。链路层接入网络通常使用48位地址；IPv4使用32位地址，IPv6使用128位地址。TCP和UDP传输使用一系列的不同的端口号。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;互联网的地址&#34;&gt;
+  互联网的地址
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e4%ba%92%e8%81%94%e7%bd%91%e7%9a%84%e5%9c%b0%e5%9d%80&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;通常采用点分十进制数地址。&lt;/p&gt;
+&lt;h3 id=&#34;分类&#34;&gt;
+  分类
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%88%86%e7%b1%bb&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;A类地址：第一位为0（二进制），网络号长度8位，主机号长度24位。范围0.0.0.0～127.255.255.255。127是一个保留地址。&lt;/li&gt;
+&lt;li&gt;B类地址：前两位为10（二进制），网络号长度16位，主机号长度16位。范围128.0.0.0～191.255.255.255。&lt;/li&gt;
+&lt;li&gt;C类地址：前三位为110（二进制），网络号长度24位，主机号长度8位。范围192.0.0.0～223.255.255.255。&lt;/li&gt;
+&lt;li&gt;D类地址：前四位为1110（二进制），范围224.0.0.0～239.255.255.255，D类地址被保留支持组播。&lt;/li&gt;
+&lt;li&gt;E类地址：前四位为1111，范围从240.0.0.0～255.255.255.255。E类不用。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;专用地址&#34;&gt;
+  专用地址
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e4%b8%93%e7%94%a8%e5%9c%b0%e5%9d%80&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;10.0.0.0~10.255.255.255&lt;/li&gt;
+&lt;li&gt;172.16.0.0~172.31.255.255&lt;/li&gt;
+&lt;li&gt;192.168.0.0~192.168.255.255&lt;/li&gt;
+&lt;li&gt;0.0.0.0/8：本地网络中的主机，仅作为源IP使用。&lt;/li&gt;
+&lt;li&gt;127.0.0.1/8：回环地址，通常只用127.0.0.1。&lt;/li&gt;
+&lt;li&gt;255.255.255.255/32：本地网络（受限）的广播地址。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;ipv6&#34;&gt;
+  IPv6
+  &lt;a class=&#34;anchor&#34; href=&#34;#ipv6&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;IPv6地址的长度是128位，采用16进制表示，每四个16进制数用一个冒号分隔（四个16进制数也称为一个块或字段），一个IPv6地址包含8个块。如&lt;code&gt;5f05:2000:80ad:5800:0058:0800:2023:1d71&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;IPv6地址简化写法
+&lt;ul&gt;
+&lt;li&gt;前导的0必须压缩，如&lt;code&gt;5f05:2000:80ad:5800:58:800:2023:1d71&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;全零的块可以省略用符号::表示。&lt;code&gt;::&lt;/code&gt;只能用于影响最大的地方（压缩最多的0）。如果多个块中包含等长度的0，则顺序靠前的块被替换为&lt;code&gt;::&lt;/code&gt;。如&lt;code&gt;0:0:0:0:0:0:0:1&lt;/code&gt;可以简写为&lt;code&gt;::1&lt;/code&gt;；&lt;code&gt;2001:0db8:0:0:0:0:0:2 &lt;/code&gt;可以简写为&lt;code&gt;2001:db8:2&lt;/code&gt;。一个IPv6地址中的&lt;code&gt;::&lt;/code&gt;只可以出现一次。&lt;/li&gt;
+&lt;li&gt;IPv4映射的IPv6地址格式中 紧接着IPv4部分的地址块的值为ffff，地址的其余部分使用点分四组格式。如IPv6地址&lt;code&gt;::ffff:10.0.0.1&lt;/code&gt;可以表示为IPv4地址10.0.0.1。&lt;/li&gt;
+&lt;li&gt;a到f的16进制用小写表示。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;在某些情况下，IPv6地址中的冒号可能和其他分隔符混淆（如URL），这种情况下可以使用&lt;code&gt;[&lt;/code&gt;和&lt;code&gt;]&lt;/code&gt;来包裹IPv6地址。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;广播地址&#34;&gt;
+  广播地址
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%b9%bf%e6%92%ad%e5%9c%b0%e5%9d%80&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;在每个IPv4子网中，一个特殊地址被保留作为子网广播地址。子网广播地址通过将IPv4地址中的网络/子网部分设置为适当值，以及主机部分的所有地址设置为1而形成。&lt;/li&gt;
+&lt;li&gt;子网广播地址的计算方式为：对子网掩码取反，并于子网中任意的计算机的地址（或者网络/子网前缀）进行按位或运算（两个输入为任意一个为1，则结果为1）。&lt;/li&gt;
+&lt;li&gt;子网128.32.1.0/24的子网广播地址是128.32.1.255，使用这种地址作为目的地址的数据报，也被称为定向广播，定向广播至今在Internet中被禁用。&lt;/li&gt;
+&lt;li&gt;255.255.255.255的IP地址被保留为本地网络广播，也称有限广播，它不会被路由器转发。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;组播地址&#34;&gt;
+  组播地址
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e7%bb%84%e6%92%ad%e5%9c%b0%e5%9d%80&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;一个IP组播地址标识一组主机接口，一个组所覆盖的网络部分称为组的范围，常见的范围包括同一计算机、同一子网等。&lt;/li&gt;
+&lt;li&gt;当一台主机向一个组发送数据时，他会创建一个数据报，使用单播IP地址作为源地址，使用组播IP地址作为目的地址，已加入组的所有主机将接收发送到改组的任何数据报。&lt;/li&gt;
+&lt;li&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;封装&#34;&gt;
+  封装
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%b0%81%e8%a3%85&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;上层向下层传输数据时，每一层都会对收到的数据增加一些首部信息。&lt;/li&gt;
+&lt;li&gt;下层向上层传输数据时，会去掉各层协议的报文首部，每层协议都要去检查报文首部中的协议标识，以确定接收数据的上层协议，这个或称被称为分用（Demultiplexing）。&lt;/li&gt;
+&lt;li&gt;TCP（传输控制协议）传给IP的数据单元被称作TCP报文段或者简称为TCP段（TCP segment），UDP（用户数据报协议）传给IP的信息单元被称为UDP数据报（UDP datagram）。IP传给网络接口层的数据单元是分组（packet）也可以叫做IP数据报，分组既可以是一个IP数据报（IP datagram），也可以是IP数据报的一个片（fragment）。通过以太网传输的比特流称作帧（Frame）。&lt;/li&gt;
+&lt;li&gt;以太网数据帧的长度必须时46~1500字节之间，以太网帧包含一个48位的目的地址（又称为介质访问控制（MAC））和一个16位的以太网类型字段（指定是IPv4或者IPv6等）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;端口号&#34;&gt;
+  端口号
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e7%ab%af%e5%8f%a3%e5%8f%b7&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;端口号由16位组成，范围是（0~65535）。每个IP地址有65536个可用的端口号。&lt;/li&gt;
+&lt;li&gt;标准的端口号由Internet号码分配机构（IANA）分配。这组数字被划分为特定范围，包括熟知端口号（0-1023）、注册端口号（1024-49151）和动态/私有端口号（49152-65535）。类似Linux这样的操作系统绑定到一个熟知端口上需要管理员的权限。&lt;/li&gt;
+&lt;li&gt;安全外壳协议（SSH，端口22）、FTP协议（端口20、21）、Telnet远程终端控制（端口23）、简单邮件传输协议（SMTP，端口25）、域名系统（DNS，端口53）、交互式邮件访问协议(IMAP和IMAPS，端口143和993)、简单网络管理协议（SNMP，端口161和162）、轻量级目录访问协议（LDAP，端口389）、超文本传输协议（HTTP和HTTPS，端口80和443）。&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>计算机网络</title>
+      <link>/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/</link>
+      <pubDate>Fri, 27 Aug 2021 16:22:59 +0000</pubDate>
+      
+      <guid>/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;Internet是全球最大的互联网络，是一个世界范围的计算机网络，互联了遍及全世界的数以亿计的计算设备的网络。&lt;/li&gt;
+&lt;li&gt;主机（host）：也叫端系统。是与因特网相连的计算机和其他设备，如PC、服务器、手机等。主机通过通信链路（电缆、光纤、无线电等）和分组交换机（路由器、链路层交换机）连接到一起。当一台主机向另一台主机发送数据，发送主机将数据分组（将数据分段，每段加上首部字节）。分组交换机从他的一条入通信链路接收到达的分组，从它的出通信链路转发该分组。路由器通常位于网络核心，链路层交换机位于接入网中。&lt;/li&gt;
+&lt;li&gt;ISP(Internet Service Provider)：因特网服务提供商。主机通过ISP介入到因特网，每个交换机由多个通信链路和分组交换机组成。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote class=&#34;book-hint info&#34;&gt;
+  &lt;ul&gt;
+&lt;li&gt;协议：计算机网络中数据交换必须遵守事先约定的规则。协议规定了网络中所有信息发送和接收过程。协议的三要素：
+&lt;ol&gt;
+&lt;li&gt;语法，数据和控制信息的结构或格式。&lt;/li&gt;
+&lt;li&gt;语义，需要发出何种控制信息；完成何种动作及做出何种响应；以及差错控制。&lt;/li&gt;
+&lt;li&gt;时许，事件的顺序；速度匹配。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;报文指的是发送信息的整体，比如一个文件、一首音乐。&lt;/li&gt;
+&lt;li&gt;分组是报文分拆出来的一系列相对较小的数据包。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+&lt;li&gt;接入网络：①DSL(Digital Subscriber Line)，即数字电话线；②电缆网络；③无线局域网和广域无线接入。&lt;/li&gt;
+&lt;li&gt;计算机网络结构：
+&lt;ul&gt;
+&lt;li&gt;网络边缘，指主机和网络应用。&lt;/li&gt;
+&lt;li&gt;接入网络，有线和无线通信链路。&lt;/li&gt;
+&lt;li&gt;网络核心(核心网络)，互联的路由器。网络核心的关键功能是路由和转发，路由是确定分组从源到目的的传输路径，转发是将分组从路由器的输入端交换至正确的输出端口。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;数据交换&#34;&gt;
+  数据交换
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%95%b0%e6%8d%ae%e4%ba%a4%e6%8d%a2&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;网络核心需要通过数据交换将数据从源主机发送到目的主机，数据交换有以下类型：1. 电路交换。2. 报文交换。3. 分组交换。&lt;/li&gt;
+&lt;li&gt;电路交换的三个阶段是：1. 建立通信；2. 通信；3. 释放连接。会独占资源。为了共享中继线，引入了多路复用(Multiplexing)。典型的多路复用有：1. 频分多路复用(FDM)；2. 时分多路复用(TDM)；3. 波分多路复用(WDM)；4. 码分多路复用(CDM)。&lt;/li&gt;
+&lt;li&gt;频分多路复用是各用户占用不同的频率带宽。用户在分派到一定的频带后，在通信过程中始终占用此频带。&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/1.png&#34; alt=&#34;FDM&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;时分复用则是将时间划分为一段段等长的时分复用帧（TDM 帧），每个用户在每个TDM帧中占用固定序号的时隙。时分复用的所有用户是在不同的时间占用相同的频带宽度。&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/2.png&#34; alt=&#34;TDM&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;波分复用就是光的频分复用。&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/3.png&#34; alt=&#34;WDM&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;码分多路复用是为每个用户分配一个唯一的mbit码片序列，各用户码片序列相互正交。&lt;/li&gt;
+&lt;li&gt;报文交换和分组交换均采用存储转发的方式交换数据，报文交换以完整的报文进行存储转发，分组交换以较小的分组进行存储转发。&lt;/li&gt;
+&lt;li&gt;分组交换的报文的交付时间:&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/4.png&#34; alt=&#34;FDM&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;分组交换和电路交换的比较：
+&lt;ol&gt;
+&lt;li&gt;分组交换适合突发数据传输网络。&lt;/li&gt;
+&lt;li&gt;电路交换会独占资源，分组交换不会，所以分组交换可能产生拥堵和分组丢失。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;网络性能指标&#34;&gt;
+  网络性能指标
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e7%bd%91%e7%bb%9c%e6%80%a7%e8%83%bd%e6%8c%87%e6%a0%87&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;速率或比特率，使用单位时间中传输信息的比特量。1Gbps=10^3Mbps=10^6kbps=10^9bps&lt;/li&gt;
+&lt;li&gt;带宽指的是数字信道所能传输的最高数据率。单位是bps&lt;/li&gt;
+&lt;li&gt;分组交换可能会发生丢包和时延。因为分组在路由器缓存中排队时，如果分组到达速率超过输出链路容量时就会丢包；分组排队等待输出链路可用时就会产生时延，时延包括节点处理延迟(通常小于毫秒级别)、数据报排队延迟、路由器中传输延迟和物理链路传播延迟。&lt;/li&gt;
+&lt;li&gt;时延带宽积又被称为以比特为单位的链路长度，时延带宽积=传播时延x带宽。&lt;/li&gt;
+&lt;li&gt;丢包率=丢包数/已发分组数。&lt;/li&gt;
+&lt;li&gt;吞吐量标识在发送端和接收端之间传送数据速率。吞吐量取决于链路上最小的带宽。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;osi参考模型和tcpip参考模型&#34;&gt;
+  OSI参考模型和TCP/IP参考模型
+  &lt;a class=&#34;anchor&#34; href=&#34;#osi%e5%8f%82%e8%80%83%e6%a8%a1%e5%9e%8b%e5%92%8ctcpip%e5%8f%82%e8%80%83%e6%a8%a1%e5%9e%8b&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;现实中基本上都用的TCP/IP参考模型。&lt;/li&gt;
+&lt;li&gt;每一层都会封装上层的数据，增加一些控制信息用来构建协议数据单元(PDU)。&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/5.png&#34; alt=&#34;OSI参考模型&#34; /&gt;
+&lt;ul&gt;
+&lt;li&gt;物理层定义了接口特性、传输模式、比特编码、比特同步和数据率。&lt;/li&gt;
+&lt;li&gt;数据链路层是相邻网络元素（主机、交换机、路由器等）的数据传输，负责节点之间的数据传输、组帧、物理寻址、流量控制、差错控制和访问控制(决定某一时刻哪个设备拥有物理介质的使用权)。&lt;/li&gt;
+&lt;li&gt;网络层负责源主机到目的主机的数据分组路由与转发以及逻辑寻址。&lt;/li&gt;
+&lt;li&gt;传输层负责进程间完整报文的传输。包括分段与重组、SAP寻址、连接控制、流量控制、差错控制。&lt;/li&gt;
+&lt;li&gt;会话层负责对话的建立、维护和同步。&lt;/li&gt;
+&lt;li&gt;表示层负责数据的加密解密、压缩解压等。&lt;/li&gt;
+&lt;li&gt;应用层支持用户通过用户代理(如浏览器)或网络接口使用网络。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>网络安全</title>
+      <link>/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/</link>
+      <pubDate>Sun, 01 Aug 2021 11:39:10 +0000</pubDate>
+      
+      <guid>/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/</guid>
+      <description>&lt;p&gt;安全通信需要具有下列的特性&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;机密性：仅有发送方和希望的接收方能够理解传输报文的内容。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;报文完整性：确保其通信内容在传输的过程中未被改变。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;端点鉴别：发送方和接收方都能证实通信过程所涉及的另一方。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;运行安全性：确保网络安全。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;密码学&#34;&gt;
+  密码学
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%af%86%e7%a0%81%e5%ad%a6&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;报文的最初形式称为&lt;strong&gt;明文&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;使用&lt;strong&gt;加密算法&lt;/strong&gt;加密明文，生成的加密报文称为&lt;strong&gt;密文&lt;/strong&gt;，加密算法往往是已知的。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;密钥&lt;/strong&gt;K&lt;sub&gt;A&lt;/sub&gt;是一串数字或者字符，加密算法以密钥和明文报文m为输入，生成的密文为输出。用K&lt;sub&gt;A&lt;/sub&gt;(m)表示。&lt;/p&gt;
+&lt;p&gt;解密算法使用密钥K&lt;sub&gt;B&lt;/sub&gt;和密文作为输入，通过计算K&lt;sub&gt;B&lt;/sub&gt;(K&lt;sub&gt;A&lt;/sub&gt;(m))得到m&lt;/p&gt;
+&lt;h3 id=&#34;对称密钥密码体制&#34;&gt;
+  对称密钥密码体制
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%af%b9%e7%a7%b0%e5%af%86%e9%92%a5%e5%af%86%e7%a0%81%e4%bd%93%e5%88%b6&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;凯撒密码
+&lt;ul&gt;
+&lt;li&gt;将明文报文中的每个字母用字母表中该字母后第k个字母进行替换，允许回绕。&lt;/li&gt;
+&lt;li&gt;缺点：密钥值只有25个&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;单码代替密码
+&lt;ul&gt;
+&lt;li&gt;使用字母表中的一个字母替换另一个字母。需要给定一个替换表，每个字母都有唯一一个的替换字母。&lt;/li&gt;
+&lt;li&gt;缺点：由于是定向替换，当对密文进行统计分析，并且常见的两三个字母的组合（in、on、the）往往是一起出现，而且如果入侵者知道该密文具有某些可能的东西，破解该密文就不那么困难了。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;多码代替密码
+&lt;ul&gt;
+&lt;li&gt;使用多个单码来替换明文的字母，即从多个字母中选一个代替明文中的一个字母，如何选怎呢？需要指定一个次序，比如第一次选择多个字母的第一个，第二次选择多个字母的第二个，第三次选择多个字母的第二个（122），然后按照这个顺序循环多次，直到完成加密。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;块密码：要加密的报文被处理为k比特的块。例如。如果k=64，字报文被划分为多个64比特的块，每块被独立加密。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;密码块链接&lt;/strong&gt;：使用块密码时，如果有多个明文块可能是相同的，将会产生相同的密文，解决方式是：发送方为第i个块生成一个随机的k比特数，通过将该数与第i个明文块异或，再将结果加密。该方法有一个问题，就是传输的时候需要两倍的带宽，块密码使用了一种称为密码块链接（Cipher Block Chaining，CBC）的技术，基本思想是只传输一个随机值，剩余的让发送方和接收方计算。流程如下：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;发送方生成一个随机的k比特串，称为初始向量c(0)，发送方以明文方式发送。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;对于第一个块，发送方计算m(1)⊕c(0)，然后加密得到c(1)=K&lt;sub&gt;s&lt;/sub&gt;(m(1)⊕c(0))。发送方向接收方发送加密块c(1)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;对于第i个块，发送方根据c(i)=K&lt;sub&gt;s&lt;/sub&gt;(m(1)⊕c(i-1))向接收方发送第i个密文块。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;公开密钥加密&#34;&gt;
+  公开密钥加密
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%85%ac%e5%bc%80%e5%af%86%e9%92%a5%e5%8a%a0%e5%af%86&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;世界上任何人都都可以得到&lt;strong&gt;公钥&lt;/strong&gt;（public key）K&lt;sub&gt;B&lt;/sub&gt;&lt;sup&gt;+&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;只有主人知道的&lt;strong&gt;私钥&lt;/strong&gt;（private key）K&lt;sub&gt;B&lt;/sub&gt;&lt;sup&gt;-&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;假如A要和B通信，A首先要取得B的公钥，然后用这个公钥和一个众所周知的加密算法加密他要传给B的报文m，即K&lt;sub&gt;B&lt;/sub&gt;&lt;sup&gt;+&lt;/sup&gt;(m)，B接到A的加密报文后，用其私钥和一个众所周知的解密算法解密报文，即计算K&lt;sub&gt;B&lt;/sub&gt;&lt;sup&gt;-&lt;/sup&gt;(K&lt;sub&gt;B&lt;/sub&gt;&lt;sup&gt;+&lt;/sup&gt;(m))，这样就得到了最初的明文m。此外还有K&lt;sub&gt;B&lt;/sub&gt;&lt;sup&gt;-&lt;/sup&gt;(K&lt;sub&gt;B&lt;/sub&gt;&lt;sup&gt;+&lt;/sup&gt;(m)) = K&lt;sub&gt;B&lt;/sub&gt;&lt;sup&gt;+&lt;/sup&gt;(K&lt;sub&gt;B&lt;/sub&gt;&lt;sup&gt;-&lt;/sup&gt;(m))=m。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;RSA
+&lt;ul&gt;
+&lt;li&gt;生成RSA的公钥和私钥
+&lt;ol&gt;
+&lt;li&gt;选择两个大素数p和q，p和q越大，破解RSA越困难，执行加密和解密所用的时间也越长。推荐p和q的乘积为1024比特的数量级&lt;/li&gt;
+&lt;li&gt;计算n=pq，z=(p-1)(q-1)&lt;/li&gt;
+&lt;li&gt;选择一个小于n的数e，使得e和z没有公因数，e用来加密&lt;/li&gt;
+&lt;li&gt;求得一个数d使得ed-1可以被z整除，d将用来解密（ed mod z = 1）&lt;/li&gt;
+&lt;li&gt;外界可用的公钥K&lt;sub&gt;B&lt;/sub&gt;&lt;sup&gt;+&lt;/sup&gt;是一对数（n，e），私钥K&lt;sub&gt;B&lt;/sub&gt;&lt;sup&gt;-&lt;/sup&gt;是一对数（n，d）&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;加密和解密过程
+&lt;ol&gt;
+&lt;li&gt;A给B发送一个由整数m表示的比特组合，m&amp;lt;n。加密后的值c=m&lt;sup&gt;e&lt;/sup&gt; mod n，将密文c发送给B&lt;/li&gt;
+&lt;li&gt;B通过计算获得m，m=c&lt;sup&gt;d&lt;/sup&gt; mod n&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;会话密钥：RSA的指数运算极其耗时，在实际应用中，RSA通常与对称密钥结合使用。首先，A选择一个用于加密数据本身的密钥，这个密钥有时候称为会话密钥K&lt;sub&gt;s&lt;/sub&gt;。A通过公钥将K&lt;sub&gt;s&lt;/sub&gt;传输给B，B通过私钥解密后，就获取了K&lt;sub&gt;s&lt;/sub&gt;，然后使用K&lt;sub&gt;s&lt;/sub&gt;来传输数据。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;报文完整性和数字签名&#34;&gt;
+  报文完整性和数字签名
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%8a%a5%e6%96%87%e5%ae%8c%e6%95%b4%e6%80%a7%e5%92%8c%e6%95%b0%e5%ad%97%e7%ad%be%e5%90%8d&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;密码散列函数&#34;&gt;
+  密码散列函数
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%af%86%e7%a0%81%e6%95%a3%e5%88%97%e5%87%bd%e6%95%b0&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;密码散列函数的性质：找到任意两个不同的报文x和y使得H(x)=H(y)，在计算上是不可能的。&lt;/p&gt;
+&lt;p&gt;算法：MD5(128位)、SHA-1(160位)&lt;/p&gt;
+&lt;p&gt;为了执行报文完整性，A和B需要共享秘密s，这个共享的秘密是个比特串，被称为&lt;strong&gt;鉴别密钥&lt;/strong&gt;。使用这个共享秘密，报文完整性能够执行如下：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;A生成报文m，用s级联m生成m+s，并计算散列H(m+s)。H(m+s)被称为&lt;strong&gt;报文鉴别码&lt;/strong&gt;(Message Authentication Code,MAC)。&lt;/li&gt;
+&lt;li&gt;A将MAC附加到报文m上，生成扩展报文(m,H(m+s))，将该扩展报文发送给B。&lt;/li&gt;
+&lt;li&gt;B收到扩展报文(m,h)，由于知道s，计算出报文鉴别码H(m+s)，如果其等于h，则证明一切正常。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;数字签名&#34;&gt;
+  数字签名
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%95%b0%e5%ad%97%e7%ad%be%e5%90%8d&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;数字签名是B先使用散列函数对报文生成散列，使用私钥对散列进行加密（数字签名）。&lt;/p&gt;
+&lt;p&gt;A获取到了B的明文报文和已经数字签名的报文摘要，先使用B的公钥解密数字签名，得到一个散列结果，再使用散列函数获取报文的散列，如果这两个散列匹配，则可以确信报文的完整性和发送方。&lt;/p&gt;
+&lt;h3 id=&#34;公钥认证&#34;&gt;
+  公钥认证
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%85%ac%e9%92%a5%e8%ae%a4%e8%af%81&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;证实一个公钥属于某个特定的实体。&lt;/p&gt;
+&lt;p&gt;将公钥与特定的实体绑定通常是由认证中心（Certification Authority，CA）完成的。CA证实了一个实体的真实身份；一旦CA验证了某个实体的身份，这个CA会生成一个将其身份和实体的公钥绑定起来的证书。&lt;/p&gt;
+&lt;h2 id=&#34;使tcp连接安全ssl&#34;&gt;
+  使TCP连接安全：SSL
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e4%bd%bftcp%e8%bf%9e%e6%8e%a5%e5%ae%89%e5%85%a8ssl&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;SSL：Secure Socket Layer，安全套接口协议&lt;/p&gt;
+&lt;p&gt;TLS：Transport Layer Security，TLS 运输层安全性，是SSL版本3的一个稍加修改的版本&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

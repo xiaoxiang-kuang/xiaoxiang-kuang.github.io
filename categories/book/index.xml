@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>book on 小象的blog</title>
+    <link>/categories/book/</link>
+    <description>Recent content in book on 小象的blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Wed, 31 May 2023 20:53:13 +0800</lastBuildDate><atom:link href="/categories/book/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Linux内核设计与实现</title>
+      <link>/book/linux%E5%86%85%E6%A0%B8%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/</link>
+      <pubDate>Wed, 31 May 2023 20:53:13 +0800</pubDate>
+      
+      <guid>/book/linux%E5%86%85%E6%A0%B8%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/</guid>
+      <description>第12章 内存管理#12.1 页#内核将物理页作为内存管理的基本单元，内存管理单元MMU以页为单位来处理。 内核用struct page结构表示系统中的每个物理页。 flag用来存放页的状态，保持页是不是脏的等。 _count存放页的引用计数，当计数值变为-1时，表示当前内核并没有引用这一页，于是在新的分配中就可以使用它。 virtual是页的虚拟地址。 内核用这种结构来管理系统中所有的页。系统中的每个物理页都要分配这样一个结构体。 12.2 区#内核并不能对所有的页一视同仁，会存在下面这种情况：一些硬件只能用某些特定的内存地址来执行DMA等等等。所以内核将页划分成不同的区域。
+Linux主要使用了四种区：
+ZONE_DMA 这个区域的页只能用来执行DMA操作。 ZONE_DMA32 该区包含的页面只能用来执行DMA，且只能被32位设备访问。 ZONE_NORMAL 能正常映射的页。 ZONE_HIGHEM 这个区包含高端内存，其中的页并不能永久地映射到内核地址空间。 X64-64体系结构可以映射和处理64位的内存空间，所以X86_64没有ZONE_HIGHMEM区，所有的物理内存都存储与ZONE_DMA和ZONE_NORMAL区。、
+12.3 获得页#第14章 块I/O层#块设备：系统中能够随机访问固定大小的数据片的设备，如硬盘。 字符设备：字符设备按照字符流的方式被有序的访问，如串口和键盘。 14.1 刨析一个块设备#块设备中最小的可寻址单元是扇区。 内核执行的所有磁盘是按照块来进行的，块必须是扇区的整数倍大小。 内核要求块的大小不能超过一个页的长度。 14.2 缓冲区和缓冲区头#当一个块调入内存时，它要存储在一个缓冲区中，每个缓冲区和一个块对应，它相当于是磁盘块在内存中的对应。 由于内核在处理数据时需要一些控制信息（如块属于哪个设备，块对应的缓冲区等），所以每一个缓冲区都有一个对应的描述符。该描述符用buffer_head结构体标识。 struct buffer_head { unsigned long b_state;	/* 缓冲区状态，如下表 */ struct buffer_head *b_this_page;/* circular list of page&amp;#39;s buffers */ struct page *b_page;	/* the page this bh is mapped to */ sector_t b_blocknr;	/* start block number */ size_t b_size;	/* size of mapping */ char *b_data;	/* pointer to data within the page */ struct block_device *b_bdev; bh_end_io_t *b_end_io;	/* I/O completion */ void *b_private;	/* reserved for b_end_io */ struct list_head b_assoc_buffers; /* 相关的映射链表 */ struct address_space *b_assoc_map;	/* 相关的地址空间 */ atomic_t b_count;	/* 缓冲区地址计数 */ spinlock_t b_uptodate_lock; }; // b_state标识缓冲区的状态，可以是如下的多种标志的组合 enum bh_state_bits { BH_Uptodate,	/* 该缓冲区包含可用数据 */ BH_Dirty,	/* 该缓冲区是脏的 */ BH_Lock,	/* Is locked */ BH_Req,	/* Has been submitted for I/O */ BH_Mapped,	/* Has a disk mapping */ BH_New,	/* Disk mapping was newly created by get_block */ BH_Async_Read,	/* Is under end_buffer_async_read I/O */ BH_Async_Write,	/* Is under end_buffer_async_write I/O */ BH_Delay,	/* Buffer is not yet allocated on disk */ BH_Boundary,	/* Block is followed by a discontiguity */ BH_Write_EIO,	/* I/O error on write */ BH_Unwritten,	/* Buffer is allocated on disk but not written */ BH_Quiet,	/* Buffer Error Prinks to be quiet */ BH_Meta,	/* Buffer contains metadata */ BH_Prio,	/* Buffer should be submitted with REQ_PRIO */ BH_Defer_Completion, /* Defer AIO completion to workqueue */ BH_PrivateStart,/* not a state bit, but the first bit available * for private allocation by other entities */ }; 在操作缓冲区头之前，应该先使用get_bh函数增加缓冲区头的引用计数，当完成缓冲区操作时，需要使用put_bh()函数减少引用计数。 b_data指向相应的块，块的大小由b_size域标识，所以块在内存中的起始位置在b_data处，结束位置在b_data + b_size处。 buffer_head描述磁盘块和物理内存缓冲区之间的映射关系，扮演了一个描述符角色。 14.</description>
+    </item>
+    
+    <item>
+      <title>PCI Express体系结构导读</title>
+      <link>/book/PCI-Express%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E5%AF%BC%E8%AF%BB/</link>
+      <pubDate>Thu, 04 May 2023 20:04:24 +0800</pubDate>
+      
+      <guid>/book/PCI-Express%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E5%AF%BC%E8%AF%BB/</guid>
+      <description>第1章 PCI总线的基本知识#简称：PCI Express总线简称为PCIe总线，PCI-to-PCI简称为PCI桥，PCI Express-to-PCI简称为PCIe桥，Host-to-PCI主桥简称为HOST主桥。
+PCI总线的特点：
+PCI总线空间与处理器空间隔离。PCI设备具有独立的地址空间。 可扩展性，1棵PCI总线树上，最多能挂接256个PCI设备。（包括PCI桥） 动态配置机制，PCI设备使用的地址可以根据需要由系统软件动态分配。 总线带宽。 共享总线机制，PCI设备通过仲裁获取PCI总线的使用权后，才能进行数据传送。在PCI总线上进行数据传送，不需要处理器的参与。 中断机制，PCI总线上的设备可以通过四根中断请求信号INTA~D#向处理器提交中断请求。 1.1 PCI总线的组成结构#1.1.1 HOST主桥#HOST主桥的主要功能是隔离处理器系统的存储器域与处理器系统的PCI总线域，管理PCI总线域，并完成处理器与PCI设备间的数据交换。 在一个处理器系统中，每一个HOST主线都管理了一颗PCI总线树，在同·一棵PCI总线树上的所有PCI设备属于同一个PCI总线域。 HOST主桥x下的PCI设备属于PCI总线x域，HOST主桥y下的PCI设备属于PCI总线y域。 1.1.2 PCI总线#在一颗PCI总线树上可能具有多条PCI总线。 如图1.1所示，PCI总线x树具有两条PCI总线，分别为PCI总线x0和PCI总线x1，在PCI总线y树中只有一条PCI总线。 在一个处理器系统中，可以通过PCI桥扩展PCI总线，这样就形成了具有血缘关系的多级PCI总线。 1.1.3 PCI设备#PCI总线中有三类设备：PCI主设备、PCI从设备和桥设备。 PCI从设备只能被动地接受来自HOST主桥或者其他PCI设备的读写请求。 PCI主设备可以通过总线仲裁获取到PCI总线的使用权，主动地向其他PCI设备或者主存储器发起存储器读写请求。 桥设备的主要作用是管理下游的PCI总线，并转发上下游总线之间的总线事务。 一个PCI设备既可以是主设备也可以是从设备，但在同一时刻，只能是其中一个。 PCI总线规范将PCI主从设备统称为PCI Agent设备，常见的PCI网卡、显卡、声卡等都属于PCI Agent设备。 1.1.4 HOST处理器#PCI总线规定在同一时刻，在一棵PCI总线树上有且只有一个HOST处理器。这个HOST处理器可以通过HOST主桥，发起PCI总线的配置请求总线十五，并对PCI总线上的设备和桥片进行配置。 在PCI总线中，设置了很多的寄存器，HOST处理器通过操作这些寄存器来管理PCI设备。如在X86处理器的HOST主桥中设置了0XCF8和0XCFC这两个I/O端口访问PCI设备的配置空间。 1.1.5 PCI总线的负载#PCI总线能挂接的负载域总线频率相关，总线频率越高，能挂接的负载越少，整条总线能提供的带宽越大。 1.2 PCI总线的信号定义#PCI总线是一条共享总线，在一条PCI总线上可以挂接多个PCI设备。 PCI总线是一个同步总线，每一个设备都具有一个CLK信号，其发送设备与接收设备使用这个CLK信号进行同步数据传输。 1.2.1 地址和数据总线#在PCI总线中，与地址和数据相关的信号如下所示： AD[31:0]信号。PCI总线复用地址和数据信号，PCI总线事务在启动后的第一个时钟周期传送地址，这个地址是PCI总线域的存储器地址或者I/O地址，而在下一个时钟周期传送数据。 PAR信号。PCI总线使用奇偶校验机制，保证地址和数据信号在进行数据传递时的正确性。 C/BE[3:0]#信号。PCI总线复用命令与字节选通引脚。 1.2.2 接口控制信号#接口控制信号的作用是保证数据的正常传输，并根据PCI主从设备的状态，暂停、终止或者正常完成当前的总线事务。主要信号如下： FRAME#信号：指示一个PCI总线事务的开始和结束。 IRDY#信号：该信号由PCI主设备（包括HOST主桥）驱动，该信号有效时表示PCI主设备的数据已经准备完毕。 TRDY#信号：该信号由目标设备驱动，该信号有效时表示目标设备已经将数据准备完毕。 STOP#信号：该信号有效时，表示目标设备请求主设备停止当前PCI总线事务。 IDSEL信号：PCI总线在进行配置读写总线事务时，使用该信号选择PCI目标设备。 DEVSEL信号：该信号有效时表示PCI总线的目标设备准备好。 LOCK#信号：PCI主设备可以使用该信号，将目标设备的某个存储器或者I/O资源锁定，以禁止其他PCI主设备访问此资源，直到锁定这个资源的主设备将其释放。 1.</description>
+    </item>
+    
+    <item>
+      <title>TCP IP网络编程</title>
+      <link>/book/TCP-IP%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/</link>
+      <pubDate>Thu, 16 Mar 2023 15:56:53 +0800</pubDate>
+      
+      <guid>/book/TCP-IP%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/</guid>
+      <description>1-10 多进程服务器端#10.1 进程概念及应用#通过fork函数创建进程 #include &amp;lt;unistd.h&amp;gt; #失败时返回-1 pid_t fork(void); fork函数将创建进程副本。复制正在运行的、调用fork函数的进程。 因为是通过同一个进程，复制相同的内存空间，之后的程序流要根据fork函数返回值进行区分： 父进程：fork函数返回子进程ID 子进程：fork函数返回0 10.2 进程和僵尸进程#僵尸进程#向exit函数传递的参数值和main函数的return值都会返回给操作系统，但是操作系统不会销毁子进程，直到这些值传给产生该子进程的父进程，处在这种状态下的进程就是僵尸进程。 把子进程变成僵尸进程的正是操作系统。 只有当父进程收到子进程的exit参数值或return返回值时，僵尸进程才会被销毁，父进程需要主动获取子进程的返回值。 通过ps aux命令，看到STAT哪一行的状态为Z+，即是僵尸进程。 销毁僵尸进程1：利用wait函数##include &amp;lt;sys/wait.h&amp;gt; #成功时返回子进程ID，失败时返回-1 pid_t wait(int *statloc); wait函数是阻塞函数 子进程的返回值会存到statloc中，statloc中还有其他信息，通过如下方式获取： int pid = fork(); if (pid == 0) { exit(7); } else if (pid != -1) { int status; wait(&amp;amp;status); if (WIFEXITED(status)) { printf(&amp;#34;Child send : %d\n&amp;#34;, WEXITSTATUS(status)); } } </description>
+    </item>
+    
+    <item>
+      <title>嵌入式Linux操作系统原理与应用</title>
+      <link>/book/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86%E4%B8%8E%E5%BA%94%E7%94%A8/</link>
+      <pubDate>Thu, 02 Mar 2023 02:48:13 +0800</pubDate>
+      
+      <guid>/book/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86%E4%B8%8E%E5%BA%94%E7%94%A8/</guid>
+      <description>第2章 Linux编程基础#2.4 GDB调试器#2.4.2 GDB使用流程#要使用GDB，需要在编译时将调试信息添加到可执行文件中。 gcc -g hello.c -o hello GDB调试的是可执行文件。 gdb hello l可以查看源码，b 行号用来设置断点，info break来查看断点情况。 r即可运行程序，n和s表示单步运行，n不会进入函数，s会进入函数。 c可以恢复程序的正常运行，它会跳到下一个断点，如果没有断点，他会把剩余的程序执行完。 p 变量名可在断点处查看相关的变量值。 bt可以查看函数堆栈。 finish退出函数，q退出gdb。 2.7 文件I/O编程#2.7.1 文件I/O编程基础#Linux为了保护内核空间，将程序的运行空间分为内核空间和用户空间，它们运行在不同的级别上，逻辑上是互相隔离的。 操作系统提供了两个接口：用户编程接口API和系统调用。 对于Linux来讲，所有文件的操作都是通过文件描述符来进行的，它是一个索引值，指向内核中每个进程打开文件的记录表。通常一个进程启动时，都会打开3个文件：标准输入、标准输出和标准错误输出，分别对应的文件描述符为0、1、2。 2.7.2 基本I/O操作#包括open（打开）、read（读取）、write（写入）、lseek（定位）、close（关闭）五个函数，是不带缓冲区的I/O操作。
+open函数
+int open(const char *pathname, int flags)int open(const char * pathname, int flags, mode_t mode)pathame 表示文件名称，可以包含命令flags 表示文件的打开方式，可以通过&amp;#34;|&amp;#34;来组合mode 表示打开文件的存取权限模式函数返回值 成功则返回文件描述符，出错则返回-1 常用flags标志(fcntl.h) 标识 作用 O_RDONLY 只读打开 O_WRONLY 只写打开 O_RDWR 读/写打开 O_CREAT 如果文件不存在则创建 O_EXCL 如果使用O_CREAT时文件存在，则报错 O_TRUNC 如果文件存在，且以只读或只写成功打开，则删除文件原有数据 O_APPEND 以添加的方式打开文件，打开文件的同时，文件指针指向文件末尾 模式mode(sys/stat.</description>
+    </item>
+    
+  </channel>
+</rss>

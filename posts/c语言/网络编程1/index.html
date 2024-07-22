@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>网络编程1 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#第一个程序-hello">第一个程序 hello</a></li>
+        <li><a href="#第二个程序-echo">第二个程序 echo</a></li>
+        <li><a href="#第三个程序-calculate">第三个程序 calculate</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>网络编程1</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#第一个程序-hello">第一个程序 hello</a></li>
+        <li><a href="#第二个程序-echo">第二个程序 echo</a></li>
+        <li><a href="#第三个程序-calculate">第三个程序 calculate</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/c%E8%AF%AD%E8%A8%80/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B1/">网络编程1</a>
+  </h1>
+  
+  <h5>2022-12-07</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/c%E8%AF%AD%E8%A8%80/">c语言</a>
+  </div>
+  
+
+
+
+<ul>
+<li>网络编程学习程序</li>
+</ul>
+<h2 id="第一个程序-hello">
+  第一个程序 hello
+  <a class="anchor" href="#%e7%ac%ac%e4%b8%80%e4%b8%aa%e7%a8%8b%e5%ba%8f-hello">#</a>
+</h2>
+<ul>
+<li>hello_server.c</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e">#运行方法</span>
+</span></span><span style="display:flex;"><span>gcc -o hello_server hello_server.c
+</span></span><span style="display:flex;"><span>./hello_server <span style="color:#ae81ff">8899</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdlib.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;string.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;unistd.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;arpa/inet.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;sys/socket.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">error_handling</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>message);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>(<span style="color:#66d9ef">int</span> argc, <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>argv[]) 
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> server_sock, client_sock;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">struct</span> sockaddr_in server_addr, client_addr;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">socklen_t</span> client_addr_size;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">char</span> send_message[] <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;hello client</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (argc <span style="color:#f92672">!=</span> <span style="color:#ae81ff">2</span>) 
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;Usage : %s &lt;port&gt;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, argv[<span style="color:#ae81ff">0</span>]);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">exit</span>(<span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//创建套接字
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    server_sock <span style="color:#f92672">=</span> <span style="color:#a6e22e">socket</span>(PF_INET, SOCK_STREAM, <span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (server_sock <span style="color:#f92672">==</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">error_handling</span>(<span style="color:#e6db74">&#34;socket() error&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">memset</span>(<span style="color:#f92672">&amp;</span>server_addr, <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">sizeof</span>(server_addr));
+</span></span><span style="display:flex;"><span>    server_addr.sin_family <span style="color:#f92672">=</span> AF_INET;
+</span></span><span style="display:flex;"><span>    server_addr.sin_addr.s_addr <span style="color:#f92672">=</span> <span style="color:#a6e22e">htonl</span>(INADDR_ANY);
+</span></span><span style="display:flex;"><span>    server_addr.sin_port <span style="color:#f92672">=</span> <span style="color:#a6e22e">htons</span>(<span style="color:#a6e22e">atoi</span>(argv[<span style="color:#ae81ff">1</span>]));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//分配IP地址和端口号
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">bind</span>(server_sock, (<span style="color:#66d9ef">struct</span> sockaddr<span style="color:#f92672">*</span>) <span style="color:#f92672">&amp;</span>server_addr, <span style="color:#66d9ef">sizeof</span>(server_addr)) <span style="color:#f92672">==</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">error_handling</span>(<span style="color:#e6db74">&#34;bind() error&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//将套接字转为可接收连接状态
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">listen</span>(server_sock, <span style="color:#ae81ff">5</span>) <span style="color:#f92672">==</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>) 
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">error_handling</span>(<span style="color:#e6db74">&#34;listen() error&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    client_addr_size <span style="color:#f92672">=</span> <span style="color:#66d9ef">sizeof</span>(client_addr);
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//调用accpet函数接收连接请求
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    client_sock <span style="color:#f92672">=</span> <span style="color:#a6e22e">accept</span>(server_sock, (<span style="color:#66d9ef">struct</span> sockaddr<span style="color:#f92672">*</span>)<span style="color:#f92672">&amp;</span>client_addr, <span style="color:#f92672">&amp;</span>client_addr_size);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (client_sock <span style="color:#f92672">==</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">error_handling</span>(<span style="color:#e6db74">&#34;accept() error&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//将消息写到客户端
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">write</span>(client_sock, send_message, <span style="color:#66d9ef">sizeof</span>(send_message));
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">close</span>(client_sock);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">close</span>(server_sock);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">error_handling</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>message)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fputs</span>(message, stderr);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fputc</span>(<span style="color:#e6db74">&#39;\n&#39;</span>, stderr);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">exit</span>(<span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ul>
+<li>hello_client.c</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e">#运行方法</span>
+</span></span><span style="display:flex;"><span>gcc -o hello_client hello_client.c
+</span></span><span style="display:flex;"><span>./hello_client 127.0.0.1 <span style="color:#ae81ff">8899</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdlib.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;string.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;unistd.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;arpa/inet.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;sys/socket.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">error_handling</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>message);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>(<span style="color:#66d9ef">int</span> argc, <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>argv[]) 
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> sock;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">struct</span> sockaddr_in server_addr;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">char</span> message[<span style="color:#ae81ff">30</span>];
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> str_len;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (argc <span style="color:#f92672">!=</span> <span style="color:#ae81ff">3</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;Usage : %s &lt;IP&gt; &lt;port&gt; </span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, argv[<span style="color:#ae81ff">0</span>]);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">exit</span>(<span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    sock <span style="color:#f92672">=</span> <span style="color:#a6e22e">socket</span>(PF_INET, SOCK_STREAM, <span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (sock <span style="color:#f92672">==</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>) 
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">error_handling</span>(<span style="color:#e6db74">&#34;socket() error&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">memset</span>(<span style="color:#f92672">&amp;</span>server_addr, <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">sizeof</span>(server_addr));
+</span></span><span style="display:flex;"><span>    server_addr.sin_family <span style="color:#f92672">=</span> AF_INET;
+</span></span><span style="display:flex;"><span>    server_addr.sin_addr.s_addr <span style="color:#f92672">=</span> <span style="color:#a6e22e">inet_addr</span>(argv[<span style="color:#ae81ff">1</span>]);
+</span></span><span style="display:flex;"><span>    server_addr.sin_port <span style="color:#f92672">=</span> <span style="color:#a6e22e">htons</span>(<span style="color:#a6e22e">atoi</span>(argv[<span style="color:#ae81ff">2</span>]));
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">connect</span>(sock, (<span style="color:#66d9ef">struct</span> sockaddr<span style="color:#f92672">*</span>)<span style="color:#f92672">&amp;</span>server_addr, <span style="color:#66d9ef">sizeof</span>(server_addr))) 
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">error_handling</span>(<span style="color:#e6db74">&#34;connect() error&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    str_len <span style="color:#f92672">=</span> <span style="color:#a6e22e">read</span>(sock, message, <span style="color:#66d9ef">sizeof</span>(message) <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (str_len <span style="color:#f92672">==</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">error_handling</span>(<span style="color:#e6db74">&#34;read() error!&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;%s </span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, message);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">close</span>(sock);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">error_handling</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>message)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fputs</span>(message, stderr);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fputc</span>(<span style="color:#e6db74">&#39;\n&#39;</span>, stderr);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">exit</span>(<span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="第二个程序-echo">
+  第二个程序 echo
+  <a class="anchor" href="#%e7%ac%ac%e4%ba%8c%e4%b8%aa%e7%a8%8b%e5%ba%8f-echo">#</a>
+</h2>
+<ul>
+<li>echo_server.c</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;sys/socket.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;arpa/inet.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdlib.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;string.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;unistd.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#define BUF_SIZE 1024
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">error_handling</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>message);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>(<span style="color:#66d9ef">int</span> argc, <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>argv[])
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//未传递端口时给默认值
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int</span> port <span style="color:#f92672">=</span> <span style="color:#ae81ff">8899</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (argc <span style="color:#f92672">==</span> <span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        port <span style="color:#f92672">=</span> <span style="color:#a6e22e">atoi</span>(argv[<span style="color:#ae81ff">1</span>]);        
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//创建socket
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int</span> server_sock <span style="color:#f92672">=</span> <span style="color:#a6e22e">socket</span>(PF_INET, SOCK_STREAM, <span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (server_sock <span style="color:#f92672">==</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">error_handling</span>(<span style="color:#e6db74">&#34;socker() error!&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//设置在TIME_WAIT状态下套接字端口可以重新分配给新的套接字
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int</span> option <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">socklen_t</span> option_len <span style="color:#f92672">=</span> <span style="color:#66d9ef">sizeof</span>(option);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">setsockopt</span>(server_sock, SOL_SOCKET, SO_REUSEADDR, <span style="color:#f92672">&amp;</span>option, option_len);
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//绑定端口
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">struct</span> sockaddr_in server_addr;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">memset</span>(<span style="color:#f92672">&amp;</span>server_addr, <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">sizeof</span>(server_addr));
+</span></span><span style="display:flex;"><span>    server_addr.sin_family <span style="color:#f92672">=</span> AF_INET;
+</span></span><span style="display:flex;"><span>    server_addr.sin_addr.s_addr <span style="color:#f92672">=</span> <span style="color:#a6e22e">htonl</span>(INADDR_ANY);
+</span></span><span style="display:flex;"><span>    server_addr.sin_port <span style="color:#f92672">=</span> <span style="color:#a6e22e">htons</span>(port);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">bind</span>(server_sock, (<span style="color:#66d9ef">struct</span> sockaddr <span style="color:#f92672">*</span>)<span style="color:#f92672">&amp;</span>server_addr, <span style="color:#66d9ef">sizeof</span>(server_addr)) <span style="color:#f92672">==</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">error_handling</span>(<span style="color:#e6db74">&#34;bind() error&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//监听连接请求，并指定了5个等待队列
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">listen</span>(server_sock, <span style="color:#ae81ff">5</span>) <span style="color:#f92672">==</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">error_handling</span>(<span style="color:#e6db74">&#34;listen() error&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">5</span>; i<span style="color:#f92672">++</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">struct</span> sockaddr_in client_addr;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">int</span> client_addr_size <span style="color:#f92672">=</span> <span style="color:#66d9ef">sizeof</span>(client_addr);
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">//接收连接请求
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">int</span> client_sock <span style="color:#f92672">=</span> <span style="color:#a6e22e">accept</span>(server_sock, (<span style="color:#66d9ef">struct</span> sockaddr <span style="color:#f92672">*</span>)<span style="color:#f92672">&amp;</span>client_addr, <span style="color:#f92672">&amp;</span>client_addr_size);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (client_sock <span style="color:#f92672">==</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">error_handling</span>(<span style="color:#e6db74">&#34;accept() error&#34;</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;---Connected client %d---</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, client_sock);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">char</span> buf[BUF_SIZE];
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">int</span> str_len;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> ((str_len <span style="color:#f92672">=</span> <span style="color:#a6e22e">read</span>(client_sock, buf, BUF_SIZE <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>)) <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">//收到客户端数据，打印到标准输出，并回显给客户端
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>            <span style="color:#75715e">////手动字符串的结束位置
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>            buf[str_len] <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;%s&#34;</span>, buf);
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">write</span>(client_sock, buf, str_len);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;---Disconnected---</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">close</span>(client_sock);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">close</span>(server_sock);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">error_handling</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>message)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fputs</span>(message, stderr);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fputc</span>(<span style="color:#e6db74">&#39;\n&#39;</span>, stderr);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">exit</span>(<span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ul>
+<li>echo_client.c</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;sys/socket.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;arpa/inet.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdlib.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;string.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;unistd.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#define BUF_SIZE 1024
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">error_handling</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>message);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>(<span style="color:#66d9ef">int</span> argc, <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>argv[])
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//未传递服务端信息时给默认值
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">char</span> ip[<span style="color:#ae81ff">15</span>] <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;127.0.0.1&#34;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> port <span style="color:#f92672">=</span> <span style="color:#ae81ff">8899</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (argc <span style="color:#f92672">==</span> <span style="color:#ae81ff">3</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">strcpy</span>(ip, argv[<span style="color:#ae81ff">1</span>]);
+</span></span><span style="display:flex;"><span>        port <span style="color:#f92672">=</span> <span style="color:#a6e22e">atoi</span>(argv[<span style="color:#ae81ff">2</span>]);
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//连接服务端
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int</span> sock <span style="color:#f92672">=</span> <span style="color:#a6e22e">socket</span>(PF_INET, SOCK_STREAM, <span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">struct</span> sockaddr_in client_addr;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">memset</span>(<span style="color:#f92672">&amp;</span>client_addr, <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">sizeof</span>(client_addr));
+</span></span><span style="display:flex;"><span>    client_addr.sin_family <span style="color:#f92672">=</span> AF_INET;
+</span></span><span style="display:flex;"><span>    client_addr.sin_addr.s_addr <span style="color:#f92672">=</span> <span style="color:#a6e22e">inet_addr</span>(ip);
+</span></span><span style="display:flex;"><span>    client_addr.sin_port <span style="color:#f92672">=</span> <span style="color:#a6e22e">htons</span>(port);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">connect</span>(sock, (<span style="color:#66d9ef">struct</span> sockaddr<span style="color:#f92672">*</span>)<span style="color:#f92672">&amp;</span>client_addr, <span style="color:#66d9ef">sizeof</span>(client_addr)) <span style="color:#f92672">==</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">error_handling</span>(<span style="color:#e6db74">&#34;connect() error&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;Connected...&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">char</span> buf[BUF_SIZE];
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> (<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">//获取输入，发送到服务端，并打印来自服务端的消息
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;Please input message(Q to quit): &#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">fgets</span>(buf, BUF_SIZE,stdin);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">strcmp</span>(buf, <span style="color:#e6db74">&#34;Q</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>))
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">write</span>(sock, buf, <span style="color:#a6e22e">strlen</span>(buf));
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">int</span> str_len <span style="color:#f92672">=</span> <span style="color:#a6e22e">read</span>(sock, buf, BUF_SIZE <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">//手动字符串的结束位置
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        buf[str_len] <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;Message from server: %s</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, buf);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">close</span>(sock);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">error_handling</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>message)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fputs</span>(message, stderr);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fputc</span>(<span style="color:#e6db74">&#39;\n&#39;</span>, stderr);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">exit</span>(<span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="第三个程序-calculate">
+  第三个程序 calculate
+  <a class="anchor" href="#%e7%ac%ac%e4%b8%89%e4%b8%aa%e7%a8%8b%e5%ba%8f-calculate">#</a>
+</h2>
+<ul>
+<li>calculate_server.c</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;sys/socket.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;arpa/inet.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdlib.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;string.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;unistd.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#define BUF_SIZE 1024
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#define OPSZ 4
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">error_handling</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>message);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">calculate</span>(<span style="color:#66d9ef">int</span> opnum, <span style="color:#66d9ef">int</span> opnds[], <span style="color:#66d9ef">char</span> oprator);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>(<span style="color:#66d9ef">int</span> argc, <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>argv[])
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> serv_sock, clnt_sock;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">char</span> opinfo[BUF_SIZE];
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> result, opnd_cnt, i;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> recv_cnt, recv_len;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">struct</span> sockaddr_in serv_adr, clnt_adr;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">socklen_t</span> clnt_adr_sz;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (argc <span style="color:#f92672">!=</span> <span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;Usage: %s &lt;port&gt;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, argv[<span style="color:#ae81ff">0</span>]);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">exit</span>(<span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    serv_sock <span style="color:#f92672">=</span> <span style="color:#a6e22e">socket</span>(PF_INET, SOCK_STREAM, <span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (serv_sock <span style="color:#f92672">==</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">error_handling</span>(<span style="color:#e6db74">&#34;sock() error&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">memset</span>(<span style="color:#f92672">&amp;</span>serv_adr, <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">sizeof</span>(serv_adr));
+</span></span><span style="display:flex;"><span>    serv_adr.sin_family <span style="color:#f92672">=</span> AF_INET;
+</span></span><span style="display:flex;"><span>    serv_adr.sin_addr.s_addr <span style="color:#f92672">=</span> <span style="color:#a6e22e">htonl</span>(INADDR_ANY);
+</span></span><span style="display:flex;"><span>    serv_adr.sin_port <span style="color:#f92672">=</span> <span style="color:#a6e22e">htons</span>(<span style="color:#a6e22e">atoi</span>(argv[<span style="color:#ae81ff">1</span>]));
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">bind</span>(serv_sock, (<span style="color:#66d9ef">struct</span> sockaddr<span style="color:#f92672">*</span>)<span style="color:#f92672">&amp;</span>serv_adr, <span style="color:#66d9ef">sizeof</span>(serv_adr)) <span style="color:#f92672">==</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">error_handling</span>(<span style="color:#e6db74">&#34;bind() error&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">listen</span>(serv_sock, <span style="color:#ae81ff">5</span>) <span style="color:#f92672">==</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">error_handling</span>(<span style="color:#e6db74">&#34;listen() error&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    clnt_adr_sz <span style="color:#f92672">=</span> <span style="color:#66d9ef">sizeof</span>(clnt_adr);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">5</span>; i<span style="color:#f92672">++</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        opnd_cnt <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>        clnt_sock <span style="color:#f92672">=</span> <span style="color:#a6e22e">accept</span>(serv_sock, (<span style="color:#66d9ef">struct</span> sockaddr<span style="color:#f92672">*</span>)<span style="color:#f92672">&amp;</span>clnt_adr, <span style="color:#f92672">&amp;</span>clnt_adr_sz);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">read</span>(clnt_sock, <span style="color:#f92672">&amp;</span>opnd_cnt, <span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>        recv_len <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> ((opnd_cnt <span style="color:#f92672">*</span> OPSZ <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">&gt;</span> recv_len)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            recv_cnt <span style="color:#f92672">=</span> <span style="color:#a6e22e">read</span>(clnt_sock, <span style="color:#f92672">&amp;</span>opinfo[recv_len], BUF_SIZE <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>            recv_len <span style="color:#f92672">+=</span> recv_cnt;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        result <span style="color:#f92672">=</span> <span style="color:#a6e22e">calculate</span>(opnd_cnt, (<span style="color:#66d9ef">int</span><span style="color:#f92672">*</span>)opinfo, opinfo[recv_len <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>]);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">write</span>(clnt_sock, (<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>)<span style="color:#f92672">&amp;</span>result, <span style="color:#66d9ef">sizeof</span>(result));
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">close</span>(clnt_sock);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">close</span>(serv_sock);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">calculate</span>(<span style="color:#66d9ef">int</span> opnum, <span style="color:#66d9ef">int</span> opnds[], <span style="color:#66d9ef">char</span> op)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> result <span style="color:#f92672">=</span> opnds[<span style="color:#ae81ff">0</span>], i;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">switch</span> (op)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;+&#39;</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> ( i <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; i <span style="color:#f92672">&lt;</span> opnum; i<span style="color:#f92672">++</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            result <span style="color:#f92672">+=</span> opnds[i];
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;-&#39;</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> ( i <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; i <span style="color:#f92672">&lt;</span> opnum; i<span style="color:#f92672">++</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            result <span style="color:#f92672">-=</span> opnds[i];
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;*&#39;</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> ( i <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; i <span style="color:#f92672">&lt;</span> opnum; i<span style="color:#f92672">++</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            result <span style="color:#f92672">*=</span> opnds[i];
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> result;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">error_handling</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>message)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fputs</span>(message, stderr);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fputc</span>(<span style="color:#e6db74">&#39;\n&#39;</span>, stderr);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">exit</span>(<span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ul>
+<li>calculate_client.c</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;sys/socket.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;arpa/inet.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdlib.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;string.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;unistd.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#define BUF_SIZE 1024
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#define RLT_SIZE 4
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#define OPSZ 4
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">error_handling</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>message);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>(<span style="color:#66d9ef">int</span> argc, <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>argv[])
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span>(argc <span style="color:#f92672">!=</span> <span style="color:#ae81ff">3</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;Usage %s &lt;IP&gt; &lt;port&gt;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, argv[<span style="color:#ae81ff">0</span>]);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">exit</span>(<span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> sock <span style="color:#f92672">=</span> <span style="color:#a6e22e">socket</span>(PF_INET, SOCK_STREAM, <span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span>(sock <span style="color:#f92672">==</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">error_handling</span>(<span style="color:#e6db74">&#34;sock() error&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">struct</span> sockaddr_in addr;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">memset</span>(<span style="color:#f92672">&amp;</span>addr, <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">sizeof</span>(addr));
+</span></span><span style="display:flex;"><span>    addr.sin_family <span style="color:#f92672">=</span> AF_INET;
+</span></span><span style="display:flex;"><span>    addr.sin_addr.s_addr <span style="color:#f92672">=</span> <span style="color:#a6e22e">inet_addr</span>(argv[<span style="color:#ae81ff">1</span>]);
+</span></span><span style="display:flex;"><span>    addr.sin_port <span style="color:#f92672">=</span> <span style="color:#a6e22e">htons</span>(<span style="color:#a6e22e">atoi</span>(argv[<span style="color:#ae81ff">2</span>]));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">connect</span>(sock, (<span style="color:#66d9ef">struct</span> sockaddr<span style="color:#f92672">*</span>)<span style="color:#f92672">&amp;</span>addr, <span style="color:#66d9ef">sizeof</span>(addr)) <span style="color:#f92672">==</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">error_handling</span>(<span style="color:#e6db74">&#34;connect() error&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">puts</span>(<span style="color:#e6db74">&#34;Connected...&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fputs</span>(<span style="color:#e6db74">&#34;Operand count: &#34;</span>,stdout);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> opnd_cnt;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">scanf</span>(<span style="color:#e6db74">&#34;%d&#34;</span>, <span style="color:#f92672">&amp;</span>opnd_cnt);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">char</span> opmsg[BUF_SIZE];
+</span></span><span style="display:flex;"><span>    opmsg[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> (<span style="color:#66d9ef">char</span>)opnd_cnt;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> opnd_cnt; i<span style="color:#f92672">++</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;Operand %d:&#34;</span>, i <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">scanf</span>(<span style="color:#e6db74">&#34;%d&#34;</span>,(<span style="color:#66d9ef">int</span><span style="color:#f92672">*</span>)<span style="color:#f92672">&amp;</span>opmsg[i <span style="color:#f92672">*</span> OPSZ <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>]);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//冲刷掉回车
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">fgetc</span>(stdin);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fputs</span>(<span style="color:#e6db74">&#34;Operator: &#34;</span>,stdout);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">scanf</span>(<span style="color:#e6db74">&#34;%c&#34;</span>, <span style="color:#f92672">&amp;</span>opmsg[opnd_cnt <span style="color:#f92672">*</span> OPSZ <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>]);
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//将所有的输入一次发送到服务端
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">write</span>(sock, opmsg, opnd_cnt <span style="color:#f92672">*</span> OPSZ <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> result;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">read</span>(sock, <span style="color:#f92672">&amp;</span>result, RLT_SIZE);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;Operation result: %d </span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, result);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">close</span>(sock);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">error_handling</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>message)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fputs</span>(message, stderr);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fputc</span>(<span style="color:#e6db74">&#39;\n&#39;</span>, stderr);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">exit</span>(<span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

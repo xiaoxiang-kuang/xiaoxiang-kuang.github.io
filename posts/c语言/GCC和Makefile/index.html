@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>GCC和Makefile | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#gcc">GCC</a>
+          <ul>
+            <li><a href="#gcc编译">GCC编译</a></li>
+            <li><a href="#常用选项">常用选项</a></li>
+            <li><a href="#库">库</a></li>
+            <li><a href="#命令">命令</a></li>
+          </ul>
+        </li>
+        <li><a href="#makefile">Makefile</a>
+          <ul>
+            <li><a href="#变量">变量</a></li>
+            <li><a href="#通配符">通配符</a></li>
+            <li><a href="#假想目标phony">假想目标.PHONY</a></li>
+            <li><a href="#函数">函数</a></li>
+          </ul>
+        </li>
+        <li><a href="#头文件依赖">头文件依赖</a>
+          <ul>
+            <li></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>GCC和Makefile</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#gcc">GCC</a>
+          <ul>
+            <li><a href="#gcc编译">GCC编译</a></li>
+            <li><a href="#常用选项">常用选项</a></li>
+            <li><a href="#库">库</a></li>
+            <li><a href="#命令">命令</a></li>
+          </ul>
+        </li>
+        <li><a href="#makefile">Makefile</a>
+          <ul>
+            <li><a href="#变量">变量</a></li>
+            <li><a href="#通配符">通配符</a></li>
+            <li><a href="#假想目标phony">假想目标.PHONY</a></li>
+            <li><a href="#函数">函数</a></li>
+          </ul>
+        </li>
+        <li><a href="#头文件依赖">头文件依赖</a>
+          <ul>
+            <li></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/c%E8%AF%AD%E8%A8%80/GCC%E5%92%8CMakefile/">GCC和Makefile</a>
+  </h1>
+  
+  <h5>2023-02-18</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/c%E8%AF%AD%E8%A8%80/">c语言</a>
+  </div>
+  
+
+
+
+<h2 id="gcc">
+  GCC
+  <a class="anchor" href="#gcc">#</a>
+</h2>
+<h3 id="gcc编译">
+  GCC编译
+  <a class="anchor" href="#gcc%e7%bc%96%e8%af%91">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e">#预处理</span>
+</span></span><span style="display:flex;"><span>gcc -E -o hello.i hello.c
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#编译(包含预处理)</span>
+</span></span><span style="display:flex;"><span>gcc -S -o hello.s hello.i
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#汇编(包含预处理和编译)</span>
+</span></span><span style="display:flex;"><span>gcc -c -o hello.o hello.s
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#链接(包含上面的步骤)</span>
+</span></span><span style="display:flex;"><span>gcc -o hello hello.o
+</span></span></code></pre></div><h4 id="预处理">
+  预处理
+  <a class="anchor" href="#%e9%a2%84%e5%a4%84%e7%90%86">#</a>
+</h4>
+<ul>
+<li>源文件中以&quot;#&ldquo;开头的命令被称为预处理命令，如&rdquo;#include&quot;、&quot;#define&quot;、&quot;#ifdef&quot;等，预处理是将要包含的文件插入到原文件中，将宏定义展开、根据条件选择要使用的代码，最后将结果输出到一个文件中等待后续处理。</li>
+</ul>
+<h4 id="编译">
+  编译
+  <a class="anchor" href="#%e7%bc%96%e8%af%91">#</a>
+</h4>
+<ul>
+<li>编译是将预处理后的文件翻译成汇编代码，用到的工具为cc1。</li>
+</ul>
+<h4 id="汇编">
+  汇编
+  <a class="anchor" href="#%e6%b1%87%e7%bc%96">#</a>
+</h4>
+<ul>
+<li>汇编试讲汇编代码翻译成机器码，在linux上一般表现为ELF目标文件（OBJ文件），用到的工具为as。</li>
+</ul>
+<h4 id="链接">
+  链接
+  <a class="anchor" href="#%e9%93%be%e6%8e%a5">#</a>
+</h4>
+<ul>
+<li>链接是将生成的OBJ代码和系统库的OBJ文件、库文件链接起来，最终生成了可以在特定平台运行的可执行文件，用到的工具为ld或collect2.</li>
+</ul>
+<h3 id="常用选项">
+  常用选项
+  <a class="anchor" href="#%e5%b8%b8%e7%94%a8%e9%80%89%e9%a1%b9">#</a>
+</h3>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-E</td>
+<td>预处理</td>
+</tr>
+<tr>
+<td>-c</td>
+<td>把预处理、编译、汇编都做的，但是不链接</td>
+</tr>
+<tr>
+<td>-o</td>
+<td>指定输出文件</td>
+</tr>
+<tr>
+<td>-I</td>
+<td>指定头文件目录</td>
+</tr>
+<tr>
+<td>-L</td>
+<td>指定链接时使用库文件的目录</td>
+</tr>
+<tr>
+<td>-l（小L）</td>
+<td>指定链接哪一个库文件，如-labc就是链接libabc.so</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>显示编译器驱动程序、预处理器、编译器办吧等信息。</td>
+</tr>
+<tr>
+<td>-Wall</td>
+<td>打开所有需要注意的警告信息</td>
+</tr>
+</tbody>
+</table>
+<pre tabindex="0"><code>#include &lt;xxx&gt; //在标准库的目录开始搜索（包括使用-Idir定义的目录）
+#include &#34;xxx&#34; //先从用户的工作目录开始搜索，再搜索标准库目录
+</code></pre><h3 id="库">
+  库
+  <a class="anchor" href="#%e5%ba%93">#</a>
+</h3>
+<ul>
+<li>动态库</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e">#创建动态链接库</span>
+</span></span><span style="display:flex;"><span>gcc -shared -o libsub.so sub.o sub1.o
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#使用当前目录下得sub库</span>
+</span></span><span style="display:flex;"><span>gcc -o test main.o -lsub -L ./
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#运行时需要指定动态库的位置，可以将libsub.so移动到/lib目录下，或者配置一个环境变量</span>
+</span></span><span style="display:flex;"><span>export LD_LIBRARY_PATH<span style="color:#f92672">=</span>$LD_LIBRARY_PATH:/xiaox
+</span></span></code></pre></div><ul>
+<li>静态库</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e">#生成静态库</span>
+</span></span><span style="display:flex;"><span>ar crs libsub.a sub.o sub2.o
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#将静态库打包到程序里</span>
+</span></span><span style="display:flex;"><span>gcc -o tet main.o libsub.a
+</span></span></code></pre></div><h3 id="命令">
+  命令
+  <a class="anchor" href="#%e5%91%bd%e4%bb%a4">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e">#列出头文件目录、库目录(LIBRARY_PATH)等</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#39;main(){}&#39;</span>| gcc -E -v -
+</span></span></code></pre></div><h2 id="makefile">
+  Makefile
+  <a class="anchor" href="#makefile">#</a>
+</h2>
+<ul>
+<li>格式如下：</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-makefile" data-lang="makefile"><span style="display:flex;"><span><span style="color:#a6e22e">target </span><span style="color:#f92672">:</span> prerequires1 prerequires2 ...
+</span></span><span style="display:flex;"><span>	command1
+</span></span><span style="display:flex;"><span>	command2
+</span></span><span style="display:flex;"><span>	...
+</span></span></code></pre></div><h3 id="变量">
+  变量
+  <a class="anchor" href="#%e5%8f%98%e9%87%8f">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-makefile" data-lang="makefile"><span style="display:flex;"><span>A <span style="color:#f92672">:=</span> XXX //立即变量
+</span></span><span style="display:flex;"><span>B <span style="color:#f92672">=</span> XXX //延时变量，在使用时才生效
+</span></span><span style="display:flex;"><span>C <span style="color:#f92672">+=</span> yyy //拼接字符串
+</span></span><span style="display:flex;"><span>D <span style="color:#f92672">?=</span> xxx //如果D之前定义过，则此语句无效；如果之前定义值，此语句定义。
+</span></span></code></pre></div><h4 id="例">
+  例
+  <a class="anchor" href="#%e4%be%8b">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-makefile" data-lang="makefile"><span style="display:flex;"><span>A <span style="color:#f92672">:=</span> <span style="color:#66d9ef">$(</span>C<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>B <span style="color:#f92672">=</span> <span style="color:#66d9ef">$(</span>C<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>C <span style="color:#f92672">=</span> abc
+</span></span><span style="display:flex;"><span>D <span style="color:#f92672">?=</span> weidongshan
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">all</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">@echo</span> A <span style="color:#f92672">=</span> <span style="color:#66d9ef">$(</span>A<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">@echo</span> B <span style="color:#f92672">=</span> <span style="color:#66d9ef">$(</span>B<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">@echo</span> D <span style="color:#f92672">=</span> <span style="color:#66d9ef">$(</span>D<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>C <span style="color:#f92672">+=</span> <span style="color:#ae81ff">123</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#结果
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#A = 立即变量定义式就确定，所以A的值为空
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#B = abc 123 延时变量只有在用到时才确定，当执行make时，会解析Makefile里面的所有变量。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#D = weidongshan 因为D在前面没有定义，所以是此值。
+</span></span></span></code></pre></div><h3 id="通配符">
+  通配符
+  <a class="anchor" href="#%e9%80%9a%e9%85%8d%e7%ac%a6">#</a>
+</h3>
+<ul>
+<li><code>*.c</code> 表示所有的.c结尾的文件。</li>
+<li><code>$@</code>表示target。</li>
+<li><code>$&lt;</code>表示第一个依赖文件。</li>
+<li><code>$^</code>表示所有的依赖文件。</li>
+</ul>
+<h3 id="假想目标phony">
+  假想目标.PHONY
+  <a class="anchor" href="#%e5%81%87%e6%83%b3%e7%9b%ae%e6%a0%87phony">#</a>
+</h3>
+<ul>
+<li>target并非只要求是文件，也可以是个标记（假想目标），声明要采取的动作。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-makefile" data-lang="makefile"><span style="display:flex;"><span><span style="color:#a6e22e">clean </span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>	rm -rf *.o
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">.PHONY </span><span style="color:#f92672">:</span> clean
+</span></span></code></pre></div><h3 id="函数">
+  函数
+  <a class="anchor" href="#%e5%87%bd%e6%95%b0">#</a>
+</h3>
+<ul>
+<li>foreach</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-makefile" data-lang="makefile"><span style="display:flex;"><span><span style="color:#75715e">#对于list中的每一个var，执行text的动作
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">$(</span>foreach var,list,text<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#例
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>A <span style="color:#f92672">:=</span> a b c
+</span></span><span style="display:flex;"><span>B <span style="color:#f92672">:=</span> <span style="color:#66d9ef">$(</span>foreach f, <span style="color:#66d9ef">$(</span>A<span style="color:#66d9ef">)</span>, <span style="color:#66d9ef">$(</span>f<span style="color:#66d9ef">)</span>.c<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">all </span><span style="color:#f92672">:</span> 
+</span></span><span style="display:flex;"><span>	@echo B <span style="color:#f92672">=</span> <span style="color:#66d9ef">$(</span>B<span style="color:#66d9ef">)</span>
+</span></span></code></pre></div><ul>
+<li>filter/filter-out</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-makefile" data-lang="makefile"><span style="display:flex;"><span><span style="color:#66d9ef">$(</span>filter pattern...,text<span style="color:#66d9ef">)</span> <span style="color:#75715e"># 在text中取出符合patten格式的值
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">$(</span>filter-out pattern...,text<span style="color:#66d9ef">)</span> <span style="color:#75715e"># 在text中取出不符合patten格式的值
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#例
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>A <span style="color:#f92672">:=</span> a b c dxx
+</span></span><span style="display:flex;"><span>B <span style="color:#f92672">:=</span> <span style="color:#66d9ef">$(</span>filter %xx, <span style="color:#66d9ef">$(</span>A<span style="color:#66d9ef">))</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">all </span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>	@echo <span style="color:#66d9ef">$(</span>B<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#结果为dxx
+</span></span></span></code></pre></div><ul>
+<li>patsubst</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-makefile" data-lang="makefile"><span style="display:flex;"><span><span style="color:#75715e">#如果var中的值匹配pattern，就将它替换为replacement
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">$(</span>patsubst pattern, replacement, <span style="color:#66d9ef">$(</span>var<span style="color:#66d9ef">))</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#例
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>files <span style="color:#f92672">:=</span> a.c b.c c.c d.c e.c abc
+</span></span><span style="display:flex;"><span>dep_files <span style="color:#f92672">:=</span> <span style="color:#66d9ef">$(</span>patsubst %.c,%.d,<span style="color:#66d9ef">$(</span>files<span style="color:#66d9ef">))</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">all </span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>	@echo dep_files <span style="color:#f92672">=</span> <span style="color:#66d9ef">$(</span>dep_files<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#结果为 dep_files = a.d b.d c.d d.d e.d abc
+</span></span></span></code></pre></div><h2 id="头文件依赖">
+  头文件依赖
+  <a class="anchor" href="#%e5%a4%b4%e6%96%87%e4%bb%b6%e4%be%9d%e8%b5%96">#</a>
+</h2>
+<ul>
+<li>通过命令，自动生成依赖的的头文件，当头文件发生变化时，重新生成对应的文件。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e">#-M获取c.c依赖的头文件</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#-MF将依赖输出的c.d的文件</span>
+</span></span><span style="display:flex;"><span>gcc -M -MF c.d c.c
+</span></span></code></pre></div><h4 id="例-1">
+  例
+  <a class="anchor" href="#%e4%be%8b-1">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-makefile" data-lang="makefile"><span style="display:flex;"><span>objs <span style="color:#f92672">=</span> a.o b.o c.o
+</span></span><span style="display:flex;"><span>dep_files <span style="color:#f92672">:=</span> <span style="color:#66d9ef">$(</span>patsubst %,.%.d, <span style="color:#66d9ef">$(</span>objs<span style="color:#66d9ef">))</span>
+</span></span><span style="display:flex;"><span>dep_files <span style="color:#f92672">:=</span> <span style="color:#66d9ef">$(</span>wildcard <span style="color:#66d9ef">$(</span>dep_files<span style="color:#66d9ef">))</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">test </span><span style="color:#f92672">:</span> <span style="color:#66d9ef">$(</span>objs<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>	gcc -o test $^
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">%.o </span><span style="color:#f92672">:</span> %.c
+</span></span><span style="display:flex;"><span>	gcc -c -o $@ $&lt; -M -MF .$@.d
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">ifneq</span> <span style="color:#960050;background-color:#1e0010">(</span><span style="color:#66d9ef">$(</span>dep_files<span style="color:#66d9ef">)</span><span style="color:#960050;background-color:#1e0010">,)</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#960050;background-color:#1e0010">include</span> <span style="color:#66d9ef">$(</span>dep_files<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">endif</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">clean</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>	rm *.o test
+</span></span><span style="display:flex;"><span>	rm <span style="color:#66d9ef">$(</span>dep_files<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">.PHONY</span><span style="color:#f92672">:</span> clean
+</span></span></code></pre></div></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

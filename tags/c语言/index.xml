@@ -1,0 +1,831 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>c语言 on 小象的blog</title>
+    <link>/tags/c%E8%AF%AD%E8%A8%80/</link>
+    <description>Recent content in c语言 on 小象的blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Fri, 09 Jun 2023 16:08:26 +0800</lastBuildDate><atom:link href="/tags/c%E8%AF%AD%E8%A8%80/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>C语言练习</title>
+      <link>/posts/c%E8%AF%AD%E8%A8%80/c%E8%AF%AD%E8%A8%80%E7%BB%83%E4%B9%A0/</link>
+      <pubDate>Fri, 09 Jun 2023 16:08:26 +0800</pubDate>
+      
+      <guid>/posts/c%E8%AF%AD%E8%A8%80/c%E8%AF%AD%E8%A8%80%E7%BB%83%E4%B9%A0/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;练习程序。&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>GCC和Makefile</title>
+      <link>/posts/c%E8%AF%AD%E8%A8%80/GCC%E5%92%8CMakefile/</link>
+      <pubDate>Sat, 18 Feb 2023 19:36:46 +0800</pubDate>
+      
+      <guid>/posts/c%E8%AF%AD%E8%A8%80/GCC%E5%92%8CMakefile/</guid>
+      <description>&lt;h2 id=&#34;gcc&#34;&gt;
+  GCC
+  &lt;a class=&#34;anchor&#34; href=&#34;#gcc&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;gcc编译&#34;&gt;
+  GCC编译
+  &lt;a class=&#34;anchor&#34; href=&#34;#gcc%e7%bc%96%e8%af%91&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#预处理&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gcc -E -o hello.i hello.c
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#编译(包含预处理)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gcc -S -o hello.s hello.i
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#汇编(包含预处理和编译)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gcc -c -o hello.o hello.s
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#链接(包含上面的步骤)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gcc -o hello hello.o
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;预处理&#34;&gt;
+  预处理
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e9%a2%84%e5%a4%84%e7%90%86&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;源文件中以&amp;quot;#&amp;ldquo;开头的命令被称为预处理命令，如&amp;rdquo;#include&amp;quot;、&amp;quot;#define&amp;quot;、&amp;quot;#ifdef&amp;quot;等，预处理是将要包含的文件插入到原文件中，将宏定义展开、根据条件选择要使用的代码，最后将结果输出到一个文件中等待后续处理。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;编译&#34;&gt;
+  编译
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e7%bc%96%e8%af%91&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;编译是将预处理后的文件翻译成汇编代码，用到的工具为cc1。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;汇编&#34;&gt;
+  汇编
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%b1%87%e7%bc%96&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;汇编试讲汇编代码翻译成机器码，在linux上一般表现为ELF目标文件（OBJ文件），用到的工具为as。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;链接&#34;&gt;
+  链接
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e9%93%be%e6%8e%a5&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;链接是将生成的OBJ代码和系统库的OBJ文件、库文件链接起来，最终生成了可以在特定平台运行的可执行文件，用到的工具为ld或collect2.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;常用选项&#34;&gt;
+  常用选项
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%b8%b8%e7%94%a8%e9%80%89%e9%a1%b9&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;参数&lt;/th&gt;
+&lt;th&gt;描述&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;-E&lt;/td&gt;
+&lt;td&gt;预处理&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-c&lt;/td&gt;
+&lt;td&gt;把预处理、编译、汇编都做的，但是不链接&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-o&lt;/td&gt;
+&lt;td&gt;指定输出文件&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-I&lt;/td&gt;
+&lt;td&gt;指定头文件目录&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-L&lt;/td&gt;
+&lt;td&gt;指定链接时使用库文件的目录&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-l（小L）&lt;/td&gt;
+&lt;td&gt;指定链接哪一个库文件，如-labc就是链接libabc.so&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-v&lt;/td&gt;
+&lt;td&gt;显示编译器驱动程序、预处理器、编译器办吧等信息。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-Wall&lt;/td&gt;
+&lt;td&gt;打开所有需要注意的警告信息&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#include &amp;lt;xxx&amp;gt; //在标准库的目录开始搜索（包括使用-Idir定义的目录）
+#include &amp;#34;xxx&amp;#34; //先从用户的工作目录开始搜索，再搜索标准库目录
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;库&#34;&gt;
+  库
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%ba%93&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;动态库&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#创建动态链接库&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gcc -shared -o libsub.so sub.o sub1.o
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#使用当前目录下得sub库&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gcc -o test main.o -lsub -L ./
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#运行时需要指定动态库的位置，可以将libsub.so移动到/lib目录下，或者配置一个环境变量&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;export LD_LIBRARY_PATH&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;$LD_LIBRARY_PATH:/xiaox
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;静态库&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#生成静态库&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ar crs libsub.a sub.o sub2.o
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#将静态库打包到程序里&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gcc -o tet main.o libsub.a
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;命令&#34;&gt;
+  命令
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%91%bd%e4%bb%a4&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#列出头文件目录、库目录(LIBRARY_PATH)等&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;main(){}&amp;#39;&lt;/span&gt;| gcc -E -v -
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;makefile&#34;&gt;
+  Makefile
+  &lt;a class=&#34;anchor&#34; href=&#34;#makefile&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;格式如下：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-makefile&#34; data-lang=&#34;makefile&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;target &lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; prerequires1 prerequires2 ...
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	command1
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	command2
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	...
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;变量&#34;&gt;
+  变量
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%8f%98%e9%87%8f&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-makefile&#34; data-lang=&#34;makefile&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;A &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; XXX //立即变量
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;B &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; XXX //延时变量，在使用时才生效
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;C &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; yyy //拼接字符串
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;D &lt;span style=&#34;color:#f92672&#34;&gt;?=&lt;/span&gt; xxx //如果D之前定义过，则此语句无效；如果之前定义值，此语句定义。
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;例&#34;&gt;
+  例
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e4%be%8b&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-makefile&#34; data-lang=&#34;makefile&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;A &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;C&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;B &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;C&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;C &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; abc
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;D &lt;span style=&#34;color:#f92672&#34;&gt;?=&lt;/span&gt; weidongshan
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;all&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;@echo&lt;/span&gt; A &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;A&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;@echo&lt;/span&gt; B &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;B&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;@echo&lt;/span&gt; D &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;D&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;C &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;123&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#结果
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#A = 立即变量定义式就确定，所以A的值为空
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#B = abc 123 延时变量只有在用到时才确定，当执行make时，会解析Makefile里面的所有变量。
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#D = weidongshan 因为D在前面没有定义，所以是此值。
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;通配符&#34;&gt;
+  通配符
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e9%80%9a%e9%85%8d%e7%ac%a6&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;*.c&lt;/code&gt; 表示所有的.c结尾的文件。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;$@&lt;/code&gt;表示target。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;$&amp;lt;&lt;/code&gt;表示第一个依赖文件。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;$^&lt;/code&gt;表示所有的依赖文件。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;假想目标phony&#34;&gt;
+  假想目标.PHONY
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%81%87%e6%83%b3%e7%9b%ae%e6%a0%87phony&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;target并非只要求是文件，也可以是个标记（假想目标），声明要采取的动作。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-makefile&#34; data-lang=&#34;makefile&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;clean &lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	rm -rf *.o
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;.PHONY &lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; clean
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;函数&#34;&gt;
+  函数
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%87%bd%e6%95%b0&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;foreach&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-makefile&#34; data-lang=&#34;makefile&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#对于list中的每一个var，执行text的动作
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;foreach var,list,text&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#例
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;A &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; a b c
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;B &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;foreach f, &lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;A&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;f&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;.c&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;all &lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	@echo B &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;B&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;filter/filter-out&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-makefile&#34; data-lang=&#34;makefile&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;filter pattern...,text&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;# 在text中取出符合patten格式的值
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;filter-out pattern...,text&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;# 在text中取出不符合patten格式的值
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#例
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;A &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; a b c dxx
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;B &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;filter %xx, &lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;A&lt;span style=&#34;color:#66d9ef&#34;&gt;))&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;all &lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	@echo &lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;B&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#结果为dxx
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;patsubst&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-makefile&#34; data-lang=&#34;makefile&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#如果var中的值匹配pattern，就将它替换为replacement
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;patsubst pattern, replacement, &lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;var&lt;span style=&#34;color:#66d9ef&#34;&gt;))&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#例
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;files &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; a.c b.c c.c d.c e.c abc
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;dep_files &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;patsubst %.c,%.d,&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;files&lt;span style=&#34;color:#66d9ef&#34;&gt;))&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;all &lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	@echo dep_files &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;dep_files&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#结果为 dep_files = a.d b.d c.d d.d e.d abc
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;头文件依赖&#34;&gt;
+  头文件依赖
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%a4%b4%e6%96%87%e4%bb%b6%e4%be%9d%e8%b5%96&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;通过命令，自动生成依赖的的头文件，当头文件发生变化时，重新生成对应的文件。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#-M获取c.c依赖的头文件&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#-MF将依赖输出的c.d的文件&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gcc -M -MF c.d c.c
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;例-1&#34;&gt;
+  例
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e4%be%8b-1&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-makefile&#34; data-lang=&#34;makefile&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;objs &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; a.o b.o c.o
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;dep_files &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;patsubst %,.%.d, &lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;objs&lt;span style=&#34;color:#66d9ef&#34;&gt;))&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;dep_files &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;wildcard &lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;dep_files&lt;span style=&#34;color:#66d9ef&#34;&gt;))&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;test &lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;objs&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	gcc -o test $^
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;%.o &lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; %.c
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	gcc -c -o $@ $&amp;lt; -M -MF .$@.d
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;ifneq&lt;/span&gt; &lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;dep_files&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;,)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;include&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;dep_files&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;endif&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;clean&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	rm *.o test
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	rm &lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;dep_files&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;.PHONY&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; clean
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+    </item>
+    
+    <item>
+      <title>网络编程2</title>
+      <link>/posts/c%E8%AF%AD%E8%A8%80/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B2/</link>
+      <pubDate>Mon, 12 Dec 2022 21:25:48 +0800</pubDate>
+      
+      <guid>/posts/c%E8%AF%AD%E8%A8%80/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B2/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;网络编程练习程序&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>网络编程1</title>
+      <link>/posts/c%E8%AF%AD%E8%A8%80/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B1/</link>
+      <pubDate>Wed, 07 Dec 2022 21:10:49 +0800</pubDate>
+      
+      <guid>/posts/c%E8%AF%AD%E8%A8%80/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B1/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;网络编程学习程序&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>应用层</title>
+      <link>/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E5%BA%94%E7%94%A8%E5%B1%82/</link>
+      <pubDate>Thu, 05 May 2022 21:50:36 +0800</pubDate>
+      
+      <guid>/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E5%BA%94%E7%94%A8%E5%B1%82/</guid>
+      <description>&lt;h2 id=&#34;http&#34;&gt;
+  HTTP
+  &lt;a class=&#34;anchor&#34; href=&#34;#http&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;网页包含多个对象，如HTML文件、JPEG图片、视频文件、动态脚本等，基本HTML文件包含对其他对象引用的链接。通过URL可以进行对象的寻址。&lt;/li&gt;
+&lt;li&gt;HTTP协议流程：
+&lt;ol&gt;
+&lt;li&gt;服务器在80端口等待客户的请求&lt;/li&gt;
+&lt;li&gt;浏览器发起到服务器的TCP连接（创建套接字Socket）&lt;/li&gt;
+&lt;li&gt;浏览器与Web服务器交换HTTP消息&lt;/li&gt;
+&lt;li&gt;关闭TCP连接&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;HTTP是无状态的协议，即服务器不维护任何有关客户端过去所发请求的信息。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;http连接&#34;&gt;
+  HTTP连接
+  &lt;a class=&#34;anchor&#34; href=&#34;#http%e8%bf%9e%e6%8e%a5&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;HTTP包含非持久性连接和持久性连接
+&lt;ul&gt;
+&lt;li&gt;非持久性连接指的是每个TCP连接最多允许传输一个对象，HTTP1.0使用非持久性连接。&lt;/li&gt;
+&lt;li&gt;持久性连接指每个TCP连接可以传输多个对象，HTTP1.1默认使用持久性连接。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;http消息格式&#34;&gt;
+  HTTP消息格式
+  &lt;a class=&#34;anchor&#34; href=&#34;#http%e6%b6%88%e6%81%af%e6%a0%bc%e5%bc%8f&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;HTTP有两类消息，请求消息（request）和响应消息（response）。&lt;/li&gt;
+&lt;li&gt;HTTP请求消息的格式如下：&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e5%ba%94%e7%94%a8%e5%b1%82/1.png&#34; alt=&#34;HTTP请求格式&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;HTTP响应消息的格式如下：&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e5%ba%94%e7%94%a8%e5%b1%82/2.png&#34; alt=&#34;HTTP请求格式&#34; /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;web缓存&#34;&gt;
+  Web缓存
+  &lt;a class=&#34;anchor&#34; href=&#34;#web%e7%bc%93%e5%ad%98&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;如果浏览器缓存过数据，当下次发送相同请求时，浏览器向服务器发送HTTP请求，并带上&lt;code&gt;If-modified-since: &amp;lt;date&amp;gt;&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;如果对象未改变，则返回&lt;code&gt;304 Not Modified&lt;/code&gt;，不反会对象，表示对象未被修改。&lt;/li&gt;
+&lt;li&gt;如果对象发生改变，服务器会返回对象。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;dns&#34;&gt;
+  DNS
+  &lt;a class=&#34;anchor&#34; href=&#34;#dns&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;DNS的是分布式数据库。提供了域名向IP地址的翻译、主机别名等功能。&lt;/li&gt;
+&lt;li&gt;一般来说是本地域名解析服务器代替进行域名解析的，当主机进行DNS查询时，查询会被发送到本地域名服务器，当本地域名服务器无法解析域名时，就会访问根域名服务器。全球共13个根域名服务器。&lt;/li&gt;
+&lt;li&gt;顶级域名服务器（TLD，top-level domain），负责com、org、net等顶级域名和国家顶级域名，如cn、uk等。&lt;/li&gt;
+&lt;li&gt;权威域名服务器是组织的域名解析服务器，提供组织内部服务器的解析服务。&lt;/li&gt;
+&lt;li&gt;当&lt;code&gt;cis.poly.edu&lt;/code&gt;想获取&lt;code&gt;gaia.cs.umass.edu&lt;/code&gt;的IP地址时，迭代查询流程如下&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e5%ba%94%e7%94%a8%e5%b1%82/3.png&#34; alt=&#34;迭代查询流程&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;递归查询的流程如下（将域名解析的任务交给所联系的服务器）&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e5%ba%94%e7%94%a8%e5%b1%82/4.png&#34; alt=&#34;递归查询流程&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;只要域名解析服务器获得域名时，就会缓存这一映射，一段时间后缓存条目才会失效。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;dns记录&#34;&gt;
+  DNS记录
+  &lt;a class=&#34;anchor&#34; href=&#34;#dns%e8%ae%b0%e5%bd%95&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;资源记录格式为(name, value, type, ttl)，类型如下&lt;/li&gt;
+&lt;li&gt;type=A，Name为主机域名，Value为IP地址&lt;/li&gt;
+&lt;li&gt;type=NS，Name为域（如edu.cn），value为该域权威域名解析服务器的主机域名。&lt;/li&gt;
+&lt;li&gt;type=CNAME，name为某一真实域名的别名，value为真实域名&lt;/li&gt;
+&lt;li&gt;type=MX，value是与name对应的邮件服务器。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;dns协议消息格式&#34;&gt;
+  DNS协议消息格式
+  &lt;a class=&#34;anchor&#34; href=&#34;#dns%e5%8d%8f%e8%ae%ae%e6%b6%88%e6%81%af%e6%a0%bc%e5%bc%8f&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;DNS查询（query）和回复（reply消息）的格式相同。&lt;/li&gt;
+&lt;li&gt;消息头部
+&lt;ul&gt;
+&lt;li&gt;Identification：16为查询编号，回复使用相同的编号。&lt;/li&gt;
+&lt;li&gt;flags表示查询或回复、期望递归、递归可用、权威回答。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e5%ba%94%e7%94%a8%e5%b1%82/5.png&#34; alt=&#34;DNS查询流程&#34; /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;socket&#34;&gt;
+  socket
+  &lt;a class=&#34;anchor&#34; href=&#34;#socket&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;对外通过IP地址+端口号表示通信端点。&lt;/li&gt;
+&lt;li&gt;操作系统通过套接字描述符（socket descriptor）来管理套接字。&lt;/li&gt;
+&lt;li&gt;socket类似于文件，当应用进程创建套接字时，操作系统分配一个数据结构存储该套接字相关信息。&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e5%ba%94%e7%94%a8%e5%b1%82/6.png&#34; alt=&#34;socket描述符表&#34; /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;地址结构&#34;&gt;
+  地址结构
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%9c%b0%e5%9d%80%e7%bb%93%e6%9e%84&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;使用TCP/IP协议簇的网络应用程序声明端点地址变量时，使用结构socketaddr_in&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; sockaddr_in
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  u_char sin_len; &lt;span style=&#34;color:#75715e&#34;&gt;/*地址长度 */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  u_char sin_family; &lt;span style=&#34;color:#75715e&#34;&gt;/*地址族(TCP/IP：AF_INET) */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  u_short sin_port; &lt;span style=&#34;color:#75715e&#34;&gt;/*端口号 */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; in_addr sin_addr; &lt;span style=&#34;color:#75715e&#34;&gt;/*IP地址 */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#66d9ef&#34;&gt;char&lt;/span&gt; sin_zero[&lt;span style=&#34;color:#ae81ff&#34;&gt;8&lt;/span&gt;]; &lt;span style=&#34;color:#75715e&#34;&gt;/*未用(置0) */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;socket-api函数&#34;&gt;
+  socket api函数
+  &lt;a class=&#34;anchor&#34; href=&#34;#socket-api%e5%87%bd%e6%95%b0&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;h4 id=&#34;socket函数&#34;&gt;
+  socket函数
+  &lt;a class=&#34;anchor&#34; href=&#34;#socket%e5%87%bd%e6%95%b0&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;sd = socket(protofamily,type,proto);&lt;/code&gt; 创建套接字并返回套接字描述符。&lt;/li&gt;
+&lt;li&gt;第一个参数指定协议族：protofamily=PF_INET(TCP/IP)&lt;/li&gt;
+&lt;li&gt;第二个参数指定套接字类型：SOCK_STREAM（TCP）, SOCK_DGRAM（UDP）, SOCK_RAW（面向网络层）&lt;/li&gt;
+&lt;li&gt;第三个参数指定协议号：0为默认&lt;/li&gt;
+&lt;li&gt;例&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; protoent &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;p;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;p&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;getprotobyname&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;tcp&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;SOCKET sd&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;socket&lt;/span&gt;(PF_INET,SOCKET_STREAM,p&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;p_proto);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;close&#34;&gt;
+  close
+  &lt;a class=&#34;anchor&#34; href=&#34;#close&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;int close(SOCKET sd)&lt;/code&gt; 关闭一个描述符为sd的套接字&lt;/li&gt;
+&lt;li&gt;如果多个进程共享一个套接字，调用close将套接字引用计数减1，减至0才关闭。&lt;/li&gt;
+&lt;li&gt;一个进程中的多线程对一个套接字的使用无计数。&lt;/li&gt;
+&lt;li&gt;返回值 0：成功，SOCKET_ERROR：失败。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;bind&#34;&gt;
+  bind
+  &lt;a class=&#34;anchor&#34; href=&#34;#bind&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;int bind(sd,localaddr,addrlen);&lt;/code&gt; 绑定套接字的本地端点地址&lt;/li&gt;
+&lt;li&gt;客户端一般不必调用bind函数，一般由服务端调用。&lt;/li&gt;
+&lt;li&gt;一台机器可能由多个网卡，可用使用地址通配符INADDR_ANY来绑定。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;listen&#34;&gt;
+  listen
+  &lt;a class=&#34;anchor&#34; href=&#34;#listen&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;int listen(sd,queuesize);&lt;/code&gt;置服务器端的流套接字处理处于监听状态。&lt;/li&gt;
+&lt;li&gt;仅服务端调用，仅用于面向连接的流套接字。&lt;/li&gt;
+&lt;li&gt;queuesize表示连接请求的队列大小。&lt;/li&gt;
+&lt;li&gt;返回值 0：成功，SOCKET_ERROR：失败。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;connect&#34;&gt;
+  connect
+  &lt;a class=&#34;anchor&#34; href=&#34;#connect&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;connect(sd,saddr,saddrlen)&lt;/code&gt; 客户端调用connect函数来使客户端套接字（sd）与特定计算机的特定端口（saddr）的套接字服务进行连接。&lt;/li&gt;
+&lt;li&gt;仅用于客户端，可用于TCP客户端也可以用于UDP客户端。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;accept&#34;&gt;
+  accept
+  &lt;a class=&#34;anchor&#34; href=&#34;#accept&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;newsock = accept(sd,caddr,caddrlen);&lt;/code&gt;服务程序调用accept函数从处于监听状态的流套接字sd的客户端连接请求队列中取出排在最前的一个客户请求，并且创建一个新的套接字来与客户套接字创建连接通道。&lt;/li&gt;
+&lt;li&gt;仅用于TCP套接字，仅用于服务器。&lt;/li&gt;
+&lt;li&gt;服务器会利用新创建的套接字（newsock）与客户端通信。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;send&#34;&gt;
+  send
+  &lt;a class=&#34;anchor&#34; href=&#34;#send&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;send(sd,*buf,len,flags);&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;sendto(sd,*buf,len,flags,destaddr,addrlen);&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;send：发送数据（用于TCP套接字或连接模式（调用了connect函数）的客户端UDP套接字）&lt;/li&gt;
+&lt;li&gt;sendto函数用于UDP服务器端套接字与未调用connect函数的UDP客户端套接字发送数据&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;recv&#34;&gt;
+  recv
+  &lt;a class=&#34;anchor&#34; href=&#34;#recv&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;recv(sd,buffer,len,flags);&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;recvfrom(sd,buf,len,flags,senderaddr,saddrlen);&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;recv函数从TCP连接的另一端接收数据，或者从调用了connect函数的UDP客户端套接接收服务器发来的数据&lt;/li&gt;
+&lt;li&gt;recvfrom函数用于从UDP服务器端套接字与未调用connect函数的UDP客户端套接字接收对端数据&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;setsockoptgetsockopt&#34;&gt;
+  setsockopt,getsockopt
+  &lt;a class=&#34;anchor&#34; href=&#34;#setsockoptgetsockopt&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;int setsockopt(int sd, int level, int optname, *optval, int optlen);&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;int setsockopt(int sd, int level, int optname, *optval, int optlen);&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;setsockopt()函数用来设置套接字sd的选项参数&lt;/li&gt;
+&lt;li&gt;getsockopt()函数用于获取任意类型、任意状态套接口的选项当前值，并把结果存入optval&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;网络字节序&#34;&gt;
+  网络字节序
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e7%bd%91%e7%bb%9c%e5%ad%97%e8%8a%82%e5%ba%8f&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;网络字节序采用大端排序方式（低位低地址，高位高地址）&lt;/li&gt;
+&lt;li&gt;某些Socket API函数的参数需要存储为网络字节顺序（如IP地址、端口号等）&lt;/li&gt;
+&lt;li&gt;转换函数
+&lt;ul&gt;
+&lt;li&gt;htons: 本地字节顺序→网络字节顺序(16bits)&lt;/li&gt;
+&lt;li&gt;ntohs: 网络字节顺序→本地字节顺序(16bits)&lt;/li&gt;
+&lt;li&gt;htonl: 本地字节顺序→网络字节顺序(32bits)&lt;/li&gt;
+&lt;li&gt;ntohl: 网络字节顺序→本地字节顺序(32bits)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;解析服务器ip地址&#34;&gt;
+  解析服务器IP地址
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e8%a7%a3%e6%9e%90%e6%9c%8d%e5%8a%a1%e5%99%a8ip%e5%9c%b0%e5%9d%80&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;客户端可能使用域名或IP地址标识服务器，IP协议需要使用32为二进制IP地址，需要将函数名或IP地址转换为32为IP地址。&lt;/li&gt;
+&lt;li&gt;inet_addr可用实现点分十进制IP地址到32位IP地址转换。&lt;/li&gt;
+&lt;li&gt;gethostbyname实现域名到32位IP地址转换。会返回一个指向结构hostent的指针。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; hostent {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;char&lt;/span&gt; FAR&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; h_name; &lt;span style=&#34;color:#75715e&#34;&gt;/*official host name */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;char&lt;/span&gt; FAR&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; FAR&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; h_aliases; &lt;span style=&#34;color:#75715e&#34;&gt;/*other aliases */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;short&lt;/span&gt; h_addrtype; &lt;span style=&#34;color:#75715e&#34;&gt;/*address type */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;short&lt;/span&gt; h_lengty; &lt;span style=&#34;color:#75715e&#34;&gt;/*address length */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;char&lt;/span&gt; FAR&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; FAR&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; h_addr_list; &lt;span style=&#34;color:#75715e&#34;&gt;/*list of address */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;};
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#define h_addr h_addr_list[0] 
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;解析服务器端口号&#34;&gt;
+  解析服务器端口号
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e8%a7%a3%e6%9e%90%e6%9c%8d%e5%8a%a1%e5%99%a8%e7%ab%af%e5%8f%a3%e5%8f%b7&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;客户端可能使用服务名（如HTTP）标识服务器端口，需要将服务名转换为熟知端口号&lt;/li&gt;
+&lt;li&gt;getservbyname会返回一个指向结构servent的指针。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; servent {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;char&lt;/span&gt; FAR&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; s_name; &lt;span style=&#34;color:#75715e&#34;&gt;/*official service name */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;char&lt;/span&gt; FAR&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; FAR&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; s_aliases; &lt;span style=&#34;color:#75715e&#34;&gt;/*other aliases */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;short&lt;/span&gt; s_port; &lt;span style=&#34;color:#75715e&#34;&gt;/*port for this service */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;char&lt;/span&gt; FAR&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; s_proto; &lt;span style=&#34;color:#75715e&#34;&gt;/*protocol to use */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}; 
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;解析协议号&#34;&gt;
+  解析协议号
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e8%a7%a3%e6%9e%90%e5%8d%8f%e8%ae%ae%e5%8f%b7&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;客户端可能使用协议名来指定协议，需要将协议名转换为协议号&lt;/li&gt;
+&lt;li&gt;函数getprotobyname实现协议名到协议号的转换。会返回一个protoent的指针。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; protoent {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;char&lt;/span&gt; FAR&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; p_name; &lt;span style=&#34;color:#75715e&#34;&gt;/*official protocol name */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;char&lt;/span&gt; FAR&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; FAR&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; p_aliases; &lt;span style=&#34;color:#75715e&#34;&gt;/*list of aliases allowed */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;short&lt;/span&gt; p_proto; &lt;span style=&#34;color:#75715e&#34;&gt;/*official protocol number*/&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; }; 
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;tcp客户端软件流程&#34;&gt;
+  TCP客户端软件流程
+  &lt;a class=&#34;anchor&#34; href=&#34;#tcp%e5%ae%a2%e6%88%b7%e7%ab%af%e8%bd%af%e4%bb%b6%e6%b5%81%e7%a8%8b&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;确定服务器IP地址和端口号&lt;/li&gt;
+&lt;li&gt;创建套接字&lt;/li&gt;
+&lt;li&gt;分配本地端点地址（可选）&lt;/li&gt;
+&lt;li&gt;连接服务器（套接字）&lt;/li&gt;
+&lt;li&gt;遵循应用层协议进行通信&lt;/li&gt;
+&lt;li&gt;关闭/释放连接&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;udp客户端软件流程&#34;&gt;
+  UDP客户端软件流程
+  &lt;a class=&#34;anchor&#34; href=&#34;#udp%e5%ae%a2%e6%88%b7%e7%ab%af%e8%bd%af%e4%bb%b6%e6%b5%81%e7%a8%8b&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;确定服务器IP地址与端口号&lt;/li&gt;
+&lt;li&gt;创建套接字&lt;/li&gt;
+&lt;li&gt;分配本地端点地址（IP地址+端口号）&lt;/li&gt;
+&lt;li&gt;指定服务器端点地址，构造UDP数据报&lt;/li&gt;
+&lt;li&gt;遵循应用层协议进行通信&lt;/li&gt;
+&lt;li&gt;关闭/释放套接字&lt;/li&gt;
+&lt;/ol&gt;</description>
+    </item>
+    
+    <item>
+      <title>C语言基础</title>
+      <link>/posts/c%E8%AF%AD%E8%A8%80/C%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/</link>
+      <pubDate>Sun, 26 Sep 2021 21:47:12 +0800</pubDate>
+      
+      <guid>/posts/c%E8%AF%AD%E8%A8%80/C%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/</guid>
+      <description>&lt;h2 id=&#34;变量和初始化&#34;&gt;
+  变量和初始化
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%8f%98%e9%87%8f%e5%92%8c%e5%88%9d%e5%a7%8b%e5%8c%96&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;外部变量&#34;&gt;
+  外部变量
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%a4%96%e9%83%a8%e5%8f%98%e9%87%8f&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;外部变量和函数具有如下性质：通过同一个名字引用的所有外部变量实际上都是引用同一个对象。&lt;/li&gt;
+&lt;li&gt;如果外部变量的定义和变量的使用不在同一个文件中，需要在相应的变量声明中强制性的使用关键字extern。&lt;/li&gt;
+&lt;li&gt;变量的声明用于说明变量的属性(主要是变量的类型)，而变量的定义除此外还将引起存储器的分配。以下语句如果放在所有函数的外部，那么这两条语句将定义外部变量sp和val，并为其分配存储单元。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; sp;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//声明外部变量必须指定数组长度。
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;double&lt;/span&gt; val[&lt;span style=&#34;color:#ae81ff&#34;&gt;100&lt;/span&gt;];
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;下面这两行声明了两个外部变量，并没有建立变量或分配存储空间。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;extern&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; sp;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;extern&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;double&lt;/span&gt; val[];
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;静态变量&#34;&gt;
+  静态变量
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e9%9d%99%e6%80%81%e5%8f%98%e9%87%8f&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;用static声明限定&lt;code&gt;外部变量和函数&lt;/code&gt;，可以将其声明后的对象的作用域限定为被编译源文件的剩余部分，通过static限定外部对象，可以&lt;code&gt;隐藏外部对象&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;通常情况下，函数名是全局可访问的，对于整个程序各个部分而言都可见。但如果将函数声明为static类型，则该函数除了对该函数声明所在的文件可见外，其他文件都无法访问。&lt;/li&gt;
+&lt;li&gt;static也可用于声明内部变量，但是不管函数是否被调用，它一直存在。static类型的内部变量是一种只能在某个特定函数中使用但是一直占用存储空间的变量。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;初始化&#34;&gt;
+  初始化
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%88%9d%e5%a7%8b%e5%8c%96&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;在不进行显式初始化的情况下，&lt;code&gt;外部变量和静态变量都将被初始化为0&lt;/code&gt;，而内部变量和寄存器变量的初值则没有定义。&lt;/li&gt;
+&lt;li&gt;对于外部变量和静态变量来说，初始化变量表达式必须是常量表达式，且只初始化一次。&lt;/li&gt;
+&lt;li&gt;数组的初始化实在声明后紧跟一个初始化列表。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//当省略数组的长度时，编译器将把花括号中的长度作为数组的长度
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; days[] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; {&lt;span style=&#34;color:#ae81ff&#34;&gt;31&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;28&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;31&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;30&lt;/span&gt;};
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//字符数组的初始化方式如下
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;char&lt;/span&gt; pattern[] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;oule&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//等价于
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;char&lt;/span&gt; pattern &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; {&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;o&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;u&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;l&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;e&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;\0&amp;#39;&lt;/span&gt;};
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;运算&#34;&gt;
+  运算
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e8%bf%90%e7%ae%97&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;计算char类型或short类型时，会将其转化为int类型来计算。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;预处理器&#34;&gt;
+  预处理器
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e9%a2%84%e5%a4%84%e7%90%86%e5%99%a8&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;#include&lt;/code&gt;将指定文件的内容包含到当前文件中。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;#define 名字 替换文本&lt;/code&gt;将&lt;code&gt;名字&lt;/code&gt;替换为&lt;code&gt;替换文本&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;sizeof&lt;/code&gt;可以用来计算任一对象的长度，如&lt;code&gt;sizeof(int)&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;条件包括&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#if SYSTEM == SYSV
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;#define HDR &amp;#34;sysv.h&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#elif SYSTEM == BSD
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;#define HDR &amp;#34;bsd.h&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#else
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;#define HDR &amp;#34;default.h&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#endif
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;HDR&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#ifdef HDR
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;printf&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;DEF HDR&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#endif
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;指针与数组&#34;&gt;
+  指针与数组
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%8c%87%e9%92%88%e4%b8%8e%e6%95%b0%e7%bb%84&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;&amp;amp;&lt;/code&gt;表示取一个对象的地址&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//把c的地址给p
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;p &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;c 
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;*&lt;/code&gt;作用于指针时，将访问指针所指向的对象。&lt;/li&gt;
+&lt;li&gt;指针只能指向某种特定类型的对象（void*除外）。&lt;/li&gt;
+&lt;li&gt;通过数组下表能实现的操作都可以通过指针来实现。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; a[] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; {&lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;11&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;12&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;13&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;14&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;15&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;16&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;17&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;18&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;19&lt;/span&gt;};
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//将指针pa指向数组的第0个元素，pa的值为a[0]的地址
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//等价于pa = a;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;pa &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;a[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;];
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//*pa 和 a[0] 的含义是相同的
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; x1 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;pa;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;printf&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;x1 的值为 %d&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;, x1);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//&amp;amp;a[1] 和 a + 1 的含义是相同的
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; x2 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;(a &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;printf&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;x2 的值为 %d&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;, x2);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//pa[2] 和 *pa[2] 的含义是相同的
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; x3 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; pa[&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;];
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;printf&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;x3 的值为 %d&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;, x3);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;数组和指针的不同点&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;指针是一个变量，所以&lt;code&gt;pa = a&lt;/code&gt;和&lt;code&gt;pa++&lt;/code&gt;都是合法的。&lt;/li&gt;
+&lt;li&gt;数组名不是变量，&lt;code&gt;a = pa&lt;/code&gt;和&lt;code&gt;a++&lt;/code&gt;非法。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;在函数的定义中，以下两种形参是等价的：&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;char&lt;/span&gt; s[];
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;char&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;s;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;可以将数组的一部分传递给函数：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//将起始于a[2]的子数组的地址传递给函数f
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;f&lt;/span&gt;(&lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;a[&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;]);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//或
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;f&lt;/span&gt;(a &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;字符指针&#34;&gt;
+  字符指针
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%ad%97%e7%ac%a6%e6%8c%87%e9%92%88&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;字符串常量是一个字符数组，在字符串的内部表示中，字符数组以空字符&lt;code&gt;\0&lt;/code&gt;结尾。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;下面两个定义之间有很大的差别：&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//定义了一个指针，指向了一个字符串常量，不能修改字符串的值
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;char&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;pmessage &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;now is the time&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//定义了一个数组，数组中的单个字符可以修改
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;char&lt;/span&gt; a[] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;now is the time&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;二维数组和指针数组&#34;&gt;
+  二维数组和指针数组
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e4%ba%8c%e7%bb%b4%e6%95%b0%e7%bb%84%e5%92%8c%e6%8c%87%e9%92%88%e6%95%b0%e7%bb%84&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//真正的二维数组，分配了200个int类型长度的存储空间
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; a[&lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt;][&lt;span style=&#34;color:#ae81ff&#34;&gt;20&lt;/span&gt;];
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//仅分配了10个指针，并没有对指针进行初始化，需要显式的进行初始化
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//b的每个元素都是int *类型的指针，b并非是二维数组
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;b[&lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt;];
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//例：
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;b[&lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt;];
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; x1 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;b[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;x1;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; x2[] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; {&lt;span style=&#34;color:#ae81ff&#34;&gt;21&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;22&lt;/span&gt;};
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;b[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; x2;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//相当于是一维数组，数组中的每个元素是字符串指针
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;char&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;name[] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; {&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;illegal month&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;jan&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;feb&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;mar&amp;#34;&lt;/span&gt;};
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//二维数组，数组中的每个元素的长度是15，不够补充\0
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;char&lt;/span&gt; aname[][&lt;span style=&#34;color:#ae81ff&#34;&gt;15&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; {&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;illegal month&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;jan&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;feb&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;mar&amp;#34;&lt;/span&gt;};
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;结构&#34;&gt;
+  结构
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e7%bb%93%e6%9e%84&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//声明方式
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; point {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; x;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; y;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;};
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;print1&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; point &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;pt);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; point pt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    pt.x &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    pt.y &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#a6e22e&#34;&gt;print1&lt;/span&gt;(&lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;pt);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;print1&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; point &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;pt)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;//pt-&amp;gt;x 等价于 (*pt).x
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#a6e22e&#34;&gt;printf&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;x is %d&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;y is %d&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;, pt&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;x, pt&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;y);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;类型定义typedef&#34;&gt;
+  类型定义typedef
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e7%b1%bb%e5%9e%8b%e5%ae%9a%e4%b9%89typedef&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;typedef用来建立新的数据类型名。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//类型定义
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;typedef&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; Length;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//声明变量
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;Length len, maxlen;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;typedef&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; point {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; x;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; y;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;} Pointx;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Pointx px;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;union&#34;&gt;
+  union
+  &lt;a class=&#34;anchor&#34; href=&#34;#union&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;一个变量可以合法的保存多种数据类型中的任何一种类型的对象。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;union&lt;/span&gt; u_tag {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; ival;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;float&lt;/span&gt; fval;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;char&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;swal;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}u;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

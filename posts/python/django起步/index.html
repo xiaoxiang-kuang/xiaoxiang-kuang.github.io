@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>django起步 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#起步">起步</a></li>
+        <li><a href="#模型">模型</a>
+          <ul>
+            <li><a href="#设置mysitesittingspy">设置mysite/sittings.py</a></li>
+            <li><a href="#创建模型">创建模型</a></li>
+            <li><a href="#激活和修改模型">激活和修改模型</a></li>
+          </ul>
+        </li>
+        <li><a href="#django管理页面">Django管理页面</a></li>
+        <li><a href="#视图view">视图view</a>
+          <ul>
+            <li><a href="#模板">模板</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>django起步</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#起步">起步</a></li>
+        <li><a href="#模型">模型</a>
+          <ul>
+            <li><a href="#设置mysitesittingspy">设置mysite/sittings.py</a></li>
+            <li><a href="#创建模型">创建模型</a></li>
+            <li><a href="#激活和修改模型">激活和修改模型</a></li>
+          </ul>
+        </li>
+        <li><a href="#django管理页面">Django管理页面</a></li>
+        <li><a href="#视图view">视图view</a>
+          <ul>
+            <li><a href="#模板">模板</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/python/django%E8%B5%B7%E6%AD%A5/">django起步</a>
+  </h1>
+  
+  <h5>2021-03-16</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/python/">python</a>
+  </div>
+  
+
+
+
+<h2 id="起步">
+  起步
+  <a class="anchor" href="#%e8%b5%b7%e6%ad%a5">#</a>
+</h2>
+<ul>
+<li>django项目目录</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>mysite<span style="color:#f92672">/</span>
+</span></span><span style="display:flex;"><span>    manage<span style="color:#f92672">.</span>py <span style="color:#75715e">#管理django项目的命令行工具</span>
+</span></span><span style="display:flex;"><span>    mysite<span style="color:#f92672">/</span>	<span style="color:#75715e">#python包，名字就是当引用它内部任何东西时需要用到的python包名</span>
+</span></span><span style="display:flex;"><span>        __init__<span style="color:#f92672">.</span>py	<span style="color:#75715e">#告诉python这个目录应该被认为是一个python包</span>
+</span></span><span style="display:flex;"><span>        settings<span style="color:#f92672">.</span>py	<span style="color:#75715e">#项目的配置文件</span>
+</span></span><span style="display:flex;"><span>        urls<span style="color:#f92672">.</span>py <span style="color:#75715e">#url声明</span>
+</span></span><span style="display:flex;"><span>        asgi<span style="color:#f92672">.</span>py <span style="color:#75715e">#运行在asgi兼容的web服务器上的入口</span>
+</span></span><span style="display:flex;"><span>        wsgi<span style="color:#f92672">.</span>py <span style="color:#75715e">#运行在wsgi兼容的web服务器上的入口</span>
+</span></span></code></pre></div><ul>
+<li>运行项目的命令<code>python manage.py runserver</code></li>
+<li>创建一个应用<code>python manage.py startapp polls</code></li>
+<li>应用urls.py中使用到的函数path()有四个参数，两个必须参数route和view，两个可选参数kwargs和name
+<ul>
+<li>route是一个匹配URL的准则，当响应一个请求时，他会从urlpatterns的第一项开始，按顺序依次匹配列表中的项。这些准则不会匹配get和post参数或域名</li>
+<li>view：当找到了一个匹配的准则，就会调用这个特定的视图函数，并传入一个HttpRequest对象作为第一个参数，被捕获的参数以关键字参数的形式传入。</li>
+<li>kwages：任意个关键字参数可作为一个字典传递给目标视图函数。</li>
+<li>name：为url取名</li>
+</ul>
+</li>
+<li>函数include()允许引用其他URLconfs</li>
+</ul>
+<h2 id="模型">
+  模型
+  <a class="anchor" href="#%e6%a8%a1%e5%9e%8b">#</a>
+</h2>
+<h3 id="设置mysitesittingspy">
+  设置mysite/sittings.py
+  <a class="anchor" href="#%e8%ae%be%e7%bd%aemysitesittingspy">#</a>
+</h3>
+<ul>
+<li>设置时区<code>TIME_ZONE = 'Asia/Shanghai' USE_TZ = True</code>
+<ul>
+<li>当启用了时区支持（即<code>USE_TZ = True</code>），Django将在数据库中以UTC存储日期信息，而在模板和表单中转化为最终用户的时区</li>
+</ul>
+</li>
+<li>设置数据库</li>
+<li><code>INSTALLED_APPS</code>是在项目中启用的Django应用，这里面的某些应用需要数据表，可以用<code>python manage.py migrate</code>生成</li>
+</ul>
+<h3 id="创建模型">
+  创建模型
+  <a class="anchor" href="#%e5%88%9b%e5%bb%ba%e6%a8%a1%e5%9e%8b">#</a>
+</h3>
+<ul>
+<li>模型设真实数据的描述，它包含了存储的数据所必要的字段和行为。</li>
+<li>Django的迁移代码是从模型文件中自动生成的</li>
+<li>每个模型都是<code>django.db.models.Model</code>类的子类，每个模型有许多的类变量，他们都表示一个数据库的字段，每个字段都是Field类的实例，每个Field类实例变量的名字也是数据库的列名。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#polls/models.py</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> django.db <span style="color:#f92672">import</span> models
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Choice</span>(models<span style="color:#f92672">.</span>Model):
+</span></span><span style="display:flex;"><span>    question <span style="color:#f92672">=</span> models<span style="color:#f92672">.</span>ForeignKey(Question, on_delete<span style="color:#f92672">=</span>models<span style="color:#f92672">.</span>CASCADE)
+</span></span><span style="display:flex;"><span>    choice_text <span style="color:#f92672">=</span> models<span style="color:#f92672">.</span>CharField(max_length<span style="color:#f92672">=</span><span style="color:#ae81ff">200</span>)
+</span></span><span style="display:flex;"><span>    votes <span style="color:#f92672">=</span> models<span style="color:#f92672">.</span>IntegerField(default<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+</span></span></code></pre></div><h3 id="激活和修改模型">
+  激活和修改模型
+  <a class="anchor" href="#%e6%bf%80%e6%b4%bb%e5%92%8c%e4%bf%ae%e6%94%b9%e6%a8%a1%e5%9e%8b">#</a>
+</h3>
+<ul>
+<li>首先把应用安装到项目中，在<code>INSTALLED_APPS</code>中添加<code>polls.apps.PollsConfig</code></li>
+<li>执行<code>python manage.py makemigrations polls</code></li>
+<li>迁移数据存放在应用的<code>migrations/0001_initial.py</code>中，可以通过<code>python manage.py sqlmigrate polls 0001</code>来查看对应的sql</li>
+<li>运行<code>python manage.py migtate</code>来应用数据库迁移</li>
+<li>通过<code>python manage.py shell</code>可进入当前项目对应的命令行</li>
+<li>给模型增加<code>__str__</code>方法能带来一些方便</li>
+</ul>
+<h2 id="django管理页面">
+  Django管理页面
+  <a class="anchor" href="#django%e7%ae%a1%e7%90%86%e9%a1%b5%e9%9d%a2">#</a>
+</h2>
+<ul>
+<li>首先创建一个能登陆管理界面的用户<code>python manage.py createsuperuser</code></li>
+<li>将创建的models注册，以便后台可以管理</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#polls/admin.py</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> django.contrib <span style="color:#f92672">import</span> admin
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> .models <span style="color:#f92672">import</span> Question
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>admin<span style="color:#f92672">.</span>site<span style="color:#f92672">.</span>register(Question)
+</span></span></code></pre></div><ul>
+<li>运行项目<code>python manage.py runserver</code></li>
+</ul>
+<h2 id="视图view">
+  视图view
+  <a class="anchor" href="#%e8%a7%86%e5%9b%beview">#</a>
+</h2>
+<ul>
+<li>向应用的views.py中添加视图函数，这些函数的第一个参数是request，也以有第二、第三个参数。每个视图必须做的只有返回一个包含请求页面内容的HttpResponse对象或者抛出一个异常</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">detail</span>(request, question_id):
+</span></span><span style="display:flex;"><span>    context <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;question_id&#39;</span>: question_id,
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#template = loader.get_template(&#39;xxx/xxxx.html&#39;)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#return HttpResponse(template.render(context, request))</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> render(request, <span style="color:#e6db74">&#39;xxx/xxxx.html&#39;</span>, context)
+</span></span></code></pre></div><ul>
+<li>
+<p>当使用模型的get函数获取对象，如果不存在，可以抛出Http404错误，Django提供了一个快捷函数<code>get_object_or_404</code>，</p>
+</li>
+<li>
+<p>将这些视图添加加到应用的urls.py中</p>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#为url名称添加命名空间</span>
+</span></span><span style="display:flex;"><span>app_name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;polls&#39;</span>
+</span></span><span style="display:flex;"><span>urlpatterns <span style="color:#f92672">=</span> [
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#...</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#int:是一个转换器，决定了应该以什么变量类型匹配这部分url路径</span>
+</span></span><span style="display:flex;"><span>    path(<span style="color:#e6db74">&#39;&lt;int:question_id&gt;/detail/&#39;</span>, views<span style="color:#f92672">.</span>detail, name<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;detail&#39;</span>),
+</span></span><span style="display:flex;"><span>]
+</span></span></code></pre></div><ul>
+<li>当其他人访问网站的某个页面时，比如&rsquo;polls/34/detail&rsquo;，django将会载入项目的urls.py模块，因为这在<strong>ROOT_URLCONF</strong>中配置了，然后django寻找名为urlpatterns变量并按顺序匹配正则表达式，在找到匹配项&rsquo;polls/&rsquo;，它切掉了匹配的文本&rsquo;polls/&rsquo;，将剩余文本'34/detail&rsquo;发送至&rsquo;polls.urls&rsquo;中做进一步处理</li>
+</ul>
+<h3 id="模板">
+  模板
+  <a class="anchor" href="#%e6%a8%a1%e6%9d%bf">#</a>
+</h3>
+<ul>
+<li>在应用路径下创建templates目录，项目的<strong>TEMPLATES</strong>配置项描述了django如何载入和渲染模板，默认将<strong>APP_DIRS</strong>设置为True，这一选项让DjangoTemplates能在每个INSTALLED_APPS文件夹中寻找templates子目录。</li>
+<li>由于django能直接访问到templates文件夹，为了放置出现模板文件名冲突，最好的方法就是将它们放到一个与自身应用重名的子文件夹里</li>
+<li>指向具有命名空间的视图</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;{% url &#39;polls:detail&#39; question.id %}&#34;</span>&gt;{{ context.question_id }}&lt;/<span style="color:#f92672">a</span>&gt;
+</span></span></code></pre></div><ul>
+<li>无论何时，当需要创建一个改变服务器端数据的表单时，请使用post。</li>
+<li>django自带了一个非常有用的防御系统，所有针对内部url的post表单都应该使用<code>{% csrf_token %}</code>模板标签。</li>
+<li>request.POST是一个字典类型对象，可以通过关键字来获取提交的数据，获取的值永远是字符串。如果key提供错误，将会抛出一个KeyError。</li>
+<li>函数reverse()能避免在视图函数中硬编码url，他需要我们给出想要跳转的视图的名字和该视图所对应的url模式中需要给该视图提供的参数。</li>
+</ul></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

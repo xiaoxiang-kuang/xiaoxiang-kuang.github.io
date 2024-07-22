@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>PCIe总线概述 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#pcie总线使用的信号">PCIe总线使用的信号</a></li>
+        <li><a href="#pcie总线的层次结构">PCIe总线的层次结构</a>
+          <ul>
+            <li><a href="#事务层">事务层</a></li>
+            <li><a href="#数量链路层">数量链路层</a></li>
+            <li><a href="#物理层">物理层</a></li>
+          </ul>
+        </li>
+        <li><a href="#pcie链路的扩展">PCIe链路的扩展</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>PCIe总线概述</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#pcie总线使用的信号">PCIe总线使用的信号</a></li>
+        <li><a href="#pcie总线的层次结构">PCIe总线的层次结构</a>
+          <ul>
+            <li><a href="#事务层">事务层</a></li>
+            <li><a href="#数量链路层">数量链路层</a></li>
+            <li><a href="#物理层">物理层</a></li>
+          </ul>
+        </li>
+        <li><a href="#pcie链路的扩展">PCIe链路的扩展</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/bios/PCIe%E6%80%BB%E7%BA%BF%E6%A6%82%E8%BF%B0/">PCIe总线概述</a>
+  </h1>
+  
+  <h5>2023-05-04</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/bios/">bios</a>
+  </div>
+  
+
+
+
+<ul>
+<li>PCIe总线使用高速差分总线，采用端到端的连接方式，因此在每一条PCIe链路中只能连接两个设备，这两个设备互为数据发送端和数据接收端。</li>
+<li>PCIe链路使用“端到端的数据传送方式“，发送端和接收端都存在TX(发送逻辑)和RX（接收逻辑）,结构如下：</li>
+<li>
+  <img src="/img/book/pcie/5.jpg" alt="图4-1" /></li>
+<li>在PCIe总线的物理链路的一个数据通路（lane）中，有两组差分信号，共四根信号线。发送端的TX和接收端的RX使用一组差分信号连接。该链路被称为发送端的发送链路，也是接收端的接收链路。一个PCIe链路可以由多个Lane组成。</li>
+<li>告诉差分信号电气规范要求发送端串接一个电容，以进行AC耦合，该电容也被称为AC耦合电容。</li>
+<li>PCIe链路使用差分信号进行数据传输，一个差分型号由D+和D-两根信号线组成，信号接收端通过比较这两个信号的差值，判断发送端发送的是逻辑1还是逻辑0。</li>
+<li>使用差分信号能有效抑制电磁干扰（EMI），差分信号使用两根信号传送一位数据。</li>
+<li>PCIe链路可以由多条Lane组成，目前PCIe支持1、2、4、8、12、16和32个Lane，即x1、x2、x4、x8、x12、x16、x32宽度的PCIe链路。</li>
+<li>在PCIe总线中，使用GT(gigatransfer)计算PCIe链路的峰值带宽，计算公式为总线频率x数据位宽x2。</li>
+<li>PCIe链路使用串行方式进行数据传输，但在芯片内部，数据总线仍然是并行的，因此PCIe链路接口需要进行串并转换。</li>
+<li>PCIe总线物理链路之间的数据传送使用基于时钟的同步传送机制，但物理链路并没有时钟线，PCIe总线的接收端含有时钟恢复模块CDR（Clock Data Recovery），CDR从接收报文提取接收时钟，从而进行同步数据传输。</li>
+</ul>
+<h2 id="pcie总线使用的信号">
+  PCIe总线使用的信号
+  <a class="anchor" href="#pcie%e6%80%bb%e7%ba%bf%e4%bd%bf%e7%94%a8%e7%9a%84%e4%bf%a1%e5%8f%b7">#</a>
+</h2>
+<ul>
+<li>PCIe设备使用两种电源信号供电，分为是V<sub>cc</sub>和V<sub>aux</sub>，其额定电压为3.3V。PCIe设备使用的主要逻辑模块使用V<sub>cc</sub>供电，而一些与电源管理相关的逻辑使用V<sub>aux</sub>供电。</li>
+<li>在一个处理器系统中，一般最多提供x16的PCIe插槽，并使用PETp0~15、PETn0~15和PERp0~15、PERn0~15共64根信号线组成32对差分信号，其中16对PETXX信号用于发送链路。另外16对PERxx信号用于接收链路。除此之外，PCIe总线还使用了下列辅助信号。
+<ol>
+<li>PERST#信号：该信号为全局复位信号，由处理器系统提供。当该信号有效时，PCIe设备将进行复位操作。PCIe总线定义了多种复位方式，齐总cold reset和warm reset这两种复位方式的实现和该信号有关。</li>
+<li>REFCLK+和REFCLK-信号：
+<ul>
+<li>在一个处理器系统中，可能含有很多PCIe设备，这些设备可以作为Add-In卡与PCIe插槽连接，也可以作为内置模块，与处理器提供的PCIe链路直接相连。PCIe设备与插槽都具有REFCLK+和REFCLK-信号。</li>
+<li>PCIe插槽使用这组信号与处理器系统同步。</li>
+<li>当PCIe设备作为Add-In卡连接在PCIe插槽时i，可以直接使用PCIe插槽提供的这组信号，也可以使用独立的参考时钟。</li>
+</ul>
+</li>
+<li>WAKE#信号：当PCIe设备进入休眠状态，主电源已经停止供电时，PCIe设备使用该信号向处理器系统提交唤醒请求，使处理器系统重新为该PCIe设备提供主电源Vcc。WAKE#信号是可选的，产生该信号的硬件逻辑必须使用辅助电源Vaux供电。</li>
+<li>SMCLK和SMDAT信号：这两个信号与x86的SMBus（System management bus）有关，SMBus由SMCLK和SMDAT信号组成。</li>
+<li>JTAG信号：JTAG是一种国际标准测试协议，主要用于芯片的内部测试。正式产品中一般不暴力JTAG接口。</li>
+<li>PRSNT1#和PRSNT2#信号：这两个信号和PCIe设备的热插拔有关。</li>
+</ol>
+</li>
+</ul>
+<h2 id="pcie总线的层次结构">
+  PCIe总线的层次结构
+  <a class="anchor" href="#pcie%e6%80%bb%e7%ba%bf%e7%9a%84%e5%b1%82%e6%ac%a1%e7%bb%93%e6%9e%84">#</a>
+</h2>
+<ul>
+<li>PCIe总线使用了串行连接的方式，并使用数据包（Packet）进行数据传输。</li>
+<li>PCIe总线的层次结构如下：</li>
+<li>
+  <img src="/img/book/pcie/6.jpg" alt="图4-4" /></li>
+<li>PCIe总线各个层次都是使用硬件逻辑实现的，在PCIe体系结构中，数据报文首先在设备的核心层（Device Core）中产生，然后经过设备的事务层（Transaction Layer）、数据链路层（Data Link Layer）和物理层（Physical Layer），最终发送出去，接收端的数据也需要通过物理层、数据链路层和事务层，最终到达核心层。</li>
+</ul>
+<h3 id="事务层">
+  事务层
+  <a class="anchor" href="#%e4%ba%8b%e5%8a%a1%e5%b1%82">#</a>
+</h3>
+<ul>
+<li>事务层定义了PCIe总线使用总线事务，这些总线事务可以通过Switch等设备传送到其他PCIe设备或者RC。RC也可以使用这些总线事务访问PCIe设备。</li>
+<li>事务层接收来自PCIe设备核心层的数据，并将其封装成TLP（transaction layer packet）后，发向数据链路层。事务层还从数据链路层接收数据报文，然后转发到PCIe设备的核心层。</li>
+</ul>
+<h3 id="数量链路层">
+  数量链路层
+  <a class="anchor" href="#%e6%95%b0%e9%87%8f%e9%93%be%e8%b7%af%e5%b1%82">#</a>
+</h3>
+<ul>
+<li>数据链路层保证来自发送端事务层的报文可以可靠、完整地发送到接收端的数据链路层，来自事务层的报文再通过数据链路层时，被添加Sequence Number前缀和CRC后缀，数据链路层使用ACK/NAK协议保证报文的可靠传输。</li>
+</ul>
+<h3 id="物理层">
+  物理层
+  <a class="anchor" href="#%e7%89%a9%e7%90%86%e5%b1%82">#</a>
+</h3>
+<ul>
+<li>物理层是PCIe总线的最底层，将PCIe设备连在一起。PCIe总线的物理电气特性决定了PCIe链路只能采用端到端的连接方式。PCIe总线的物理层为PCIe设备间的数据通信提供了传送介质，为数据传送提供了可靠的物理环境。</li>
+</ul>
+<h2 id="pcie链路的扩展">
+  PCIe链路的扩展
+  <a class="anchor" href="#pcie%e9%93%be%e8%b7%af%e7%9a%84%e6%89%a9%e5%b1%95">#</a>
+</h2>
+<ul>
+<li>PCIe使用端到端的数据传送方式，如果要连接多个设备，PCIe链路必须使用Switch扩展PCIe链路。</li>
+<li>Switch由1个上游端口和2~n个下游端口组成。在一个switch中和RC直接或间接相连的端口为上游端口。</li>
+<li>在switch中，有两个与端口相关的概念，egress和ingress，egress指的是发送端口，即数据离开switch的使用的端口，ingress端口指数据进入switch的使用的端口。</li>
+</ul></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

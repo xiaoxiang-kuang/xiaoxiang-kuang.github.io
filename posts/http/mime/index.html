@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>mime | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#语法">语法</a>
+          <ul>
+            <li><a href="#通用结构">通用结构</a></li>
+            <li><a href="#类型">类型</a></li>
+            <li><a href="#部分mime类型介绍">部分MIME类型介绍</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>mime</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#语法">语法</a>
+          <ul>
+            <li><a href="#通用结构">通用结构</a></li>
+            <li><a href="#类型">类型</a></li>
+            <li><a href="#部分mime类型介绍">部分MIME类型介绍</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/http/mime/">mime</a>
+  </h1>
+  
+  <h5>2021-02-19</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/http/">http</a>
+  </div>
+  
+
+
+
+<ul>
+<li>MIME：multipurpose internet mail extensions媒体类型</li>
+<li>浏览器通常使用mime类型来确定如何处理url</li>
+</ul>
+<h2 id="语法">
+  语法
+  <a class="anchor" href="#%e8%af%ad%e6%b3%95">#</a>
+</h2>
+<h3 id="通用结构">
+  通用结构
+  <a class="anchor" href="#%e9%80%9a%e7%94%a8%e7%bb%93%e6%9e%84">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>#大小写不敏感
+</span></span><span style="display:flex;"><span>type/subtype
+</span></span></code></pre></div><h3 id="类型">
+  类型
+  <a class="anchor" href="#%e7%b1%bb%e5%9e%8b">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>#text表明是普通文本
+</span></span><span style="display:flex;"><span>text/html 
+</span></span><span style="display:flex;"><span>text/css
+</span></span><span style="display:flex;"><span>text/xml
+</span></span><span style="display:flex;"><span>#image表示是某种图像（包括动态图片）
+</span></span><span style="display:flex;"><span>image/jpeg
+</span></span><span style="display:flex;"><span>image/png
+</span></span><span style="display:flex;"><span>#applicaiton表示是某种二进制数据
+</span></span><span style="display:flex;"><span>application/pdf
+</span></span><span style="display:flex;"><span>application/json
+</span></span><span style="display:flex;"><span>text/javascript
+</span></span><span style="display:flex;"><span>#audio表示是某种音频文件
+</span></span><span style="display:flex;"><span>#video表示是某种视频文件
+</span></span><span style="display:flex;"><span>#multipart表示细分领域的文件类型的种类
+</span></span><span style="display:flex;"><span>#...
+</span></span></code></pre></div><h3 id="部分mime类型介绍">
+  部分MIME类型介绍
+  <a class="anchor" href="#%e9%83%a8%e5%88%86mime%e7%b1%bb%e5%9e%8b%e4%bb%8b%e7%bb%8d">#</a>
+</h3>
+<ul>
+<li><code>application/octet-stream</code>：这是应用程序的默认值，意思是未知的应用程序文件。</li>
+<li><code>text/plain</code>文本的默认值</li>
+<li><code>text/css</code>：网页中要被解析为css的任何css文件必须指定MIME为<code>text/css</code>。</li>
+</ul>
+<p><strong>参考链接：</strong>
+  <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Basics_of_HTTP/MIME_Types">MIME类型</a> | 
+  <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types">常见MIME类型列表</a></p></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

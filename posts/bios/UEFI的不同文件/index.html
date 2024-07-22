@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>UEFI的不同文件 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#搭建uefi工程模块">搭建UEFI工程模块</a>
+          <ul>
+            <li><a href="#dsc文件">DSC文件</a></li>
+            <li><a href="#inf文件">INF文件</a></li>
+            <li><a href="#3种入口函数的uefi应用">3种入口函数的UEFI应用</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>UEFI的不同文件</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#搭建uefi工程模块">搭建UEFI工程模块</a>
+          <ul>
+            <li><a href="#dsc文件">DSC文件</a></li>
+            <li><a href="#inf文件">INF文件</a></li>
+            <li><a href="#3种入口函数的uefi应用">3种入口函数的UEFI应用</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/bios/UEFI%E7%9A%84%E4%B8%8D%E5%90%8C%E6%96%87%E4%BB%B6/">UEFI的不同文件</a>
+  </h1>
+  
+  <h5>2023-04-15</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/bios/">bios</a>
+  </div>
+  
+
+
+
+<ul>
+<li>模块（module）是UEFI上最小的可单独编译的代码单元，它包含INF文件，源代码和二进制文件。INF文件用来描述文件的行为。</li>
+<li>包（package）是由模块、平台描述文件（DSC）和包声明文件（DEC）组成，可以不包含模块，也可以包含多个模块。</li>
+<li>EDK2中定义了很多类型的模块：
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BASE</td>
+<td>常用于库模块的开发</td>
+</tr>
+<tr>
+<td>SEC</td>
+<td></td>
+</tr>
+<tr>
+<td>PEI_CORE</td>
+<td></td>
+</tr>
+<tr>
+<td>DXE_CORE</td>
+<td></td>
+</tr>
+<tr>
+<td>DXE_DRIVER</td>
+<td></td>
+</tr>
+<tr>
+<td>DXE_RUNTIME_DRIVER</td>
+<td></td>
+</tr>
+<tr>
+<td>DXE_SAL_DRIVER</td>
+<td></td>
+</tr>
+<tr>
+<td>DXE_SMM_DRIVER</td>
+<td></td>
+</tr>
+<tr>
+<td>UEFI_DRIVER</td>
+<td>UEFI启动模块</td>
+</tr>
+<tr>
+<td>UEFI_APPLICATION</td>
+<td>UEFI应用模块</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<h2 id="搭建uefi工程模块">
+  搭建UEFI工程模块
+  <a class="anchor" href="#%e6%90%ad%e5%bb%bauefi%e5%b7%a5%e7%a8%8b%e6%a8%a1%e5%9d%97">#</a>
+</h2>
+<ul>
+<li>UEFI编译过程如下：</li>
+<li>
+  <img src="/img/book/uefi_lb/1.jpg" alt="" /></li>
+</ul>
+<h3 id="dsc文件">
+  DSC文件
+  <a class="anchor" href="#dsc%e6%96%87%e4%bb%b6">#</a>
+</h3>
+<ul>
+<li>dsc文件（description）是平台描述文件，描述了模块、库和组件如何编译。文件中还包含很多的节标志如<code>[Defines]</code>。</li>
+<li>在dsc文件中，经常用<code>！include</code>来包含其他文件，用<code>#</code>来表示注释。</li>
+<li><code>[Defines]</code>中定义了各种变量，必须是dsc文件中的第一个。语法格式如下：</li>
+</ul>
+<pre tabindex="0"><code class="language-dsc" data-lang="dsc">[Defines]
+  PLATFORM_NAME                  = MdeModule
+  PLATFORM_GUID                  = 587CE499-6CBE-43cd-94E2-186218569478
+  PLATFORM_VERSION               = 0.98
+  DSC_SPECIFICATION              = 0x00010005
+  #可选
+  OUTPUT_DIRECTORY               = Build/MdeModule
+  SUPPORTED_ARCHITECTURES        = IA32|X64|EBC|ARM|AARCH64|RISCV64|LOONGARCH64
+  BUILD_TARGETS                  = DEBUG|RELEASE|NOOPT
+  SKUID_IDENTIFIER               = DEFAULT
+</code></pre><ul>
+<li>
+<p><code>[BuildOptions]</code>中给出编译器和相关的编译参数。</p>
+</li>
+<li>
+<p><code>[LibraryClasses]</code>用来提供模块所使用的库入口，格式如下：</p>
+</li>
+</ul>
+<pre tabindex="0"><code>[LibraryClasses]
+  PeiCoreEntryPoint|MdePkg/Library/PeiCoreEntryPoint/PeiCoreEntryPoint.inf
+  PeimEntryPoint|MdePkg/Library/PeimEntryPoint/PeimEntryPoint.inf
+</code></pre><ul>
+<li><code>[Components]</code>用来定义模块编译，指定模块的INF文件所在的位置。格式如下：</li>
+</ul>
+<pre tabindex="0"><code>[Components]
+  MdeModulePkg/Application/HelloWorld/HelloWorld.inf
+  MdeModulePkg/Application/DumpDynPcd/DumpDynPcd.inf
+  
+  #这种格式下，{}内的内容只对当前的INF文件有效
+  AppPkg/Applications/LibSample/MyLibApp/MyLibApp.inf{
+    &lt;LibraryClasses&gt;
+    MyLibraryLib|AppPkg/Applications/LibSample/MyLibrary/MyLibrary.inf
+  }
+</code></pre><h3 id="inf文件">
+  INF文件
+  <a class="anchor" href="#inf%e6%96%87%e4%bb%b6">#</a>
+</h3>
+<ul>
+<li>
+<p>inf文件是模块的工程文件，描述了模块的属性，如模块由哪些代码组成、依赖了哪些库等。</p>
+</li>
+<li>
+<p>EDK2的模块一般位于包的子目录下，如果是提供库的模块一般位于Library子目录下，如果是UEFI Application，一般位于Application下。</p>
+</li>
+<li>
+<p>INF文件包含很多节标志，包括<code>[Defines]</code>、<code>[Sources]</code>等。</p>
+</li>
+<li>
+<p><code>[Defines]</code>中定义了各种变量，后续编译步骤中需要使用这些变量。</p>
+</li>
+</ul>
+<pre tabindex="0"><code>[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = Uefi_Main
+  FILE_GUID                      = 6937936E-ED34-44ab-AE97-1FA5E7ED2116
+  MODULE_TYPE                    = UEFI_APPLICATION
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = UefiMain
+</code></pre><ul>
+<li><code>[Sources]</code>用于列出模块中所有的源文件和资源文件，这些文件位于inf所在的目录或者子目录中。</li>
+</ul>
+<pre tabindex="0"><code>[Sources]
+  Uefi_Main.c
+</code></pre><ul>
+<li><code>[BuildOptions]</code>和dsc文件的<code>[BuildOptions]</code>语法格式基本相同，INF文件只对本模块有效，DSC对包下所有模块有效。</li>
+<li><code>[Protocols]</code>列出了模块时用到的协议，在INF文件中列出的是协议的GUID。</li>
+</ul>
+<pre tabindex="0"><code>[Protocols]
+  gEfiSimpleTextInputExProtocolGuid
+  gEfiGraphicsOutputProtocolGuid
+</code></pre><ul>
+<li><code>LibraryClasses</code>列出本模块需要链接的库。模块如果需要添加库，一般需要：
+<ol>
+<li>在INF文件下的<code>[LibraryClasses]</code>中添加库名</li>
+<li>在DES文件的<code>[LibraryClasses]</code>中寻找这个库，如果没有，则需要添加编译此库的INF文件。</li>
+</ol>
+</li>
+</ul>
+<pre tabindex="0"><code>[LibraryClasses]
+  UefiLib
+  ShellCEntryLib
+</code></pre><ul>
+<li><code>[Packages]</code>列出本模块引用的所有包的DEC文件。</li>
+</ul>
+<pre tabindex="0"><code>[Packages]
+  MdePkg/MdePkg.dec
+  ShellPkg/ShellPkg.dec
+</code></pre><h3 id="3种入口函数的uefi应用">
+  3种入口函数的UEFI应用
+  <a class="anchor" href="#3%e7%a7%8d%e5%85%a5%e5%8f%a3%e5%87%bd%e6%95%b0%e7%9a%84uefi%e5%ba%94%e7%94%a8">#</a>
+</h3>
+<ul>
+<li>
+<p><code>&lt;Uefi.h&gt;</code> 定义了UEFI中的基本数据类型和核心数据结构。</p>
+</li>
+<li>
+<p><code>&lt;Library/UefiLib.h&gt;</code>提供通用的库函数。</p>
+</li>
+<li>
+<p><code>&lt;Library/BaseLib.h&gt;</code>提供字符串处理、数学、文件路径处理等相关库函数。</p>
+</li>
+<li>
+<p><code>&lt;Library/BaseMemoryLib.h&gt;</code> 处理内存的库函数。</p>
+</li>
+<li>
+<p><code>&lt;Library/DebugLib.h&gt;</code>功能调试输出的库函数。</p>
+</li>
+<li>
+<p>ImageHandle指向了模块自身加载到内存的Image对象。SystemTable是UEFI应用和UEFI内核交互的桥梁，通过它可以获得UEFI提供的各种服务，包括BS服务和CS服务。</p>
+</li>
+<li>
+<p>在EFI_SYSTEM_TABLE的结构体中，提供了访问BS服务和RT服务的指针。针对一些常用的Protocol的接口，如ConsoleIn（键盘）和ConsoleOut（屏幕）也提供了访问指针。</p>
+</li>
+</ul>
+<h4 id="fdf文件">
+  FDF文件
+  <a class="anchor" href="#fdf%e6%96%87%e4%bb%b6">#</a>
+</h4>
+<ul>
+<li>Flash Description File FDF文件用来描述固件在Flash中的布局和位置。</li>
+<li>一般来说，生成固件的源码中只有一个FDF文件，其作用是规定把哪些包编入Flash中，并确定编译的位置。</li>
+<li>FDF文件由<code>[Defines] [FD] [FV] [Capsule] [VTF] [Rule] [OptionRom]</code>等几个节组成。</li>
+</ul>
+<ol>
+<li>[Defines]</li>
+<li>[FD]
+<ul>
+<li>Firmware Device 即固件设备，常用的BIOS ROM就是一个FD。</li>
+</ul>
+</li>
+<li>[FV]
+<ul>
+<li>Fireware Volume FV是固件的逻辑区域，相当于FD上的分区。这个节定义了镜像包含的组件和模块。</li>
+</ul>
+</li>
+</ol></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

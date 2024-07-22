@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>HEST上报开发小结 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#1-hest表ghescper">1. HEST表、GHES、CPER</a></li>
+        <li><a href="#2-linux串口配置">2. Linux串口配置</a></li>
+        <li><a href="#3-编译linux内核">3. 编译Linux内核</a></li>
+        <li><a href="#4-内存">4. 内存</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>HEST上报开发小结</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#1-hest表ghescper">1. HEST表、GHES、CPER</a></li>
+        <li><a href="#2-linux串口配置">2. Linux串口配置</a></li>
+        <li><a href="#3-编译linux内核">3. 编译Linux内核</a></li>
+        <li><a href="#4-内存">4. 内存</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/bios/HEST%E4%B8%8A%E6%8A%A5%E5%BC%80%E5%8F%91%E5%B0%8F%E7%BB%93/">HEST上报开发小结</a>
+  </h1>
+  
+  <h5>2024-01-12</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/bios/">bios</a>
+  </div>
+  
+
+
+
+<h2 id="1-hest表ghescper">
+  1. HEST表、GHES、CPER
+  <a class="anchor" href="#1-hest%e8%a1%a8ghescper">#</a>
+</h2>
+<ul>
+<li>APEI（ACPI Platform Error Interfaces）：提供了一种将错误信息传递给OS的机制。</li>
+<li>APEI包含了四张ACPI表：
+<ul>
+<li>ERST（Error Record Serialization Table）</li>
+<li>BERT（Boot Error Record Table）</li>
+<li>HEST（Hardware Error Source Table）</li>
+<li>EINJ (Error Injection Table)</li>
+</ul>
+</li>
+<li>HEST用来将系统硬件错误传递给OSPM，HEST表的结构如下：</li>
+<li>
+  <img src="/img/hest/3.jpg" alt="" /></li>
+<li>GHES（Generic Hardware Error Source）通用硬件错误源，GHES是Error Source Structure的一种。除了GHES外，还有其他的一些错误源（IA-32 Architecture Machine Check Exception、PCI Express Root Port AER、PCI Express Device AER Structure）。</li>
+<li>GHES的结构如下图，其中比较重要的字段为Error Status Address和Notify。
+<ul>
+<li>Error Status Address是一个地址，指向了一块大小固定的地址空间，该空间存放上报给OS的错误信息，结构如下图所示。</li>
+<li>Notify表示当错误发生时如何上报给OS。（支持的方式包括SCI、Polled等）</li>
+</ul>
+</li>
+<li>
+  <img src="/img/hest/4.jpg" alt="" /></li>
+<li>CPER（Common Platform Error Record）：上图中的Error Section可以用来存放CPER（详见UEFI_SPEC的 N）。CPER的结构如下图：</li>
+<li>
+  <img src="/img/hest/5.jpg" alt="" /></li>
+<li>可以通过如下流程，将硬件错误上报给OS，流程如下：
+<ol>
+<li>新增一条GHES，并将此GHES插入到HEST中。保存GHES中申请的地址基址。
+<ol>
+<li>要求此GHES的Notify Type为Polled。使用Polled后OS会定期去轮询。</li>
+</ol>
+</li>
+<li>创建CPER，将存在Error的物理地址写入到CPER中。</li>
+<li>将CPER插入到GHES指向的物理地址中。（此步骤比较难，需要同步修改Generic Error Status Block和Generic Error Data Entry）。</li>
+</ol>
+</li>
+<li>整个流程用到的数据结构的关系如下：</li>
+<li>
+  <img src="/img/hest/6.jpg" alt="" /></li>
+</ul>
+<h2 id="2-linux串口配置">
+  2. Linux串口配置
+  <a class="anchor" href="#2-linux%e4%b8%b2%e5%8f%a3%e9%85%8d%e7%bd%ae">#</a>
+</h2>
+<ul>
+<li>
+<p>开启Linux串口可以收集OS的日志，也可以解决OS下BIOS日志显示不全的问题</p>
+</li>
+<li>
+<p>开启步骤如下：</p>
+</li>
+</ul>
+<ol>
+<li>编译grub配置文件，在文件末尾添加如下的配置 <code>vim /etc/default/grub </code></li>
+</ol>
+<pre tabindex="0"><code>GRUB_CMDLINE_LINUX_DEFAULT=&#34;console=tty0 console=ttyS0,115200n8&#34;
+GRUB_TERMINAL=serial
+GRUB_SERIAL_COMMAND=&#34;serial --speed=115200 --unit=0 --word=8 --parity=no --stop=1&#34;
+</code></pre><ol start="2">
+<li>执行如下命令生成grub配置文件。</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>grub2-mkconfig  -o /boot/efi/EFI/centos/grub.cfg
+</span></span></code></pre></div><h2 id="3-编译linux内核">
+  3. 编译Linux内核
+  <a class="anchor" href="#3-%e7%bc%96%e8%af%91linux%e5%86%85%e6%a0%b8">#</a>
+</h2>
+<ul>
+<li>在使用CPER上报OS的过程中，发现dmesg一直报错<code>GHES:Failed to read error status block!</code>，后续重新编译Linux内核，才定位到错误。</li>
+<li>编译Linux内核流程如下：</li>
+</ul>
+<ol>
+<li>在Github下载最新的Linux内核代码（下载最新的即可，老版本内核代码可能缺少后续更新的某些patch）：</li>
+</ol>
+<ul>
+<li>
+  <img src="/img/hest/1.jpg" alt="" /></li>
+</ul>
+<ol start="2">
+<li>将内核代码传到Linux服务器上，并进行解压。</li>
+<li>将/boot路径下的config-xxx文件拷贝到内核代码的路径，并重命名为.config。<code>cp  /boot/config-4.18.0-193.el8.x86_64  .config</code></li>
+<li>进入Linux内核目录，执行<code>make menuconfig</code>，之后找找有没有自己感兴趣的配置，把它选上后，保存退出。</li>
+<li>开始编译Linux内核，执行<code>make -j128</code>，其中-j表示并行编译，可以加快编译速度，可以根据自己CPU的核心数来调整该值的大小。
+<ol>
+<li>如果出现报错，是因为缺少某些库，可以自己按照报错去搜一下需要安装的软件或者需要注释掉的选项。</li>
+</ol>
+</li>
+<li>当编译完成后，执行<code>make modules_install</code>来安装内核模块。</li>
+<li>执行<code>make install</code>安装Linux内核。</li>
+<li>更新grub配置，让其重新扫描内核，并从新的Linux内核启动<code>grub2-mkconfig -o /boot/efi/EFI/centos/grub.cfg</code></li>
+<li>如果以上步骤执行完后，重新启动可以看到grub中新增加了一个刚编译的内核的启动项。</li>
+</ol>
+<ul>
+<li>
+  <img src="/img/hest/2.jpg" alt="" /></li>
+</ul>
+<hr>
+<ul>
+<li>内核中使用printk来添加打印信息，使用方式如下：</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">//KERN_ERR是打印级别
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">printk</span>(KERN_ERR <span style="color:#e6db74">&#34;%s: kpf acpi_hest_get_size(gdata) = 0x%x, data_len = 0x%x</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, __func__, <span style="color:#a6e22e">acpi_hest_get_size</span>(gdata), data_len);
+</span></span></code></pre></div><ul>
+<li>重新编译并安装内核后，使用<code>dmesg -w</code>即可看到添加的打印信息。</li>
+</ul>
+<h2 id="4-内存">
+  4. 内存
+  <a class="anchor" href="#4-%e5%86%85%e5%ad%98">#</a>
+</h2>
+<ul>
+<li>DIMM（Double In-line Memory Module）双列内存模组，双列指的是电路板两侧有两列金手指。</li>
+<li>SDRAM（Synchronous Dynamic Random Access Memory）：同步动态随机存储器。同步指的是其时钟频率与CPU前端总线的系统时钟频率相同；动态指的是存储阵列需要不断的刷新来保证数据不丢失；随机指的是可以自由指定地址进行数据的读写。</li>
+<li>RANK：也叫P-Bank（Physical Bank），P-Bank是一组内存芯片的集合，这个集合的总位宽必须要和CPU的数据位宽相同。
+<ul>
+<li>每个内存芯片都有自己的位宽（（SDRAM）存储单元容量=位宽，（DDR）存储单元容量=2×位宽），位宽就是每个传输周期提供的数据量。一般一个内存芯片的位宽为8Bit。</li>
+<li>只有知道芯片位宽的情况下，才能确定P-BANK的数量。</li>
+</ul>
+</li>
+<li>BANK：内存可以看作是一个表格，指定一个行（Row）和一个列（Column）后，就可以找到所需要的单元格了，这个单元格可以称为<code>存储单元</code>（一个存储单元可以存nbit的数据（n取决于位宽）），这个表格就叫L-BANK（逻辑Bank，也叫BANK）。
+<ul>
+<li>一个BANK一般会包含多个表格。所以在进行寻址时，需要先确定是哪个BANK，然后在这个选定的L-BANK中选择相应的行和列进行寻址。</li>
+</ul>
+</li>
+<li>内存芯片的容量（存储单元的容量） = 行数 x 列数 x L-BANK的数量。</li>
+<li>DDR SDRAM（Double Data Rate SDRAM）：双倍数据流SDRAM。</li>
+</ul></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

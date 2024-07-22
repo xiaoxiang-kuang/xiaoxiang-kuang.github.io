@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>kafka | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#介绍">介绍</a>
+          <ul>
+            <li><a href="#日志存储">日志存储</a></li>
+            <li><a href="#消费者">消费者</a></li>
+          </ul>
+        </li>
+        <li><a href="#命令行">命令行</a>
+          <ul>
+            <li><a href="#java程序案例">java程序案例</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>kafka</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#介绍">介绍</a>
+          <ul>
+            <li><a href="#日志存储">日志存储</a></li>
+            <li><a href="#消费者">消费者</a></li>
+          </ul>
+        </li>
+        <li><a href="#命令行">命令行</a>
+          <ul>
+            <li><a href="#java程序案例">java程序案例</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/javaee/kafka/">kafka</a>
+  </h1>
+  
+  <h5>2021-10-21</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">java</a>
+  </div>
+  
+
+
+
+<h2 id="介绍">
+  介绍
+  <a class="anchor" href="#%e4%bb%8b%e7%bb%8d">#</a>
+</h2>
+<ul>
+<li>kafka中的消息以主题为单位进行归类，生产者负责将消息发送到特定的topic，消费者负责订阅topic并进行消费。</li>
+<li>topic是一个逻辑上的概念，它可以细分为多个partition（分区），一个partition只属于单个topic（主题）。</li>
+<li>同一个topic下的不同的partition存放的消息是不同的。消息在被追加到分区文件中会被分配一个特定的偏移量（offset）。offset是消息在partition中唯一的标识，kafka通过offset来保证消息在分区内的顺序性。offset并不跨越分区，也就是说kafka保证的是partition有序而非topic有序。</li>
+<li>partition可以分布在不同的broker上，也就是说一个topic可以横跨多个broker。</li>
+<li>每一条消息被发送到broker前，会根据分区规则选择存到哪个具体的分区，如果分区规则设置的合理，则所有的消息都可以均匀的分配到不同的分区中。如果一个topic只有一个分区，那么这个这个分区文件所在的机器的I/O将会成为这个topic的性能瓶颈。</li>
+<li>kafka为分区引入了副本（replica）机制，同一个分区的不同副本中保存的是相同的消息。副本之间是一主多从的关系，leader副本负责处理读写请求，follower副本只负责于leader副本的消息同步，当leader副本出现故障时，从follower中重新选举的新leader对外提供服务。</li>
+</ul>
+<h3 id="日志存储">
+  日志存储
+  <a class="anchor" href="#%e6%97%a5%e5%bf%97%e5%ad%98%e5%82%a8">#</a>
+</h3>
+<ul>
+<li>kafka中的消息是以topic为基本单位进行归类的，各个topic逻辑上相互独立，每个topic可以分为一个或多个partition，分区的数量可以在topic创建时指定，也可以在之后修改。每个消息在发送的时候会根据分区规则被追加到指定的partition中，partition中的每条消息都会被分配一个唯一的序列号，即偏移量（offset）。</li>
+<li>不考虑多副本的情况，一个分区对应一个日志（Log）。为了防止Log过大，kafka引入了日志分段(LogSegment)的概念，将Log切分为多个LogSegment，相当于一个大型文件被平均分为多个相对较小的文件。Log在物理上以文件夹的形式存储，每隔LogSegment对应于磁盘上的一个日志文件和两个索引文件以及可能的其他文件。</li>
+<li>Log对应的命名形式为<code>topic-partition</code>的目录。</li>
+<li>为了便于消息的检索，每隔LogSegment中的日志文件（以<code>.log</code>文件结尾）都有对应的两个索引文件：偏移量索引文件（<code>.index</code>）和时间戳索引文件(<code>.timeindex</code>)，每个logsegment都有一个基准偏移量baseoffset，用来表示当前logsegment中第一条消息的offset，偏移量是一个64位长整型数，日志文件和两个索引文件都是根据准偏移量来命名的，名称固定为20个数字，没有达到的位数则用0填充。</li>
+<li>kafka消费者的唯一是保存在内部topic <code>__consumer_offsets</code>中的。</li>
+</ul>
+<h3 id="消费者">
+  消费者
+  <a class="anchor" href="#%e6%b6%88%e8%b4%b9%e8%80%85">#</a>
+</h3>
+<ul>
+<li>一个消费者只属于一个消费组，每一个分区只能被一个消费组中的一个消费者所消费。</li>
+</ul>
+<h2 id="命令行">
+  命令行
+  <a class="anchor" href="#%e5%91%bd%e4%bb%a4%e8%a1%8c">#</a>
+</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e">#启动服务</span>
+</span></span><span style="display:flex;"><span>bin/zookeeper-server-start.sh config/zookeeper.properties
+</span></span><span style="display:flex;"><span>bin/kafka-server-start.sh config/server.properties
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#创建有4个partition的topic</span>
+</span></span><span style="display:flex;"><span>kafka-topics.sh --bootstrap-server 10.2.4.31:9092 --create --topic kuangpf-topic --partitions <span style="color:#ae81ff">4</span> <span style="color:#f92672">[</span>--replication-factor 1<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--if-not-exists<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#展示topic分区副本的分配细节</span>
+</span></span><span style="display:flex;"><span>kafka-topics.sh --bootstrap-server 10.2.4.31:9092 --describe --topic kuangpf-topic
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#向topic中写入event</span>
+</span></span><span style="display:flex;"><span>bin/kafka-console-producer.sh --topic test --bootstrap-server localhost:9092
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#读取events</span>
+</span></span><span style="display:flex;"><span>bin/kafka-console-consumer.sh --topic test --from-beginning --bootstrap-server localhost:9092
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#获取当前可用的topics</span>
+</span></span><span style="display:flex;"><span>kafka-topics.sh --bootstrap-server 10.2.4.31:9092 --list <span style="color:#f92672">[</span>--if-exists<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#增加分区数，分区数只能增加不能减少</span>
+</span></span><span style="display:flex;"><span>kafka-topics.sh --bootstrap-server 10.2.4.31:9092 --alter  --topic kuangpf-topic --partitions <span style="color:#ae81ff">5</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#查看动态配置</span>
+</span></span><span style="display:flex;"><span>kafka-configs.sh --bootstrap-server 10.2.4.31:9092 --describe --entity-type topics --entity-name kuangpf-topic
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#添加配置，多个配置用逗号隔开</span>
+</span></span><span style="display:flex;"><span>kafka-configs.sh --bootstrap-server 10.2.4.31:9092 --alter  --entity-type topics --entity-name kuangpf-topic --add-config max.message.bytes<span style="color:#f92672">=</span><span style="color:#ae81ff">10000</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#删除某个动态配置</span>
+</span></span><span style="display:flex;"><span>kafka-configs.sh --bootstrap-server 10.2.4.31:9092 --alter  --entity-type topics --entity-name kuangpf-topic --delete-config max.message.bytes
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#删除一个topic</span>
+</span></span><span style="display:flex;"><span>kafka-topics.sh --bootstrap-server 10.2.4.31:9092 --delete --topic kuangpf-topic <span style="color:#f92672">[</span>--if-exists<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#将消费组的topic的偏移量移到最后</span>
+</span></span><span style="display:flex;"><span>kafka-consumer-groups.sh --bootstrap-server 10.2.4.31:9092 --group log-process --topic a36cde73-88e0-4398-b7ee-7246f65c6cfe --reset-offsets --to-latest --execute
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#性能测试工具</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#发送100万条数据，每条消息1024字节，吞吐量大于-时表示当发送的吞吐量大于该值时就会被阻塞一段时间，小于0则不限流</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#records sent表示测试时发送的消息总数，records/sec和MB、sec表示吞吐量，avg latency表示消息处理的平均耗时，max latency表示消息的最大耗时。50th表示50%的消息处理耗时，其他的类推。</span>
+</span></span><span style="display:flex;"><span>kafka-producer-perf-test.sh --topic k1 --num-records <span style="color:#ae81ff">100000</span> --record-size <span style="color:#ae81ff">1024</span> --throughput -1 --producer-props bootstrap.servers<span style="color:#f92672">=</span>10.2.4.31:9092
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#消费100万条数据</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#start.time起始时间、end.time结束时间、data.consumed.in.MB消费的消息总量、每秒拉去的消息的字节大小fetch.MB.sec、fetch.nMsg.sec每秒拉去的消息个数</span>
+</span></span><span style="display:flex;"><span>kafka-consumer-perf-test.sh --topic k1 --messages <span style="color:#ae81ff">1000000</span> --broker-list 10.2.4.31:9092
+</span></span></code></pre></div><h3 id="java程序案例">
+  java程序案例
+  <a class="anchor" href="#java%e7%a8%8b%e5%ba%8f%e6%a1%88%e4%be%8b">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span><span style="color:#f92672">(</span>String<span style="color:#f92672">[]</span> args<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    Properties props <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Properties<span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//给程序一个唯一标识符，用于区分和同一个kafka对话的其他程序。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    props<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>StreamsConfig<span style="color:#f92672">.</span><span style="color:#a6e22e">APPLICATION_ID_CONFIG</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;streams-pipe&#34;</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//kafka的地址
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    props<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>StreamsConfig<span style="color:#f92672">.</span><span style="color:#a6e22e">BOOTSTRAP_SERVERS_CONFIG</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;localhost:9092&#34;</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>    props<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>StreamsConfig<span style="color:#f92672">.</span><span style="color:#a6e22e">DEFAULT_KEY_SERDE_CLASS_CONFIG</span><span style="color:#f92672">,</span> Serdes<span style="color:#f92672">.</span><span style="color:#a6e22e">String</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getClass</span><span style="color:#f92672">());</span>
+</span></span><span style="display:flex;"><span>    props<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>StreamsConfig<span style="color:#f92672">.</span><span style="color:#a6e22e">DEFAULT_VALUE_SERDE_CLASS_CONFIG</span><span style="color:#f92672">,</span> Serdes<span style="color:#f92672">.</span><span style="color:#a6e22e">String</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getClass</span><span style="color:#f92672">());</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//使用topology构建器构建一个topology
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">final</span> StreamsBuilder builder <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> StreamsBuilder<span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//创建源流，KStream会不断地从my-input中获取数据
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    KStream<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">,</span> String<span style="color:#f92672">&gt;</span> source <span style="color:#f92672">=</span> builder<span style="color:#f92672">.</span><span style="color:#a6e22e">stream</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;my-input&#34;</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//将输入的键和值随意更改，类型也可以修改，返回新的键值对
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    source<span style="color:#f92672">.</span><span style="color:#a6e22e">map</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> KeyValueMapper<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">,</span> String<span style="color:#f92672">,</span> KeyValue<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">,</span> String<span style="color:#f92672">&gt;&gt;()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">public</span> KeyValue<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">,</span> String<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">apply</span><span style="color:#f92672">(</span>String key<span style="color:#f92672">,</span> String value<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            log<span style="color:#f92672">.</span><span style="color:#a6e22e">info</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;====&gt; key {}, value{}&#34;</span><span style="color:#f92672">,</span> key<span style="color:#f92672">,</span> value<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> KeyValue<span style="color:#f92672">&lt;&gt;(</span>key<span style="color:#f92672">,</span> value<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">});</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//将数据写入到my-output，TopicNameExtractor可以动态指定topic，但topic必须存在
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    source<span style="color:#f92672">.</span><span style="color:#a6e22e">to</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> TopicNameExtractor<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">,</span> String<span style="color:#f92672">&gt;()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">public</span> String <span style="color:#a6e22e">extract</span><span style="color:#f92672">(</span>String key<span style="color:#f92672">,</span> String value<span style="color:#f92672">,</span> RecordContext recordContext<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            log<span style="color:#f92672">.</span><span style="color:#a6e22e">info</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;----&gt;key {}, value {},recordContext {}&#34;</span><span style="color:#f92672">,</span> key<span style="color:#f92672">,</span> value<span style="color:#f92672">,</span> recordContext<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;my-output&#34;</span><span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">});</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">final</span> Topology topology <span style="color:#f92672">=</span> builder<span style="color:#f92672">.</span><span style="color:#a6e22e">build</span><span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//使用上面的两个组件topology和props来构建streams客户端。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">final</span> KafkaStreams streams <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> KafkaStreams<span style="color:#f92672">(</span>topology<span style="color:#f92672">,</span> props<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//程序结束前能关闭连接
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    Runtime<span style="color:#f92672">.</span><span style="color:#a6e22e">getRuntime</span><span style="color:#f92672">().</span><span style="color:#a6e22e">addShutdownHook</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> Thread<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;streams-shutdown-hook&#34;</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            streams<span style="color:#f92672">.</span><span style="color:#a6e22e">close</span><span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">});</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//执行此客户端
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    streams<span style="color:#f92672">.</span><span style="color:#a6e22e">start</span><span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

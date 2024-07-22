@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>浮点数 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#浮点数">浮点数</a>
+          <ul>
+            <li><a href="#32位浮点数">32位浮点数</a></li>
+            <li><a href="#64位浮点数">64位浮点数</a></li>
+          </ul>
+        </li>
+        <li><a href="#程序计数器">程序计数器</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>浮点数</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#浮点数">浮点数</a>
+          <ul>
+            <li><a href="#32位浮点数">32位浮点数</a></li>
+            <li><a href="#64位浮点数">64位浮点数</a></li>
+          </ul>
+        </li>
+        <li><a href="#程序计数器">程序计数器</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/%E6%B5%AE%E7%82%B9%E6%95%B0/">浮点数</a>
+  </h1>
+  
+  <h5>2020-03-27</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">计算机组成原理</a>
+  </div>
+  
+
+
+
+<h2 id="浮点数">
+  浮点数
+  <a class="anchor" href="#%e6%b5%ae%e7%82%b9%e6%95%b0">#</a>
+</h2>
+<ul>
+<li>浮点表示法：把一个数的有效数字和数的范围在计算机的一个存储单元中分别予以表示的方法。</li>
+</ul>
+<h3 id="32位浮点数">
+  32位浮点数
+  <a class="anchor" href="#32%e4%bd%8d%e6%b5%ae%e7%82%b9%e6%95%b0">#</a>
+</h3>
+<ul>
+<li>数的量级在1x2<sup>-126</sup>至1.11&hellip;x2<sup>127</sup>之间，大概就是1.19x10<sup>-38</sup>至3.40x10<sup>38</sup>之间，如果有一个数为10<sup>40</sup>，就不能使用float来存了。</li>
+</ul>
+<h4 id="0--100-0001-0--011-0110-0000-0000-0000-0000">
+  <code>0 | 100 0001 0 | 011 0110 0000 0000 0000 0000</code>
+  <a class="anchor" href="#0--100-0001-0--011-0110-0000-0000-0000-0000">#</a>
+</h4>
+<ul>
+<li>第一部分表示符号位，0为正数，1为负数</li>
+<li>第二部分共8位，表示阶码（指数），需要减去127</li>
+<li>第三部分（23位）表示尾数（小数点后面的数）。</li>
+<li>0表示为正数，100 0001 0减127为3，剩余23位放在1.的后面，即1.011011，所以结果为1.011011x2<sup>3</sup></li>
+</ul>
+<h3 id="64位浮点数">
+  64位浮点数
+  <a class="anchor" href="#64%e4%bd%8d%e6%b5%ae%e7%82%b9%e6%95%b0">#</a>
+</h3>
+<ul>
+<li>阶码宽度为11位，</li>
+<li>位数宽度为52位</li>
+<li>数的量级在1x2<sup>-1022</sup> 至 (2-2<sup>-52</sup>)x2<sup>1023</sup>之间，大概就是10<sup>-308</sup>至10<sup>308</sup></li>
+</ul>
+<h2 id="程序计数器">
+  程序计数器
+  <a class="anchor" href="#%e7%a8%8b%e5%ba%8f%e8%ae%a1%e6%95%b0%e5%99%a8">#</a>
+</h2>
+<ul>
+<li>PC总是存储将要执行的下一条指令的地址</li>
+</ul></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

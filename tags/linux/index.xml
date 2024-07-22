@@ -1,0 +1,2965 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>linux on 小象的blog</title>
+    <link>/tags/linux/</link>
+    <description>Recent content in linux on 小象的blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Fri, 12 May 2023 17:51:50 +0800</lastBuildDate><atom:link href="/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Ext4文件系统</title>
+      <link>/posts/linux/ext4%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/</link>
+      <pubDate>Fri, 12 May 2023 17:51:50 +0800</pubDate>
+      
+      <guid>/posts/linux/ext4%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;一个ext4文件系统被分割为多个block groups，block groups的大小在&lt;code&gt;sb.s_blocks_per_group&lt;/code&gt;块中指定。&lt;/li&gt;
+&lt;li&gt;默认情况下一个块的大小是4KiB，此时每个block group会包含32768个块，即一个group的大小为128MiB。&lt;/li&gt;
+&lt;li&gt;ext4中块是最小的分配单位。&lt;/li&gt;
+&lt;li&gt;ext4文件系统采用小端模式，数值的低字节存储在低地址处，高字节存储在高地址处。比如数“12 34 56 78”，小端存放的形式如下“78 56 34 12”。大端存放的形式为“12 34 56 78”。&lt;/li&gt;
+&lt;li&gt;一个标准的block group布局如下（并非所有的块都是此布局）：&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/linux/ext4/1.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;centos7下使用dumpe2fs获取到的ext4文件系统的信息&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/linux/ext4/1.2.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/linux/ext4/1.1.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;ext4会保留一些inode作为特殊用途，如下：&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/linux/ext4/2.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;ext4文件系统&#34;&gt;
+  ext4文件系统
+  &lt;a class=&#34;anchor&#34; href=&#34;#ext4%e6%96%87%e4%bb%b6%e7%b3%bb%e7%bb%9f&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;目录&#34;&gt;
+  目录
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e7%9b%ae%e5%bd%95&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;目录也是文件，目录有对应的inode和data blocks，目录的data block中存放多个ext4_dir_entry_2，结构如下：&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/linux/ext4/3.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;文件类型可以取的值如下：&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/linux/ext4/4.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;案例
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;0D000000&lt;/code&gt; &lt;code&gt;1000&lt;/code&gt; &lt;code&gt;05&lt;/code&gt; &lt;code&gt;01&lt;/code&gt;  &lt;code&gt;6673746162&lt;/code&gt;  &lt;code&gt;000000&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;第一块表示inode号&lt;/li&gt;
+&lt;li&gt;第二块表示此结构体长度为0x0010，即16，因为ext4采用小端存放，所以高位在高地址，低位在低地址。&lt;/li&gt;
+&lt;li&gt;第三块表示文件名为5字节&lt;/li&gt;
+&lt;li&gt;第四块表示文件类型为普通文件&lt;/li&gt;
+&lt;li&gt;第五块是文件名，对应fstab，f的ascii是0x66，s的是0x73，t是0x75。&lt;/li&gt;
+&lt;li&gt;最后一块是填充位，结构体大小必须是最大对其数的整数倍。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>抓包</title>
+      <link>/posts/linux/%E6%8A%93%E5%8C%85/</link>
+      <pubDate>Wed, 25 May 2022 11:21:41 +0800</pubDate>
+      
+      <guid>/posts/linux/%E6%8A%93%E5%8C%85/</guid>
+      <description>&lt;h2 id=&#34;wireshark&#34;&gt;
+  wireshark
+  &lt;a class=&#34;anchor&#34; href=&#34;#wireshark&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;eq ==
+ne !=
+gt &amp;gt;
+lt &amp;lt;
+ge &amp;gt;=
+le &amp;lt;=
+# 指定来源ip、目的端口和协议
+ip.src eq 10.2.4.50 and http and tcp.dstport eq 40010
+tcp.port in {80, 443, 8080}
+http.request.method in {&amp;#34;HEAD&amp;#34;, &amp;#34;GET&amp;#34;}
+#支持使用range
+ip.addr in {10.0.0.5 .. 10.0.0.9, 192.168.1.1 .. 192.168.1.9}
+#支持子网的形式
+ip.addr == 129.111.0.0/16
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
+      <title>snmp</title>
+      <link>/posts/linux/snmp/</link>
+      <pubDate>Wed, 22 Dec 2021 21:52:01 +0000</pubDate>
+      
+      <guid>/posts/linux/snmp/</guid>
+      <description>&lt;h2 id=&#34;snmpdconf&#34;&gt;
+  snmpd.conf
+  &lt;a class=&#34;anchor&#34; href=&#34;#snmpdconf&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#建立一个从community到security name的映射，source可以是default、一个IP、一个主机名、或者一个子网（如10.10.10.0/24），source以!开头表示拒绝此source的请求。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;com2sec -&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;-Cn CONTEXT&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; SECNAME SOURCE COMMUNITY
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#建立从security name到group的一个映射，多个group指令可以指定相同的group名，&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;group GROUP &lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;v1|v2c|usm|tsm|ksm&lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt; SECNAME
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#定义一个view name，type可以是included或者excluded。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;view VNAME TYPE OID &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;MASK&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#建立一个从group到三个view之一的映射，&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#LEVEL是noauth、auth或priv之一&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#PREFX指定CONTEXT如何被请求匹配，可以是exact、prefix&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#READ和WRITE指定用于GET、SET和TRAP/INFORM 请求的view。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;access GROUP CONTEXT &lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;any|v1|v2c|usm|tsm|ksm&lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt; LEVEL PREFX READ WRITE NOTIFY
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;连接命令&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#-v版本 -c community
+snmpwalk -c nsag -v2c 10.0.1.81 1.3.6.1.2.1.1.1.0
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
+      <title>xwindow</title>
+      <link>/posts/linux/xwindow/</link>
+      <pubDate>Mon, 15 Nov 2021 14:28:47 +0000</pubDate>
+      
+      <guid>/posts/linux/xwindow/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;linux上的图形用户接口GUI被称为X或者X11。&lt;/li&gt;
+&lt;li&gt;X11是一个软件，利用网络构架来进行图形接口的执行与绘制。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;x11&#34;&gt;
+  X11
+  &lt;a class=&#34;anchor&#34; href=&#34;#x11&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;X Server是管理硬件，X Client则是应用程序。X Client应用程序将所想要呈现的画面告诉X Server，X Server将结果透过他管理的硬件绘制出来。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;x-server-硬件管理屏幕绘制与字符提供功能&#34;&gt;
+  X Server 硬件管理、屏幕绘制与字符提供功能
+  &lt;a class=&#34;anchor&#34; href=&#34;#x-server-%e7%a1%ac%e4%bb%b6%e7%ae%a1%e7%90%86%e5%b1%8f%e5%b9%95%e7%bb%98%e5%88%b6%e4%b8%8e%e5%ad%97%e7%ac%a6%e6%8f%90%e4%be%9b%e5%8a%9f%e8%83%bd&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;X Server管理的设备主要与输入/输出有关，包括键盘、鼠标、手写板、显示器、屏幕分辨率与颜色深度、显示是配置与显示的字符等。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;每台客户端主机都需要安装X Server，而服务器则是提供X Client软件，以提供客户端绘图所需要的数据。&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;X Server和X Client的互动并非只有client&amp;ndash;&amp;gt;server，两者实际上是有互动的，X Server会将来自输入设备（键盘、鼠标等）的动作告知X Client。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;x-client-负责x-server要求的事件处理&#34;&gt;
+  X Client 负责X Server要求的事件处理
+  &lt;a class=&#34;anchor&#34; href=&#34;#x-client-%e8%b4%9f%e8%b4%a3x-server%e8%a6%81%e6%b1%82%e7%9a%84%e4%ba%8b%e4%bb%b6%e5%a4%84%e7%90%86&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;X Client也可以叫X Application。&lt;/li&gt;
+&lt;li&gt;X Server管理显示接口与在屏幕上绘图，同时将输入设备的行为告知X Client，此时X Client会依据这个输入设备的行为来开始处理，再将结果传回X Server，X Server再根据X Client传回来的绘图资料将它描述在自己的屏幕上，来得到显示的结果。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;x-window-manager-特殊的x-client负责管理所有的x-client&#34;&gt;
+  X Window Manager 特殊的X Client，负责管理所有的X Client
+  &lt;a class=&#34;anchor&#34; href=&#34;#x-window-manager-%e7%89%b9%e6%ae%8a%e7%9a%84x-client%e8%b4%9f%e8%b4%a3%e7%ae%a1%e7%90%86%e6%89%80%e6%9c%89%e7%9a%84x-client&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;窗口管理员提供许多的控制元素，包括任务栏、桌面背景的设定等等；管理虚拟桌面；提供窗口控制参数，包括窗口的大小、窗口的重叠显示、窗口的移动、窗口的最小化等等。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;display-manager-提供登入需求&#34;&gt;
+  Display Manager 提供登入需求
+  &lt;a class=&#34;anchor&#34; href=&#34;#display-manager-%e6%8f%90%e4%be%9b%e7%99%bb%e5%85%a5%e9%9c%80%e6%b1%82&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;gdm全称GNOME Display Manager；一般通过图形界面登入系统的那个登录界面就是Display Manager。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;x-window的启动&#34;&gt;
+  X Window的启动
+  &lt;a class=&#34;anchor&#34; href=&#34;#x-window%e7%9a%84%e5%90%af%e5%8a%a8&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;通过startx启动：&lt;code&gt;startx [X client参数] -- [X server参数]&lt;/code&gt;，startx是一个shell脚本。
+&lt;ul&gt;
+&lt;li&gt;startx最重要的任务是找出用户或者系统默认的X server和X client配置文件，它可以直接启动，也可以外接参数启动。&lt;/li&gt;
+&lt;li&gt;startx的X server参数的优先级如下：①通过命令行传递的参数；②~/.xserverc；③/etc/X11/xinit/xserverrc；④单纯执行/usr/bin/X（X server执行文件）。&lt;/li&gt;
+&lt;li&gt;startx的X client参数优先级如下：①startx后面跟的参数；②~/.xinitrc；③/etc/X11/xinit/xinitrc；④单纯执行xterm。&lt;/li&gt;
+&lt;li&gt;当startx找到需要的设定值后，就呼叫xinit来启动X。&lt;code&gt;xinit [client option] -- [server or display option]&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;当单纯执行xinit的时候，默认执行的命令为&lt;code&gt;xinit xterm -geogmetry _1_1 -n login -display :0 -- X :0&lt;/code&gt;。-display:0表示这个虚拟机是第:0号的X显示接口。一般会使用startx来启动xwindow，因为startx会自动找到对应的参数。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;xserverrc
+&lt;ul&gt;
+&lt;li&gt;在启动X server时，Xorg会去读取/etc/X11/xorg.conf这个配置文件。linux通过执行&lt;code&gt;X&lt;/code&gt;来启动X server，linux可以同时启动多个X，第一个X的画面在:0即tty2，第二个X是:1即tty3。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;在文字接口下启动X时，直接使用startx来找到X Server和X client的参数或者配置文件，然后再呼叫xinit来启动X窗口系统。xinit现在如X server到预设的:0这个显示接口，然后再加载X client到这个X显示接口上。X client通常就是GNOME或者KDE。&lt;/li&gt;
+&lt;li&gt;X Server理论上要启动一个6000端口来和X client通信，但是在同一台机器上时，会使用socket来通信。在X Window System环境下，我们称port 6000为第0个显示接口，即hostname:0，可以简写为:0。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#X启动&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#启动X server，这个时候会跳转到tty2（也可能是别的，下面以tty2举例），但是啥都没有，用ctrl+alt+F1跳回到tty1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;X :1 &amp;amp;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#启动X Client，这个时候tty2会变白，通过ctrl+alt+F2跳到tty2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;xterm -display :1 &amp;amp;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#在tty2执行&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;xclock -display :1 &amp;amp;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;xeyes -display :1 &amp;amp;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#切换到tty1，安装twm&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;apt install twm
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#启动twm，再切换到tty2就能拖动窗口了&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;twm -display :1 &amp;amp;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+    </item>
+    
+    <item>
+      <title>ubuntu</title>
+      <link>/posts/linux/ubuntu/</link>
+      <pubDate>Sat, 25 Sep 2021 00:58:07 +0000</pubDate>
+      
+      <guid>/posts/linux/ubuntu/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;记录使用ubuntu的一些发现&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;del&gt;提升体验的一个软件&lt;code&gt;apt install gnome-shell-extension-dash-to-panel;apt remove gnome-shell-extension-ubuntu-dock&lt;/code&gt;重启之后在gnome-tweaks中打开该扩展即可。它类似于windows的状态栏，比之前ubuntu自带的收藏栏和状态栏分开的情况好多了，而且可定制的程度高&lt;/del&gt;。 此种方式下载的已经过时，在ubuntu20上会有bug，最新版本可以通过
+  &lt;a href=&#34;https://extensions.gnome.org/&#34;&gt;GNOME Shell Extensions&lt;/a&gt;下载，该网站需要安装浏览器扩展插件、本地主机安装chrome-gnome-shell，安装完后和直接在该网站下载Dash to Panel即可。&lt;strong&gt;参考链接：&lt;/strong&gt;
+  &lt;a href=&#34;https://github.com/home-sweet-gnome/dash-to-panel/wiki/Installation#ubuntu&#34;&gt;Installation · home-sweet-gnome/dash-to-panel Wiki · GitHub&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;neofetch&lt;/code&gt; 命令行显示系统信息、logo。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;ctrl + d&lt;/code&gt; 文件夹添加到左边栏&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;gnome-screenshot --interactive --area&lt;/code&gt; 截图&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;sudo apt install papirus-icon-theme&lt;/code&gt; 好看的图标&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;创建一个桌面应用图标：&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#/usr/share/applications目录下&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Desktop Entry&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Name&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;Typora
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Exec&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;/opt/Typora-linux-x64/Typora %f
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Icon&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;/opt/Typora-linux-x64/resources/assets/icon/icon_256x256.png
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Type&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;Application
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;
+  &lt;a href=&#34;https://specifications.freedesktop.org/desktop-entry-spec/1.1/ar01s06.html&#34;&gt;The Exec key&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>linux开机</title>
+      <link>/posts/linux/linux%E5%BC%80%E6%9C%BA/</link>
+      <pubDate>Fri, 24 Sep 2021 19:27:36 +0000</pubDate>
+      
+      <guid>/posts/linux/linux%E5%BC%80%E6%9C%BA/</guid>
+      <description>&lt;h3 id=&#34;流程如下&#34;&gt;
+  流程如下
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%b5%81%e7%a8%8b%e5%a6%82%e4%b8%8b&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;加载BIOS的硬件信息、进行自我测试，根据设定取得第一个可开机的装置；&lt;/li&gt;
+&lt;li&gt;读取并执行第一个开机装置内的MBR的bootloader（如grub2）；&lt;/li&gt;
+&lt;li&gt;依据bootloader的设定载入kernel，kernel会开始侦测硬件和载入驱动程序；&lt;/li&gt;
+&lt;li&gt;在硬件驱动成功后，kernel会主动呼叫systemd程序，并以default.target流程开机；
+&lt;ol&gt;
+&lt;li&gt;systemd执行sysinit.target初始化系统及basic.target准备操作系统；&lt;/li&gt;
+&lt;li&gt;systemd启动multi-user.target下的服务；&lt;/li&gt;
+&lt;li&gt;systemd执行multi-user.target下的/etc/rc.d/rc.local文件；&lt;/li&gt;
+&lt;li&gt;systemd执行multi-user.target下的getty.target及登入服务；&lt;/li&gt;
+&lt;li&gt;systed执行graphical需要的服务。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;biosuefimbrgptbootloader&#34;&gt;
+  BIOS（UEFI）、MBR（GPT）、bootloader
+  &lt;a class=&#34;anchor&#34; href=&#34;#biosuefimbrgptbootloader&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;BIOS（固件）是开机的时候，计算机系统会主动执行的第一个程序。通过BIOS去加载CMOS的信息，通过CMOS内的设置取得主机的各项硬件设置。例：CPU与周边设备的沟通时钟、开机设备的搜寻顺序、硬盘的大小和类型等，取得这些信息后，BIOS还会进行开机自测试（Power-on Self Test），然后开始执行硬件侦测的初始化，并设定PnP设备。之后再定义出可开机设备顺序，接下来就会开始进行开机设备的读取了。BIOS通过硬件的INT13中断功能来读取MBR，只要BIOS能检测到硬盘，就能通过INT13来读取磁盘的第一个磁区内的MBR软件。&lt;/li&gt;
+&lt;li&gt;UEFI（Unified Extension Firmware Interface）是取代BIOS的。&lt;/li&gt;
+&lt;li&gt;整颗磁盘的第一个扇区特别重要，它记录了整颗磁盘的重要信息，早期磁盘的第一个扇区的包含重要的分区格式MBR（master boot record），后来多了一个新的磁盘分区格式，称为GPT（guid partition table）。&lt;/li&gt;
+&lt;li&gt;MBR可以安装开机管理程序，其和分区表通常放在磁盘的第一个扇区，这个扇区通常是512字节。开机管理程序占446字节，分区表占64字节。分区表最多只能有四组记录。&lt;/li&gt;
+&lt;li&gt;GPT将磁盘的所有区块以LBA（logical block address，预设为512字节）来规划，GPT使用34个LBA区块来记录分区信息，整个磁盘的最后33个LBA拿来作为备份。&lt;/li&gt;
+&lt;li&gt;boot loader的功能：①提供菜单；②装入核心文件；③转交其他loader。每个文件系统都会保留一块开机扇区提供操作系统安装bootloader，通常操作系统会安装一份boot loader到他自己的文件系统中。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;
+  &lt;img src=&#34;/img/linux/linux%e5%9f%ba%e7%a1%80%e8%ae%be%e5%ae%9a/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;当boot loader开始读取内核文件后，linux会将核心解压到内存中，并使用核心的功能，开始测试cpu、网卡、声卡等装置，此时linux核心会以自己的功能重新侦测一次硬件。一般来说，核心文件被放在/boot中，并取名为/boot/vmlinuz。linux核心可以动态加载模块，这些核心模块放在/lib/modules目录中，开机过程中根目录采用只读方式挂载。虚拟文件系统（Initial RAM Filesystem）一般使用的文件名为/boot/initrd或/boot/initramfs。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;linux预设情况下会提供6个终端让使用者登陆，切换方式为[ctrl]+[alt]+[f1]~[f6]，6个终端命名为tty1～tty6。在centos7中，开机后系统只会提供一个tty，其他的是不存在的，当要切换时，系统才产生额外的tty2，tty3&amp;hellip;。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>make</title>
+      <link>/posts/linux/make/</link>
+      <pubDate>Thu, 16 Sep 2021 19:55:13 +0000</pubDate>
+      
+      <guid>/posts/linux/make/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;当执行make时，make会在当时的目录下搜索Makefile（makefile）文件，而makefile里面则记录了原始码如何编译的详细信息，make按照makefile去编译这些文件。当在编译完成之后，修改了某个源码文件，执行make时，make只会针对被修改的文件进行编译。通常软件开发商会写一支侦测程序来侦测使用者的作业环境，以及该作业环境是否有软件开发商所需要的其他功能，在侦测程序侦测完毕后，会主动建立Makefile，通常这个检查程序的文件名为configure或config。&lt;/li&gt;
+&lt;li&gt;tarball就是将软件的所有原始码文件先以tar打包，然后再压缩。tarball文件通常包括：源代码文件；侦测程序文件（configure或config）；本软件的简易说明和安装说明（INSTALL或README）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#-lm表示的是使用libm.so这个库，这个命令可以拆成两部分来看：l表示加入到某个函数库，m表示使用libm.so这个库，lib和扩展名.so或.a不需要写。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#-L/lib表示在这个路径下寻找库。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gcc test.c -lm -L/lib -L/lib64
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#-I后面跟的路径就是设置要去搜索的include文件（如c语言的头文件）的目录。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gcc test.c -lm -I/usr/include
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#将源码编译为目标文件，不链接&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gcc -c hello.c
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#-o将编译的结果输出为特定的文件，-Wall会输出经过信息。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gcc -o hello hello.c -Wall
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;makefile文件规则&#34;&gt;
+  makefile文件规则
+  &lt;a class=&#34;anchor&#34; href=&#34;#makefile%e6%96%87%e4%bb%b6%e8%a7%84%e5%88%99&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-makefile&#34; data-lang=&#34;makefile&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#变量左右可以有空格，变量左边不能有tab键；变量和变量内容在等号两边不能有&amp;#34;:&amp;#34;。
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#变量习惯以大写字母为主。
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#使用${xxx}或者$(xxx)来使用变量。
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;LIBS &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; -lm
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;OBJS &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; hello.o test.o
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt;${OBJS}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#75715e&#34;&gt;#tab必须是命令的第一个字符&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	GCC -O MAIN &lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;OBJS&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;LIBS&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;clean&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	rm -rf main &lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;OBJS&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#通过make clean来执行命令
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#$@表示当前的目标，如这里的clean或main
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;一般情况下，安装的基本步骤是：①./configure；②make clean；③make；④make install。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;通常会将自己安装的软件放到/usr/local下，将源代码放到/usr/local/src下。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;
+  &lt;a href=&#34;http://linux.vbird.org/linux_basic/0520source_code_and_tarball.php#intro_make&#34;&gt;鸟哥的 Linux 私房菜 &amp;ndash; 第二十一章、软件安装：源代码与 Tarball (vbird.org)&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>shell脚本</title>
+      <link>/posts/linux/shell%E8%84%9A%E6%9C%AC/</link>
+      <pubDate>Thu, 09 Sep 2021 16:28:01 +0000</pubDate>
+      
+      <guid>/posts/linux/shell%E8%84%9A%E6%9C%AC/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;用户可以透过应用程序来指挥kernel，让kernel来完成我们所需要的硬件任务，因为程序是在最外层，类似鸡蛋的外壳一样，所以就叫壳程序（shell）。shell是提供用户操作系统的一个接口。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;bash全称就是Bourne Again SHell，是linux预设的shell。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;系统中合法的shell都会写入到/etc/shells这个文件。当用户登录的时候，系统会提供一个shell，这个shell就记录在/etc/passwd这个文件中。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;bash有很多内建指令，如cd等，可以通过type这个指令观察。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;一行输不完，可以通过\来换行。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;shell脚本中第一行的&lt;code&gt;#!/bin/bash&lt;/code&gt;宣告这个script使用的是bash的语法。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;当使用bash（sh）或者./xxx.sh来下达指令时，是在子程序中执行的；通过source来执行脚本时，是在父程序中执行的。子程序：在当前shell的情况下，去启动另一个新的shell，新的shell就是子程序。子程序会继承父进程的环境变量，但不会继承父进程的自定义变量。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;login shell是取得bash时需要输入完整的登录账号密码的就是login shell。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;non-login shell就是取得bash接口不需要重复的登入。如从图形化界面进入linux后，开启每个bash都不需要再次输入用户名和密码。这就是non-login shell。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;login shell会读取&lt;code&gt;/etc/profile&lt;/code&gt;（系统整体的设定，每个使用者登入取得bash时一定会读取的配置文件。）和&lt;code&gt;~/.bash_profile或~/.bash_login或~/.profile&lt;/code&gt;（个人的设定）的文件。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;non-login shell会读取~/.bashrc、/etc/bashrc、/etc/profile.d（不同的linux会有些不同）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;source可以立即读入配置文件的内容。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;变量定义&#34;&gt;
+  变量定义
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%8f%98%e9%87%8f%e5%ae%9a%e4%b9%89&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;环境变量如PATH等，通常使用大写字符来表示，当输入了一个命令ls，系统会通过PATH这个遍历里面的内容记录的路径来顺序搜索指令。&lt;/li&gt;
+&lt;li&gt;变量在使用时，需要加上在前面加上&lt;code&gt;$&lt;/code&gt;。如&lt;code&gt;$PATH,${PATH}&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;通过&lt;code&gt;env&lt;/code&gt;和&lt;code&gt;export&lt;/code&gt;可以查询系统中所有的环境变量。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;变量&#34;&gt;
+  变量
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%8f%98%e9%87%8f&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;设定变量直接使用等号=，如&lt;code&gt;myname=xiaoxiang&lt;/code&gt;，等号两边不能有空格；&lt;/li&gt;
+&lt;li&gt;变量内容若有空格可以使用单引号或者双引号括起来，但是双引号内的特殊符号如&lt;code&gt;$&lt;/code&gt;会保持原本的特性，而单引号内的特殊字符则是&lt;strong&gt;纯文字&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;当需要为变量扩增内容内容时，可以使用&lt;code&gt;PATH=$PATH:/home/bin&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;通过&lt;code&gt;export JAVA_HOME&lt;/code&gt;使得变量JAVA_HOME变成了环境变量。&lt;/li&gt;
+&lt;li&gt;通常大写字符为系统默认变量，自行设定的变量可以使用小写字符。&lt;/li&gt;
+&lt;li&gt;取消变量可以使用&lt;code&gt;unset myname&lt;/code&gt;。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;readarraydeclare&#34;&gt;
+  read，array，declare
+  &lt;a class=&#34;anchor&#34; href=&#34;#readarraydeclare&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;read可以读取键盘输入的变量。如&lt;code&gt;read -p &amp;quot;please input:&amp;quot; -t 10 name &lt;/code&gt;。其中-p是提示信息，-t是倒计时，系统不会一直等待输入，name就是变量，会将输入的信息给这个变量。&lt;/li&gt;
+&lt;li&gt;declare、typeset是宣告变量的类型（shell默认类型是字符串）。&lt;code&gt;declare&lt;/code&gt;命令如果用在函数中，声明的变量只在函数内部有效，等同于&lt;code&gt;local&lt;/code&gt;命令。
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;declare -a var&lt;/code&gt;将var声明为数组类型array。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;declare -i var&lt;/code&gt;将var声明为整数类型integer（bash中的数值计算最多只能达到整数形态）。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;declare -x var&lt;/code&gt;将var声明为环境变量。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;declare -r var&lt;/code&gt;将变量声明为只读类型readonly，改变量不可更改，不能unset。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;declare -p var&lt;/code&gt;查看变量的类型。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;数组&#34;&gt;
+  数组
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%95%b0%e7%bb%84&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;数组可以采用逐个赋值的方法创建。也可以一次性赋值。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;ARRAY[INDEX]=value
+ARRAY=(value1 value2 ... valueN)
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;读取元素&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#输出单个元素，${}是必须的
+echo ${array[0]}
+#输出所有元素
+echo ${foo[@]}
+#循环遍历所有元素，数据要放在双引号中
+for i in &amp;#34;${names[@]}&amp;#34;; do
+  echo $i
+done
+
+#数组赋值
+hobbies=( &amp;#34;${activities[@]}&amp;#34; )
+#获取数组长度
+echo ${#a[@]}
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;通配符与特殊符号&#34;&gt;
+  通配符与特殊符号
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e9%80%9a%e9%85%8d%e7%ac%a6%e4%b8%8e%e7%89%b9%e6%ae%8a%e7%ac%a6%e5%8f%b7&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;符号&lt;/th&gt;
+&lt;th&gt;意义&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;*&lt;/td&gt;
+&lt;td&gt;代表0到无穷多个任意字符&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;？&lt;/td&gt;
+&lt;td&gt;代表一定有一个的任意字符&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;[]&lt;/td&gt;
+&lt;td&gt;代表一定有一个在括号内的字符&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;[-]&lt;/td&gt;
+&lt;td&gt;表示一定有一个在编码顺序内的所有字符，如[0-9]表示一定有一个数字&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;[^]&lt;/td&gt;
+&lt;td&gt;表示反向选择，如[^abc]就表示一定有一个字符，但不是abc中的一个。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;变量内容的删除与取代&#34;&gt;
+  变量内容的删除与取代
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%8f%98%e9%87%8f%e5%86%85%e5%ae%b9%e7%9a%84%e5%88%a0%e9%99%a4%e4%b8%8e%e5%8f%96%e4%bb%a3&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;符号&lt;/th&gt;
+&lt;th&gt;含义&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;#&lt;/td&gt;
+&lt;td&gt;从最左边开始，删除匹配最短的那个&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;##&lt;/td&gt;
+&lt;td&gt;从最左边开始，删除匹配最长的那个&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;%&lt;/td&gt;
+&lt;td&gt;从最右边开始，删除匹配最短的那个&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;%%&lt;/td&gt;
+&lt;td&gt;从最右边开始，删除匹配最长的那个&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/旧字符串/新字符串&lt;/td&gt;
+&lt;td&gt;若变量内容符合旧字符串，则第一个旧字符串会被新字符串取代&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;//旧字符串/新字符串&lt;/td&gt;
+&lt;td&gt;若变量内容符合旧字符串，则全部旧字符串会被新字符串取代&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#例:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;path&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#去掉了开始的/usr/local/sbin:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;echo &lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;path#/*:&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#输出为空&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;echo &lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;path##/*:&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#去掉了末尾的/bin:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;echo &lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;path%/*:&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#输出为空&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;echo &lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;path%%/*:&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#将第一个出现的usr替换为USR&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;echo &lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;path/usr/USR&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#将所有的sbin替换为SBIN&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;echo &lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;path//sbin/SBIN&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;tr删除字符串中的一段文字或者进行文字的替换&#34;&gt;
+  tr：删除字符串中的一段文字，或者进行文字的替换。
+  &lt;a class=&#34;anchor&#34; href=&#34;#tr%e5%88%a0%e9%99%a4%e5%ad%97%e7%ac%a6%e4%b8%b2%e4%b8%ad%e7%9a%84%e4%b8%80%e6%ae%b5%e6%96%87%e5%ad%97%e6%88%96%e8%80%85%e8%bf%9b%e8%a1%8c%e6%96%87%e5%ad%97%e7%9a%84%e6%9b%bf%e6%8d%a2&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;cat example.txt | tr [a-z] [A-Z]&lt;/code&gt;将输出的文件中的所有小写字符变成大写字符。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;cat /etc/passwd | tr -d &#39;:&#39;&lt;/code&gt;删除输出文件中的所有冒号:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;变量的测试与内容替换&#34;&gt;
+  变量的测试与内容替换
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%8f%98%e9%87%8f%e7%9a%84%e6%b5%8b%e8%af%95%e4%b8%8e%e5%86%85%e5%ae%b9%e6%9b%bf%e6%8d%a2&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#减号-：当str不存在的时候，str=root，而当str存在（为空也视为存在）则str=$str&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;str&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;username-root&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#:- 当str为空或不存在，str=root；str不为空则str=$str&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;str&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;str&lt;span style=&#34;color:#66d9ef&#34;&gt;:-&lt;/span&gt;root&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;cut将一段数据切出来&#34;&gt;
+  cut：将一段数据切出来
+  &lt;a class=&#34;anchor&#34; href=&#34;#cut%e5%b0%86%e4%b8%80%e6%ae%b5%e6%95%b0%e6%8d%ae%e5%88%87%e5%87%ba%e6%9d%a5&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt; cat filename |cut -d &#39;分隔字符&#39;  -f num&lt;/code&gt;：-d后面跟分隔字符，将数据分为几段，-f表示取出第几段。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;cat filename  |cut -c 12-&lt;/code&gt;：-c表示每一行都获取从第12个字符后面的所有字符（注意12后面有个减号）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;命令执行的判断依据-----&#34;&gt;
+  命令执行的判断依据 ;  &amp;amp;&amp;amp;  ||
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%91%bd%e4%bb%a4%e6%89%a7%e8%a1%8c%e7%9a%84%e5%88%a4%e6%96%ad%e4%be%9d%e6%8d%ae-----&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;命令之间用&lt;code&gt;;&lt;/code&gt;隔开，分号前的指令执行完后会立刻接着执行后面的指令。&lt;/li&gt;
+&lt;li&gt;命令之间用&lt;code&gt;&amp;amp;&amp;amp;&lt;/code&gt;连接，表示当上一个指令&lt;strong&gt;正确&lt;/strong&gt;执行完成后，才会接着执行下一个命令，这里使用到了上面提到的&lt;code&gt;$?&lt;/code&gt;变量。如&lt;code&gt;ls /tmp/abc &amp;amp;&amp;amp; touch /tmp/abc/hehe&lt;/code&gt;，当不存在abc这个目录时，touch命令不会执行。&lt;/li&gt;
+&lt;li&gt;命令之间用&lt;code&gt;||&lt;/code&gt;连接，当上一个指令&lt;strong&gt;错误&lt;/strong&gt;执行完成后，才会接着执行下一个命令。如&lt;code&gt;ls /tmp/abc || mkdir /tmp/abc &amp;amp;&amp;amp; touch /tmp/abc/hehe&lt;/code&gt;，当abc路径不存在时，会创建abc路径，并执行touch命令；而如果abc路径存在，则会直接执行touch命名。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;格式化打印输出&#34;&gt;
+  格式化打印输出
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%a0%bc%e5%bc%8f%e5%8c%96%e6%89%93%e5%8d%b0%e8%be%93%e5%87%ba&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;%ns表示n个字符；%ni表示n个整数数字数；%N.nf表示一共N个数字，小数点占n个。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;\n表示换行，\t表示tab键&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;正则&#34;&gt;
+  正则
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%ad%a3%e5%88%99&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;vi、grep、awk、seq等工具支持正则表达式；cp、ls不支持正则表达式，只能使用bash本身的通配符。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;规则&lt;/th&gt;
+&lt;th&gt;意义&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;^word&lt;/td&gt;
+&lt;td&gt;寻找以word开始的行&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;word$&lt;/td&gt;
+&lt;td&gt;寻找以行尾为word的行&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;.&lt;/td&gt;
+&lt;td&gt;代表任意一个字符&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;\&lt;/td&gt;
+&lt;td&gt;转义字符&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;*&lt;/td&gt;
+&lt;td&gt;重复前一个字符0到无穷次&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;[abc]&lt;/td&gt;
+&lt;td&gt;搜寻含有a或b或c的那一行，[]只代表一个待搜寻的字符&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;[a-z]&lt;/td&gt;
+&lt;td&gt;搜寻两个字符间的所有连续字符，这个连续与ASCII编码有关。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;[^abc]&lt;/td&gt;
+&lt;td&gt;反向选择，不要有a或者b或者c的行&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;\{n,m\}&lt;/td&gt;
+&lt;td&gt;\{n,m\} 连续n到m个的前一个字符&lt;br&gt;\{n\} 连续n个前一个字符&lt;br&gt;\{n,\} 连续n个以上的前一个字符&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;[:alnum:]&lt;/td&gt;
+&lt;td&gt;代表a-z,A-Z,0-9&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;[:alpha:]&lt;/td&gt;
+&lt;td&gt;代表A-Z,a-z&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;[:blank:]&lt;/td&gt;
+&lt;td&gt;代表空格和[Tab]&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;[:digit:]&lt;/td&gt;
+&lt;td&gt;代表数字&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;[:lower:]、[:upper:]&lt;/td&gt;
+&lt;td&gt;代表小写字符、代表大写字符&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;[:space:]&lt;/td&gt;
+&lt;td&gt;任何会产生空白的字符，包括空格，[Tab]，CR等&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;[:xdigit:]&lt;/td&gt;
+&lt;td&gt;代表16进位的数字类型。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;test指令&#34;&gt;
+  test指令
+  &lt;a class=&#34;anchor&#34; href=&#34;#test%e6%8c%87%e4%bb%a4&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;文件的判断&#34;&gt;
+  文件的判断
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%96%87%e4%bb%b6%e7%9a%84%e5%88%a4%e6%96%ad&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;命令&lt;/th&gt;
+&lt;th&gt;解释&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;test -e filename&lt;/td&gt;
+&lt;td&gt;判断文件是否存在&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-f&lt;/td&gt;
+&lt;td&gt;是否为文件&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-d&lt;/td&gt;
+&lt;td&gt;是否为目录&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-r&lt;/td&gt;
+&lt;td&gt;是否有可读的权限&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-w&lt;/td&gt;
+&lt;td&gt;是否有可写的权限&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-x&lt;/td&gt;
+&lt;td&gt;是否有可执行的权限&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-nt（newer than）&lt;/td&gt;
+&lt;td&gt;判断file1是否比file2新，例：test file1 -nt file2&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-ot（older than）&lt;/td&gt;
+&lt;td&gt;判断file1是否比file2旧&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-ef&lt;/td&gt;
+&lt;td&gt;判断两个文件是否是同一个文件，其实是判断两个文件是否指向同一个inode。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;两个整数之间的判断-如test-n1--eq-n2&#34;&gt;
+  两个整数之间的判断 如：test n1 -eq n2
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e4%b8%a4%e4%b8%aa%e6%95%b4%e6%95%b0%e4%b9%8b%e9%97%b4%e7%9a%84%e5%88%a4%e6%96%ad-%e5%a6%82test-n1--eq-n2&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;命令&lt;/th&gt;
+&lt;th&gt;介绍&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;-eq&lt;/td&gt;
+&lt;td&gt;两数值相等&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-ne&lt;/td&gt;
+&lt;td&gt;两数值不等&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-gt（greater than）/ -ge（greater than or equal）&lt;/td&gt;
+&lt;td&gt;n1大于 / 大于等于n2&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-lt / -le&lt;/td&gt;
+&lt;td&gt;n1小于 / 小于等于n2&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;判断字符串的数据&#34;&gt;
+  判断字符串的数据
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%88%a4%e6%96%ad%e5%ad%97%e7%ac%a6%e4%b8%b2%e7%9a%84%e6%95%b0%e6%8d%ae&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;命令&lt;/th&gt;
+&lt;th&gt;介绍&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;test -z string&lt;/td&gt;
+&lt;td&gt;若字符串为空串，则为true&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;test -n string&lt;/td&gt;
+&lt;td&gt;若字符串为非空串，则为true&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;test str1 == str2（bash中一个等号和两个等号是一样的）&lt;/td&gt;
+&lt;td&gt;若str1等于str2，则返回true&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;test str1 != str2&lt;/td&gt;
+&lt;td&gt;若str1不等于str2，则返回true&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;条件判断如test--r-filename--a--x-filename&#34;&gt;
+  条件判断，如test -r filename -a -x filename
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%9d%a1%e4%bb%b6%e5%88%a4%e6%96%ad%e5%a6%82test--r-filename--a--x-filename&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;命令&lt;/th&gt;
+&lt;th&gt;介绍&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;-a（and）&lt;/td&gt;
+&lt;td&gt;与，两条件同时成立返回true&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-o（or）&lt;/td&gt;
+&lt;td&gt;或，任何一个条件成立就返回true&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;!&lt;/td&gt;
+&lt;td&gt;非，如test ! -x file,当file不具备执行条件时返回true&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;shell中的默认变量&#34;&gt;
+  shell中的默认变量
+  &lt;a class=&#34;anchor&#34; href=&#34;#shell%e4%b8%ad%e7%9a%84%e9%bb%98%e8%ae%a4%e5%8f%98%e9%87%8f&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;shell定义了一些默认的变量。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tar -c -v -f example.tar example/
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$0  $1 $2 $3    $4       $5
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;$#&lt;/code&gt;表示命令后面的参数个数，上面就是5。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;$@&lt;/code&gt;表示&amp;quot;$1&amp;quot; &amp;ldquo;$2&amp;rdquo; &amp;ldquo;$3&amp;rdquo; &amp;ldquo;$4&amp;rdquo; &amp;ldquo;$5&amp;rdquo;。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;$*&lt;/code&gt; 表示&amp;quot;$1 $2 $3 $4 $5&amp;quot;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;$$&lt;/code&gt; 当前shell的PID。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;$?&lt;/code&gt; 上一个执行指令的回传值，一般一个指令执行完后，会回传一个0值。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;$&lt;/code&gt;本身也是一个变量，代表着当前shell的PID，通过&lt;code&gt;$$&lt;/code&gt;使用该变量。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;?&lt;/code&gt;是一个变量，代表上一个指令传回来的值，一般来说，当我们成功执行了一个指令，则会返回0值，如果执行错误，就会传回一个错误代码，通过&lt;code&gt;$?&lt;/code&gt;来调用。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;算数运算&#34;&gt;
+  算数运算
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e7%ae%97%e6%95%b0%e8%bf%90%e7%ae%97&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;((...))&lt;/code&gt;语法可以进行整数的算术运算，&lt;code&gt;((...))&lt;/code&gt;会自动忽略内部的空格。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;((foo = 5 + 5))
+echo $foo
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;如果要结果，需要在&lt;code&gt;((...))&lt;/code&gt;前面加上美元符号&lt;code&gt;$((...))&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;total_mem=$(( 1 + 2 ))
+#可以使用括号来改变运算顺序
+echo $(( (2 + 3) * 4 ))
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;((...))&lt;/code&gt;支持&lt;code&gt;+ - * / %(取余) **(指数) ++ --&lt;/code&gt;，&lt;code&gt;++&lt;/code&gt;和&lt;code&gt;--&lt;/code&gt;这两个运算符有前缀和后缀的区别。作为前缀是先运算后返回值，作为后缀是先返回值后运算。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;expr&#34;&gt;
+  expr
+  &lt;a class=&#34;anchor&#34; href=&#34;#expr&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;expr&lt;/code&gt;命令支持算术运算，可以不使用&lt;code&gt;((...))&lt;/code&gt;语法，只支持整数。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;foo&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;expr $foo + &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;条件判断式&#34;&gt;
+  条件判断式
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%9d%a1%e4%bb%b6%e5%88%a4%e6%96%ad%e5%bc%8f&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;if&#34;&gt;
+  if
+  &lt;a class=&#34;anchor&#34; href=&#34;#if&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;中括号[  ]和test类似，也可以来进行数据的判断，中括号的两端需要有空格来分割。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt; 条件判断式1 &lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;;&lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	指令
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	指令
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	exit &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;elif&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt; 条件判断式2 &lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;;&lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	指令
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	指令
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	指令
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	指令
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#可以if后面可以跟上多个条件&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt; 条件判断式1 &lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;||&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt; 条件判断式2 &lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;;&lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt; 条件判断式1 &lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt; 条件判断式2 &lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;;&lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;case&#34;&gt;
+  case
+  &lt;a class=&#34;anchor&#34; href=&#34;#case&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;case&lt;/span&gt; $变量名称 in
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;第一个变量名称&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		指令
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		指令
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;第二个变量名称&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		指令
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		指令
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#75715e&#34;&gt;#下面这个有点类似于C语言的default&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	*&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		指令
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		指令
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;esac&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#例：&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;1&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt; in 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;--host&amp;#34;&lt;/span&gt;|&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;--ip&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        init_dir
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        build_image
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        modify_ip_address &lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;2&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        echo -e &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;文件已安装到\e[36m&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;base_dir&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;\e[0m下, 稍后请进入该目录下执行后续操作&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        ;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;build_image&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        build_image
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        ;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    *&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        display_help
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        ;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;esac&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;函数function&#34;&gt;
+  函数function
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%87%bd%e6%95%b0function&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;shell是从上往下执行，所以函数要放在程序的最前面。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#function关键字是可选的&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#可以通过test abc来给函数传递参数&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; test&lt;span style=&#34;color:#f92672&#34;&gt;(){&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	指令
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	指令
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;return&lt;/code&gt;命令用于从函数返回一个值。函数执行到这条命令，就不再往下执行了，直接返回了。return后面可以不跟参数。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;循环&#34;&gt;
+  循环
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%be%aa%e7%8e%af&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;不定循环&#34;&gt;
+  不定循环
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e4%b8%8d%e5%ae%9a%e5%be%aa%e7%8e%af&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#当condition条件不成立时终止循环&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;while&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt; condition &lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	指令
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	指令
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#当condition条件成立时终止循环&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;until&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt; conditon &lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	指令
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	指令
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;固定循环&#34;&gt;
+  固定循环
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%9b%ba%e5%ae%9a%e5%be%aa%e7%8e%af&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; var in con1 con2 con3
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	指令
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	指令
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#或&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;((&lt;/span&gt; 初始值; 限制值；执行步阶&lt;span style=&#34;color:#f92672&#34;&gt;))&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	指令
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	指令
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#一个案例&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;((&lt;/span&gt; i&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;1; i&amp;lt;&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;10; i&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;i+1&lt;span style=&#34;color:#f92672&#34;&gt;))&lt;/span&gt;; &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	printf &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;%i\n&amp;#34;&lt;/span&gt; $i
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#一个ping很多机器的shell脚本&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#!bin/bash&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;network&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;82.156.3
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#seq是sequence，会连续生成1到254之间的数&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; site in &lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;seq &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; 254&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#75715e&#34;&gt;#-c表示ping几次，-w表示超时时间，单位是秒&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        ping -c &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; -w &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;network&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;.&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;site&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt; &amp;gt; /dev/null 2&amp;gt;&amp;amp;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt; $? -eq &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;;&lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;network&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;site&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; is ok&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;network&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;site&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; id down&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;fi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#计算多个容器使用内存之和&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#!/bin/bash&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;total_mem&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#获取要计算内存的容器名称&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; item in &lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;docker ps | grep kuam | awk &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;{print $NF}&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;; &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;#获取容器的pid&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; pid in &lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;docker top &lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;item&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;  | grep -v PID | awk &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;{print $2}&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;; &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;#获取占用的内存&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        mem&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;cat /proc/&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;pid&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;/status | grep -i vmrss | awk &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;{print $2}&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;item&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; PID:&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;pid&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; MEM:&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;mem&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;#内存求和&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        total_mem&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;$((&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;total_mem&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;mem&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;))&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;total mem: &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;total_mem&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;shell调试&#34;&gt;
+  shell调试
+  &lt;a class=&#34;anchor&#34; href=&#34;#shell%e8%b0%83%e8%af%95&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;shell [-nvx] xxx.sh&lt;/code&gt;：-n查询语法是否正确；-v先输出文件内容再执行shell脚本；-x执行前先将使用到的script输出到屏幕上。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;例&#34;&gt;
+  例
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e4%be%8b&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#!/bin/bash
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#上传的文件路径&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;file_path&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;/tmp/blog.tar&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#文件放的位置&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;blog_dir&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;/opt/web/front/xiaoxiang.space&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#检查上传的文件是否存在&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt; !  -e &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;file_path&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;;&lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;文件不存在&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    exit &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#检查当前是否有scp进程，没有就说明文件已经上传完成&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;scp_status&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;ps aux | grep scp | grep -v grep&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;while&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt; -n &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;scp_status&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    sleep 1s
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    scp_status&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;ps aux | grep scp | grep -v grep&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;传输完成...&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#将上传的文件解压到对应位置&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mkdir -p &lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;blog_dir&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;rm -rf &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;blog_dir:?&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;/*&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; tar -xvf &lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;file_path&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt; -C &lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;blog_dir&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;;&lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;部署成功,文件位置为&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;blog_dir&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#删掉上传的文件&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;rm -f &lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;file_path&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+    </item>
+    
+    <item>
+      <title>linux命令总结</title>
+      <link>/posts/linux/linux%E5%91%BD%E4%BB%A4/</link>
+      <pubDate>Mon, 08 Feb 2021 11:29:58 +0000</pubDate>
+      
+      <guid>/posts/linux/linux%E5%91%BD%E4%BB%A4/</guid>
+      <description>&lt;h2 id=&#34;linux指令执行过程&#34;&gt;
+  linux指令执行过程
+  &lt;a class=&#34;anchor&#34; href=&#34;#linux%e6%8c%87%e4%bb%a4%e6%89%a7%e8%a1%8c%e8%bf%87%e7%a8%8b&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;linux在下达一个指令时，会按照以下的顺序寻找（所以当直接在bash中输入xxx.sh时是不会执行的）：
+&lt;ol&gt;
+&lt;li&gt;以相对/绝对路径执行指令如/bin/ls，或./ls。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;alias lm=&#39;ls -al&#39;&lt;/code&gt;：给命令设定别名；&lt;code&gt;alias&lt;/code&gt;：可以查看系统的所有别名；使用&lt;code&gt;unalias lm&lt;/code&gt;取消别名。&lt;/li&gt;
+&lt;li&gt;由bash内建的指令来执行。&lt;/li&gt;
+&lt;li&gt;通过$PATH这个变量的顺序搜寻到第一个指令来执行。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;使用&lt;code&gt;which&lt;/code&gt;指令可定位到程序的位置。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;linux进程&#34;&gt;
+  linux进程
+  &lt;a class=&#34;anchor&#34; href=&#34;#linux%e8%bf%9b%e7%a8%8b&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;进程（process）：程序被触发后，执行者的权限与属性、程序及程序所需的数据都会被加载到内存中，操作系统给与这个内存内的单元一个标识符PID。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;当登入系统后，会取得一个bash，当使用这个bash提供的接口去执行另一个指令时，另外执行的指令也会生成PID，这个新进程就是子进程，而原来的bash环境就是父进程。linux中进程通常由父进程以复制(fork)的方式产生一个一摸一样的子进程，然后被复制出来的子进程再以exec的方式来执行实际要进行的程序，最终就会成为一个子进程。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;系统先以fork的方式复制一个与父进程相同的暂存进程，这个进程与父进程唯一的差别就是PID不同，此外这个暂存进程还会多一个PPID（parient pid）的参数。&lt;/li&gt;
+&lt;li&gt;暂存进程开始以exec的方式加载实际要执行的程序。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;常驻内存中的进程通常提供一些功能以服务用户，因此这些常驻程序就会被称为：服务（daemon）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;lspci-获取本机pci相关信息&#34;&gt;
+  lspci 获取本机PCI相关信息
+  &lt;a class=&#34;anchor&#34; href=&#34;#lspci-%e8%8e%b7%e5%8f%96%e6%9c%ac%e6%9c%bapci%e7%9b%b8%e5%85%b3%e4%bf%a1%e6%81%af&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;lspci -tv&lt;/code&gt;显示PCI树和树上设备的名称。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;lspci -vvvs bus:device.function&lt;/code&gt; 显示此设备的配置空间，-vvv也可以是-vv，信息会少一点。例：&lt;code&gt;lspci -vvvs 2c:00.0&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;lspci -xxxxs bdf&lt;/code&gt; 以十六进制显示PCI设备的配置空间。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;lspci -vvv&lt;/code&gt; 获取所有设备的配置空间。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;setpci-设置pcie配置空间&#34;&gt;
+  setpci 设置PCIe配置空间
+  &lt;a class=&#34;anchor&#34; href=&#34;#setpci-%e8%ae%be%e7%bd%aepcie%e9%85%8d%e7%bd%ae%e7%a9%ba%e9%97%b4&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;setpci -s b:d.f reg.[B|W|L]=value&lt;/code&gt; 写PCIe配置空间reg寄存器的值，其中B表示一个字节，W表示两个字节，L表示四个字节。例：&lt;code&gt;setpci -s 60:03.1 0x60.b=0x57&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;dmidecode-获取smbios信息&#34;&gt;
+  dmidecode 获取SMBIOS信息
+  &lt;a class=&#34;anchor&#34; href=&#34;#dmidecode-%e8%8e%b7%e5%8f%96smbios%e4%bf%a1%e6%81%af&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;dmidecode -t9&lt;/code&gt;获取主机槽位信息。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;ext4文件系统调试&#34;&gt;
+  ext4文件系统调试
+  &lt;a class=&#34;anchor&#34; href=&#34;#ext4%e6%96%87%e4%bb%b6%e7%b3%bb%e7%bb%9f%e8%b0%83%e8%af%95&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;获取文件的inode&lt;code&gt;ls -ila&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;读取文件的inode信息&lt;code&gt;stat /etc/passwd&lt;/code&gt;（需要指定全路径）。&lt;/li&gt;
+&lt;li&gt;获取inode所在的block位置&lt;code&gt;debugfs /dev/sda1 -R &amp;quot;imap &amp;lt;6029951&amp;gt;&amp;quot; | tee&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;将十六进制转为十进制并显示&lt;code&gt;echo $((0x4002))&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;获取文件系统类型&lt;code&gt;df -Th&lt;/code&gt;。-T表示打印文件系统Type。通过&lt;code&gt;df -i&lt;/code&gt;还能看到文件系统当前的inode总数和剩余inode数量。&lt;/li&gt;
+&lt;li&gt;根据inode号获取inode信息和data block的位置&lt;code&gt;debugfs /dev/sda1 -R &amp;quot;stat &amp;lt;6029951&amp;gt;&amp;quot; | tee&lt;/code&gt;，使用tee看起来更直观。&lt;/li&gt;
+&lt;li&gt;查看super block和group descriptors的信息&lt;code&gt;dump2fs /dev/sda1&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;读取磁盘指定block位置的数据&lt;code&gt;dd if=/dev/sda1  bs=4096 count=1 skip=6327982&lt;/code&gt;，其中if表示输入文件，bs表示块大小，count表示几个快，skip表示跳过多少块。可以使用xxd来显示十六进制&lt;code&gt; dd if=/dev/sda1  bs=4096 count=1 skip=6327982 | xxd&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;文件被删除后，在目录下是看不到该文件的，但是该文件的inode信息其实还存放在目录中，可以通过如下命令拿到文件的inode号&lt;code&gt;debugfs /dev/sdd3 -R &amp;quot;ls -d /dir1&amp;quot;&lt;/code&gt;（注意，此路径不是挂载的全路径，而是直接从文件系统的根路径开始）。&lt;/li&gt;
+&lt;li&gt;删除文件只是将文件inode中的block数组给置零了，文件内容其实没有删除。&lt;/li&gt;
+&lt;li&gt;例（查看inode的extent信息）：
+&lt;ol&gt;
+&lt;li&gt;使用&lt;code&gt;ls -li&lt;/code&gt;获取inode number。&lt;br&gt;
+  &lt;img src=&#34;/img/linux/linux%e5%91%bd%e4%bb%a4/3.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;查看此inode的信息。&lt;code&gt; debugfs /dev/sda1 -R &amp;quot;stat &amp;lt;1573164&amp;gt;&amp;quot;&lt;/code&gt;&lt;br&gt;
+  &lt;img src=&#34;/img/linux/linux%e5%91%bd%e4%bb%a4/4.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;或取此inode所在的块。&lt;code&gt;debugfs /dev/sda1 -R &amp;quot;imap &amp;lt;1573164&amp;gt;&amp;quot; | tee&lt;/code&gt;&lt;br&gt;
+  &lt;img src=&#34;/img/linux/linux%e5%91%bd%e4%bb%a4/5.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;根据块号和偏移量找到相应的inode的数据。&lt;code&gt;dd if=/dev/sda1 count=1 bs=4096 skip=6291506 |xxd&lt;/code&gt;&lt;br&gt;
+  &lt;img src=&#34;/img/linux/linux%e5%91%bd%e4%bb%a4/6.jpg&#34; alt=&#34;&#34; /&gt;&lt;br&gt;
+  &lt;img src=&#34;/img/linux/linux%e5%91%bd%e4%bb%a4/7.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;解析后的结果如下：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;//0af3 0400 0400 0000 0000 0000
+ext4_extent_header 
+{
+	eh_magic = 0xF30A //magic number 2byte
+	eh_entries = 4	//header之后的entry数量 2byte
+	eh_max = 4	//header之后最大的entry数量 2byte
+	eh_depth = 0	//树的深度 2byte
+	eh_generation = 0
+}
+
+//第一个extent 0000 0000 0004 0000 0094 0a00 
+struct ext4_extent
+{
+	ee_block = 0	//当前是第几个块（这里的块和文件系统的块不同） 4byte
+	ee_len = 1024	//多少个块 2byte
+	ee_start_hi = 0	//块号高16位 2byte
+	ee_start_lo = 693248	//块号低16位 4byte
+}
+
+//第二个extent 0004 0000 0004 0000 00d4 0a00
+struct ext4_extent
+{
+	ee_block = 1024	//当前是第几个块（这里的块和文件系统的块不同） 4byte
+	ee_len = 1024	//多少个块 2byte
+	ee_start_hi = 0	//块号高16位 2byte
+	ee_start_lo = 709632	//块号低16位 4byte
+}
+
+//第三个extent 0008 0000 0020 0000 00e0 0a00
+struct ext4_extent
+{
+	ee_block = 2048	//当前是第几个块（这里的块和文件系统的块不同） 4byte
+	ee_len = 8192	//多少个块 2byte
+	ee_start_hi = 0	//块号高16位 2byte
+	ee_start_lo = 712704	//块号低16位 4byte
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;vim-文本编辑工具&#34;&gt;
+  vim 文本编辑工具
+  &lt;a class=&#34;anchor&#34; href=&#34;#vim-%e6%96%87%e6%9c%ac%e7%bc%96%e8%be%91%e5%b7%a5%e5%85%b7&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;通过配置~/.vimrc（不建议修改/etc/vimrc）可以设定一些vim的属性，在vim的命令模式输入&lt;code&gt;:set all&lt;/code&gt;可以查到&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;ctrl+f&lt;/code&gt;向下移动一页&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ctrl+b&lt;/code&gt;向上移动一页&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;0或者home&lt;/code&gt;移动到这一列的最前面&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;$或end&lt;/code&gt;移到这一列最后一页&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;G(注意是大写)&lt;/code&gt;移到文件的最后一列&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;gg&lt;/code&gt;移到文件的第一行&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;n+enter&lt;/code&gt;光标向下移动n行&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;/word&lt;/code&gt;搜索为名称为word的字符串&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;:1,2s/word1/word2/g&lt;/code&gt;[第一行，第二行]中所有的word1被替换成word2&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;:1,$s/word1/word2/g&lt;/code&gt;第一行到最后一行所有word1被替换为word2&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;:1,$s/word1/word2/gc&lt;/code&gt;第一行到最后一行所有word1被替换为word2，且在取代前会提示字符给用户确认&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;dd&lt;/code&gt;删除当前一整行，&lt;code&gt;ndd&lt;/code&gt; 删除光标所在的向下n行&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;yy&lt;/code&gt;复制一整行，&lt;code&gt;4yy &lt;/code&gt;复制4行。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;p&lt;/code&gt;将复制的数据在光标的下一行粘贴，&lt;code&gt;P&lt;/code&gt;在光标的上一行粘贴&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;u&lt;/code&gt;复原前一个动作&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ctr+r&lt;/code&gt;重复上一个动作&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;:w [filename]&lt;/code&gt;将文件另存为&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;:set nu/nonu&lt;/code&gt;开启/关闭行号&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;:set ic&lt;/code&gt; 忽视大小写&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;nmcli-网络配置工具&#34;&gt;
+  nmcli 网络配置工具
+  &lt;a class=&#34;anchor&#34; href=&#34;#nmcli-%e7%bd%91%e7%bb%9c%e9%85%8d%e7%bd%ae%e5%b7%a5%e5%85%b7&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;目前主流网卡为使用以太网络协议开发出来的以太网卡（Ethernet），所以linux称呼这种网络接口为ethN（N为数字）。新的centos7对网卡的编号有另一套规则，网卡待会现在与网卡的来源有关：eno1（BIOS内建的网卡），ens1（BIOS内建的PCI-E网卡），enp2s0（PCI-E）界面的独立网卡。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;nmcli可用来设置ip、dns等配置，与直接修改/etc/sysconfig/network-scripts/ifcfg-xxx（centos7）、/etc/NetworkManager/system-connections/ethernet-xxx（ubuntu18）等效。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;一个网卡设备可以有多个配置，但是只能有一个为激活状态，多个配置可以在不同的网络环境中切换。比如小明在公司用静态IP的方式连接到网络，在家用DHCP的方式连接网络，可以创建两个connections，一个叫static-conn，另一个叫dhcp-conn，当需要使用DHCP的方式时，执行&lt;code&gt;nmcli con up dhcp-conn&lt;/code&gt;激活配置，当使用静态IP的方式时，执行&lt;code&gt;nmcli con static-conn&lt;/code&gt;激活配置。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;nmcli connection {show | up |down| modify | add | edit |clone | delete |monitor | reload | load | import | export } ARGUMENTS...&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#为网卡enp0s8创建一个配置&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nmcli connection add ifname enp0s8 type ethernet ipv4.method auto
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#在一个交互式的窗口中为ethernet-enp0s8编写配置&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nmcli connection edit ethernet-enp0s8
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#修改ethernet-enp0s8的网络参数&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nmcli connection modify enp0s8 &lt;span style=&#34;color:#ae81ff&#34;&gt;\ &lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    connection.autoconnect yes &lt;span style=&#34;color:#ae81ff&#34;&gt;\ &lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#是否开机就启动这个配置&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ipv4.method manual &lt;span style=&#34;color:#ae81ff&#34;&gt;\ &lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#自动（DHCP）还是手动设定网络参数&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ipv4.addresses 192.168.x.x/24 &lt;span style=&#34;color:#ae81ff&#34;&gt;\ &lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#设定地址&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ipv4.gateway 192.168.x.x &lt;span style=&#34;color:#ae81ff&#34;&gt;\ &lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#设定网关&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ipv4.dns 192.168.x.x &lt;span style=&#34;color:#75715e&#34;&gt;#设定DNS&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ipv4.never-default yes &lt;span style=&#34;color:#75715e&#34;&gt;#设定不为默认路由&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#移除某个配置，只需要将该配置的值置为空&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nmcli con modify ethernet-enp0s8 ipv4.dns &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#为ethernet-enp0s8添加dns的配置（因为dns和ip能有多个配置，所以可以用+和-，不能有多个配置的不能用）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nmcli con modify ethernet-enp0s8 +ipv4.dns 8.8.8.8
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#为ethernet-enp0s8删除ip的配置&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nmcli con modify ethernet-enp0s8 -ipv4.addresses &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;192.168.100.25/24&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#修改配置名称&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nmcli connection modify ethernet-enp0s8 con-name 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#列出所有的配置。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nmcli connection show 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#仅列出激活状态的配置。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nmcli connection show --active
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#列出ethernet-enp0s8的配置。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nmcli connection show ethernet-enp0s8 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#激活enp0s8设备的配置。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nmcli connection up ifname enp0s8
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#激活名称为ethernet-enp0s8的配置。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nmcli connection up ethernet-enp0s8 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#删除ethernet-enp0s8的配置&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nmcli connection delete ethernet-enp0s8
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#导入一个openvpn的配置给networkmanager&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nmcli con import type openvpn file ~/Downloads/frootvpn.ovpn
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#增加一个ip地址（多ip地址）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nmcli c modify mark +ipv4.addresses  10.2.0.31/24
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#去掉一个ip地址&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nmcli c modify mark +ipv4.addresses  10.2.0.31/24
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;etcnetworkinterfaces网络配置&#34;&gt;
+  /etc/network/interfaces网络配置
+  &lt;a class=&#34;anchor&#34; href=&#34;#etcnetworkinterfaces%e7%bd%91%e7%bb%9c%e9%85%8d%e7%bd%ae&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;修改/etc/network/interfaces配置文件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#指定 enp0s3 接口在启动时自动激活。
+auto enp0s3
+#指定 enp0s3 接口的配置方式为静态 IP 地址。
+iface enp0s3 inet static
+        address 192.168.1.110
+        netmask 255.255.255.0
+        gateway 192.168.1.1
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;重启使配置生效&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;etcsysconfignetwork-scriptsifcfg-xxx配置介绍&#34;&gt;
+  /etc/sysconfig/network-scripts/ifcfg-xxx配置介绍
+  &lt;a class=&#34;anchor&#34; href=&#34;#etcsysconfignetwork-scriptsifcfg-xxx%e9%85%8d%e7%bd%ae%e4%bb%8b%e7%bb%8d&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#最小配置
+DEVICE=eth1  #网卡号，必须与文件名对应
+ONBOOT=yes	#是否默认启动，要联网必须要配置
+BOOTPROTO=none	#是否使用dhcp，是的话BOOTPROTO=dhcp
+HWADDR=08:00:27:35:2F:f2	#mac地址
+IPADDR=172.27.32.6	#ip地址
+NETMASK=255.255.255.0	#子网掩码
+GATEWAY=172.27.32.1	#网关
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;firewall-cmd-centos7下的防火墙工具&#34;&gt;
+  firewall-cmd centos7下的防火墙工具
+  &lt;a class=&#34;anchor&#34; href=&#34;#firewall-cmd-centos7%e4%b8%8b%e7%9a%84%e9%98%b2%e7%81%ab%e5%a2%99%e5%b7%a5%e5%85%b7&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#查看防火墙的状态&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;systemctl status firewalld
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#关闭防火墙并禁止开机自启&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;systemctl stop firewalld; systemctl disable firewalld
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#启用防火墙并允许开机自启&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;systemctl start firewalld; systemctl enable firewalld
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;防火墙的服务名为firewalld，centos7使用firewall-cmd来管理防火墙。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;firewalld预先准备了几套防火墙策略集合（zone）。常见的zone：1. trusted允许所有的数据包；2. home；3. internal；4. work；5. public；6. external；7.dmz；8. block；9.drop。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;常见命令：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&amp;ndash;get-default-zone查询默认的zone；- -set-default-zone设置默认的zone，&amp;ndash;get-zones显示可用的zone；&lt;/li&gt;
+&lt;li&gt;&amp;ndash;list-all显示当前区域的网卡配置参数、资源、端口及服务等信息； &amp;ndash;list-all-zones显示所有区域的网卡配置参数、资源、端口及服务等信息；&lt;/li&gt;
+&lt;li&gt;&amp;ndash;add-service=服务名、&amp;ndash;remove-service=服务名；&lt;/li&gt;
+&lt;li&gt;&amp;ndash;add-port=端口号/协议、&amp;ndash;remove-port=端口号/协议；&amp;ndash;list-ports列出已开放的端口。&lt;/li&gt;
+&lt;li&gt;&amp;ndash;add-forward-port=port=源端口号:proto=协议:toport=目标端口号:toaddr:目标ip地址。&lt;/li&gt;
+&lt;li&gt;&amp;ndash;panic-on/&amp;ndash;panic-off启动/关闭应急状态，阻断一切网络连接。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;firewalld设置只在下次重启前有效，如果需要永久生效，需要加上&amp;ndash;permanent模式，并执行firewall-cmd &amp;ndash;reload。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#永久放开3306端口，并立刻生效&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;firewall-cmd --add-port 3306/tcp --permanent
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;firewall-cmd --reload
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#永久拒绝192.168.10.0/24网段的所有用户访问本机的ssh服务。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;firewall-cmd --permanent --zone&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;public --add-rich-rule&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;rule family=&amp;#34;&lt;/span&gt;ipv4&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34; source address=&amp;#34;&lt;/span&gt;192.168.10.0/24&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34; service name=&amp;#34;&lt;/span&gt;ssh&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34; reject&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;nmap&#34;&gt;
+  nmap
+  &lt;a class=&#34;anchor&#34; href=&#34;#nmap&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nmap &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;扫描类型&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;扫描参数&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;主机地址&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;扫描类型：
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	-sS：扫描TCP，通过SYNACK报文判断
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	-sP：以ping的方式扫描
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	-sT：扫描TCP，通过建立tcp连接
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	-sU：扫描UDP
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;扫描参数：
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	-p 扫描端口，如80，80-1023等
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;主机地址：
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	如192.128.0.0/24，192.168.1.100，192.168.1.1-50，60-100
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nmap -sS 10.2.4.2
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;iptables&#34;&gt;
+  iptables
+  &lt;a class=&#34;anchor&#34; href=&#34;#iptables&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;参考链接：
+  &lt;a href=&#34;https://www.frozentux.net/iptables-tutorial/iptables-tutorial.html&#34;&gt;Iptables Tutorial 1.2.2 (frozentux.net)&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;REDIRECT用于将数据包转发到本机，数据包目的地址将映射到127.0.0.1地址，只能用于nat表的PREROUTING和OUTPUT。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;iptables有4张表，每个表和其中的链用途如下：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;filter（过滤器）：主要跟进入Linux本机的数据包有关
+&lt;ul&gt;
+&lt;li&gt;INPUT：进入Linux的数据包&lt;/li&gt;
+&lt;li&gt;OUTPUT：Linux发出去的数据包&lt;/li&gt;
+&lt;li&gt;FORWARD：和Linux本机无关，他可以转发封包到后面的计算机&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;nat（地址转换）：主要是进行IP或端口的转换：
+&lt;ul&gt;
+&lt;li&gt;PREROUTING：在进行路由判断之前要进行的规则(DNAT/REDIRECT)&lt;/li&gt;
+&lt;li&gt;POSTROUTING：在进行路由判断之后要进行的规则（SNAT/MASQUERADE）&lt;/li&gt;
+&lt;li&gt;OUTPUT：与发出去的数据包有关&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;mangle（破坏者）&lt;/li&gt;
+&lt;li&gt;raw&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;查看防火墙规则&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;iptables [-t tables] [-L] [-nv]
+
+-t 后面跟表名，默认为filter
+-L 列出目前table的规则
+-n 不获取HOSTNAME，速度快
+-v 显示更多信息
+--line-numbers 显示行号
+
+结果介绍：
+Chain那一行的括号里的policy就是预设的策略。
+---
+target：表示进行的动作，ACCEPT是放行，REJECT是拒绝，DROP是丢弃。
+prot：表示协议，如tcp、udp、icmp。
+in：表示输入网口
+out：表述输出网口
+source：表示此规则是针对哪个来源做处理
+destination：表示此规则是针对哪个目标进行限制
+说明栏：
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;设定预设规则&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;iptables [-t nat] -P [INPUT, OUTPUT, FORWARD] [ACCEPT, DROP]
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/linux/linux%e5%91%bd%e4%bb%a4/1.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;相关命令&#34;&gt;
+  相关命令
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e7%9b%b8%e5%85%b3%e5%91%bd%e4%bb%a4&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;删除进入的数据包&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#拒绝来自10.2.4.2 tcp20000端口的数据包，使用REJECT会返回一个port-unreachable的ICMP&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;iptables -A INPUT -s 10.2.4.2 -p tcp --dport &lt;span style=&#34;color:#ae81ff&#34;&gt;20000&lt;/span&gt; -j REJECT
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#拒绝来自10.2.4.5的数据，将此规则插入到链第二个节点&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;iptables -t filter -I  INPUT &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;  -s 10.2.4.5 -j REJECT
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;数据包复制和重定向&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#（10.2.4.56主机）将5140 udp端口的数据复制一份到10.2.4.31上&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;iptables -t mangle -A PREROUTING  -p udp --dport &lt;span style=&#34;color:#ae81ff&#34;&gt;5140&lt;/span&gt; -j TEE --gateway 10.2.4.31
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#（10.2.4.31主机）将目标IP地址为10.2.4.56、udp端口为5140的数据转发到本地的5141端口&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;iptables -t nat -A PREROUTING -d 10.2.4.56 -p udp --dport &lt;span style=&#34;color:#ae81ff&#34;&gt;5140&lt;/span&gt;  -j REDIRECT --to-ports &lt;span style=&#34;color:#ae81ff&#34;&gt;5141&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;规则删除&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#删除nat表PREROUTING链的第二条规则&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;iptables -t nat -D PREROUTING &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;systemctl-管理unit&#34;&gt;
+  systemctl 管理unit
+  &lt;a class=&#34;anchor&#34; href=&#34;#systemctl-%e7%ae%a1%e7%90%86unit&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;一般linux上的服务会在服务名后面加上一个d，这个d就表示daemon。&lt;/li&gt;
+&lt;li&gt;systemd将daemon执行脚本称为的一个unit。一般情况下安装的应用的unit都会放到&lt;code&gt;/usr/lib/systemd/system/&lt;/code&gt;下；而在&lt;code&gt;/etc/systemd/system/&lt;/code&gt;目录下会存放unit的一些配置。&lt;/li&gt;
+&lt;li&gt;unit有多种类型，包括 ①service：服务类型；②socket；③target：执行环境类型，是一群unit的集合；④mount、automount：文件系统挂载相关的服务；⑤path：侦测特定的文件或目录类型；⑥timer：循环执行的服务。常用的即使service和target，比如mysqld.service（mysql服务），firewalld.service（防火墙）。&lt;/li&gt;
+&lt;li&gt;通过systemctl可以管理unit，格式如下：&lt;code&gt;systemctl [command] [unit]&lt;/code&gt;，其中command如下：
+&lt;ul&gt;
+&lt;li&gt;start：启动。例 &lt;code&gt;systemctl start mysqld.service&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;stop：停止。&lt;/li&gt;
+&lt;li&gt;enable：开机启动。例 &lt;code&gt;systemctl enable mysqld.service&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;disable：禁止开机启动。&lt;/li&gt;
+&lt;li&gt;status：unit的状态。&lt;/li&gt;
+&lt;li&gt;is-active：是否运行。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;执行&lt;code&gt;systemctl status xxx&lt;/code&gt;，会显示该unit的状态。结果的第二行表示该服务是否会开机启动，结果的第三行表示该服务的当前状态。&lt;/li&gt;
+&lt;li&gt;一个daemon的预设状态有多个，包括：
+&lt;ul&gt;
+&lt;li&gt;enabled：这个daemon会在开机被执行。&lt;/li&gt;
+&lt;li&gt;disabled：这个daemon在开机不会被执行。&lt;/li&gt;
+&lt;li&gt;static：这个daemon不可以自己启动（即不能使用&lt;code&gt;systemctl enable xxx&lt;/code&gt;来设置开机自启），但可以被其他的服务来唤醒。&lt;/li&gt;
+&lt;li&gt;mask：注销状态，这个daemon无法被启动，可以通过&lt;code&gt;systemctl unmask xxx&lt;/code&gt;改会原来的状态。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;systemctl [list-units]&lt;/code&gt;列出目前启动的unit；&lt;code&gt;systemctl list-units --all&lt;/code&gt;列出所有的unit。&lt;code&gt;systemctl list-unit-files&lt;/code&gt;列出所有已安装的unit。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;unit文件说明&#34;&gt;
+  unit文件说明
+  &lt;a class=&#34;anchor&#34; href=&#34;#unit%e6%96%87%e4%bb%b6%e8%af%b4%e6%98%8e&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;h4 id=&#34;unit&#34;&gt;
+  Unit
+  &lt;a class=&#34;anchor&#34; href=&#34;#unit&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;Description： 当前unit的描述&lt;/li&gt;
+&lt;li&gt;Documentation：文档地址，可接受 &amp;ldquo;&lt;code&gt;http://&lt;/code&gt;&amp;rdquo;,&amp;quot;&lt;code&gt;https://&lt;/code&gt;&amp;quot;,&amp;quot;&lt;code&gt;file:&lt;/code&gt;&amp;quot;,&amp;quot;&lt;code&gt;info:&lt;/code&gt;&amp;quot;, &amp;ldquo;&lt;code&gt;man:&lt;/code&gt;&amp;rdquo; 五种URI类型。&lt;/li&gt;
+&lt;li&gt;Requires：表示本unit和其他unit之间有强依赖关系。&lt;/li&gt;
+&lt;li&gt;Wants：是 &lt;code&gt;Requires=&lt;/code&gt; 的弱化版。当此单元被启动时，所有这里列出的其他单元只是尽可能被启动。但是，即使某些单元不存在或者未能启动成功，也不会影响此单元的启动。推荐使用此选项来设置单元之间的依赖关系。&lt;/li&gt;
+&lt;li&gt;Before、After：强制指定unit的启动顺序，不涉及依赖关系。&lt;/li&gt;
+&lt;li&gt;OnFailure：接受一个空格分隔的单元列表，当单元启动失败时，将会启动列表中的单元。&lt;/li&gt;
+&lt;li&gt;相关链接：
+  &lt;a href=&#34;http://www.jinbuguo.com/systemd/systemd.unit.html&#34;&gt;systemd.unit 中文手册&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;service类型的unit特有的的service&#34;&gt;
+  service类型的unit特有的的Service
+  &lt;a class=&#34;anchor&#34; href=&#34;#service%e7%b1%bb%e5%9e%8b%e7%9a%84unit%e7%89%b9%e6%9c%89%e7%9a%84%e7%9a%84service&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Type&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;simple：如果设为 &lt;code&gt;simple&lt;/code&gt; ，那么 &lt;code&gt;ExecStart=&lt;/code&gt; 进程就是该服务的主进程，systemd 会认为在创建了该服务的主服务进程之后，该服务就已经启动完成。如果execStart指定的可执行文件不存在或User=的用户不存在，systemctl start也仍然会执行成功。除了simple之外的类型都需要等待服务完成初始化，所以可能减慢系统启动速度。&lt;/li&gt;
+&lt;li&gt;exec：和simple类似，但该服务只有在主服务的进程执行完成后，systemd才会认为该服务启动完成。&lt;code&gt;simple&lt;/code&gt; 表示当 &lt;code&gt;fork()&lt;/code&gt; 函数返回时，即算是启动完成，而&lt;code&gt;exec&lt;/code&gt; 则表示仅在 &lt;code&gt;fork()&lt;/code&gt; 与  &lt;code&gt;execve()&lt;/code&gt; 函数都执行成功时，才算是启动完成。对于exec来说，如果不能成功调用主服务进程（如User不存在、后可执行文件不存在），则systemctl start会执行失败。&lt;/li&gt;
+&lt;li&gt;forking：ExecStart=进程将会在启动过程中使用 &lt;code&gt;fork()&lt;/code&gt; 系统调用。也就是当所有通信渠道都已建好、启动亦已成功之后，父进程将会退出，而子进程将作为主服务进程继续运行。在这种情况下，systemd 会认为在父进程退出之后，该服务就已经启动完成。如果使用了此种类型，那么建议同时设置 &lt;code&gt;PIDFile=&lt;/code&gt; 选项，以帮助 systemd 准确可靠的定位该服务的主进程。systemd 将会在父进程退出之后立即开始启动后继单元。&lt;/li&gt;
+&lt;li&gt;oneshot：只有当该服务的主服务进程退出后，systemd才会认为该服务启动完成。通常需要设置 RemainAfterExit=yes ，使、systemd 在服务进程退出之后仍然认为服务处于激活状态。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;notify&lt;/code&gt; 与 &lt;code&gt;exec&lt;/code&gt; 类似，不同之处在于，该服务将会在启动完成之后通过 
+  &lt;a href=&#34;http://www.jinbuguo.com/systemd/sd_notify.html#&#34;&gt;sd_notify(3)&lt;/a&gt;之类的接口发送一个通知消息。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;idle&lt;/code&gt; 与 &lt;code&gt;simple&lt;/code&gt; 类似，不同之处在于，服务进程将会被延迟到所有活动任务都完成之后再执行。这样可以避免控制台上的状态信息与shell脚本的输出混杂在一起。注意：(1)仅可用于改善控制台输出，切勿将其用于不同单元之间的排序工具；(2)延迟最多不超过5秒，超时后将无条件的启动服务进程。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;ExecStart：启动服务时需要执行的命令+参数。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;ExecReload：用于设置该服务被要求重新载入配置时需要执行的命令行。有一个特殊的环境变量$MAINPID用于表示主进程的PID，可以这样使用&lt;code&gt;/bin/kill -HUP $MAINPID&lt;/code&gt;。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;ExecStop：用于设置服务被要求停止时所执行的命令行。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Restart：当服务经常正常退出、异常退出、被杀死、超时的时候，是否重新穷该服务。可以为on、on-success、on-failure、on-abnormal、on-watchdog、on-abort、always之一。默认是no。always表示服务会被无条件的重启，on-success表示仅在服务进程正常退出时重启，正常退出是指：退出代码为0或进程收到 SIGHUP, SIGINT, SIGTERM, SIGPIPE 信号之一， 并且 退出码符合 SuccessExitStatus= 的设置。on-failure 表示 仅在服务进程异常退出时重启， 所谓&amp;quot;异常退出&amp;quot; 是指： 退出码不为&amp;quot;0&amp;quot;， 或者 进程被强制杀死(包括 &amp;ldquo;core dump&amp;quot;以及收到 SIGHUP, SIGINT, SIGTERM, SIGPIPE 之外的其他信号)。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;退出原因(↓) | Restart= (→)&lt;/th&gt;
+&lt;th&gt;&lt;code&gt;no&lt;/code&gt;&lt;/th&gt;
+&lt;th&gt;&lt;code&gt;always&lt;/code&gt;&lt;/th&gt;
+&lt;th&gt;&lt;code&gt;on-success&lt;/code&gt;&lt;/th&gt;
+&lt;th&gt;&lt;code&gt;on-failure&lt;/code&gt;&lt;/th&gt;
+&lt;th&gt;&lt;code&gt;on-abnormal&lt;/code&gt;&lt;/th&gt;
+&lt;th&gt;&lt;code&gt;on-abort&lt;/code&gt;&lt;/th&gt;
+&lt;th&gt;&lt;code&gt;on-watchdog&lt;/code&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;正常退出&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;X&lt;/td&gt;
+&lt;td&gt;X&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;退出码不为&amp;quot;0&amp;rdquo;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;X&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;X&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;进程被强制杀死&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;X&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;X&lt;/td&gt;
+&lt;td&gt;X&lt;/td&gt;
+&lt;td&gt;X&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;systemd 操作超时&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;X&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;X&lt;/td&gt;
+&lt;td&gt;X&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;看门狗超时&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;X&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;X&lt;/td&gt;
+&lt;td&gt;X&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;X&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;RestartSrc：设置在(Restart)前暂停多长时间，默认值为100ms，如果未指定时间单位，默认单位是秒。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;相关链接：
+  &lt;a href=&#34;http://www.jinbuguo.com/systemd/systemd.service.html&#34;&gt;systemd.service 中文手册&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;service&#34;&gt;
+  service
+  &lt;a class=&#34;anchor&#34; href=&#34;#service&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;KillMode：设置单元停止时，杀死进程的方法：control-group、process、mixed、none。默认值是control-group。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;install&#34;&gt;
+  install
+  &lt;a class=&#34;anchor&#34; href=&#34;#install&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;WantedBy：表示在使用systemctl enable启用此单元时，将会在每个列表单元的.wants下创建一个指向该单元的软链接，相当于为每个列表中的单元文件添加了Wants=此单元选项，这样当单元启动时，该单元就会被启动。注：&lt;code&gt;multi-user.target&lt;/code&gt;通常是包含在&lt;code&gt;graphical.target&lt;/code&gt;中。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;root@localhost ~&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# cat /usr/lib/systemd/system/nginx.service &lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Unit&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Description&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;nginx
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Service&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Type&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;forking
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;PIDFile&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;/opt/nginx/logs/nginx.pid
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ExecStart&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;/opt/nginx/sbin/nginx
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ExecReload&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;/opt/nginx/sbin/nginx -s reload
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Restart&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;on-failure
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ExecStop&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;/opt/nginx/sbin/nginx -s quit
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Install&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;WantedBy&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;multi-user.target
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;systemd取消了以前的runlevel概念，转而使用不同的target操作环境。常见的操作环境为multi-user.target（命令行界面）和graphical.target（图形界面）。不重新启动而转不同的操作环境使用&lt;code&gt;systemctl isolate unit.target&lt;/code&gt;，设定预设的环境使用&lt;code&gt;systemctl set-default multi-user.target&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;rpm-软件管理机制&#34;&gt;
+  RPM 软件管理机制
+  &lt;a class=&#34;anchor&#34; href=&#34;#rpm-%e8%bd%af%e4%bb%b6%e7%ae%a1%e7%90%86%e6%9c%ba%e5%88%b6&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;RPM全称：RedHat Package Manager&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;RPM是通过预先编译打包成RPM文件格式后，再加以安装的一种方式。RPM在打包软件的同时会加入一些其他的信息，包括软件版本、作者、&lt;strong&gt;依赖的其他软件&lt;/strong&gt;等。RPM会在linux系统上建立一个RPM软件数据库，当要安装某个软件时，RPM会去在数据库里检测是否已经存在相关软件，如果不存在就不能安装。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;当软件安装完毕后，该软件相关的信息就会被写入到&lt;code&gt;/var/lib/rpm&lt;/code&gt;目录下的数据库文件中了。未来任何软件升级的需求，版本之间的比较都是来自于这个数据库。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;rpm -ivh package_name&lt;/code&gt;安装软件&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;-i install；-v查看安装信息界面；-h显示安装进度&lt;/li&gt;
+&lt;li&gt;&amp;ndash;force：强制安装，&amp;ndash;test：测试一下该软件是否可以被安装到linux中&lt;/li&gt;
+&lt;li&gt;&amp;ndash;prefix 新路径：将软件安装到其他路径&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;rpm -Uvh/-Fvh file-1.0-1.e17.x86_64.rpm&lt;/code&gt; 更新软件&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;-U：update后面的软件即使没有安装过，系统会直接安装，如果安装过旧版，系统会更新到新版。&lt;/li&gt;
+&lt;li&gt;-F：freshen后面的软件如果没有安装就不安装，如果安装过旧版就更行到新版。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;rpm -qa&lt;/code&gt;查询本机所有已安装软件&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;rpm -q package_name&lt;/code&gt;查询后面的软件是否被安装&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;rpm -qi package_name&lt;/code&gt;列出该软件的详细信息&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;rpm -ql package_name&lt;/code&gt;列出该软件所有文件与目录&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;rpm -qR package_name&lt;/code&gt;列出该软件依赖那些软件&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;rpm -qpR file-1.0-1.e17.x86_64.rpm&lt;/code&gt;查询某个rpm文件依赖了哪些文件，-p表示指定的是一个rpm文件。&lt;/li&gt;
+&lt;li&gt;tips：在查询本机上已安装的软件时，只用加上软件的名称即可，版本号啥的都不需要。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;yum-包管理工具&#34;&gt;
+  yum 包管理工具
+  &lt;a class=&#34;anchor&#34; href=&#34;#yum-%e5%8c%85%e7%ae%a1%e7%90%86%e5%b7%a5%e5%85%b7&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;当客户端有软件安装需求时，客户端会主动下载yum服务器中该软件的依赖清单，将该清单与本机的RPM数据库进行比较，就能安装未安装的依赖了。&lt;/p&gt;
+&lt;p&gt;yum提供了查找、安装、删除软件包的命令。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;yum &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;options&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;command&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;package ...&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;options：可选，-y表示安装过程全部为yes，-q白哦是不显示安装过程，-h表示帮助，&amp;ndash;installroot=路径：将软件安装到指定路径中。&lt;/li&gt;
+&lt;li&gt;command：要进行的操作，如search、list、info。&lt;/li&gt;
+&lt;li&gt;package：包名。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;常用命令&#34;&gt;
+  常用命令
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%b8%b8%e7%94%a8%e5%91%bd%e4%bb%a4&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;yum check-update&lt;/code&gt;列出所有可更新的软件。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;yum update&lt;/code&gt;更新所有软件&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;yum install package_name&lt;/code&gt;安装指定的软件&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;yum update package_name&lt;/code&gt;更新指定的软件&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;yum list &lt;/code&gt;列出所有的可安装的软件
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;yum list packa*&lt;/code&gt;寻找以packa开头的软件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;yum remove package_name&lt;/code&gt;删除软件&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;yum search keyword_name&lt;/code&gt;查找软件包命令&lt;/li&gt;
+&lt;li&gt;yum会先下载软件库的清单到本机的&lt;code&gt;var/cache/yum&lt;/code&gt;中，清除缓存命令如下
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;yum clean packages/headers/all&lt;/code&gt;清楚缓存目录下的软件包/headers/所有软件库的数据。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;netstat-显示网络状态&#34;&gt;
+  netstat 显示网络状态
+  &lt;a class=&#34;anchor&#34; href=&#34;#netstat-%e6%98%be%e7%a4%ba%e7%bd%91%e7%bb%9c%e7%8a%b6%e6%80%81&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;netstat -tulnp&lt;/code&gt;用来获取目前主机已启动的服务&lt;/li&gt;
+&lt;li&gt;-t/-u显示tcp/udp传输协议的连接情况&lt;/li&gt;
+&lt;li&gt;-l显示监听状态的的服务&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-a&lt;/code&gt;显示所有连线中的socket&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-n &lt;/code&gt;：显示数字而不是别名&lt;/li&gt;
+&lt;li&gt;-p显示socket的pid/程序名&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;tcpdump-抓包命令&#34;&gt;
+  tcpdump 抓包命令
+  &lt;a class=&#34;anchor&#34; href=&#34;#tcpdump-%e6%8a%93%e5%8c%85%e5%91%bd%e4%bb%a4&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-i interface&lt;/code&gt;监听指定的interface，如果未指定此参数，tcpdump会搜索系统interface上数字最小的interface（如eth0）监控。可以用&lt;code&gt;-i any&lt;/code&gt;来监控所有的interface（此参数不会在promiscuous mode下工作）。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-X&lt;/code&gt;显示原始16进制数据内容和ascii编码后的内容。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-D&lt;/code&gt; 列出系统上可用的网络接口。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-A&lt;/code&gt; 以ASCII的方式打印出每个包（不包括链路层头部）。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-nn&lt;/code&gt;显示原始的ip地址和端口。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-v&lt;/code&gt;产生详细的输出. 比如包的TTL，id标识，数据包长度，以及IP包的一些选项。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-w&lt;/code&gt; 将抓到的数据包写入到文件中。&lt;/li&gt;
+&lt;li&gt;
+  &lt;a href=&#34;https://www.tcpdump.org/&#34;&gt;tcpdump&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;例子&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#以ASCII的形式显示在本机所有网卡、端口5140上监听的数据&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tcpdump -A -i any -n port &lt;span style=&#34;color:#ae81ff&#34;&gt;5140&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#监听端口不是5140&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tcpdump -A -i any -n ! port &lt;span style=&#34;color:#ae81ff&#34;&gt;5140&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#抓来源是10.0.1.81，目的端口是5140的数据&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tcpdump -i any -nnA src host 10.0.1.81 and dst port &lt;span style=&#34;color:#ae81ff&#34;&gt;5140&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#同时指定两个端口&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tcpdump -i any -nnA port &lt;span style=&#34;color:#ae81ff&#34;&gt;8848&lt;/span&gt; or port &lt;span style=&#34;color:#ae81ff&#34;&gt;5140&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tcpdump -i any -nnA port &lt;span style=&#34;color:#ae81ff&#34;&gt;8848&lt;/span&gt; or &lt;span style=&#34;color:#ae81ff&#34;&gt;5140&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#指定端口范围&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tcpdump -i any -nnA portrange 514-5140
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#将抓到的数据保存到文件中&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tcpdump icmp -w icmp.pcap
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tcpdump icmp  -r icmp.pcap
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;curl-强大的网络工具&#34;&gt;
+  curl 强大的网络工具
+  &lt;a class=&#34;anchor&#34; href=&#34;#curl-%e5%bc%ba%e5%a4%a7%e7%9a%84%e7%bd%91%e7%bb%9c%e5%b7%a5%e5%85%b7&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;（client url）通过指定的url上传或者下载数据。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;curl xiaoxiang.space&lt;/code&gt;查看网页源码。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;curl -o [文件名] xiaoxiang.space&lt;/code&gt;保存文件。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;使用&lt;code&gt;-L&lt;/code&gt;参数，当有重定向时，会跳转到新的网址。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;-i&lt;/code&gt;显示http response的头信息，同时也会显示网页代码。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;-I/--head&lt;/code&gt;只显示http response。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;-v&lt;/code&gt;显示一次http通信的整个过程。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;发送get请求和参数，直接把数据附加到网址后面就行。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;curl -X POST --data-urlencode &amp;quot;data=xxx&amp;quot; example.com/xxx&lt;/code&gt;发送post请求。&lt;code&gt;-X&lt;/code&gt;参数可以支持几个动词。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;--User-Agent&lt;/code&gt;、&lt;code&gt;--cookie&lt;/code&gt;等，&lt;code&gt;--header&lt;/code&gt;增加一个头信息。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;--user name:password&lt;/code&gt;http认证。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;-k&lt;/code&gt;跳过ssl检测。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;--limit-rate&lt;/code&gt;限制HTTP请求和回应的带宽。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;参考链接：&lt;/strong&gt;
+  &lt;a href=&#34;https://www.ruanyifeng.com/blog/2011/09/curl.html&#34;&gt;curl网站开发指南 - 阮一峰的网络日志 (ruanyifeng.com)&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;参考链接：&lt;/strong&gt;
+  &lt;a href=&#34;https://www.ruanyifeng.com/blog/2019/09/curl-reference.html&#34;&gt;curl 的用法指南 - 阮一峰的网络日志 (ruanyifeng.com)&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;ps-获取当前时刻系统进程状态&#34;&gt;
+  ps 获取当前时刻系统进程状态
+  &lt;a class=&#34;anchor&#34; href=&#34;#ps-%e8%8e%b7%e5%8f%96%e5%bd%93%e5%89%8d%e6%97%b6%e5%88%bb%e7%b3%bb%e7%bb%9f%e8%bf%9b%e7%a8%8b%e7%8a%b6%e6%80%81&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;ps aux&lt;/code&gt;查询所有系统运行的进程
+&lt;ul&gt;
+&lt;li&gt;%CPU：使用的cpu资源百分比；%mem：使用的内存资源百分比；vsz：使用的虚拟内存Kb；rss：占用的固定内存Kb；tty：该进程是在哪个终端机上运行，如果于与终端机无关则显示？；stat：进程目前状态（R运行；S睡眠但可被唤醒；D不可被唤醒；T停止状态；Z僵尸状态）；time：实际使用cpu的时间。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--sort +rss&lt;/code&gt; 按照rss以递增[+]或者递减[-]的顺序排序 。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#按照cpu占用从大到小排序 并一页一页的显示&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ps aux --sort -%cpu | more
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;使用&lt;code&gt;ps -lf&lt;/code&gt;显示当前的bash的进程。
+&lt;ul&gt;
+&lt;li&gt;-l时较详细的输出当前bash的信息，-f是更完整的输出。🤣&lt;/li&gt;
+&lt;li&gt;输出中的S代表该进程的状态，主要的状态有：R running；S sleep；D 不可唤醒的睡眠状态，而可能是在等待I/O；T 停止状态；Z zombie僵尸状态。&lt;/li&gt;
+&lt;li&gt;PRI/NI priority/nice 代表此进程被cpu所执行的优先级。PRI值越低代表优先级越高。优先级是由内核动态调整的，用户无法干涉，如果需要调整进程的优先执行次序时，可以通过修改Nice的值。一般来说有PRI(new)=PRI(old)+nice，但是最终的PRI也是有系统分析后决定的，nice的值有正有负，当nice为负数时，该进程就会降低pri值，所以会被较为优先的处理。nice的值的范围是&lt;code&gt;-10~19&lt;/code&gt;。一般使用者仅可以调整自己进程的nice值，范围为&lt;code&gt;0~19&lt;/code&gt;，且只能将nice调高。使用nice和renice调整。
+&lt;ul&gt;
+&lt;li&gt;nice：新执行的指令给予新的nice值 &lt;code&gt;nice [-n 数字] command&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;renice：已存在进程的nice重新调整 &lt;code&gt;renice [-number] PID&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ADDR/SZ/WCHAN  addr标识该进程在cpu的哪个部分，如果是running的进程，一般就会显示-，sz代表该进程用掉了多少的内存。wchaz代表进程目前是否在运行中。&lt;/li&gt;
+&lt;li&gt;TIME代表使用掉的cpu的时间。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ps axjf&lt;/code&gt;可以列出来类似进程树的进程显示。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;pstree [-Apu]&lt;/code&gt; -p显示每个进程的pid，-u显示每个进程的所属账号。-A各个进程之间以ascii字符来连接。&lt;/li&gt;
+&lt;li&gt;相关文档 
+  &lt;a href=&#34;http://www.linfo.org/ps.html&#34;&gt;The ps Command&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;top-动态显示进程状态&#34;&gt;
+  top 动态显示进程状态
+  &lt;a class=&#34;anchor&#34; href=&#34;#top-%e5%8a%a8%e6%80%81%e6%98%be%e7%a4%ba%e8%bf%9b%e7%a8%8b%e7%8a%b6%e6%80%81&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;top [-d n]&lt;/code&gt;每隔n秒（默认为5）更新一次&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;第一行显示的是：当前时间、开机到现今经过的时间、登入系统的人数、系统在1、5、15分钟的平均工作负载&lt;/li&gt;
+&lt;li&gt;第二行显示进程总量、进程状态；第三行显示cpu整体负载；第四行和第五行显示物理内存和虚拟内存的使用情况。&lt;/li&gt;
+&lt;li&gt;第三行（%Cpus&amp;hellip;）显示的是CPU的整体负载，wa表示I/O wait&lt;/li&gt;
+&lt;li&gt;PR:priority，指进程的优先级、NI：Nice，于PR有关；TIME+表示CPU使用时间的累加&lt;/li&gt;
+&lt;li&gt;执行过程中按下M表示以内存的使用来排序，N表示已PID来排序，P表示以CPU来排序，T表示以TIME+来排序，按下q可以离开top&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-p PID&lt;/code&gt;观察指定PID&lt;/li&gt;
+&lt;li&gt;在top执行过程中可以按下**&lt;code&gt;P&lt;/code&gt;&lt;strong&gt;使得以CPU的使用资源排序，按下&lt;/strong&gt;&lt;code&gt;M&lt;/code&gt;&lt;strong&gt;以内存的使用资源排序，按下&lt;/strong&gt;&lt;code&gt;N&lt;/code&gt;**以PID来排序。按下&lt;code&gt;c&lt;/code&gt;显示完整的路径和名称。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;kill-向进程发送signal&#34;&gt;
+  kill 向进程发送signal
+  &lt;a class=&#34;anchor&#34; href=&#34;#kill-%e5%90%91%e8%bf%9b%e7%a8%8b%e5%8f%91%e9%80%81signal&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;kill -9 PID&lt;/code&gt;立刻强制删除一个工作&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;kill  [-15] PID&lt;/code&gt;以正常的方式结束一个工作&lt;/li&gt;
+&lt;li&gt;例：当使用vim时，会产生一个.filename.swp文件，使用-15时，vim会以正常的步骤结束vi的工作，所以.filename.swp会被主动的移除，但如果使用-9，由于vim工作被强制移除了，所以.filename.swp就会继续存在文件系统中。&lt;/li&gt;
+&lt;li&gt;当想要进程执行某些动作时，可以给该进程一个工作号码，可以使用&lt;code&gt;kill -l &lt;/code&gt;或者&lt;code&gt;man 7 signal&lt;/code&gt;查到，主要的信号与名称对应关系。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;signal&lt;/th&gt;
+&lt;th&gt;内容&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;1 SIGHUP&lt;/td&gt;
+&lt;td&gt;启动被终止的进程，可以让该PID重新读取自己的配置文件，类似于重新启动&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;2 SIGINT&lt;/td&gt;
+&lt;td&gt;相当于用键盘输入一个ctrl-c来中断一个进程的执行&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;9 SIGKILL&lt;/td&gt;
+&lt;td&gt;强制中断一个进程的进行&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;15 SIGTERM&lt;/td&gt;
+&lt;td&gt;以正常的结束进程来终止该进程&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;19 SIGSTOP&lt;/td&gt;
+&lt;td&gt;相当于使用键盘ctrl-z来暂停一个进程的执行。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;ul&gt;
+&lt;li&gt;kill可以帮我们将signal传递给某个%jobnumber（参考下面的job和fg命令）或者某个PID。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;nohup和-后台执行&#34;&gt;
+  nohup和&amp;amp; 后台执行
+  &lt;a class=&#34;anchor&#34; href=&#34;#nohup%e5%92%8c-%e5%90%8e%e5%8f%b0%e6%89%a7%e8%a1%8c&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;nohup会将标准输入重定向到/dev/null，将标准输出重定向到nohup.out（一般情况）或$HOME/nohup.out文件，将标准错误输出重定向到标准输出。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;nohup COMMAND &amp;gt; FILE&lt;/code&gt; 保存输出内容到文件。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;nohup COMMAND &amp;amp;&lt;/code&gt; 后台执行命令。&lt;/li&gt;
+&lt;li&gt;使用&lt;code&gt;&amp;amp;&lt;/code&gt;可以将任务丢到后台执行，但标准输出和标准错误输出仍然会被输出到屏幕上。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;amp;&lt;/code&gt;将进程放到了背景执行，但是当退出bash后，进程就会被终止掉，如果需要退出bash后进程仍然能继续执行，可以使用nohup。nohup能在退出bash后还能继续执行工作。&lt;/li&gt;
+&lt;li&gt;例：&lt;code&gt;nohup java -jar xxx.jar &amp;lt;/dev/null 2&amp;gt;&amp;amp;1 &amp;amp;&lt;/code&gt; 将java命令放到后台执行，标准输出和标准错误输出都重定向到/dev/null&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;sed-正则工具&#34;&gt;
+  sed 正则工具
+  &lt;a class=&#34;anchor&#34; href=&#34;#sed-%e6%ad%a3%e5%88%99%e5%b7%a5%e5%85%b7&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;sed [-nefr] [n1[,n2]] function&lt;/code&gt;。
+&lt;ul&gt;
+&lt;li&gt;-i 直接修改读取的文件；-n只有经过sed处理的行会被输出（配合q使用）。&lt;/li&gt;
+&lt;li&gt;n1,n2表示选择进行操作的行数。&lt;/li&gt;
+&lt;li&gt;function有：a 新增到的当前下几行；c 取代；d 删除；i 插入到当前的上一行；p 打印；s 取代，如1,20s/old/new/g。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#将显示到屏幕的内容删除第2-5行&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nl /etc/passwd | sed &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;2,5d&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#删除第三行到最后一行&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nl /etc/passwd | sed &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;3,$d&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#在第二行后面加上drink tea（就是加在了第三行）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nl /etc/passwd | sed &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;2a drink tea&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#在第二行后面加上了两行，每一行之间都要以反斜杠\来进行新行的增加&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nl /etc/passwd | sed &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;2a drink tea \
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;drink beer&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#取代2-5行&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nl /etc/passed | sed &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;2,5c No 2-5 number&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#仅列出/etc/passwd文件的第5-7行&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nl /etc/passwd | sed -n &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;5,7p&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#删除5-7行&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nl /etc/passwd | sed &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;5,7 d&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#去掉开始的空格，删除以1和2开始的行&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nl /etc/passwd |sed &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;s/^ *//g&amp;#39;&lt;/span&gt; | sed &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;/^[1-2]/d&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#去掉有#注释的行和空白行&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cat server.properties  | sed &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;/^#/d&amp;#39;&lt;/span&gt; | sed &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;/^\s*$/d&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#将行末尾的.改为!&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sed -i &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;s/\.$/\!/g&amp;#39;&lt;/span&gt; regular_express.txt
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#文件的最后一行增加一行文字&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sed -i &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;$a # This is a test&amp;#39;&lt;/span&gt; regular_express.txt
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#删除文件中\r&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sed -i &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;s/\r//g&amp;#39;&lt;/span&gt; file.txt 
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;取代命令 &lt;code&gt;sed &#39;s/要被取代的字符串/新的字符串/g&#39;&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;awk-数据处理工具&#34;&gt;
+  awk 数据处理工具
+  &lt;a class=&#34;anchor&#34; href=&#34;#awk-%e6%95%b0%e6%8d%ae%e5%a4%84%e7%90%86%e5%b7%a5%e5%85%b7&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;awk &#39;条件类型1{动作1}&#39; filename&lt;/code&gt; ，awk只能用单引号。&lt;/li&gt;
+&lt;li&gt;awk默认以空格或者[Tab]按键隔开，隔开的每一行的每个字段都是有变量名称的，那就是$1、$2&amp;hellip;。$0表示一整行。&lt;/li&gt;
+&lt;li&gt;NF表示每一行的字段总数；NR表示目前是第几行；FS表示目前的分割字符，默认是空格&lt;/li&gt;
+&lt;li&gt;参数-F可以指定分隔符，如&lt;code&gt;awk -F : &#39;{print $(NF -1)}&#39;&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#输出账号和ip，有些数据格式不对&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;last -n &lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt; | awk &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;{print $1 &amp;#34;\t&amp;#34; $3}&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;last -n 5| awk &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;{print $1 &amp;#34;\t lines: &amp;#34; NR &amp;#34;\t columns: &amp;#34; NF}&amp;#39;&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#将分割字符设为冒号:，查询第三栏小于10，并只输出账号和第三栏&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cat /etc/passwd | awk &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;BEGIN {FS=&amp;#34;:&amp;#34;} $3 &amp;lt; 10 {print $1 &amp;#34;\t &amp;#34; $3}&amp;#39;&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#杀掉所有的java程序&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;jps |grep -vi jps | awk &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;{print $1}&amp;#39;&lt;/span&gt; | xargs -n &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; -I &lt;span style=&#34;color:#f92672&#34;&gt;{}&lt;/span&gt; kill &lt;span style=&#34;color:#f92672&#34;&gt;{}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;job和fg-前台执行&#34;&gt;
+  job和fg 前台执行
+  &lt;a class=&#34;anchor&#34; href=&#34;#job%e5%92%8cfg-%e5%89%8d%e5%8f%b0%e6%89%a7%e8%a1%8c&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;可以使用&lt;code&gt;ctrl+z&lt;/code&gt;将任务丢到背景，状态是暂停。&lt;/li&gt;
+&lt;li&gt;使用 &lt;code&gt;jobs -l&lt;/code&gt;可以观察当前背景中的任务。其中+代表最近被放到背景，-代表最近倒数第二个被放到背景。&lt;/li&gt;
+&lt;li&gt;使用fg可以将背景工作拿到前台来执行。命令：&lt;code&gt;fg &amp;amp;jobnumber&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;删除背景中的工作。命令：&lt;code&gt;kill [-15 |-9] %jobnumber&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;at与cron&#34;&gt;
+  at与cron
+  &lt;a class=&#34;anchor&#34; href=&#34;#at%e4%b8%8ecron&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;at-只执行一次的任务&#34;&gt;
+  at 只执行一次的任务
+  &lt;a class=&#34;anchor&#34; href=&#34;#at-%e5%8f%aa%e6%89%a7%e8%a1%8c%e4%b8%80%e6%ac%a1%e7%9a%84%e4%bb%bb%e5%8a%a1&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;要使用at，需要先启动atd。我们使用at这个指令来产生要运行的工作，并将这个工作以文本文件的方式写入到/var/spool/at/目录内，该工作就能等待atd这个服务的取用与执行。&lt;/li&gt;
+&lt;li&gt;at会先寻找/etc/at.allow这个文件，写在这个文件中的使用者可以使用at，不在这个文件中的用户不能使用at，即使用户没有写在at.deny中。如果不在这个文件中，at会寻找/etc/at.deny这个文件，写在这个文件中的使用者不能用at，不在这个文件中的使用者可以使用（也就是说两个文件存在一个就可以）。如果两个文件都不存在，就只有root可以执行at。&lt;/li&gt;
+&lt;li&gt;at会将所有的标准输出和标准错误输出传送到执行者的mailbox中，解决方法是&lt;code&gt;echo &amp;quot;hello world&amp;quot; &amp;gt; /dev/tty1&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;at &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;-ldv&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; TIME
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-l 相当于atq，列出当前系统上面所有当前用户的未执行的at排程。
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-d 相当于atrm，取消一个在at排程中的工作
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-c 列出后面接的第几项项工作的实际指令内容at -c &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;TIME: HH:MM &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;YYYY--MM-DD&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; 18:02 2021-10-29
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	  HH:MM &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Month&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Date&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; 18:02 October &lt;span style=&#34;color:#ae81ff&#34;&gt;29&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	  HH:MM&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;am|pm&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; + number &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;minutes|hours|days|weeks&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#再过5分钟后执行，ctrl+d退出&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;at now + &lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt; minutes
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#查询还没执行的任务&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;atq
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#删除3这个任务&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;atrm &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;cron-定时任务&#34;&gt;
+  cron 定时任务
+  &lt;a class=&#34;anchor&#34; href=&#34;#cron-%e5%ae%9a%e6%97%b6%e4%bb%bb%e5%8a%a1&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;与at类似，cron也有两个限制文件，/etc/cron.allow和/etc/cron.deny，/etc/cron.allow比deny要优先，两个文件只选择一个来限制，所以保留一个即可。系统默认保留/etc/cron.deny。&lt;/li&gt;
+&lt;li&gt;当用户使用crontab指令来建立工作排程后，该项工作就会被记录到/var/spool/cron里面去，而且以账号来判别。cron执行的 每一项工作都会被记录到/var/log/cron这个文件中。&lt;/li&gt;
+&lt;li&gt;下达指令最好使用绝对路径；cron会每分钟去读取一次/etc/crontab与/var/spool/cron里面的数据，所以编辑完文件后，cron会按照设定自动执行。&lt;/li&gt;
+&lt;li&gt;放到&lt;code&gt;/etc/cron.hourly&lt;/code&gt;目录内的所有执行文件（必须是shell脚本）会在每小时的一分钟开始后的5分钟内随机选择一个时间点来执行（详细请看/etc/cron.d/路径下的文件）。放到&lt;code&gt;/etc/cron.daily&lt;/code&gt;、&lt;code&gt;/etc/cron.weekly&lt;/code&gt;、&lt;code&gt;/etc/cron.monthly&lt;/code&gt;下面的文件是由anacron执行的。而anacron执行方式是在&lt;code&gt;/etc/cron.hourly/0anacron&lt;/code&gt;里面。&lt;/li&gt;
+&lt;li&gt;crond预设有三个地方会有执行脚本配置文件，分别是&lt;code&gt;/etc/crontab&lt;/code&gt; ,&lt;code&gt;/etc/cron.d/*&lt;/code&gt;,&lt;code&gt;/var/spool/cron/*&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;当执行项目有输出时，该数据会mail给MAILTO设定的账号，所以如果不是很重要，将输出重定向到/dev/null中。&lt;/li&gt;
+&lt;li&gt;建议个人的话使用&lt;code&gt;crontab -e&lt;/code&gt;来创建定时任务，系统维护人员直接使用&lt;code&gt;vim /etc/crontab&lt;/code&gt;，开发的软件使用&lt;code&gt;vim /etc/cron.d/newfile&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;crontab &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;-u username&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;-l | -e |-r&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-u 只有root可以使用这个参数。
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-e 编辑crontab的工作内容
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-l 查阅crontab的工作内容
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-r 移除所有的crontab的工作内容，如果只移除一项，可以用-e编辑。
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;每项工作的格式都是具有六个字段，这六个字段的意义为：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;分钟&lt;/th&gt;
+&lt;th&gt;小时&lt;/th&gt;
+&lt;th&gt;日期&lt;/th&gt;
+&lt;th&gt;月份&lt;/th&gt;
+&lt;th&gt;周&lt;/th&gt;
+&lt;th&gt;指令&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;0-59&lt;/td&gt;
+&lt;td&gt;0-23&lt;/td&gt;
+&lt;td&gt;1-31&lt;/td&gt;
+&lt;td&gt;1-12&lt;/td&gt;
+&lt;td&gt;0-7（0和7都表示星期天）&lt;/td&gt;
+&lt;td&gt;指令&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;ul&gt;
+&lt;li&gt;特殊符号&lt;/li&gt;
+&lt;/ul&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;特殊符号&lt;/th&gt;
+&lt;th&gt;意义&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;*&lt;/td&gt;
+&lt;td&gt;代表任何时刻&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;,&lt;/td&gt;
+&lt;td&gt;代表该字段有多个参数，如每天3点和6点执行命令，为&lt;code&gt;0 3,6 * * * command&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;表示一段时间范围内，如8点到12点之间每小时的20分都进行一项工作，&lt;code&gt;20 8-12 * * * command&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/n&lt;/td&gt;
+&lt;td&gt;n代表数字，表示每隔n单位的时间执行一此，如每隔5分钟执行一次，&lt;code&gt;*/5 * * * * command&lt;/code&gt;，也可以写成&lt;code&gt;0-59/5 * * * * command&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;/etc/crontab&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#使用哪种shell接口&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;SHELL&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;/bin/bash
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#执行文件搜寻路径&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;PATH&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;/sbin:/bin:/usr/sbin:/usr/bin
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#有输出时发给谁&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;MAILTO&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;root
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#该文件中需要指定用户&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; * * * * *  username command
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;anacron&#34;&gt;
+  anacron
+  &lt;a class=&#34;anchor&#34; href=&#34;#anacron&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;/etc/cron.daily&lt;/code&gt;各字段含义：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;天数：anacron 执行当下与时间戳 (/var/spool/anacron/ 内的时间纪录文件) 相差的天数，若超过此天数，就准备开始执行，若没有超过此天数，则不予执行后续的指令。&lt;/li&gt;
+&lt;li&gt;延迟时间：超过天数导致要执行定时任务，延迟执行的时间。&lt;/li&gt;
+&lt;li&gt;工作名称定义：通常与后续的目录资源名称相同即可。&lt;/li&gt;
+&lt;li&gt;实际要进行的指令串。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;anacron执行流程（cron.daily)：&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol&gt;
+&lt;li&gt;由 /etc/anacrontab 分析到 cron.daily 这项工作名称的天数为 1 天；&lt;/li&gt;
+&lt;li&gt;由 /var/spool/anacron/cron.daily 取出最近一次执行 anacron 的时间戳；&lt;/li&gt;
+&lt;li&gt;由上个步骤与目前的时间比较，若差异天数为 1 天以上 (含 1 天)，就准备进行指令；&lt;/li&gt;
+&lt;li&gt;若准备进行指令，根据 /etc/anacrontab 的设定，将延迟 5 分钟 + 随机n分钟 (看RANDOM_DELAY 的 设定)；&lt;/li&gt;
+&lt;li&gt;延迟时间过后，开始执行后续指令，亦即『 run-parts /etc/cron.daily 』这串指令；&lt;/li&gt;
+&lt;li&gt;执行完毕后， anacron 程序结束。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;freeunamehostnamelocale查看和设置系统信息&#34;&gt;
+  free、uname、hostname、locale查看和设置系统信息
+  &lt;a class=&#34;anchor&#34; href=&#34;#freeunamehostnamelocale%e6%9f%a5%e7%9c%8b%e5%92%8c%e8%ae%be%e7%bd%ae%e7%b3%bb%e7%bb%9f%e4%bf%a1%e6%81%af&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;free -h&lt;/code&gt;查看内存使用情况。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;uname [-asrmpi]&lt;/code&gt; -a表示所有；-s 系统核心名称；-r 核心的版本；-m 本系统的硬件名称(x86_64)；-p CPU的类型；-i 硬件的平台。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;uptime&lt;/code&gt;显示系统启动时间和工作负载。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;hostnamectl [set-hostname 主机名]&lt;/code&gt; 修改主机名。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;timedatectl [list-timezones | set-timezone | set-time | set-ntp]&lt;/code&gt; 列出系统上的失去、设定时区、设定时间、设定网络校时。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;localectl set-locale LANG=en_US.utf8&lt;/code&gt;设置语系。通过&lt;code&gt;locale -a&lt;/code&gt;可以查看linux支持了多少语系，通过&lt;code&gt;locale&lt;/code&gt;来查看系统目前的语言环境。LC_ALL、LC_CTYPE、LANG这三个环境变量的值决定了操作系统当前使用的是哪种字符集，优先级是&lt;code&gt;LC_ALL&amp;gt;LC_CTYPE&amp;gt;LANG&lt;/code&gt;。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;硬件数据收集：dmidecode(CPU型号、主板型号、内存相关型号等), gdisk, dmesg, vmstat（分析cpu、内存、io目前的状态）, lspci, lsusb,iostat。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;ls-列出文件&#34;&gt;
+  ls 列出文件
+  &lt;a class=&#34;anchor&#34; href=&#34;#ls-%e5%88%97%e5%87%ba%e6%96%87%e4%bb%b6&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;ls 列出指定的目录下的文件
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-d 目录名&lt;/code&gt;  列出目录名而不进入该目录。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;cattactailwc-查看文件&#34;&gt;
+  cat、tac、tail、wc 查看文件
+  &lt;a class=&#34;anchor&#34; href=&#34;#cattactailwc-%e6%9f%a5%e7%9c%8b%e6%96%87%e4%bb%b6&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;cat：从第一行开始显示文件内容
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-n&lt;/code&gt;标上行号&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;tac：从最后一行开始显示&lt;/li&gt;
+&lt;li&gt;nl：显示的时候输出行号&lt;/li&gt;
+&lt;li&gt;more：一页一页的显示文件内容&lt;/li&gt;
+&lt;li&gt;less：与more类似，但是可以往前翻
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;/srting&lt;/code&gt;，向下搜索string&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;?string&lt;/code&gt;，向上搜索string&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;head：只看头几行
+&lt;ul&gt;
+&lt;li&gt;默认是显示10行&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;head -n -100 filename&lt;/code&gt;文件后面100行不显示&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;tail：只看尾几行
+&lt;ul&gt;
+&lt;li&gt;默认是显示10行&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;tail -f filename&lt;/code&gt;文件内容如果有增加，输出增加的内容&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-n num filename&lt;/code&gt;输出文件末尾的n行，默认是10行&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;tail -n +100 filename&lt;/code&gt;文件第100行（包括）以后都会被列出来&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;od：以二进制查看&lt;/li&gt;
+&lt;li&gt;file：查看文件类型&lt;/li&gt;
+&lt;li&gt;wc：查看文件里有多少字，多少行，多少字符。
+&lt;ul&gt;
+&lt;li&gt;wc [-lwm] -l表示列出多少行，-w表示列多多少字，-m表示列出多少字符。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;重定向与管道&#34;&gt;
+  重定向与管道
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e9%87%8d%e5%ae%9a%e5%90%91%e4%b8%8e%e7%ae%a1%e9%81%93&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;标准输入&lt;code&gt;&amp;lt;&amp;lt;&lt;/code&gt;或&lt;code&gt;&amp;lt;&lt;/code&gt;；标准输出&lt;code&gt;&amp;gt;&amp;gt;&lt;/code&gt;或&lt;code&gt;&amp;gt;&lt;/code&gt;；标准错误输出&lt;code&gt;2&amp;gt;&lt;/code&gt;或&lt;code&gt;2&amp;gt;&amp;gt;&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;gt;&lt;/code&gt;会覆盖原文件，&lt;code&gt;&amp;gt;&amp;gt;&lt;/code&gt;会追加到文件中。如&lt;code&gt;find /home -name .bashrc &amp;gt; list_right 2&amp;gt; list_error&lt;/code&gt;，将正确输出和错误输出存入到不同的文件中。&lt;/li&gt;
+&lt;li&gt;黑洞装置&lt;code&gt;/dev/null&lt;/code&gt;，可以吃掉任何导向这个装置的信息。&lt;/li&gt;
+&lt;li&gt;将正确和错误输出都放到同一个文件中&lt;code&gt;find /home -name .bashrc &amp;gt; list 2&amp;gt;&amp;amp;1&lt;/code&gt;。对2&amp;gt;&amp;amp;1的理解，这里2表示错误输出，意思是将错误输出重定向到标准输出，&amp;amp;1表示对标准输出的应用。&lt;/li&gt;
+&lt;li&gt;管道&lt;code&gt;|&lt;/code&gt;只会处理标准输出，会忽略标准错误输出。&lt;/li&gt;
+&lt;li&gt;管道命令必须要接收上一个指令的标准输入，如less、more、head、tail时管道命令，而如ls、cp、mv就不是管道命令。&lt;/li&gt;
+&lt;li&gt;管道后面第一个必须是指令。&lt;/li&gt;
+&lt;li&gt;在管道中常常会使用前一个指令的输出作为后一个指令的输入，某些指令需要指定文件名来处理，该stdin和stdout可以使用&lt;code&gt;减号&amp;quot;-&amp;quot;&lt;/code&gt;来替代。如&lt;code&gt;tar -cvf - /home | tar -xvf - -C /tmp/homeback&lt;/code&gt;，这个命令是将/home里的文件打包，将打包的文件输出到stdout，后面的命令从stdin读取数据，所以我们就不需要文件名了，直接使用-代替。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;xargs [OPTION] COMMAND [R]&lt;/code&gt;：读入stdin的数据，并以空格符作为分割，将stdin分割成参数。
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;xargs -n 1&lt;/code&gt;表示每次执行指令值取一个参数。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;xargs -I R&lt;/code&gt;将从标准输入获取到的数据替换后面命令的参数R。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;xargs -i&lt;/code&gt;相当于&lt;code&gt;xargs -I {}&lt;/code&gt;。(man手册里面不建议再使用-i了)&lt;/li&gt;
+&lt;li&gt;xargs的-I {}必须要放到-n前面。&lt;/li&gt;
+&lt;li&gt;例：&lt;code&gt;ls *.jar | xargs -I {} -n 1 sh start.sh {}&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;grep-查找指定内容&#34;&gt;
+  grep 查找指定内容
+  &lt;a class=&#34;anchor&#34; href=&#34;#grep-%e6%9f%a5%e6%89%be%e6%8c%87%e5%ae%9a%e5%86%85%e5%ae%b9&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;grep [-invAB]  &amp;lsquo;搜索字符串&amp;rsquo;  filename：查找文件或标准输出中的字符串，&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;-i表示忽略大小写。&lt;/li&gt;
+&lt;li&gt;-n表示输出行号。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-v&lt;/code&gt;：表示选择未匹配的行（反选）。&lt;/li&gt;
+&lt;li&gt;-A：&amp;ndash;after-context，输出查找字符串后面n行。&lt;/li&gt;
+&lt;li&gt;-B：&amp;ndash;before-context，输出查找字符串前面多少行&lt;/li&gt;
+&lt;li&gt;-r：递归查找当前路径下的包含指定内容的文件，同时输出包含此内容的行，-l只输出文件名。如查找指定路径下包含auth的文件：&lt;code&gt;grep -rl auth&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;whereiswhichlocale-查找文件&#34;&gt;
+  whereis、which、locale 查找文件
+  &lt;a class=&#34;anchor&#34; href=&#34;#whereiswhichlocale-%e6%9f%a5%e6%89%be%e6%96%87%e4%bb%b6&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;whereis：针对几个特定目录查找文件，&lt;code&gt;whereis -l&lt;/code&gt;查看这几个特定目录。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;which：根据PATH查看可执行文件。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;locate：根据/var/lib/mlocate内的数据库记载搜索文件（数据库未更新前搜索某新建的文件可能搜不到）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;find查找工具&#34;&gt;
+  find：查找工具
+  &lt;a class=&#34;anchor&#34; href=&#34;#find%e6%9f%a5%e6%89%be%e5%b7%a5%e5%85%b7&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;用法&lt;code&gt;find [PATH] [option] [action]&lt;/code&gt;，PATH可以是多个目录，find查找会进入子目录。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;查看/home下3天内有修改的文件&lt;code&gt;find /home -mtime 3&lt;/code&gt;（如果是+3表示大于等于3天前的文件名，-3表示小于等于3天内的文件名）；&lt;/li&gt;
+&lt;li&gt;查看/home下属于bes的文件&lt;code&gt;find /home -user bes&lt;/code&gt;，查看不属于任何人的文件&lt;code&gt;find / -nouser&lt;/code&gt;；&lt;/li&gt;
+&lt;li&gt;查到/home下文件名包含了passwd的文件名&lt;code&gt;find /home -name &amp;quot;*passwd*&amp;quot;&lt;/code&gt;;&lt;/li&gt;
+&lt;li&gt;查看/home下文件类型为普通文件的文件名&lt;code&gt;find /home -type f&lt;/code&gt;;&lt;/li&gt;
+&lt;li&gt;查看文件权限大于755的文件名&lt;code&gt;find -perm /755&lt;/code&gt;；&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;find / -perm /7000 -exec ls -l {} \;&lt;/code&gt;其中{}表示find找到的内容会放到{}中；-exec到;是关键字，表示开始和结束。&lt;/li&gt;
+&lt;li&gt;find查找会直接去查找磁盘，可能比较慢。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;tar-压缩与解压工具&#34;&gt;
+  tar 压缩与解压工具
+  &lt;a class=&#34;anchor&#34; href=&#34;#tar-%e5%8e%8b%e7%bc%a9%e4%b8%8e%e8%a7%a3%e5%8e%8b%e5%b7%a5%e5%85%b7&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;tar -xzvf xxx.tar.gz&lt;/code&gt;解压文件
+&lt;ul&gt;
+&lt;li&gt;-x extract提取文件；-z通过gzip处理文件；-v：verbose显示执行过程；-f指定文件名&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;tar -cvzf 生成的文件名.tar.gz dir/&lt;/code&gt;压缩文件
+&lt;ul&gt;
+&lt;li&gt;-c：create生成文件&lt;/li&gt;
+&lt;li&gt;tips：-C（大写）将文件放到指定文件夹&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;tar&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;-c建立打包文件；-v查看执行过程；-x解压缩；-t查看打包文件内的情况；-C在特定目录解压缩；-z使用gzip解压缩；-j使用bzip2解压缩；-J使用xz解压缩；-f后面要立刻接上要被处理的文件名；-p保留备份数据原本权限与属性；&amp;ndash;exclude=FILE压缩过程中不打包FILE。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;gzip -[cdv#]&lt;/code&gt;：-c将压缩的数据输出到屏幕；-d解压缩；-v显示出原文件/压缩文件的压缩比等信息；-#表示数字，-1最快但压缩比最差，-9最慢但压缩比最慢，-6是默认。使用gzip压缩时，原文件会被压缩为***.gz，原文件就不存在了。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;bzip2 -[cdkzv#]&lt;/code&gt;：-c将压缩的数据输出到屏幕上；-d解压缩；-k保留源文件；-z压缩（默认，可不加）；-v显示压缩比等信息；-#与gzip一样。文件名是xxx.bz2。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;xz [-dtlkc#]&lt;/code&gt;：-d解压缩；-t测试压缩文件完整性；-l列出压缩文件相关信息；-k保留原文件不删除；-c数据输出到屏幕上；-#和bzip2一样。-T0指定线程数量和CPU的数量一样。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;useraddpassedusermoduserdel-用户账号管理&#34;&gt;
+  useradd、passed、usermod、userdel 用户账号管理
+  &lt;a class=&#34;anchor&#34; href=&#34;#useraddpassedusermoduserdel-%e7%94%a8%e6%88%b7%e8%b4%a6%e5%8f%b7%e7%ae%a1%e7%90%86&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;默认情况下所有的系统上的账号和一般身份使用者，都记录在/etc/passwd这个文件中，个人密码记录在/etc/shadow文件下，所有组名都记录在/etc/group中。&lt;/li&gt;
+&lt;li&gt;当输入账号密码登陆后，系统先1. 寻找/etc/passwd里面是否有输入的账号，有的话读取UID和GID以及该账号的home目录和shell；2. 进入/etc/shadow找出对应的账号与UID，然后和对密码是否相符；3. shell启动。&lt;/li&gt;
+&lt;li&gt;查看已登录系统上的用户，可以使用&lt;code&gt;who&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;etcpasswd&#34;&gt;
+  /etc/passwd
+  &lt;a class=&#34;anchor&#34; href=&#34;#etcpasswd&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;每一行都代表一个账号，有几行就代表有几个账号在系统中。里面有很多账号本来就是系统正常运行所必需的，可以称之为系统账号。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#①账号名称:②x:③UID:④GID:⑤用户信息说明:⑥home目录:⑦shell&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;root:x:0:0:root:/root:/bin/bash
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#账户名称需要和UID对应，UID就是使用者标识符，UID中0表示系统管理员；1～999表示系统账号（1～200表示系统自行建立的系统账号）；1000～60000就是给一般使用者使用的。一个UID可以包含多个用户&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#早期unix密码放在此文件中，后来放到了/etc/shadow中，这里用x替代。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#GID与/etc/group有关。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#当用户登陆系统后就会取得一个shell来与核心沟通。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;etcshadow&#34;&gt;
+  /etc/shadow
+  &lt;a class=&#34;anchor&#34; href=&#34;#etcshadow&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#账号名称:密码:最近密码变动的日期:密码不可被更改的天数:密码需要修改的天数:密码需要变更前的警告天数:密码过期后多少天内还有效:账号失效日期:保留字段&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#第四个字段的0表示随时都可以修改密码&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;root:$6$xtr:18894:0:99999:7:::
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;etcgroup&#34;&gt;
+  /etc/group
+  &lt;a class=&#34;anchor&#34; href=&#34;#etcgroup&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#组名:x:GID:此群组支持的账号名称&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#每个用户都可以有多个群组&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;root:x:0:dmtsai,alex
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;在/etc/passwd中有个GID，即初始群组，初始群组不会加在/etc/group的第四个字段。&lt;/li&gt;
+&lt;li&gt;使用&lt;code&gt;groups&lt;/code&gt;命令可以获取当前账号所有的群组，输出的第一个群组为有效群组，新创建的一个文件使用的就是有效群组。通过&lt;code&gt;newgrp xxx&lt;/code&gt;来切换有效群组。&lt;/li&gt;
+&lt;li&gt;相关命令：&lt;code&gt;groupadd groupmod groupdel&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;useradd&#34;&gt;
+  useradd
+  &lt;a class=&#34;anchor&#34; href=&#34;#useradd&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-g 初始群组&lt;/code&gt; 该字段会被添加到/etc/passwd第四个字段。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-u UID -G 次要群组 -c 说明信息(/etc/passwd第五个字段) -r 系统账号 -s /bin/bash(指定一个初始的shell)&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;-M 不建立home目录(系统账号默认) ；-m 建立home目录(一般账号默认)。&lt;/li&gt;
+&lt;li&gt;useradd参考的是/etc/default/useradd文件，默认值可以通过&lt;code&gt;useradd -D&lt;/code&gt;查看；除此之外，还参考了/etc/login.defs文件。&lt;/li&gt;
+&lt;li&gt;相关命令:&lt;code&gt;id chsh&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;passwd&#34;&gt;
+  passwd
+  &lt;a class=&#34;anchor&#34; href=&#34;#passwd&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;使用useradd建立了账号后，默认情况下无法使用该账号登陆，需要使用passwd设定密码。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-l&lt;/code&gt; lock，会在/etc/shadow第二栏最前面加!使得密码失效，&lt;code&gt;-u&lt;/code&gt; unlock，与-l相反；&lt;code&gt;-S&lt;/code&gt; 列出秘密相关参数；&lt;code&gt;-n&lt;/code&gt; 多久不可修改密码；&lt;code&gt;-x&lt;/code&gt; 多久内必须修改密码； &lt;code&gt;-w&lt;/code&gt; 密码过期前多少天开始警告 ；&lt;code&gt;-i&lt;/code&gt; 密码失效日期；&lt;code&gt;--stdin&lt;/code&gt; 从控制台获取输入。&lt;/li&gt;
+&lt;li&gt;其他命令&lt;code&gt;chage -l user&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;usermod&#34;&gt;
+  usermod
+  &lt;a class=&#34;anchor&#34; href=&#34;#usermod&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;修改账号的数据。&lt;/li&gt;
+&lt;li&gt;添加群组&lt;code&gt;usermod -a -G wheel koal&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;userdel&#34;&gt;
+  userdel
+  &lt;a class=&#34;anchor&#34; href=&#34;#userdel&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;删除用户的相关数据。&lt;code&gt;-r&lt;/code&gt;表示同时删除该用户的home目录。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;chgrpchownchmod-文件权限&#34;&gt;
+  chgrp、chown、chmod 文件权限
+  &lt;a class=&#34;anchor&#34; href=&#34;#chgrpchownchmod-%e6%96%87%e4%bb%b6%e6%9d%83%e9%99%90&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;chgrp [-R] 文件/文件夹&lt;/code&gt; 改变文件的群组（必须是/etc/group中存在的）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;chown [-R] name:groupname 文件或目录&lt;/code&gt;来修改文件的拥有者，-R表示递归。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;chmod [-R] 文件/目录&lt;/code&gt; 改变文件/目录的权限。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;su-切换用户&#34;&gt;
+  su 切换用户
+  &lt;a class=&#34;anchor&#34; href=&#34;#su-%e5%88%87%e6%8d%a2%e7%94%a8%e6%88%b7&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;su&lt;/code&gt;单纯使用su切换为root身份时，表明切换为root身份。读取变量的设定方式为non-login shell的方式，这种方式很多原本的变量不会改变。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;su - username&lt;/code&gt;使用该命令代表使用login-shell的变量文件来登入系统。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;su - -c 指令&lt;/code&gt; 执行一次root的指令。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;sudo-以其他用户执行指令&#34;&gt;
+  sudo 以其他用户执行指令
+  &lt;a class=&#34;anchor&#34; href=&#34;#sudo-%e4%bb%a5%e5%85%b6%e4%bb%96%e7%94%a8%e6%88%b7%e6%89%a7%e8%a1%8c%e6%8c%87%e4%bb%a4&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;sudo&lt;/code&gt; 并非所有人都能执行sudo，只有/etc/sudoers内的用户能执行sudo这个指令。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;sudo [-u 用户] 指令&lt;/code&gt; 以某个用户的身份执行指令。不加该参数表示使用root执行指令。&lt;/li&gt;
+&lt;li&gt;sudoers文件格式1：&lt;code&gt;使用者账号  登入者的来源主机名=（可切换的账号）  可下达的指令。&lt;/code&gt; 可下达的指令必须使用绝对路径。&lt;/li&gt;
+&lt;li&gt;sudoers文件格式2： &lt;code&gt;%群组  ALL=(ALL)  ALL&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;sudoers文件格式3： &lt;code&gt;%群组  ALL=(ALL)  NOPASSWD:ALL&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;sudoers文件格式4：&lt;code&gt;myuser1 All=(root) !/usr/bin/passwd, /usr/bin/passwd [A-Za-z]*,!/usr/bin/passwd root&lt;/code&gt;。表示myuser1可以执行除了passwd和passwd root外的所有指令。&lt;/li&gt;
+&lt;li&gt;创建别名：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#别名必须大写&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;User_Alias ADMPW&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;pro1,pro2,pro3 myuser1,myuser2
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Cmd_Alias ADMPWCOM&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;!/usr/bin/passwd, /usr/bin/passwd &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;A-Za-z&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;*,!/usr/bin/passwd root
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ADMPW ALL&lt;span style=&#34;color:#f92672&#34;&gt;=(&lt;/span&gt;root&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; ADMPWCOM
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#可以使用sudo搭配su，将用户身份转换为root&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ADMPW ALL&lt;span style=&#34;color:#f92672&#34;&gt;=(&lt;/span&gt;root&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; /bin/su -
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;sudo时间间隔为5min。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;ulimit-限制系统资源&#34;&gt;
+  ulimit 限制系统资源
+  &lt;a class=&#34;anchor&#34; href=&#34;#ulimit-%e9%99%90%e5%88%b6%e7%b3%bb%e7%bb%9f%e8%b5%84%e6%ba%90&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;ulimit&lt;/code&gt; 限制用户的某些系统资源（比如可以开启的文件数量）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ulimit -&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;SHacdfltu&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;配置&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-H &lt;span style=&#34;color:#75715e&#34;&gt;#hard limit，严格的限制，必定不能超过这个设定的数值&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-S &lt;span style=&#34;color:#75715e&#34;&gt;#soft limit，警告的设定，可以超过这个设定值，但超过则有警告。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-a &lt;span style=&#34;color:#75715e&#34;&gt;#可列出所有的限制，-标识没有限制。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-f &lt;span style=&#34;color:#75715e&#34;&gt;#此shell可以建立的最大文件大小，单位为KB。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-t &lt;span style=&#34;color:#75715e&#34;&gt;#可使用的最大CPU时间，单位为秒。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-u &lt;span style=&#34;color:#75715e&#34;&gt;#单一用户可以使用的最大程序的数量。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-d &lt;span style=&#34;color:#75715e&#34;&gt;#程序可以使用的最大segment容量。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-l &lt;span style=&#34;color:#75715e&#34;&gt;#可用于锁定（lock）的内存量。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#一般身份如果设置了ulimit的值，通过注销再登录即可恢复，也可以重新设定&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#限制只能建立10MB以下容量的文件&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ulimit -f &lt;span style=&#34;color:#ae81ff&#34;&gt;10240&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;limits.conf&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#文件详细描述&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;vbird1 soft fsize &lt;span style=&#34;color:#ae81ff&#34;&gt;90000&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#第一个字段为账号，或者为群组，如果是群组需要加上@。如果使用群组，这个功能只对初始群组有效。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#第二个字段为限制的模式，是严格hard还是警告soft。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#第三个字段为限制，比如是限制文件容量等。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#第四个字段为限制的值&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#限制prol这个群组每次只能有1个用户登录&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;@prol hard maxlogins
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#文件修改后需要重新登录才会有效。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;acl&#34;&gt;
+  ACL
+  &lt;a class=&#34;anchor&#34; href=&#34;#acl&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Access Control List，用来提供在owner、group，others的rwx之外的权限设定，可以针对单一使用者，单一文件或目录来进行rwx的权限规范。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#检查系统是否支持ACL&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;dmesg | grep -i acl
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#设定acl参数&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;setfacl&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;-bkRd&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[{&lt;/span&gt;-m | -x&lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt; acl参数&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; 目标文件名
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-m : 设定acl参数给文件使用
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-x : 删除后面的acl参数
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-b : 移除所有的acl参数设定
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-k : 移除预设的acl参数
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-R : 递归设定acl
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-d : 设定预设的acl参数，只对目录有效，在该目录新建的数据都会引用此默认值
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#为xiaoxiang用户设定文件的权限为rwx&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#一个文件设定了ACL参数后，他的权限部分就会多出来一个+号。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;setfacl -m u:xiaoxiang:rwx file1
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#为文件使用者设定权限&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;setfacl -m u::rwx file2
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#为群组设置权限&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;setfacl -m g:mygroup:rx file3
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#为目录设置acl权限，未来文件的acl权限都继承此目录&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;setfacl -m d:u:xiaoxiang:rx /home/xiaoxiang/dir1
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#让xiaoxiang无法使用该目录&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;setfacl -m u:xiaoxiang:- /home/xiaoxiang/dir2
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#取消某个账号的ACL权限设定&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;setfacl -x u:xiaoxiang /home/xiaoxiang/file5
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#获取file1的acl权限内容&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;getfacl file1
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#结果中#开头的表示默认值&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#结果中的mask表示用来规范最大允许权限&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;df和du&#34;&gt;
+  df和du
+  &lt;a class=&#34;anchor&#34; href=&#34;#df%e5%92%8cdu&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;df&lt;/code&gt;查看文件系统的的信息。
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;df -h&lt;/code&gt;查看所有文件系统的信息。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;df -T&lt;/code&gt;查看所有文件系统的类型。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;df -iT&lt;/code&gt;查看所有文件系统的类型和inode的数量。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;du [-hskm] 文件或目录名称&lt;/code&gt; 统计磁盘的使用情况。
+&lt;ul&gt;
+&lt;li&gt;-h 易读的方式显示。默认情况下会递归展示目录，但不会展示文件。&lt;/li&gt;
+&lt;li&gt;-s （summarize）列出总量。&lt;/li&gt;
+&lt;li&gt;-d （&amp;ndash;max-depth=N）：N表示深度，1表示输出子文件夹的大小，2表述输出子文件夹的子文件夹的大小。&lt;/li&gt;
+&lt;li&gt;-a （&amp;ndash;all） 不加该参数表示只统计文件夹，加该参数表示统计所有文件。&lt;/li&gt;
+&lt;li&gt;-k和-m 以kB/mB显示。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;lsblk-列出磁盘列表&#34;&gt;
+  lsblk 列出磁盘列表
+  &lt;a class=&#34;anchor&#34; href=&#34;#lsblk-%e5%88%97%e5%87%ba%e7%a3%81%e7%9b%98%e5%88%97%e8%a1%a8&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-f&lt;/code&gt;列出磁盘内文件系统的名称。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-d&lt;/code&gt;仅列出磁盘本身，不会列出分区。&lt;/li&gt;
+&lt;li&gt;输出信息介绍
+&lt;ul&gt;
+&lt;li&gt;NAME装置的文件名&lt;/li&gt;
+&lt;li&gt;MAJ:MIN 主要：次要装置代码&lt;/li&gt;
+&lt;li&gt;RM 是否为可卸载装置 removable device&lt;/li&gt;
+&lt;li&gt;SIZE 容量&lt;/li&gt;
+&lt;li&gt;RO 是否为只读装置&lt;/li&gt;
+&lt;li&gt;TYPE 是磁盘disk、分区槽partition还是只读存储器rom&lt;/li&gt;
+&lt;li&gt;MOUNTPOINT 挂载点&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;mount-磁盘挂载&#34;&gt;
+  mount 磁盘挂载
+  &lt;a class=&#34;anchor&#34; href=&#34;#mount-%e7%a3%81%e7%9b%98%e6%8c%82%e8%bd%bd&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;mount [-alt]LABLE=&#39;&#39;/UUID=&#39;&#39;/装置文件名 挂载点/umount&lt;/code&gt;挂载与卸载&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;mount /dev/sda2 /d &lt;/code&gt;将/dev/sda2挂载到/d。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;umount [-f] 挂载点或装置文件名&lt;/code&gt; -f强制删除。&lt;/li&gt;
+&lt;li&gt;-n 不写入/etc/mtab。&lt;/li&gt;
+&lt;li&gt;-o后面可以跟一些挂载时额外加上的参数；1. asyn，sync 此文件系统是否使用同步写入（sync）或异步（async）的内存机制。默认为async。2. atime，noatime 是否修订文件的读取时间。3. ro，rw 挂载文件系统为只读或可写。auto，noauto 允许此文件系统被以mount -a自动挂载（auto）。4. dev，nodev 是否允许此文件系统上可建立装置文件。5.suid，nosuid 是否允许此文件系统上有suid的文件格式。6. ecex，noexec 是否允许此文件系统上有可执行文件。7. user，nouser 是否允许此文件系统让任何使用者执行mount，一般mount只有root可以进行，但下达该命令后，一般user也能对其进行挂载。8. defaults 默认为rw，suid， dev，exec，auto，nouser，async。9. remount 重新挂载。&lt;/li&gt;
+&lt;li&gt;-a 依照配置文件/etc/fstab的数据将所有未挂载的磁盘挂载。&lt;/li&gt;
+&lt;li&gt;-t 要挂载的文件系统的类型。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;开机挂载(修改/etc/fstab[filesystem table]）&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;参数格式：装置/UUID/LABEL 挂载点 文件系统 文件系统参数 dump fsck&lt;/li&gt;
+&lt;li&gt;例：UUID=XXX（使用blkid查询） /d ntfs defaults 0 0&lt;/li&gt;
+&lt;li&gt;/etc/fstab是开机时的配置文件，实际的filesystem的挂载记录到/etc/mtab和/proc/mounts这两个文件中。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;sh -c &amp;quot;xxx&amp;quot;&lt;/code&gt; 将一个字符串作为完整的命令来执行。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;history  n&lt;/code&gt;用来查询过去执行的指令，n表示显示最近n个命令。bash会记录使用过的指令，默认记录1000个，指令存放位置在~/.bash_history中。该文件会记录上一次登录之前的指令，而这一次登录所执行的指令都存在内存中，当注销后，这些指令才会记录到.bash_history中。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;使用write可以给linux上的其他用户发消息，通过&lt;code&gt;who&lt;/code&gt;可以查看目前有谁在线。通过&lt;code&gt;write koal&lt;/code&gt;给所有以koal登录的用户发消息。通过&lt;code&gt;mesg n&lt;/code&gt;来关闭接收消息，但无法拒绝root的消息。通过&lt;code&gt;mesg y&lt;/code&gt;来开启接收消息。使用wall可以对系统上所有的用户发送消息&lt;code&gt;wall &amp;quot;hello world&amp;quot;&lt;/code&gt;。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;manmanual用户手册&#34;&gt;
+  man（manual）用户手册
+  &lt;a class=&#34;anchor&#34; href=&#34;#manmanual%e7%94%a8%e6%88%b7%e6%89%8b%e5%86%8c&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;man中有几个常用的数字的含义：1 用户在shell环境中可以操作的指令或可执行文件；2. 系统调用，如&lt;code&gt;man 2 open&lt;/code&gt;；3. 函数库调用；4. 特殊文件，如&lt;code&gt;man 4 tty&lt;/code&gt;；5 配置文件或者某些文件的格式；6. 游戏；7. 杂项；8 系统管理员可用的指令。例：&lt;code&gt;man 8 sudo&lt;/code&gt;；9. 内核例程。&lt;/li&gt;
+&lt;li&gt;man page一般包含：①NAME：简短的说明；②SYNOPSIS：简短的指令下达语法说明；③DESCRIPTION：较完整的说明；④OPTIONS；⑤COMMANDS：当这个程序执行的时候，可以在此程序中下达的指令。⑥FILES：关联的文件；⑦SEE ALSO：其他可以参考的信息；⑧EXAMPLE：一些可以参考的范例。&lt;/li&gt;
+&lt;li&gt;快捷键：空格键:向下翻一页    [Page Up]:向上翻一页    [Page Down]:向下翻一页    [Home]:去第一页    [End]:去最后一页    /string:向下搜索string    ?string:向上搜索string    n/N:n表示下一个搜索，N表示上一个搜索。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;selinux&#34;&gt;
+  SELinux
+  &lt;a class=&#34;anchor&#34; href=&#34;#selinux&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;全称是Security Enhanced Linux。SELinux是在进行进程、文件等细部权限设定依据的一个核心模块。SELinux提供了一些预设的策略（Policy），并在政策内提供了多个规则（rule）。&lt;/li&gt;
+&lt;li&gt;自主式访问控制（Discretionary Access Control，DAC）是根据进程的拥有者与文件资源的rwx权限来决定有无存取的能力。&lt;/li&gt;
+&lt;li&gt;委任式访问控制（Mandatory Access Control，MAC）可以根据特定的进程和特定的文件资源来进行权限的管控，即使是root，在使用不同的进程时，取得到的权限不一定是root，而要看当时进程的设定而定。控制的主体由使用者变成了进程。&lt;/li&gt;
+&lt;li&gt;SELinux是通过MAC的方式来管控进程，控制的主体是进程，而目标是该进程能否读取的文件资源。
+&lt;ul&gt;
+&lt;li&gt;主体（Subject）：即进程。&lt;/li&gt;
+&lt;li&gt;目标（Object）：主体目标能否存取的目标资源，一般就是文件系统。&lt;/li&gt;
+&lt;li&gt;策略（Policy）：由于进程和文件数量庞大，SELinux会依据某些服务来制定基本的存取安全性策略，这些策略中由详细的规则（rule）来指定不同的服务开放某些资源的存取与否。Linux里提供了三个主要的策略，分别是：
+&lt;ul&gt;
+&lt;li&gt;targeted：针对网络服务限制多，针对本机限制少，是预设的策略。&lt;/li&gt;
+&lt;li&gt;minimum：仅针对选择的进程来保护。&lt;/li&gt;
+&lt;li&gt;mls：完整的SELinux限制，限制较为严格。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;安全性本文（security context）：主体能不能存取目标除了策略指定外，主体和目标的安全性本文必须一致才能够顺利存取，安全性本文类似于文件系统的rwx。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;主体如果要存取目标，首先需要通过SELinux政策内的规则；其次与目标资源的安全性本文对比；最后再检查目标的rwx权限。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;安全性文本&#34;&gt;
+  安全性文本
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%ae%89%e5%85%a8%e6%80%a7%e6%96%87%e6%9c%ac&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;文件的安全性文本是放到文件的inode内的，可以使用&lt;code&gt;ls -Z&lt;/code&gt;去观察安全性文本。&lt;/li&gt;
+&lt;li&gt;安全性文本主要用冒号分为三个字段。&lt;code&gt;identify:role:type&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;身份识别（Identify），常见的有：
+&lt;ul&gt;
+&lt;li&gt;unconfined_u：不受限的用户，也就是说该文件来自于不受限的进程所产生的。&lt;/li&gt;
+&lt;li&gt;system_u：系统用户，大部分就是系统自己产生的。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;基本上如果是系统或软件本身所提供的文件，大多就是system_u这个身份名称，如果是用户透过bash自己建立的文件，大多数是不受限的unconfined_u，如果是网络服务所产生的文件，或者是系统服务运作过程中产生的文件，大部分的识别就会是system_u。&lt;/li&gt;
+&lt;li&gt;角色（Role）
+&lt;ul&gt;
+&lt;li&gt;object_r：代表的是文件或目录等文件资源。&lt;/li&gt;
+&lt;li&gt;system_r：代表的就是进程。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;类型（Type），一个主体进程能不能读取到资源，与类型有关，类型在文件和进程中的定义不太相同。在文件资源上称为类型Type，在进程上称为领域domain。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;selinux三种模式的启动关闭和观察&#34;&gt;
+  SELinux三种模式的启动、关闭和观察
+  &lt;a class=&#34;anchor&#34; href=&#34;#selinux%e4%b8%89%e7%a7%8d%e6%a8%a1%e5%bc%8f%e7%9a%84%e5%90%af%e5%8a%a8%e5%85%b3%e9%97%ad%e5%92%8c%e8%a7%82%e5%af%9f&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;SELinux目前共有三种模式，分别为：
+&lt;ul&gt;
+&lt;li&gt;enforcing：强制模式，代表SELinux正确的开始限制domain/type了。&lt;/li&gt;
+&lt;li&gt;permissive：宽容模式，表示不会实际限制domain和type，但会有警告信息。&lt;/li&gt;
+&lt;li&gt;disable：关闭，代表SELinux并没有实际运作。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#获取当前的SELinux模式&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;getenforce
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#查询当前的策略&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sestatus 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#修改策略，修改/etc/selinux/config的SELINUX=enforcing&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#SELinux在enforcing和permissive之间切换无需重启&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#切换到disable或者从disable切换到其他需要重启&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;setenforce &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;0|1&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;#0表示permissive，1表示Enforcing&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+    </item>
+    
+    <item>
+      <title>文件</title>
+      <link>/posts/linux/%E6%96%87%E4%BB%B6/</link>
+      <pubDate>Wed, 27 Jan 2021 11:17:28 +0000</pubDate>
+      
+      <guid>/posts/linux/%E6%96%87%E4%BB%B6/</guid>
+      <description>&lt;h2 id=&#34;目录介绍&#34;&gt;
+  目录介绍
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e7%9b%ae%e5%bd%95%e4%bb%8b%e7%bb%8d&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;根目录&#34;&gt;
+  根目录
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%a0%b9%e7%9b%ae%e5%bd%95&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;目录&lt;/th&gt;
+&lt;th&gt;介绍&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;/bin&lt;/td&gt;
+&lt;td&gt;（binary）存放很多可执行的指令，该路径下的指令可以被root和一般账号所使用，比如cat，chmod，mv，bash等&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/boot&lt;/td&gt;
+&lt;td&gt;存放开机会使用到的文件，如/boot/grub&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/dev&lt;/td&gt;
+&lt;td&gt;linux中任何外部设备都是以文件的形态存在于这个目录中&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/etc&lt;/td&gt;
+&lt;td&gt;系统主要的配置文件几乎都在这个目录中，&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/lib&lt;/td&gt;
+&lt;td&gt;存放开机时会用到的库，以及在/bin或/sbin下面命令会调用的函数库。（/lib64：用来存放于/lib不同格式的支持64位的二进制函数库）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/media&lt;/td&gt;
+&lt;td&gt;存放的是可移除的设备，如光盘、dvd等，能暂时挂载到这里&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/mnt&lt;/td&gt;
+&lt;td&gt;可以用来暂时挂载某些额外的设备&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/opt&lt;/td&gt;
+&lt;td&gt;如果自行安装（不使用apt或yum命令安装的）可以放到这里，但一般还是习惯放到/usr/local中&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/run&lt;/td&gt;
+&lt;td&gt;规定开机后所产生的各项信息要放到该文件夹中&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/sbin&lt;/td&gt;
+&lt;td&gt;设置系统环境的，包括了开机、修复、还原系统所需要的指令。某些服务器软件程序一般放到/usr/sbin中，而向本机自行安装的软件所产生的系统执行文件，则放置在/usr/local/sbin中。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/srv&lt;/td&gt;
+&lt;td&gt;（service）是一些网络服务启动后，这些服务所需要取用的数据目录&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/tmp&lt;/td&gt;
+&lt;td&gt;暂时放置文件的位置&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/home&lt;/td&gt;
+&lt;td&gt;系统默认的使用者主文件夹。如bes用户的默认文件夹就是/home/bes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/root&lt;/td&gt;
+&lt;td&gt;root的主文件夹&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/lost+found&lt;/td&gt;
+&lt;td&gt;使用ext文件系统格式才会产生的目录，目的是当文件系统发生错误时，将一些遗失的片段放到这&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/proc&lt;/td&gt;
+&lt;td&gt;这个目录下的数据都在内存中，所以本身不占磁盘空间。如/proc/cpuinfo等。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/sys&lt;/td&gt;
+&lt;td&gt;主要记录与核心与系统硬件信息较相关的信息。不占磁盘空间&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/usr&lt;/td&gt;
+&lt;td&gt;（unix software resource）与软件安装有关；&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/var&lt;/td&gt;
+&lt;td&gt;（variable）与系统运行过程有关。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;usr&#34;&gt;
+  /usr
+  &lt;a class=&#34;anchor&#34; href=&#34;#usr&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;目录&lt;/th&gt;
+&lt;th&gt;介绍&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;/usr/bin&lt;/td&gt;
+&lt;td&gt;一般用户能使用的指令放到这。centos7已经将全部的用户指令放到这里，使用链接的方式将/bin链接于此。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/usr/lib&lt;/td&gt;
+&lt;td&gt;与/lib功能相同，/lib就是链接到此目录中的。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/usr/local&lt;/td&gt;
+&lt;td&gt;在本机自行安装自己下载的软件，建议安装到此目录。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/usr/sbin&lt;/td&gt;
+&lt;td&gt;/sbin就是链接到此目录。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/usr/share&lt;/td&gt;
+&lt;td&gt;好多文档都在这里。如/usr/share/man（在线说明文件）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/usr/include&lt;/td&gt;
+&lt;td&gt;c/c++等头文件和include文件的放置位置&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/usr/src&lt;/td&gt;
+&lt;td&gt;源代码建议放到这里。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/usr/libexec&lt;/td&gt;
+&lt;td&gt;某些不被一般用户惯用的执行文件或脚本等都放在此目录。例如大部分x视窗下的操作指令很多都放在此目录下。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/usr/lib64&lt;/td&gt;
+&lt;td&gt;/lib64就是链接过来的&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;var&#34;&gt;
+  /var
+  &lt;a class=&#34;anchor&#34; href=&#34;#var&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;目录&lt;/th&gt;
+&lt;th&gt;介绍&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;/var/cache&lt;/td&gt;
+&lt;td&gt;应用程序运行过程产生的一些暂存盘&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/var/lib&lt;/td&gt;
+&lt;td&gt;程序本身执行的过程中，需要使用到的数据文件放置的目录&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/var/lock&lt;/td&gt;
+&lt;td&gt;某些设备或者是文件资源一次只能被一个应用程序所使用。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/var/log&lt;/td&gt;
+&lt;td&gt;登陆文件放置的目录&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/var/run&lt;/td&gt;
+&lt;td&gt;某些应用程序启动后，会将他们的pid放置到该目录，这个目录链接到了/run&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;proc&#34;&gt;
+  /proc
+  &lt;a class=&#34;anchor&#34; href=&#34;#proc&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;目录&lt;/th&gt;
+&lt;th&gt;介绍&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;目前主机上的各个进程的PID都是以目录的形态存在/proc中，如PID为1的所有相关信息都写入在/proc/1/文件夹下。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/proc/cmdline&lt;/td&gt;
+&lt;td&gt;加载 kernel 时所下达的相关指令与参数！&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/proc/cpuinfo&lt;/td&gt;
+&lt;td&gt;本机的cpu相关信息，包含频率、类型。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/proc/devices&lt;/td&gt;
+&lt;td&gt;这个文件记录了系统各个主要装置的主要装置代号&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/proc/filesystems&lt;/td&gt;
+&lt;td&gt;目前系统已经加载的文件系统&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/proc/meminfo&lt;/td&gt;
+&lt;td&gt;使用 free 列出的内存信息，在这里也能够查阅到！&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/proc/loadavg&lt;/td&gt;
+&lt;td&gt;top 以及 uptime 的三个平均数值就是记录在此！&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/proc/modules&lt;/td&gt;
+&lt;td&gt;目前我们的 Linux 已经加载的驱动程序&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/proc/mounts&lt;/td&gt;
+&lt;td&gt;系统已经挂载的数据，就是用 mount 这个指令呼叫出来的数据啦！&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/proc/swaps&lt;/td&gt;
+&lt;td&gt;到底系统挂加载的内存在哪里？使用掉的 partition 就记录在此。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/proc/partitions&lt;/td&gt;
+&lt;td&gt;使用 fdisk -l 会出现目前所有的 partition ，在这个文件当中也有纪录。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/proc/version&lt;/td&gt;
+&lt;td&gt;核心的版本，就是用 uname -a 显示的内容&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;/proc/bus/*&lt;/td&gt;
+&lt;td&gt;一些总线的装置，还有 USB 的装置也记录在此&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;linux文件信息&#34;&gt;
+  Linux文件信息
+  &lt;a class=&#34;anchor&#34; href=&#34;#linux%e6%96%87%e4%bb%b6%e4%bf%a1%e6%81%af&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;-rw-r--r-- 1 bes bes  2625 Jan 27 11:11 _config.yml&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;第一栏表示文件类型和权限；
+&lt;ul&gt;
+&lt;li&gt;第一个字符代表该文件的类型，-表示文件，d表示目录，l表示链接文件（link），b表示区块文件如硬盘，在/dev/sda（block），c表示字符设备文件，如鼠标键盘（character），s表示数据接口文件（sockets），p表示数据输送档（FIFO,pipe）。&lt;/li&gt;
+&lt;li&gt;下来9个字符每三个为一组（r表示可读，w表示可写，x表示可执行，-表示无该权限）：
+&lt;ul&gt;
+&lt;li&gt;第一组表示文件拥有者可具备的权限；&lt;/li&gt;
+&lt;li&gt;第二组表示加入此群组的账号的权限；&lt;/li&gt;
+&lt;li&gt;第三组为非本人且没有加入本群组的其他账号的权限。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;第二栏表示有多少文件名链接到此节点（i-node）；&lt;/li&gt;
+&lt;li&gt;第三栏表示该文件所属的用户，第四栏表示所属群组；&lt;/li&gt;
+&lt;li&gt;第五栏表示容量大小，第六栏表示最近的修改时间，第七栏为文件名。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;tips&#34;&gt;
+  tips
+  &lt;a class=&#34;anchor&#34; href=&#34;#tips&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;如果用户对一个目录只有只读权限，那么是无法进入此目录的，他必须持有执行权限。&lt;/li&gt;
+&lt;li&gt;对目录有只读权限表示它可以查看该目录下的文件名数据（用ls+目录名）。&lt;/li&gt;
+&lt;li&gt;对目录有写权限表示它可以对该目录下的文件或目录执行：①新建文件和目录；②删除文件和目录（不论该文件的权限是什么）；③修改文件或目录名；④移动文件和目录。&lt;/li&gt;
+&lt;li&gt;root不受权限限制。&lt;/li&gt;
+&lt;li&gt;文件的写权限指可以编辑文件，但不包含删除文件。&lt;/li&gt;
+&lt;li&gt;umask：查看和设置文件权限。如002，表示user和group拥有全部权限，others拥有r和x权限。&lt;/li&gt;
+&lt;li&gt;特殊权限（有些文件或目录会出现rws或rwt的情况，这就是特殊权限。注意：当S或者T为大写的时候，表示无效，因为使用者没有该程序的执行权限）
+&lt;ul&gt;
+&lt;li&gt;SUID（s）：只对二进制文件（可执行的程序）有效；执行者要对该程序具有x的权限；在执行该程序时，执行者将短暂获得该程序拥有者（比如root）的权限。&lt;/li&gt;
+&lt;li&gt;SGID（s）：可以针对二进制文件或目录来设置。对二进制文件：执行者要对该程序具有x的权限，在执行该程序时，执行者将获得该程序所在群组的支持。对目录：代表使用者在这个目录下面新建的文件的文件群组都会与该目录的群组名称相同。&lt;/li&gt;
+&lt;li&gt;SBIT（t）：只针对目录有效，当使用者对该目录有w和x权限，只有自己和root才能删掉自己创建的文件或目录。&lt;/li&gt;
+&lt;li&gt;权限和数字存在对应，SUID为4，SGID为2，SBIT为1。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;文件系统&#34;&gt;
+  文件系统
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%96%87%e4%bb%b6%e7%b3%bb%e7%bb%9f&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;传统磁盘中，一个分区就是一个文件系统，但现在并不准确。文件系统通常将权限和属性放在inode中，将实际数据放到data block中。另外，有一个superblock记录整个文件系统的整体信息。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;superblock：记录此文件系统的整体信息，包括inode/block的总量、使用量、剩余量，以及文件系统的格式与相关信息等；&lt;/li&gt;
+&lt;li&gt;inode：记录文件的属性（rwx、群组、时间参数等），一个文件占用一个inode，同时记录此文件数据所在的block号码；&lt;/li&gt;
+&lt;li&gt;block：实际记录文件的内容，若文件太大时，会占用多个block。
+每个inode和block都有编号，inode内有文件数据的block号码。&lt;/li&gt;
+&lt;li&gt;索引文件系统：上面的数据存取方法就是。&lt;/li&gt;
+&lt;li&gt;FAT：没有inode存在，每个block号码都记录在前一个block中，像一条链子一样。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;ext2&#34;&gt;
+  Ext2
+  &lt;a class=&#34;anchor&#34; href=&#34;#ext2&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;EXT2设置多个区块群组，每个区块群组都有独立的inode/block/superblock系统。
+每个区块群组有6个部分：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;data block（数据区块）：存放文件内容。Ext2中支持的block大小有1k，2k及4k，在格式化的时候就固定了，每个block只能放一个文件的数据。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;th&gt;1kB&lt;/th&gt;
+&lt;th&gt;2kB&lt;/th&gt;
+&lt;th&gt;4kB&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;最大单一文件限制&lt;/td&gt;
+&lt;td&gt;16GB&lt;/td&gt;
+&lt;td&gt;256GB&lt;/td&gt;
+&lt;td&gt;2TB&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;最大文件系统容量&lt;/td&gt;
+&lt;td&gt;2TB&lt;/td&gt;
+&lt;td&gt;8TB&lt;/td&gt;
+&lt;td&gt;16TB&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;inode table（inode 表格）：记录的数据：存取模式（rwx）；拥有者和群组；文件的大小；文件创建时间，修改时间；读取时间；定义文件特性的flag；该文件内容的指向。
+&lt;ul&gt;
+&lt;li&gt;inode数量和大小在格式化时就固定了。&lt;/li&gt;
+&lt;li&gt;每个inode大小固定为128B（新的ext4和xfs可以设置到256B）；&lt;/li&gt;
+&lt;li&gt;每个文件只会占用一个inode；所以文件系统能创建的文件数量与inode的数量有关；&lt;/li&gt;
+&lt;li&gt;系统读取文件时需要先找到inode，在分析权限后，才进行下一步；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

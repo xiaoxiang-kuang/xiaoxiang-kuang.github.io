@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>TCP IP网络编程 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-10-多进程服务器端">1-10 多进程服务器端</a>
+      <ul>
+        <li><a href="#101-进程概念及应用">10.1 进程概念及应用</a></li>
+        <li><a href="#102-进程和僵尸进程">10.2 进程和僵尸进程</a>
+          <ul>
+            <li><a href="#僵尸进程">僵尸进程</a></li>
+            <li><a href="#销毁僵尸进程1利用wait函数">销毁僵尸进程1：利用wait函数</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>TCP IP网络编程</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-10-多进程服务器端">1-10 多进程服务器端</a>
+      <ul>
+        <li><a href="#101-进程概念及应用">10.1 进程概念及应用</a></li>
+        <li><a href="#102-进程和僵尸进程">10.2 进程和僵尸进程</a>
+          <ul>
+            <li><a href="#僵尸进程">僵尸进程</a></li>
+            <li><a href="#销毁僵尸进程1利用wait函数">销毁僵尸进程1：利用wait函数</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+  <article class="markdown"><h1 id="1-10-多进程服务器端">
+  1-10 多进程服务器端
+  <a class="anchor" href="#1-10-%e5%a4%9a%e8%bf%9b%e7%a8%8b%e6%9c%8d%e5%8a%a1%e5%99%a8%e7%ab%af">#</a>
+</h1>
+<h2 id="101-进程概念及应用">
+  10.1 进程概念及应用
+  <a class="anchor" href="#101-%e8%bf%9b%e7%a8%8b%e6%a6%82%e5%bf%b5%e5%8f%8a%e5%ba%94%e7%94%a8">#</a>
+</h2>
+<ul>
+<li>通过fork函数创建进程</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;unistd.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#失败时返回-1
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">pid_t</span> <span style="color:#a6e22e">fork</span>(<span style="color:#66d9ef">void</span>);
+</span></span></code></pre></div><ul>
+<li>fork函数将创建进程副本。复制正在运行的、调用fork函数的进程。</li>
+<li>因为是通过同一个进程，复制相同的内存空间，之后的程序流要根据fork函数返回值进行区分：
+<ul>
+<li>父进程：fork函数返回子进程ID</li>
+<li>子进程：fork函数返回0</li>
+</ul>
+</li>
+</ul>
+<h2 id="102-进程和僵尸进程">
+  10.2 进程和僵尸进程
+  <a class="anchor" href="#102-%e8%bf%9b%e7%a8%8b%e5%92%8c%e5%83%b5%e5%b0%b8%e8%bf%9b%e7%a8%8b">#</a>
+</h2>
+<h3 id="僵尸进程">
+  僵尸进程
+  <a class="anchor" href="#%e5%83%b5%e5%b0%b8%e8%bf%9b%e7%a8%8b">#</a>
+</h3>
+<ul>
+<li>向exit函数传递的参数值和main函数的return值都会返回给操作系统，但是操作系统不会销毁子进程，直到这些值传给产生该子进程的父进程，处在这种状态下的进程就是僵尸进程。</li>
+<li>把子进程变成僵尸进程的正是操作系统。</li>
+<li>只有当父进程收到子进程的exit参数值或return返回值时，僵尸进程才会被销毁，父进程需要主动获取子进程的返回值。</li>
+<li>通过<code>ps aux</code>命令，看到STAT哪一行的状态为<code>Z+</code>，即是僵尸进程。</li>
+</ul>
+<h3 id="销毁僵尸进程1利用wait函数">
+  销毁僵尸进程1：利用wait函数
+  <a class="anchor" href="#%e9%94%80%e6%af%81%e5%83%b5%e5%b0%b8%e8%bf%9b%e7%a8%8b1%e5%88%a9%e7%94%a8wait%e5%87%bd%e6%95%b0">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;sys/wait.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#成功时返回子进程ID，失败时返回-1
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">pid_t</span> <span style="color:#a6e22e">wait</span>(<span style="color:#66d9ef">int</span> <span style="color:#f92672">*</span>statloc);
+</span></span></code></pre></div><ul>
+<li>wait函数是阻塞函数</li>
+<li>子进程的返回值会存到<code>statloc</code>中，<code>statloc</code>中还有其他信息，通过如下方式获取：</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">int</span> pid <span style="color:#f92672">=</span> <span style="color:#a6e22e">fork</span>();
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (pid <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>) 
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">exit</span>(<span style="color:#ae81ff">7</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (pid <span style="color:#f92672">!=</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> status;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">wait</span>(<span style="color:#f92672">&amp;</span>status);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">WIFEXITED</span>(status))
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;Child send : %d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, <span style="color:#a6e22e">WEXITSTATUS</span>(status));
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

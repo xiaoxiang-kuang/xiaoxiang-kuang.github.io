@@ -1,0 +1,593 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>http on 小象的blog</title>
+    <link>/tags/http/</link>
+    <description>Recent content in http on 小象的blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Fri, 20 Aug 2021 15:35:31 +0000</lastBuildDate><atom:link href="/tags/http/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>https</title>
+      <link>/posts/http/https/</link>
+      <pubDate>Fri, 20 Aug 2021 15:35:31 +0000</pubDate>
+      
+      <guid>/posts/http/https/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;如何保证公钥不被篡改？将公钥放在数字证书中，只要证书是可信的，公钥就是可信的。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;握手过程&#34;&gt;
+  握手过程
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%8f%a1%e6%89%8b%e8%bf%87%e7%a8%8b&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;涉及四次通信。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;1-客户端发送请求clienthello&#34;&gt;
+  1. 客户端发送请求（ClientHello）。
+  &lt;a class=&#34;anchor&#34; href=&#34;#1-%e5%ae%a2%e6%88%b7%e7%ab%af%e5%8f%91%e9%80%81%e8%af%b7%e6%b1%82clienthello&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;p&gt;客户端向服务器提供以下信息：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;支持的协议版本，如TLS1.0版本。&lt;/li&gt;
+&lt;li&gt;客户端生成的随机数，是之后生成会话密钥的一部分。&lt;/li&gt;
+&lt;li&gt;支持的加密算法，如RSA。&lt;/li&gt;
+&lt;li&gt;支持的压缩算法。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&#34;2-服务器收到请求后向客户端发出回应serverhello&#34;&gt;
+  2. 服务器收到请求后，向客户端发出回应（ServerHello）。
+  &lt;a class=&#34;anchor&#34; href=&#34;#2-%e6%9c%8d%e5%8a%a1%e5%99%a8%e6%94%b6%e5%88%b0%e8%af%b7%e6%b1%82%e5%90%8e%e5%90%91%e5%ae%a2%e6%88%b7%e7%ab%af%e5%8f%91%e5%87%ba%e5%9b%9e%e5%ba%94serverhello&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;p&gt;服务器向客户端发出回应包含以下内容（如果服务器需要确认客户端的身份，就需要再包含一项请求，要求和护短提供证书文件）：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;确认使用的协议版本。&lt;/li&gt;
+&lt;li&gt;服务器生成的随机数，是之后生成会话密钥的一部分。&lt;/li&gt;
+&lt;li&gt;确认使用的加密算法。&lt;/li&gt;
+&lt;li&gt;服务器证书。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&#34;3-客户端回应&#34;&gt;
+  3. 客户端回应
+  &lt;a class=&#34;anchor&#34; href=&#34;#3-%e5%ae%a2%e6%88%b7%e7%ab%af%e5%9b%9e%e5%ba%94&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;p&gt;客户端收到回应后，先验证服务器的证书，如果证书不是可信机构颁发、证书中的域名与实际域名不一致、证书已经过期，就会显示一个警告询问是否继续。如果继续或者证书没有问题，客户端向服务端发送以下内容：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;一个随机数（pre-master key），该随机数用服务器的公钥加密。&lt;/li&gt;
+&lt;li&gt;编码改变通知，表示随后的信息都用协商的加密算法和密钥发送。&lt;/li&gt;
+&lt;li&gt;客户端的握手结束通知，包含前面发送所有内容的hash值，供服务器校验。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&#34;4-服务器回应&#34;&gt;
+  4. 服务器回应
+  &lt;a class=&#34;anchor&#34; href=&#34;#4-%e6%9c%8d%e5%8a%a1%e5%99%a8%e5%9b%9e%e5%ba%94&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;p&gt;服务器收到第三个随机数后，计算会话使用的“会话密钥”，向客户端发送以下信息：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;编码改变通知，表面之后的信息都用协商的加密算法和密钥发送。&lt;/li&gt;
+&lt;li&gt;服务器握手状态结束通知，包含签名发送的所有内容的hash值。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;中间人攻击：如果中间人在客户端与服务端开始建立连接的时候，拦截客户端的请求，让客户端与自己通信，自己再和服务端通信，出现了：客户端请求-&amp;gt;中间人-&amp;gt;服务端，服务端响应-&amp;gt;中间人-&amp;gt;客户端，中间人能获取到客户端请求的所有数据和服务端响应的所有数据。所以当出现证书不安全的时候要注意。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;参考链接：&lt;/strong&gt;
+  &lt;a href=&#34;https://www.ruanyifeng.com/blog/2014/02/ssl_tls.html&#34;&gt;SSL/TLS协议运行机制的概述 - 阮一峰的网络日志 (ruanyifeng.com)&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>rest</title>
+      <link>/posts/http/rest/</link>
+      <pubDate>Thu, 19 Aug 2021 14:19:34 +0000</pubDate>
+      
+      <guid>/posts/http/rest/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;POST：创建，PUT：修改，DELETE：删除，GET：获取&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>http状态码</title>
+      <link>/posts/http/http%E7%8A%B6%E6%80%81%E7%A0%81/</link>
+      <pubDate>Tue, 17 Aug 2021 15:47:27 +0000</pubDate>
+      
+      <guid>/posts/http/http%E7%8A%B6%E6%80%81%E7%A0%81/</guid>
+      <description>&lt;h2 id=&#34;消息响应&#34;&gt;
+  消息响应
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%b6%88%e6%81%af%e5%93%8d%e5%ba%94&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;101 Switching Protocol&lt;/code&gt; 表示正在切换协议。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-http&#34; data-lang=&#34;http&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;HTTP&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1.1&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;101&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Switching Protocols&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Upgrade&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;websocket&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Connection&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;Upgrade&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;成功响应&#34;&gt;
+  成功响应
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%88%90%e5%8a%9f%e5%93%8d%e5%ba%94&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;200 OK&lt;/code&gt;请求成功。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;201 CREATED&lt;/code&gt;请求已成功，通常是POST、PUT请求后返回的响应。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;重定向&#34;&gt;
+  重定向
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e9%87%8d%e5%ae%9a%e5%90%91&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;301 MOVED PERMENENTLY&lt;/code&gt;请求的资源已经被永久移动到新位置。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;302 FOUND&lt;/code&gt;重定向是临时的。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;304 Not Modified&lt;/code&gt; 当文档内容没有修改，服务器会返回这个状态码，304响应禁止包含消息体。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;客户端响应&#34;&gt;
+  客户端响应
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%ae%a2%e6%88%b7%e7%ab%af%e5%93%8d%e5%ba%94&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;400 BAD REQUEST&lt;/code&gt;请求参数有误。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;401 UNAUTHORIZED&lt;/code&gt;当前请求需要用户验证。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;403 FORBIDDEN&lt;/code&gt;服务器已经理解请求，但是拒绝执行。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;404 NOT FOUND&lt;/code&gt;请求资源未找到。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;405 Method Not Allowed&lt;/code&gt; 请求方法不能被用于请求相应的资源。该响应必须返回一个Allow头用以表述当前资源能够接受的请求方法的列表。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;414 URI Too Long&lt;/code&gt; 请求的URI长度超过了服务器能够解释的长度，因此服务器拒绝对该请求提供服务。通常是因为超过了GET方法传输数据的上限，可以改为POST方法。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;服务端响应&#34;&gt;
+  服务端响应
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%9c%8d%e5%8a%a1%e7%ab%af%e5%93%8d%e5%ba%94&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;500 INTERNAL SERVER ERROR&lt;/code&gt;服务器内部错误。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;502 BAD GATEWAY&lt;/code&gt;服务器作为网关需要得到处理该请求的响应，但得到了一个错误的响应。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;503 SERVICE UNAVILABLE&lt;/code&gt;服务器没有准备好处理请求。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;参考链接：&lt;/strong&gt;
+  &lt;a href=&#34;https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status&#34;&gt;HTTP 响应代码 - HTTP | MDN (mozilla.org)&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>CORS</title>
+      <link>/posts/http/cors/</link>
+      <pubDate>Wed, 24 Mar 2021 15:02:16 +0000</pubDate>
+      
+      <guid>/posts/http/cors/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;跨源资源共享（Cross-Origin Resource Sharing），CORS是一种基于HTTP头的机制，该机制通过允许服务器标识除了它自己以外的其他origin（源是协议、主机名和端口号的组合），这样其他origin就可以加载这些资源。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;XMLHttpRequest和Fetch API遵循同源策略。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;Access-Control-Allow-Origin: *&lt;/code&gt;：允许所有origin访问该资源。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;同源策略&#34;&gt;
+  同源策略
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%90%8c%e6%ba%90%e7%ad%96%e7%95%a5&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;同源是指协议相同、主机名相同、端口相同。&lt;/li&gt;
+&lt;li&gt;非同源会限制Cookie和Ajax。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;访问控制场景&#34;&gt;
+  访问控制场景
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e8%ae%bf%e9%97%ae%e6%8e%a7%e5%88%b6%e5%9c%ba%e6%99%af&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;浏览器将CORS请求分为两类，简单请求和非简单请求。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;简单请求&#34;&gt;
+  简单请求
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e7%ae%80%e5%8d%95%e8%af%b7%e6%b1%82&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;如果请求的HTTP方法是GET、HEAD、POST，并且HTTP头部除了被用户代理自动设置的首部字段外，只有Accept-Language、Content-Language、Content-Type ；并且Content-Type 的值仅限于下列三者之一： text/plain、multipart/form-data、application/x-www-form-urlencoded。那么Web浏览器发出的是简单请求。发出简单请求时，该请求将像一般请求一样发送到服务器。&lt;/li&gt;
+&lt;li&gt;简单请求不会触发CORS 预检请求。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;预检请求&#34;&gt;
+  预检请求
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e9%a2%84%e6%a3%80%e8%af%b7%e6%b1%82&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;预检请求会先使用&lt;code&gt;OPTION&lt;/code&gt;方法发起一个预检请求到服务器，以获知服务器是否允许该实际请求。预检请求的使用可以避免跨域请求对服务器的用户数据产生未预期的影响。当预检不通过，实际的请求将不会发送。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;http响应首部&#34;&gt;
+  HTTP响应首部
+  &lt;a class=&#34;anchor&#34; href=&#34;#http%e5%93%8d%e5%ba%94%e9%a6%96%e9%83%a8&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;access-control-allow-origin&#34;&gt;
+  Access-Control-Allow-Origin
+  &lt;a class=&#34;anchor&#34; href=&#34;#access-control-allow-origin&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Access-Control-Allow-Origin: &amp;lt;origin&amp;gt; | *
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;origin参数的值指定了允许访问该资源的外域URL，对不需要携带身份凭证的请求，服务器可以指定该字段的值为通配符，表示允许来自所有域的请求。&lt;/li&gt;
+&lt;li&gt;如果服务器指定了具体的域名而非&amp;quot;*&amp;quot;，那么响应首部中的Vary字段的值必须包含Origin。这将告诉客户端，服务器对不同的源站返回不同的内容。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;accsess-control-expose-headers&#34;&gt;
+  Accsess-Control-Expose-Headers
+  &lt;a class=&#34;anchor&#34; href=&#34;#accsess-control-expose-headers&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;在跨源访问时，XMLHttpRequest对象的getResponseHeaders方法只能拿到Cache-Control、Content-Language、Content-Type、Expires、Last-Modified、Pragma，如果要访问其他头，需要服务器设置响应头。&lt;/li&gt;
+&lt;li&gt;Accsess-Control-Expose-Headers头让服务器把允许浏览器访问的头放入白名单。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Access-Control-Expose-Headers: X-My-Custom-Header, X-Another-Custom-Header
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;access-control-max-age&#34;&gt;
+  Access-Control-Max-Age
+  &lt;a class=&#34;anchor&#34; href=&#34;#access-control-max-age&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;指定了预检的请求的结果能被缓存多久，单位是秒。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Access-Control-Max-Age: 3600
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;access-control-allow-credentials&#34;&gt;
+  Access-Control-Allow-Credentials
+  &lt;a class=&#34;anchor&#34; href=&#34;#access-control-allow-credentials&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Access-Control-Allow-Credentials 头指定了当浏览器的 credentials 设置为 true 时是否允许浏览器读取 response 的内容。当用在 预检测请求的响应中时，它指定了实际的请求是否可以使用 credentials。简单 GET 请求不会被预检。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;access-control-allow-methods&#34;&gt;
+  Access-Control-Allow-Methods
+  &lt;a class=&#34;anchor&#34; href=&#34;#access-control-allow-methods&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Access-Control-Allow-Methods 首部字段用于预检请求的响应。其指明了实际请求所允许使用的 HTTP 方法。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Access-Control-Allow-Methods: &amp;lt;method&amp;gt;[, &amp;lt;method&amp;gt;]*
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;access-control-allow-headers&#34;&gt;
+  Access-Control-Allow-Headers
+  &lt;a class=&#34;anchor&#34; href=&#34;#access-control-allow-headers&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Access-Control-Allow-Headers 首部字段用于预检请求的响应。其指明了实际请求中允许携带的首部字段。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;参考链接：
+  &lt;a href=&#34;https://developer.mozilla.org/zh-CN/docs/Web/HTTP/CORS&#34;&gt;跨资源共享（CORS）&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;参考链接：
+  &lt;a href=&#34;https://www.ruanyifeng.com/blog/2016/04/cors.html&#34;&gt;跨域资源共享 - 阮一峰的网络日志 (ruanyifeng.com)&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>http</title>
+      <link>/posts/http/HTTP/</link>
+      <pubDate>Sun, 28 Feb 2021 13:44:27 +0000</pubDate>
+      
+      <guid>/posts/http/HTTP/</guid>
+      <description>&lt;h2 id=&#34;http概述&#34;&gt;
+  HTTP概述
+  &lt;a class=&#34;anchor&#34; href=&#34;#http%e6%a6%82%e8%bf%b0&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;HTTP是一种client-server协议，由客户端发出的消息叫request，被服务端响应的消息叫response。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;http能控制什么&#34;&gt;
+  HTTP能控制什么
+  &lt;a class=&#34;anchor&#34; href=&#34;#http%e8%83%bd%e6%8e%a7%e5%88%b6%e4%bb%80%e4%b9%88&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;h4 id=&#34;一缓存&#34;&gt;
+  一、缓存
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e4%b8%80%e7%bc%93%e5%ad%98&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;常见的HTTP缓存只能存储GET响应。缓存的关键主要包括request method和目标url。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h5 id=&#34;缓存控制http11定义的cache-control&#34;&gt;
+  缓存控制(HTTP/1.1定义的Cache-Control)
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e7%bc%93%e5%ad%98%e6%8e%a7%e5%88%b6http11%e5%ae%9a%e4%b9%89%e7%9a%84cache-control&#34;&gt;#&lt;/a&gt;
+&lt;/h5&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Cache-Control:no-store&lt;/code&gt; ：没有缓存。缓存中不得存储任何关于客户端请求和服务端响应的内容。每次由客户端发起的请求都会下载完整的响应内容。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Cache-Control:no-cache&lt;/code&gt;：&lt;strong&gt;缓存但重新验证&lt;/strong&gt;。此方式下，每次有关请求发出时，该请求会带有与本缓存相关的验证字段，服务端会验证请求中所描述的缓存是否过期，如未过期（返回状态码304），则使用本地缓存副本。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Cache-Control:private&lt;/code&gt;&lt;strong&gt;|&lt;/strong&gt;&lt;code&gt;Cache-Control:public&lt;/code&gt; ：私有和公共缓存。private表示该响应是专用于某个用户的，中间人不能缓存此响应；public表示该缓存可以被任何中间人缓存。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Cache-Control:max-age=31536000&lt;/code&gt;：过期。表示资源能被缓存的最大时间，max-age是距离请求发起的时间的秒数。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Cache-Control:must-revalidate&lt;/code&gt;：验证方式。must-revalidate意味着在考虑使用一个陈旧的资源时，必须先验证它的状态，已过期的缓存将不被使用。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Pragme&lt;/code&gt;是HTTP/1.0定义的一个header属性，请求头中包含Pragme的效果与&lt;code&gt;Cache-Control:no-cache&lt;/code&gt;相同，但是HTTP响应头中没有明确定义这个属性。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h6 id=&#34;vary响应&#34;&gt;
+  Vary响应
+  &lt;a class=&#34;anchor&#34; href=&#34;#vary%e5%93%8d%e5%ba%94&#34;&gt;#&lt;/a&gt;
+&lt;/h6&gt;
+&lt;ul&gt;
+&lt;li&gt;Vary响应头决定了对后续的请求头，如何判断时请求一个新的资源还是使用缓存的文件。&lt;/li&gt;
+&lt;li&gt;当缓存服务器收到了一个请求，只有当前的请求和原始（缓存）的请求头跟缓存的响应头里的Vary都匹配，才能够使用缓存的响应。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;二开放同源限制&#34;&gt;
+  二、开放同源限制
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e4%ba%8c%e5%bc%80%e6%94%be%e5%90%8c%e6%ba%90%e9%99%90%e5%88%b6&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;只有来自相同来源的网页才能够获取网站的全部信息。HTTP可以通过修改头部来开放这样的限制。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;三认证&#34;&gt;
+  三、认证
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e4%b8%89%e8%ae%a4%e8%af%81&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;一些页面能被保护起来，仅让特定的用户进行访问。基本的认证功能可以直接通过HTTP提供。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;四代理和隧道&#34;&gt;
+  四、代理和隧道
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%9b%9b%e4%bb%a3%e7%90%86%e5%92%8c%e9%9a%a7%e9%81%93&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;通常服务器或客户端都是处于内网，对外网隐藏真实IP。因此HTTP请求就要通过代理越过这个网络屏障。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h5 id=&#34;正向代理&#34;&gt;
+  正向代理
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%ad%a3%e5%90%91%e4%bb%a3%e7%90%86&#34;&gt;#&lt;/a&gt;
+&lt;/h5&gt;
+&lt;ul&gt;
+&lt;li&gt;也可以叫网关，它存储并转发网络服务（如DNS、网页）以减少和控制大家使用的带宽。&lt;/li&gt;
+&lt;li&gt;正向代理代表客户端，可以隐藏客户端的身份。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h5 id=&#34;反向代理&#34;&gt;
+  反向代理
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%8f%8d%e5%90%91%e4%bb%a3%e7%90%86&#34;&gt;#&lt;/a&gt;
+&lt;/h5&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;反向代理代表服务器，可以隐藏服务器的身份。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;作用：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;负载均衡：在多个服务器之间分发负载，&lt;/li&gt;
+&lt;li&gt;缓存静态内容：缓存静态内容，为服务器分担压力，&lt;/li&gt;
+&lt;li&gt;压缩：压缩和优化内容以加快传输的速度。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;代理可以将请求地址设置为自身的ip。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;Forwarded&lt;/code&gt;（标准化版本）首部包含了代理服务器的客户端的信息。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;语法：&lt;code&gt;Forwarded:by=&amp;lt;identifier&amp;gt;;for=&amp;lt;identifier&amp;gt;;host=&amp;lt;host&amp;gt;;proto=&amp;lt;http|https&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;identifier可以是：①ip地址；②语义不明的标识符；③unknown。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;by=&amp;lt;identifier&amp;gt;&lt;/code&gt;该请求进入代理服务器的接口。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;for=&amp;lt;identifier&amp;gt;&lt;/code&gt;发起请求的客户端以及代理链中的一系列的代理服务器（这意味着要写多个for=）。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;host=&amp;lt;host&amp;gt;&lt;/code&gt;代理接收到的Host首部（Host请求指明了请求将要发送到的服务器主机名和端口号）的信息。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;proto=&amp;lt;http|https&amp;gt;&lt;/code&gt;表示发起请求时采用的何种协议。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;X-Forwarded-For&lt;/code&gt;：在客户端访问服务器的过程中，如果需要经过HTTP代理或者负载均衡服务器，可以使用该参数来获取最初发起请求的客户端的IP地址。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;语法：&lt;code&gt;X-Forwarded-For:&amp;lt;client&amp;gt;,&amp;lt;proxy1&amp;gt;,&amp;lt;proxy2&amp;gt;...&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;第一个参数表示客户端的IP地址，如果一个请求经过了多个代理服务器，那么每一个代理服务器的IP都会被依次记录在内。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;X-Forwarded-Host&lt;/code&gt;：用来确定客户端发起请求中使用Host指定的初始域名&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Host&lt;/code&gt;：Host请求头指明了请求将要发送到的服务器的主机名和端口号，所有&lt;strong&gt;HTTP/1.1请求报文中必须包含一个Host头字段&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;X-Forwarded-Proto&lt;/code&gt;：用来确定客户端与代理服务器或者负载均衡服务器之间连接所采用的传输协议。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;http报文&#34;&gt;
+  HTTP报文
+  &lt;a class=&#34;anchor&#34; href=&#34;#http%e6%8a%a5%e6%96%87&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;headers中以x开头的都不是http标准协议&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;http请求组成&#34;&gt;
+  http请求组成
+  &lt;a class=&#34;anchor&#34; href=&#34;#http%e8%af%b7%e6%b1%82%e7%bb%84%e6%88%90&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;第一行包括请求方法及请求参数&lt;/li&gt;
+&lt;li&gt;接下来的行每一行都表示一个HTTP首部，为服务器提供关于所需数据的信息&lt;/li&gt;
+&lt;li&gt;一个空行&lt;/li&gt;
+&lt;li&gt;可选数据块，包含更多数据，主要被POST方法使用。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-http&#34; data-lang=&#34;http&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;#一个http的动作，如下面的method
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;#要获取的资源路径，如下面的/chat
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;#HTTP协议版本号
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;GET&lt;/span&gt; /chat &lt;span style=&#34;color:#66d9ef&#34;&gt;HTTP&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1.1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;#Headers，为服务器表达其他的信息&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;#Host指明了要发送到的服务器主机名和端口号，如果没有包含端口号，会自动使用请求服务的默认端口。
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Host: xiaoxiang.space
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;#指明了client的应用类型，操作系统、软件开发商及版本号
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:86.0) Gecko/20100101 Firefox/86.0
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;#告知服务器客户端可以处理的内容类型，采用mime来表示，;q=表示前面这个类型权重因子，没写就默认是1
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Accept: application/json, text/javascript, */*; q=0.01
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;#客户端声明其能理解的自然语言
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;#会将客户端能够理解的内容编码方式通知给服务端。对应Content-Encoding
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Accept-Encoding: gzip, deflate
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;#指示资源的MIME类型，下面这是post请求的默认格式
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;#加了这个就是ajax异步请求
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;X-Requested-With: XMLHttpRequest
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;#用来指明发送给服务器的消息主体的大小
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Content-Length: 22
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;#指示了请求来自哪个站点。仅展示服务器名称，不包含任何路径。
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;#除了不包含任何路径，该字段与Referer类型。
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Origin: https://developer.mozilla.org
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;#决定当前的事务完成后，是否会关闭网络连接，如果是keep-alive，网络连接就是持久的，使得对同一个服务器的请求可以继续在该连接上完成
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Connection: keep-alive
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;#表示当前页面的来源页面的地址。如果当前页面采用的是非安全协议而来源页面采用的是安全协议时Referer不会被发送。
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Referer: http://xiaoxiang.space/index
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;#是由先前服务器通过Set-Cookie首部投放并存储到客户端。
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Cookie: JSESSIONID=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;#对于一些POST这样的方法，报文的body也包含了发送的资源
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;username=xxx&amp;amp;comment=xxx
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;http响应组成&#34;&gt;
+  HTTP响应组成
+  &lt;a class=&#34;anchor&#34; href=&#34;#http%e5%93%8d%e5%ba%94%e7%bb%84%e6%88%90&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;第一行是状态行，包括使用HTTP协议版本，状态码和一个状态描述。&lt;/li&gt;
+&lt;li&gt;接下来的每一行都表示一个HTTP首部，为客户端提供所发送数据的一些信息。&lt;/li&gt;
+&lt;li&gt;一个空行&lt;/li&gt;
+&lt;li&gt;最后一行是数据库，包含了响应的数据&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#一个HTTP协议版本号
+#一个状态码
+#一个状态信息，我这个请求中居然没有？？？
+HTTP/1.1 200 
+#HTTP headers
+#用来向客户端发送cookie，expires表示过期时间
+Set-Cookie: xiaoxiang.space=1; Max-Age=3600; Expires=Tue, 23-Mar-2021 11:21:23 GMT
+Content-Type: application/json
+#指明了将entity安全传递给用户的编码形式，chunked表示数据以一系列分块的形式发送，这种情况下不发送Content-Length。
+Transfer-Encoding: chunked
+#包含了报文创建的日期和时间。
+Date: Tue, 23 Mar 2021 10:21:23 GMT
+#需要将Connection首部设为keep-alive这个首部才有意义，可以设置超时时长和最大请求数。
+#HTTP/2中Connection和Keep-Alive是被忽略的。
+Keep-Alive: timeout=20
+Connection: keep-alive
+
+#下面是响应的数据
+xxx
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;参考链接：&lt;/strong&gt;
+  &lt;a href=&#34;https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers&#34;&gt;HTTP Headers - HTTP | MDN&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;HTTP消息是服务器和客户端之间交换数据的方式，有两种类型的消息：请求和响应。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;http的连接管理&#34;&gt;
+  HTTP的连接管理
+  &lt;a class=&#34;anchor&#34; href=&#34;#http%e7%9a%84%e8%bf%9e%e6%8e%a5%e7%ae%a1%e7%90%86&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;
+  &lt;img src=&#34;/img/web/1.png&#34; alt=&#34;HTTP连接管理&#34; /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;短连接&#34;&gt;
+  短连接
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e7%9f%ad%e8%bf%9e%e6%8e%a5&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;HTTP/1.0的默认模型，每一次HTTP请求之前都会有一次TCP握手。在HTTP/1.1中，当&lt;code&gt;Connection&lt;/code&gt;被设为&lt;code&gt;Close&lt;/code&gt;才会用到这个模型。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;长连接&#34;&gt;
+  长连接
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e9%95%bf%e8%bf%9e%e6%8e%a5&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;HTTP/1.1中默认就是长连接，一个长连接会保持一段时间，重复用于发送一系列请求，节省了新建TCP连接握手的时间，这个连接会在空闲一段时间后关闭（通过设置&lt;code&gt;Keep-Alive&lt;/code&gt;来指定一个最小的连接保持时间），长连接会消耗服务器资源（毕竟是TCP）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;流水线&#34;&gt;
+  流水线
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%b5%81%e6%b0%b4%e7%ba%bf&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;默认情况下HTTP请求是按顺序发出的，下一个请求只有在当前请求收到应答后才会被发出。而流水线是在同一条长链上发出连续的请求。想象很美好，现实很残酷，流水线受制于很多问题。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;一个post请求的java程序&#34;&gt;
+  一个post请求的java程序
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e4%b8%80%e4%b8%aapost%e8%af%b7%e6%b1%82%e7%9a%84java%e7%a8%8b%e5%ba%8f&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#a6e22e&#34;&gt;@Test&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;test3&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;throws&lt;/span&gt; IOException &lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        URL url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; URL&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;http://xiaoxiang.space/login/&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        HttpURLConnection connection &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;HttpURLConnection&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; url&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;openConnection&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;//用户可以输出到该URLConnection
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;        connection&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;setDoOutput&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;true&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        String param &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;password=&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; URLEncoder&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;encode&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;小象&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;UTF-8&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;//request headers
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;        connection&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;setRequestMethod&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;POST&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        connection&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;setRequestProperty&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Accept&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;text/html&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        connection&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;setRequestProperty&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;User-Agent&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:86.0) Gecko/20100101 Firefox/86.0&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        connection&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;setRequestProperty&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Content-Type&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;application/x-www-form-urlencoded; charset=UTF-8&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;//general headers
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;        connection&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;setRequestProperty&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Connection&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;close&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;//entity headers，必须放在request headers和general headers后面，否则会报错
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;        connection&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;getOutputStream&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;().&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;write&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;param&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;getBytes&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;StandardCharsets&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;UTF_8&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;));&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;//关闭重定向，可以打开试一试
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;        connection&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;setInstanceFollowRedirects&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;false&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        connection&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;connect&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        System&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;out&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;\n响应头：&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        connection&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;getHeaderFields&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;().&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;forEach&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;((&lt;/span&gt;k&lt;span style=&#34;color:#f92672&#34;&gt;,&lt;/span&gt; v&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            System&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;out&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;k &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;: &amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; v&lt;span style=&#34;color:#f92672&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;});&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;//如果有网页的话会输出该网页
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;        InputStream inputStream &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; connection&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;getInputStream&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        Scanner scanner &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; Scanner&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;inputStream&lt;span style=&#34;color:#f92672&#34;&gt;,&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;utf-8&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;while&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;scanner&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;hasNext&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;())&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            System&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;out&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;scanner&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;nextLine&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;());&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+    </item>
+    
+    <item>
+      <title>url</title>
+      <link>/posts/http/url/</link>
+      <pubDate>Tue, 23 Feb 2021 11:57:23 +0000</pubDate>
+      
+      <guid>/posts/http/url/</guid>
+      <description>&lt;h2 id=&#34;url参数get&#34;&gt;
+  url参数（get）
+  &lt;a class=&#34;anchor&#34; href=&#34;#url%e5%8f%82%e6%95%b0get&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;每个参数都是键值对，用&amp;amp;分开&lt;/li&gt;
+&lt;li&gt;字符a-z，A-Z，0-9，&lt;code&gt;. - * _&lt;/code&gt;不变。&lt;/li&gt;
+&lt;li&gt;用&lt;code&gt;+&lt;/code&gt;替换空格。&lt;/li&gt;
+&lt;li&gt;将其他所有字符编码为UTF-8，并将每个字节都编码为%后跟一个两位的16进制数字。&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>mime</title>
+      <link>/posts/http/mime/</link>
+      <pubDate>Fri, 19 Feb 2021 16:47:06 +0000</pubDate>
+      
+      <guid>/posts/http/mime/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;MIME：multipurpose internet mail extensions媒体类型&lt;/li&gt;
+&lt;li&gt;浏览器通常使用mime类型来确定如何处理url&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;语法&#34;&gt;
+  语法
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e8%af%ad%e6%b3%95&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;通用结构&#34;&gt;
+  通用结构
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e9%80%9a%e7%94%a8%e7%bb%93%e6%9e%84&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;#大小写不敏感
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;type/subtype
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;类型&#34;&gt;
+  类型
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e7%b1%bb%e5%9e%8b&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;#text表明是普通文本
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;text/html 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;text/css
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;text/xml
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;#image表示是某种图像（包括动态图片）
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;image/jpeg
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;image/png
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;#applicaiton表示是某种二进制数据
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;application/pdf
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;application/json
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;text/javascript
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;#audio表示是某种音频文件
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;#video表示是某种视频文件
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;#multipart表示细分领域的文件类型的种类
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;#...
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;部分mime类型介绍&#34;&gt;
+  部分MIME类型介绍
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e9%83%a8%e5%88%86mime%e7%b1%bb%e5%9e%8b%e4%bb%8b%e7%bb%8d&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;application/octet-stream&lt;/code&gt;：这是应用程序的默认值，意思是未知的应用程序文件。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;text/plain&lt;/code&gt;文本的默认值&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;text/css&lt;/code&gt;：网页中要被解析为css的任何css文件必须指定MIME为&lt;code&gt;text/css&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;参考链接：&lt;/strong&gt;
+  &lt;a href=&#34;https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Basics_of_HTTP/MIME_Types&#34;&gt;MIME类型&lt;/a&gt; | 
+  &lt;a href=&#34;https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types&#34;&gt;常见MIME类型列表&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

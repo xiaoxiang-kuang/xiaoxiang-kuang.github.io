@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>Protocol | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#openprotocol">OpenProtocol()</a></li>
+        <li><a href="#handleprotocol">HandleProtocol()</a></li>
+        <li><a href="#locateprotocol">LocateProtocol()</a></li>
+        <li><a href="#efi-driver-binding-protocol">EFI Driver Binding Protocol</a>
+          <ul>
+            <li><a href="#supported接口函数">Supported()接口函数</a></li>
+            <li><a href="#start接口函数">Start()接口函数</a></li>
+            <li><a href="#stop接口函数">Stop()接口函数</a></li>
+          </ul>
+        </li>
+        <li><a href="#efi-component-name-protocol">EFI Component Name Protocol</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>Protocol</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#openprotocol">OpenProtocol()</a></li>
+        <li><a href="#handleprotocol">HandleProtocol()</a></li>
+        <li><a href="#locateprotocol">LocateProtocol()</a></li>
+        <li><a href="#efi-driver-binding-protocol">EFI Driver Binding Protocol</a>
+          <ul>
+            <li><a href="#supported接口函数">Supported()接口函数</a></li>
+            <li><a href="#start接口函数">Start()接口函数</a></li>
+            <li><a href="#stop接口函数">Stop()接口函数</a></li>
+          </ul>
+        </li>
+        <li><a href="#efi-component-name-protocol">EFI Component Name Protocol</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/bios/protocol/">Protocol</a>
+  </h1>
+  
+  <h5>2023-04-15</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/bios/">bios</a>
+  </div>
+  
+
+
+
+<ul>
+<li>Protocol是UEFI提供的接口函数。</li>
+<li>每个Protocol都包含GUID、Protocol接口的结构体、和Protocol接口函数（Protocol服务）。</li>
+<li>3个使用Protocol的函数OpenProtocol、HandleProtocol、LocateProtocol找到Protocol。</li>
+<li>.efi文件（如EFI_DRIVER）加载到内存后被称为Image，ImageHandle是Image的句柄。一般模块的入口函数会有一个ImageHandle入参，该参数指向了内存中的Image。</li>
+<li>UEFI扫描总线后，会为每个设备建立一个ControllerHandle句柄。即ControllerHandle指向了某个硬件。</li>
+<li>每个Handle（对应的结构体为IHANDLE）都会有一个Protocols链表，存放自己的Protocol。所有的IHANDLE通过AllHandles链接起来。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>  UINTN         Signature;
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">/// All handles list of IHANDLE
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  LIST_ENTRY    AllHandles;
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">/// List of PROTOCOL_INTERFACE&#39;s for this handle
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  LIST_ENTRY    Protocols;
+</span></span><span style="display:flex;"><span>  UINTN         LocateRequest;
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">/// The Handle Database Key value when this handle was last created or modified
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  UINT64        Key;
+</span></span><span style="display:flex;"><span>} IHANDLE;
+</span></span></code></pre></div><h2 id="openprotocol">
+  OpenProtocol()
+  <a class="anchor" href="#openprotocol">#</a>
+</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">typedef</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">EFI_STATUS</span>
+</span></span><span style="display:flex;"><span>(EFIAPI <span style="color:#f92672">*</span>EFI_OPEN_PROTOCOL)(
+</span></span><span style="display:flex;"><span>  IN  EFI_HANDLE                Handle, <span style="color:#75715e">//安装了此Protocol的Handle
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  IN  EFI_GUID                  <span style="color:#f92672">*</span>Protocol,  <span style="color:#75715e">//要打开的Protocol的GUID
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  OUT VOID                      <span style="color:#f92672">**</span>Interface  OPTIONAL,  <span style="color:#75715e">//返回打开的Protocol
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  IN  EFI_HANDLE                AgentHandle,    <span style="color:#75715e">//使用此Protocol的Image（存疑）
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  IN  EFI_HANDLE                ControllerHandle, <span style="color:#75715e">//如果打开的是Protocol是符合UEFI驱动模型的驱动，则此参数为控制Protocol接口的控制器，否则为可选的，可能为NULL
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  IN  UINT32                    Attributes  <span style="color:#75715e">//打开Protocol的参数
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  );
+</span></span></code></pre></div><ul>
+<li>对于符合UEFI驱动模型的UEFI驱动而言，ControllerHandle是拥有该驱动的控制器，AgentHandle是拥有该EFI_DRIVER_BINGDING_PROTOCOL实例的句柄；</li>
+<li>对于UEFI应用而言，ControllerHandle可以忽略，AgentHandle是该程序的句柄，即UefiMain函数的第一个参数。</li>
+</ul>
+<h2 id="handleprotocol">
+  HandleProtocol()
+  <a class="anchor" href="#handleprotocol">#</a>
+</h2>
+<ul>
+<li>HandleProtocol不需要提供AgentHandle、ControllerHandle和Attributes。</li>
+<li>HandleProtocol的AgentHandle为gDxeCoreImageHandle，ControllerHandle为NULL，Attributes为EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">  @retval EFI_SUCCESS           成功返回指定的Protocol
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">  @retval EFI_UNSUPPORTED       此Handle没有安装此Protocol
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">**/</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">typedef</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">EFI_STATUS</span>
+</span></span><span style="display:flex;"><span>(EFIAPI <span style="color:#f92672">*</span>EFI_HANDLE_PROTOCOL)(
+</span></span><span style="display:flex;"><span>  IN  EFI_HANDLE               Handle,  <span style="color:#75715e">//安装了此Protocol的Handle
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  IN  EFI_GUID                 <span style="color:#f92672">*</span>Protocol,   <span style="color:#75715e">//此Protocol的GUID
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  OUT VOID                     <span style="color:#f92672">**</span>Interface  <span style="color:#75715e">//返回此Protocol的实例
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  );
+</span></span></code></pre></div><h2 id="locateprotocol">
+  LocateProtocol()
+  <a class="anchor" href="#locateprotocol">#</a>
+</h2>
+<ul>
+<li>当仅有一个Handle安装了某个Protocol时，可以使用LocateProtocol，该函数不需要提供安装了该Protocol的Handle。</li>
+<li>如果多个Handle都安装了某个Protocol，就会顺序遍历HANDLE链表，找到第一个该Protocol实例。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">typedef</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">EFI_STATUS</span>
+</span></span><span style="display:flex;"><span>(EFIAPI <span style="color:#f92672">*</span>EFI_LOCATE_PROTOCOL)(
+</span></span><span style="display:flex;"><span>  IN  EFI_GUID  <span style="color:#f92672">*</span>Protocol,  <span style="color:#75715e">//此Protocol的GUID
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  IN  VOID      <span style="color:#f92672">*</span>Registration  OPTIONAL,    <span style="color:#75715e">//不知道干啥用的，描述时从RegisterProtocolNotify()获得的key
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  OUT VOID      <span style="color:#f92672">**</span>Interface <span style="color:#75715e">//返回此Protocol的实例
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  );
+</span></span></code></pre></div><h2 id="efi-driver-binding-protocol">
+  EFI Driver Binding Protocol
+  <a class="anchor" href="#efi-driver-binding-protocol">#</a>
+</h2>
+<ul>
+<li>从功能上划分，UEFI驱动分为以下类别：
+<ul>
+<li>符合UEFI驱动模型的驱动（UEFI Driver Model）：包括总线驱动（Bus Drivers）、设备驱动（Device Drivers）和混合驱动（Hybrid Drivers），一般用来驱动对应的硬件设备。</li>
+<li>服务型驱动（Service Drivers）：这类驱动不管理任何设备，一般用来产生Protocol。</li>
+<li>初始化驱动（Initializing Drivers）：不会产生任何句柄，也不会增加任何Protocol到系统数据库，主要用来初始化一些操作，执行完后就从系统内存中卸载。</li>
+<li>根桥型驱动（Root Bridge Drivers）：用来初始化平台上的根桥控制器，并产生一个设备地址Protocol，以及访问总线设备的Protocol，一般用来通过总线驱动访问设备。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li>一个完整的符合UEFI驱动模型的驱动程序，大致可分为EFI Driver Binding Protocol和驱动本身提供的服务。前者用来管理驱动，后者才是用户需要使用提供的部分。</li>
+<li>所提供的服务一般为多个Protocol。</li>
+<li>为了方便用户使用，驱动程序一般还会包括EFI Component Name Protocol，这个Protocol用来显示驱动信息。</li>
+<li>EFI_DRIVER_BINDING_PROTOCOL的结构体如下：</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> _EFI_DRIVER_BINDING_PROTOCOL {
+</span></span><span style="display:flex;"><span>  EFI_DRIVER_BINDING_SUPPORTED    Supported;  <span style="color:#75715e">//检查设备控制器是否支持驱动
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  EFI_DRIVER_BINDING_START        Start;  <span style="color:#75715e">//安装驱动并启动设备
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  EFI_DRIVER_BINDING_STOP         Stop; <span style="color:#75715e">//停止设备并卸载驱动
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  UINT32        Version;  <span style="color:#75715e">//版本
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  EFI_HANDLE    ImageHandle;  <span style="color:#75715e">//镜像句柄
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  EFI_HANDLE    DriverBindingHandle;
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><ul>
+<li>接口变量ImageHandle是产生此Protocol实例的镜像句柄，DriverBindingHandle是安装了Protocol实例的句柄。</li>
+</ul>
+<h3 id="supported接口函数">
+  Supported()接口函数
+  <a class="anchor" href="#supported%e6%8e%a5%e5%8f%a3%e5%87%bd%e6%95%b0">#</a>
+</h3>
+<ul>
+<li>Supported()接口函数用来检测给定的设备控制器是否支持某驱动，函数原型如下：</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">typedef</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">EFI_STATUS</span>
+</span></span><span style="display:flex;"><span>(EFIAPI <span style="color:#f92672">*</span>EFI_DRIVER_BINDING_SUPPORTED)(
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">//Protocol实例
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  IN EFI_DRIVER_BINDING_PROTOCOL            <span style="color:#f92672">*</span>This,
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">//设备控制器句柄
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  IN EFI_HANDLE                             ControllerHandle,
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">//此参数对设备型驱动无效
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  IN EFI_DEVICE_PATH_PROTOCOL               <span style="color:#f92672">*</span>RemainingDevicePath OPTIONAL
+</span></span><span style="display:flex;"><span>  );
+</span></span></code></pre></div><h3 id="start接口函数">
+  Start()接口函数
+  <a class="anchor" href="#start%e6%8e%a5%e5%8f%a3%e5%87%bd%e6%95%b0">#</a>
+</h3>
+<ul>
+<li>用来将驱动安装到设备上，并启动硬件设备。一般在此函数中使用InstallProtocolInterface()或InstallMultipleProtocolInterface()函数进行安装。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">typedef</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">EFI_STATUS</span>
+</span></span><span style="display:flex;"><span>(EFIAPI <span style="color:#f92672">*</span>EFI_DRIVER_BINDING_START)(
+</span></span><span style="display:flex;"><span>  IN EFI_DRIVER_BINDING_PROTOCOL            <span style="color:#f92672">*</span>This,
+</span></span><span style="display:flex;"><span>  IN EFI_HANDLE                             ControllerHandle,
+</span></span><span style="display:flex;"><span>  IN EFI_DEVICE_PATH_PROTOCOL               <span style="color:#f92672">*</span>RemainingDevicePath OPTIONAL
+</span></span><span style="display:flex;"><span>  );
+</span></span></code></pre></div><h3 id="stop接口函数">
+  Stop()接口函数
+  <a class="anchor" href="#stop%e6%8e%a5%e5%8f%a3%e5%87%bd%e6%95%b0">#</a>
+</h3>
+<ul>
+<li>用于停止硬件设备，并卸载驱动。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">typedef</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">EFI_STATUS</span>
+</span></span><span style="display:flex;"><span>(EFIAPI <span style="color:#f92672">*</span>EFI_DRIVER_BINDING_STOP)(
+</span></span><span style="display:flex;"><span>  IN EFI_DRIVER_BINDING_PROTOCOL            <span style="color:#f92672">*</span>This,  <span style="color:#75715e">//Protocol实例
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  IN  EFI_HANDLE                            ControllerHandle, <span style="color:#75715e">//停止此控制器句柄上对应的驱动
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  IN  UINTN                                 NumberOfChildren, <span style="color:#75715e">//子控制器数量
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  IN  EFI_HANDLE                            <span style="color:#f92672">*</span>ChildHandleBuffer OPTIONAL <span style="color:#75715e">//子控制器数组
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  );
+</span></span></code></pre></div><h2 id="efi-component-name-protocol">
+  EFI Component Name Protocol
+  <a class="anchor" href="#efi-component-name-protocol">#</a>
+</h2>
+<ul>
+<li>为了方便用户使用，UEFI驱动通常会提供名字，以便向用户显示驱动信息。</li>
+<li>此功能由EFI_COMPONENT_NAME_PROTOCOL和EFI_COMPONENT_NAME2_PROTOCOL实现，这两种Protocol的功能相同，结构体相同，仅语言代码的格式不同，前者使用的是ISO 639-2语言代码，后者使用的是RFC4646语言代码。</li>
+</ul></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

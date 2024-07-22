@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>Ext4文件系统 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#ext4文件系统">ext4文件系统</a>
+          <ul>
+            <li><a href="#目录">目录</a></li>
+          </ul>
+        </li>
+        <li><a href="#虚拟文件系统">虚拟文件系统</a>
+          <ul>
+            <li><a href="#vfs对象">VFS对象</a></li>
+            <li><a href="#超级块对象">超级块对象</a></li>
+            <li><a href="#目录项对象">目录项对象</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>Ext4文件系统</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#ext4文件系统">ext4文件系统</a>
+          <ul>
+            <li><a href="#目录">目录</a></li>
+          </ul>
+        </li>
+        <li><a href="#虚拟文件系统">虚拟文件系统</a>
+          <ul>
+            <li><a href="#vfs对象">VFS对象</a></li>
+            <li><a href="#超级块对象">超级块对象</a></li>
+            <li><a href="#目录项对象">目录项对象</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/linux/ext4%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">Ext4文件系统</a>
+  </h1>
+  
+  <h5>2023-05-12</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/linux/">linux</a>
+  </div>
+  
+
+
+
+<ul>
+<li>一个ext4文件系统被分割为多个block groups，block groups的大小在<code>sb.s_blocks_per_group</code>块中指定。</li>
+<li>默认情况下一个块的大小是4KiB，此时每个block group会包含32768个块，即一个group的大小为128MiB。</li>
+<li>ext4中块是最小的分配单位。</li>
+<li>ext4文件系统采用小端模式，数值的低字节存储在低地址处，高字节存储在高地址处。比如数“12 34 56 78”，小端存放的形式如下“78 56 34 12”。大端存放的形式为“12 34 56 78”。</li>
+<li>一个标准的block group布局如下（并非所有的块都是此布局）：</li>
+<li>
+  <img src="/img/linux/ext4/1.jpg" alt="" /></li>
+<li>centos7下使用dumpe2fs获取到的ext4文件系统的信息</li>
+<li>
+  <img src="/img/linux/ext4/1.2.jpg" alt="" /></li>
+<li>
+  <img src="/img/linux/ext4/1.1.jpg" alt="" /></li>
+<li>ext4会保留一些inode作为特殊用途，如下：</li>
+<li>
+  <img src="/img/linux/ext4/2.jpg" alt="" /></li>
+</ul>
+<h2 id="ext4文件系统">
+  ext4文件系统
+  <a class="anchor" href="#ext4%e6%96%87%e4%bb%b6%e7%b3%bb%e7%bb%9f">#</a>
+</h2>
+<h3 id="目录">
+  目录
+  <a class="anchor" href="#%e7%9b%ae%e5%bd%95">#</a>
+</h3>
+<ul>
+<li>目录也是文件，目录有对应的inode和data blocks，目录的data block中存放多个ext4_dir_entry_2，结构如下：</li>
+<li>
+  <img src="/img/linux/ext4/3.jpg" alt="" /></li>
+<li>文件类型可以取的值如下：</li>
+<li>
+  <img src="/img/linux/ext4/4.jpg" alt="" /></li>
+<li>案例
+<ul>
+<li><code>0D000000</code> <code>1000</code> <code>05</code> <code>01</code>  <code>6673746162</code>  <code>000000</code></li>
+<li>第一块表示inode号</li>
+<li>第二块表示此结构体长度为0x0010，即16，因为ext4采用小端存放，所以高位在高地址，低位在低地址。</li>
+<li>第三块表示文件名为5字节</li>
+<li>第四块表示文件类型为普通文件</li>
+<li>第五块是文件名，对应fstab，f的ascii是0x66，s的是0x73，t是0x75。</li>
+<li>最后一块是填充位，结构体大小必须是最大对其数的整数倍。</li>
+</ul>
+</li>
+</ul>
+<h2 id="虚拟文件系统">
+  虚拟文件系统
+  <a class="anchor" href="#%e8%99%9a%e6%8b%9f%e6%96%87%e4%bb%b6%e7%b3%bb%e7%bb%9f">#</a>
+</h2>
+<ul>
+<li>Linux通过虚拟文件系统（VFS）来访问不同的文件系统。VFS使得用户可以直接使用open()、read()、write()这样的系统调用而无需考虑具体的文件系统。</li>
+<li>VFS相当于定义了接口，具体的文件系统来实现这个接口。</li>
+</ul>
+<h3 id="vfs对象">
+  VFS对象
+  <a class="anchor" href="#vfs%e5%af%b9%e8%b1%a1">#</a>
+</h3>
+<ul>
+<li>VFS中主要定义了四个对象类型：
+<ul>
+<li>超级块对象，它代表一个具体的文件系统。</li>
+<li>索引节点对象，即inode，代表一个具体文件。</li>
+<li>目录项对象，代表一个目录项（不是目录文件）。</li>
+<li>文件对象，代表进程打开的文件。</li>
+</ul>
+</li>
+</ul>
+<h3 id="超级块对象">
+  超级块对象
+  <a class="anchor" href="#%e8%b6%85%e7%ba%a7%e5%9d%97%e5%af%b9%e8%b1%a1">#</a>
+</h3>
+<ul>
+<li>超级块用来存储文件系统的信息，通常对应于存放在磁盘特定扇区中的文件系统超级块。</li>
+<li>超级块由super_block结构体表示，定义在<code>include/linux/fs.h</code>中。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> super_block {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">struct</span> list_head	s_list;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">dev_t</span>			s_dev;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">long</span>		s_blocksize; <span style="color:#75715e">//每个块的大小（单位是字节）
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span>		s_blocksize_bits; <span style="color:#75715e">//每个块的大小（单位是比特）
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span>		s_dirt;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">long</span> <span style="color:#66d9ef">long</span>	s_maxbytes;	<span style="color:#75715e">//文件大小上限
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">struct</span> file_system_type	<span style="color:#f92672">*</span>s_type;  <span style="color:#75715e">//文件系统类型
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">struct</span> super_operations	<span style="color:#f92672">*</span>s_op;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">struct</span> dquot_operations	<span style="color:#f92672">*</span>dq_op;
+</span></span><span style="display:flex;"><span> 	<span style="color:#66d9ef">struct</span> quotactl_ops	<span style="color:#f92672">*</span>s_qcop;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">struct</span> export_operations <span style="color:#f92672">*</span>s_export_op;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">long</span>		s_flags;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">long</span>		s_magic;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">struct</span> dentry		<span style="color:#f92672">*</span>s_root;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">struct</span> rw_semaphore	s_umount;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">struct</span> mutex		s_lock;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span>			s_count;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span>			s_syncing;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span>			s_need_sync_fs;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">atomic_t</span>		s_active;
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#ifdef CONFIG_SECURITY
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">void</span>                    <span style="color:#f92672">*</span>s_security;
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#endif
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">struct</span> xattr_handler	<span style="color:#f92672">**</span>s_xattr;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">struct</span> list_head	s_inodes;	<span style="color:#75715e">/* all inodes */</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">struct</span> list_head	s_dirty;	<span style="color:#75715e">/* dirty inodes */</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">struct</span> list_head	s_io;		<span style="color:#75715e">/* parked for writeback */</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">struct</span> list_head	s_more_io;	<span style="color:#75715e">/* parked for more writeback */</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">struct</span> hlist_head	s_anon;		<span style="color:#75715e">/* anonymous dentries for (nfs) exporting */</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">struct</span> list_head	s_files;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">struct</span> block_device	<span style="color:#f92672">*</span>s_bdev;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">struct</span> mtd_info		<span style="color:#f92672">*</span>s_mtd;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">struct</span> list_head	s_instances;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">struct</span> quota_info	s_dquot;	<span style="color:#75715e">/* Diskquota specific options */</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">//......省略部分代码
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>};
+</span></span></code></pre></div><h3 id="目录项对象">
+  目录项对象
+  <a class="anchor" href="#%e7%9b%ae%e5%bd%95%e9%a1%b9%e5%af%b9%e8%b1%a1">#</a>
+</h3>
+<ul>
+<li>Linux下一切皆文件，这里的文件包括目录和普通的文件。</li>
+<li>在路径/bin/vi中，bin和vi都属于文件，bin是目录文件，vi是普通文件。</li>
+<li>VFS经常要执行和目录相关的操作，所以定义了一个目录项的概念，注意此目录项和目录文件不是同一个东西。在路径/bin/vi中，<code>/ bin vi</code>都属于目录项对象。</li>
+<li>目录项对象由dentry结构体表示，定义在<code>include/linux/dcache.h</code>中</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> dentry {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">atomic_t</span> d_count;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span> d_flags;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">spinlock_t</span> d_lock;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">struct</span> inode <span style="color:#f92672">*</span>d_inode;		<span style="color:#75715e">//和目录项相关联的索引节点
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">struct</span> dentry <span style="color:#f92672">*</span>d_parent;	<span style="color:#75715e">//父目录项
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">struct</span> qstr d_name;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">struct</span> list_head d_lru;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">union</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">struct</span> list_head d_child;
+</span></span><span style="display:flex;"><span>	 	<span style="color:#66d9ef">struct</span> rcu_head d_rcu;
+</span></span><span style="display:flex;"><span>	} d_u;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">struct</span> list_head d_subdirs;	<span style="color:#75715e">//子目录链表
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">struct</span> list_head d_alias;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">long</span> d_time;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">struct</span> dentry_operations <span style="color:#f92672">*</span>d_op;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">struct</span> super_block <span style="color:#f92672">*</span>d_sb;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>d_fsdata;
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#ifdef CONFIG_PROFILING
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">struct</span> dcookie_struct <span style="color:#f92672">*</span>d_cookie;
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#endif
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">int</span> d_mounted;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span> d_iname[DNAME_INLINE_LEN_MIN];
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

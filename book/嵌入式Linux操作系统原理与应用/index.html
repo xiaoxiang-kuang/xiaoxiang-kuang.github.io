@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>嵌入式Linux操作系统原理与应用 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li><a href="#第2章-linux编程基础">第2章 Linux编程基础</a>
+      <ul>
+        <li><a href="#24-gdb调试器">2.4 GDB调试器</a>
+          <ul>
+            <li><a href="#242-gdb使用流程">2.4.2 GDB使用流程</a></li>
+          </ul>
+        </li>
+        <li><a href="#27-文件io编程">2.7 文件I/O编程</a>
+          <ul>
+            <li><a href="#271-文件io编程基础">2.7.1 文件I/O编程基础</a></li>
+            <li><a href="#272-基本io操作">2.7.2 基本I/O操作</a></li>
+            <li><a href="#273-标准io操作">2.7.3 标准I/O操作</a></li>
+          </ul>
+        </li>
+        <li><a href="#28-linux下得进程概述">2.8 Linux下得进程概述</a>
+          <ul>
+            <li><a href="#281-linux下得进程概述">2.8.1 Linux下得进程概述</a></li>
+            <li><a href="#282-linux进程编程">2.8.2 Linux进程编程</a></li>
+          </ul>
+        </li>
+        <li><a href="#29-进程间的通信和同步">2.9 进程间的通信和同步</a>
+          <ul>
+            <li><a href="#291-linux下进程间通信概述">2.9.1 Linux下进程间通信概述</a></li>
+            <li><a href="#292-管道通信">2.9.2 管道通信</a></li>
+            <li><a href="#293-共享内存通信">2.9.3 共享内存通信</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>嵌入式Linux操作系统原理与应用</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li><a href="#第2章-linux编程基础">第2章 Linux编程基础</a>
+      <ul>
+        <li><a href="#24-gdb调试器">2.4 GDB调试器</a>
+          <ul>
+            <li><a href="#242-gdb使用流程">2.4.2 GDB使用流程</a></li>
+          </ul>
+        </li>
+        <li><a href="#27-文件io编程">2.7 文件I/O编程</a>
+          <ul>
+            <li><a href="#271-文件io编程基础">2.7.1 文件I/O编程基础</a></li>
+            <li><a href="#272-基本io操作">2.7.2 基本I/O操作</a></li>
+            <li><a href="#273-标准io操作">2.7.3 标准I/O操作</a></li>
+          </ul>
+        </li>
+        <li><a href="#28-linux下得进程概述">2.8 Linux下得进程概述</a>
+          <ul>
+            <li><a href="#281-linux下得进程概述">2.8.1 Linux下得进程概述</a></li>
+            <li><a href="#282-linux进程编程">2.8.2 Linux进程编程</a></li>
+          </ul>
+        </li>
+        <li><a href="#29-进程间的通信和同步">2.9 进程间的通信和同步</a>
+          <ul>
+            <li><a href="#291-linux下进程间通信概述">2.9.1 Linux下进程间通信概述</a></li>
+            <li><a href="#292-管道通信">2.9.2 管道通信</a></li>
+            <li><a href="#293-共享内存通信">2.9.3 共享内存通信</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+  <article class="markdown"><h1 id="第2章-linux编程基础">
+  第2章 Linux编程基础
+  <a class="anchor" href="#%e7%ac%ac2%e7%ab%a0-linux%e7%bc%96%e7%a8%8b%e5%9f%ba%e7%a1%80">#</a>
+</h1>
+<h2 id="24-gdb调试器">
+  2.4 GDB调试器
+  <a class="anchor" href="#24-gdb%e8%b0%83%e8%af%95%e5%99%a8">#</a>
+</h2>
+<h3 id="242-gdb使用流程">
+  2.4.2 GDB使用流程
+  <a class="anchor" href="#242-gdb%e4%bd%bf%e7%94%a8%e6%b5%81%e7%a8%8b">#</a>
+</h3>
+<ul>
+<li>要使用GDB，需要在编译时将调试信息添加到可执行文件中。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gcc -g hello.c -o hello
+</span></span></code></pre></div><ul>
+<li>GDB调试的是可执行文件。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gdb hello
+</span></span></code></pre></div><ul>
+<li><code>l</code>可以查看源码，<code>b 行号</code>用来设置断点，<code>info break</code>来查看断点情况。</li>
+<li><code>r</code>即可运行程序，<code>n</code>和<code>s</code>表示单步运行，<code>n</code>不会进入函数，<code>s</code>会进入函数。</li>
+<li><code>c</code>可以恢复程序的正常运行，它会跳到下一个断点，如果没有断点，他会把剩余的程序执行完。</li>
+<li><code>p 变量名</code>可在断点处查看相关的变量值。</li>
+<li><code>bt</code>可以查看函数堆栈。</li>
+<li><code>finish</code>退出函数，<code>q</code>退出gdb。</li>
+</ul>
+<h2 id="27-文件io编程">
+  2.7 文件I/O编程
+  <a class="anchor" href="#27-%e6%96%87%e4%bb%b6io%e7%bc%96%e7%a8%8b">#</a>
+</h2>
+<h3 id="271-文件io编程基础">
+  2.7.1 文件I/O编程基础
+  <a class="anchor" href="#271-%e6%96%87%e4%bb%b6io%e7%bc%96%e7%a8%8b%e5%9f%ba%e7%a1%80">#</a>
+</h3>
+<ul>
+<li>Linux为了保护内核空间，将程序的运行空间分为内核空间和用户空间，它们运行在不同的级别上，逻辑上是互相隔离的。</li>
+<li>操作系统提供了两个接口：用户编程接口API和系统调用。</li>
+<li>对于Linux来讲，所有文件的操作都是通过文件描述符来进行的，它是一个索引值，指向内核中每个进程打开文件的记录表。通常一个进程启动时，都会打开3个文件：标准输入、标准输出和标准错误输出，分别对应的文件描述符为0、1、2。</li>
+</ul>
+<h3 id="272-基本io操作">
+  2.7.2 基本I/O操作
+  <a class="anchor" href="#272-%e5%9f%ba%e6%9c%acio%e6%93%8d%e4%bd%9c">#</a>
+</h3>
+<ul>
+<li>
+<p>包括open（打开）、read（读取）、write（写入）、lseek（定位）、close（关闭）五个函数，是不带缓冲区的I/O操作。</p>
+</li>
+<li>
+<p>open函数</p>
+</li>
+</ul>
+<pre tabindex="0"><code>int open(const char *pathname, int flags)
+int open(const char * pathname, int flags, mode_t mode)
+
+pathame 表示文件名称，可以包含命令
+flags 表示文件的打开方式，可以通过&#34;|&#34;来组合
+mode 表示打开文件的存取权限模式
+函数返回值 成功则返回文件描述符，出错则返回-1
+</code></pre><ul>
+<li>常用flags标志(fcntl.h)</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>标识</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>O_RDONLY</td>
+<td>只读打开</td>
+</tr>
+<tr>
+<td>O_WRONLY</td>
+<td>只写打开</td>
+</tr>
+<tr>
+<td>O_RDWR</td>
+<td>读/写打开</td>
+</tr>
+<tr>
+<td>O_CREAT</td>
+<td>如果文件不存在则创建</td>
+</tr>
+<tr>
+<td>O_EXCL</td>
+<td>如果使用O_CREAT时文件存在，则报错</td>
+</tr>
+<tr>
+<td>O_TRUNC</td>
+<td>如果文件存在，且以只读或只写成功打开，则删除文件原有数据</td>
+</tr>
+<tr>
+<td>O_APPEND</td>
+<td>以添加的方式打开文件，打开文件的同时，文件指针指向文件末尾</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>模式mode(sys/stat.h)</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>符号常量</th>
+<th>含义</th>
+<th>符号常量</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S_IRWXU</td>
+<td>700</td>
+<td>S_IWGRP</td>
+<td>020</td>
+</tr>
+<tr>
+<td>S_IRUSR</td>
+<td>400</td>
+<td>S_IXGRP</td>
+<td>010</td>
+</tr>
+<tr>
+<td>S_IWUSR</td>
+<td>200</td>
+<td>S_IRWXO</td>
+<td>007</td>
+</tr>
+<tr>
+<td>S_XUSR</td>
+<td>100</td>
+<td>S_IROTH</td>
+<td>004</td>
+</tr>
+<tr>
+<td>S_IRWXG</td>
+<td>070</td>
+<td>S_IWOTH</td>
+<td>002</td>
+</tr>
+<tr>
+<td>S_IRGRP</td>
+<td>040</td>
+<td>S_IXOTH</td>
+<td>001</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>read和write函数</li>
+</ul>
+<pre tabindex="0"><code>ssize_t read(int fd, void *buf, size_t count)
+ssize_t write(int fd, void *buf, size_t count)
+fd 文件描述符
+buf 缓冲区
+count 指定读出或写入的字节数
+返回值 如果出现错误，则返回-1，同时设置errno变量为错误代码。如果操作成功，则返回是实际读取或写入的字节数。
+</code></pre><ul>
+<li>close函数</li>
+</ul>
+<pre tabindex="0"><code>int close(int fd)
+fd 文件描述符
+如果文件顺利关闭则返回0，发生错误则返回-1，并设置errno
+</code></pre><h3 id="273-标准io操作">
+  2.7.3 标准I/O操作
+  <a class="anchor" href="#273-%e6%a0%87%e5%87%86io%e6%93%8d%e4%bd%9c">#</a>
+</h3>
+<ul>
+<li>fopen函数</li>
+</ul>
+<pre tabindex="0"><code>FILE *fopen(const char pathname, const char *modes)
+//将fd的文件描述符转化为对应的文件指针返回
+FILE * fdopen(int filedes, const char * modes)
+</code></pre><table>
+<thead>
+<tr>
+<th>mode</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>r、rb</td>
+<td>打开只读文件，要求文件必须存在</td>
+</tr>
+<tr>
+<td>r+、r+b</td>
+<td>打开可读/写的文件，要求文件必须存在</td>
+</tr>
+<tr>
+<td>2、wb</td>
+<td>打开只写文件，如果文件存在，则文件长度清0；否则建立该文件</td>
+</tr>
+<tr>
+<td>w+、w+b</td>
+<td>打开可读、可写文件，如果文件存在，则文件长度清0；否则建立该文件</td>
+</tr>
+<tr>
+<td>a、ab</td>
+<td>以附加的方式打开只写文件。若文件不存在，则会创建该文件；如果文件存在，则写入的数据会被加到文件尾后，即文件原先的内容会被保留</td>
+</tr>
+<tr>
+<td>a+、a+b</td>
+<td>以附加方式打开可读/写的文件。若文件不存在，则会创建该文件，如果文件存在，则写入的数据会被加到文件尾后，即文件原先的内容会被保留</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>fclose函数</li>
+</ul>
+<pre tabindex="0"><code>//将缓冲区的数据写入文件，并释放系统的资源。
+int fclose(FILE *fp)
+</code></pre><ul>
+<li>fflush函数</li>
+</ul>
+<pre tabindex="0"><code>//将缓冲区的数据写入到文件
+int fflush(FILE *fp)
+</code></pre><ul>
+<li>fread和fwrite函数</li>
+</ul>
+<pre tabindex="0"><code>size_t fread(void *ptr, size_t size, size_t nmemb, FILE * stream)
+size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE * stream)
+
+返回值：读或写的记录数，成功时返回的记录数等于nmemb，出错或读到文件末尾时返回的记录数小于nmemb，也可能返回0
+fread和fwrite用于读/写记录，记录指的是一串固定长度的字节，如一个int、一个结构体或一个定长数组。
+size指的是一条记录的长度
+nmemb指的是要都读或者写多少条记录
+记录在ptr所指的内存空间中连续存放，共占用size * nmemb字节
+fread从文件stream中读取size * nmemb字节保存到ptr中
+fwrite把ptr中的size * nmemb字节写入到文件stream中
+fread和fwrite返回读或写的记录数
+</code></pre><h2 id="28-linux下得进程概述">
+  2.8 Linux下得进程概述
+  <a class="anchor" href="#28-linux%e4%b8%8b%e5%be%97%e8%bf%9b%e7%a8%8b%e6%a6%82%e8%bf%b0">#</a>
+</h2>
+<h3 id="281-linux下得进程概述">
+  2.8.1 Linux下得进程概述
+  <a class="anchor" href="#281-linux%e4%b8%8b%e5%be%97%e8%bf%9b%e7%a8%8b%e6%a6%82%e8%bf%b0">#</a>
+</h3>
+<ul>
+<li>在Linux中，每个进程在创建时都会被分配一个数据结构，称为进程控制块PCB（Process Control Block）。进程控制块是进程的一个静态描述。</li>
+<li>一个或多个进程可以合起来构成一个进程组（process group），一个或多个进程组可以合起来构成一个会话（session）。</li>
+<li>
+  <img src="/img/book/embedded_linux/1.jpg" alt="" /></li>
+<li>linux中主要的进程标识有进程号PID（Process Identity）和它的父进程号PPID，可以通过getpid和getppid分别获取。</li>
+</ul>
+<h3 id="282-linux进程编程">
+  2.8.2 Linux进程编程
+  <a class="anchor" href="#282-linux%e8%bf%9b%e7%a8%8b%e7%bc%96%e7%a8%8b">#</a>
+</h3>
+<ul>
+<li>fork函数用于从已存在的进程中创建一个新进程。</li>
+</ul>
+<pre tabindex="0"><code>#include &lt;sys/types.h&gt;
+#include &lt;unistd.h&gt;
+pid_t fork();
+</code></pre><ul>
+<li>使用fork函数得到的子进程是父进程的一个复制品，他从父进程继承了整个进程的地址空间，包括进程上下文、进程堆栈、打开的文件描述符等。</li>
+<li>两个进程分别有不同的fork返回值，父进程返回的是子进程的进程号，是一个大于0的整数，而子进程则返回0，如果出错则返回-1，可以根据返回值来判定进程是父进程还是子进程。</li>
+<li>exec函数族提供了一个在进程中启动另一各程序的方法，当进程调用一种exec函数时，该进程的用户空间代码和数据完全被新进程替换，从新程序的启动例程开始执行，调用exec并不创建新进程，所以调用exec前后该进程的id并未改变。</li>
+<li>exec函数如果调用成功，则加载新的程序从启动代码开始执行，不再返回；如果调用出错，则返回-1，所以exec函数只有在出错时才返回。</li>
+</ul>
+<pre tabindex="0"><code>#include &lt;unistd.h&gt;
+int execlp(const char *file, const char *arg, ...)
+file 表示程序的位置，如果未指定程序的路径，会在PATH中查找
+arg 表示要求将新程序的每个命令都当做一个参数传给它，命令行参数是可变的，最后一个参数应该是NULL
+
+int execvp(const char *file, char * const argv[])
+file 表示程序的位置，如果未指定程序的路径，会在PATH中查找
+argv 表示参数数组，最后一个参数应该是NULL
+
+int execl(const char *path, const cahr *arg,...)
+path 必须指定程序的路径，相对路径或者绝对路径
+arg 表示要求将新程序的每个命令都当做一个参数传给它，命令行参数是可变的，最后一个参数应该是NULL
+
+int execv(const char *path, char * const argv[])
+path 必须指定程序的路径，相对路径或者绝对路径
+argv 表示参数数组，最后一个参数应该是NULL
+
+int execle(const char *path, const char *arg,..., char * const envp[])
+int execve(const char *path, char * const argv[], char * const envp[])
+path 必须指定程序的路径，相对路径或者绝对路径
+envp 环境变量表
+</code></pre><ul>
+<li>如果一个父进程终止，而它的子进程还在，则这些子进程的父进程改为init进程。</li>
+</ul>
+<h2 id="29-进程间的通信和同步">
+  2.9 进程间的通信和同步
+  <a class="anchor" href="#29-%e8%bf%9b%e7%a8%8b%e9%97%b4%e7%9a%84%e9%80%9a%e4%bf%a1%e5%92%8c%e5%90%8c%e6%ad%a5">#</a>
+</h2>
+<h3 id="291-linux下进程间通信概述">
+  2.9.1 Linux下进程间通信概述
+  <a class="anchor" href="#291-linux%e4%b8%8b%e8%bf%9b%e7%a8%8b%e9%97%b4%e9%80%9a%e4%bf%a1%e6%a6%82%e8%bf%b0">#</a>
+</h3>
+<ul>
+<li>每个进程拥有各自不同的用户地址空间，所以进程之间交换数据必须通过内核。在内核中开辟一个缓冲区，进程1把数据从用户空间复制到内核缓冲区，进程2再从内核缓冲区把数据读走，内核提供的这种机制称为进程间通信IPC（InterProcess Communicateion)。</li>
+<li>进程间的通信方式包括：
+<ul>
+<li>管道。</li>
+<li>信号。</li>
+<li>消息队列。</li>
+<li>共享内存。</li>
+<li>信号量。</li>
+<li>套接口（Socket）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="292-管道通信">
+  2.9.2 管道通信
+  <a class="anchor" href="#292-%e7%ae%a1%e9%81%93%e9%80%9a%e4%bf%a1">#</a>
+</h3>
+<ul>
+<li>管道是一种连接一个进程的标准输出到另一个进程的标准输入的方法。</li>
+</ul>
+<h3 id="293-共享内存通信">
+  2.9.3 共享内存通信
+  <a class="anchor" href="#293-%e5%85%b1%e4%ba%ab%e5%86%85%e5%ad%98%e9%80%9a%e4%bf%a1">#</a>
+</h3>
+<ul>
+<li>共享内存是指同一块物理内存被影射到进程A、B各自的进程地址空间，由于多个进程共享同一块内存区域，必然需要某种同步机制。</li>
+</ul>
+</article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

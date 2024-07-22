@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>wait和notify | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#具体案例">具体案例</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>wait和notify</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#具体案例">具体案例</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/javase/wait%E5%92%8Cnotify/">wait和notify</a>
+  </h1>
+  
+  <h5>2020-10-06</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">java</a>
+  </div>
+  
+
+
+
+<ul>
+<li>在调用wait方法时，线程必须要持有被调用对象的锁，当调用wait方法之后，线程就会释放掉该对象的锁。</li>
+<li>在调用Thread类的sleep方法时，线程是<strong>不会释放掉对象的锁</strong>的。</li>
+</ul>
+<hr>
+<ol>
+<li>当调用wait方法时，首先要确保调用了wait方法的线程已经持有了对象的锁。</li>
+<li>当调用了wait后，该线程就会释放掉这个对象的锁，然后进入等待状态，该线程进入对象的等待集合中（wait set）。</li>
+<li>当线程调用了wait后进入到等待状态时，它就等待其他线程调用相同对象的notify和notifyAll方法来使得自己被唤醒。</li>
+<li>调用wait方法的代码片段需要放在一个synchronized块或者被synchronized修饰的方法中。</li>
+<li>当调用了对象的notify方法时，它会随机唤醒该对象等待集合中（wait set）的任意一个线程，当某个线程被唤醒后，它就会与其他线程一同竞争对象的锁。</li>
+<li>当调用对象的notifyAll方法时，它会唤醒该对象等待集合中（wait set）中所有的线程，这些线程被唤醒后，又会开始竞争对象的锁。</li>
+<li>某一时刻，只有唯一的一个线程拥有对象的锁。</li>
+</ol>
+<h3 id="具体案例">
+  具体案例
+  <a class="anchor" href="#%e5%85%b7%e4%bd%93%e6%a1%88%e4%be%8b">#</a>
+</h3>
+<p>Demon对象有一个int类型的属性counter，该值初始为0；
+创建四个线程，两个线程对该值增1，两个线程对该值减1；
+输出counter每次变化后的结果，要求输出结果为1010101010&hellip;。</p>
+<h5 id="包含counter的demon类">
+  包含counter的Demon类
+  <a class="anchor" href="#%e5%8c%85%e5%90%abcounter%e7%9a%84demon%e7%b1%bb">#</a>
+</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">//该对象提供加1和减1的操作
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Demon</span><span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//counter
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">int</span> counter<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span><span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//对方法加锁，当一个线程要调用该方法时，需要先获取该对象的锁
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">synchronized</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">inc</span><span style="color:#f92672">(){</span><span style="color:#75715e">//counter加1
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#75715e">//此处必须使用while而不是if，防止被其他不相关的线程唤醒
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">while</span><span style="color:#f92672">(</span>counter<span style="color:#f92672">!=</span><span style="color:#ae81ff">0</span><span style="color:#f92672">){</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                wait<span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>InterruptedException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                e<span style="color:#f92672">.</span><span style="color:#a6e22e">printStackTrace</span><span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>        counter<span style="color:#f92672">++;</span>
+</span></span><span style="display:flex;"><span>        System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">print</span><span style="color:#f92672">(</span>counter<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">/*此处必须使用notifyAll，notify会从等待队列中
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">        随机选择一个线程唤醒，可能会导致程序一直阻塞*/</span>
+</span></span><span style="display:flex;"><span>        notifyAll<span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//counter减1
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">synchronized</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">dec</span><span style="color:#f92672">(){</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span><span style="color:#f92672">(</span>counter<span style="color:#f92672">!=</span><span style="color:#ae81ff">1</span><span style="color:#f92672">){</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                wait<span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>InterruptedException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                e<span style="color:#f92672">.</span><span style="color:#a6e22e">printStackTrace</span><span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>        counter<span style="color:#f92672">--;</span>
+</span></span><span style="display:flex;"><span>        System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">print</span><span style="color:#f92672">(</span>counter<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>        notifyAll<span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p><strong>关键代码如上，剩余的代码也都比较简单，就省略了。如果你需要所有代码，可以通过<code>ctrl+u</code>查看网页源代码，并使用<code>ctrl+f</code>快捷键搜索&quot;黑魔仙变身&quot;即可找到完整代码。手机需要使用能查看网页源代码的浏览器，如via等。</strong></p>
+<!--
+//黑魔仙变身
+//该对象提供加1和减1的操作
+class Demon{
+    //counter
+    private int counter=0;
+	//对方法加锁，当一个线程要调用该方法时，需要先获取该对象的锁
+    public synchronized void inc(){//counter加1
+        //此处必须使用while而不是if，防止被其他不相关的线程唤醒
+        while(counter!=0){
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        counter++;
+        System.out.print(counter);
+        /*此处必须使用notifyAll，notify会从等待队列中
+        随机选择一个线程唤醒，可能会导致程序一直阻塞*/
+        notifyAll();
+    }
+	//counter减1
+    public synchronized void dec(){
+        while(counter!=1){
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        counter--;
+        System.out.print(counter);
+        notifyAll();
+    }
+}
+//执行counter++
+class IncThread implements Runnable{
+    private Demon demon;
+    public IncThread(Demon demon){
+        this.demon=demon;
+    }
+    //实现Runnable的run方法
+    public void run() {
+        for(int i=0;i<30;i++) {
+            demon.inc();
+        }
+    }
+}
+//执行counter--
+class DecThread implements Runnable{
+    private Demon demon;
+    public DecThread(Demon demon){
+        this.demon=demon;
+    }
+    public void run() {
+        for(int i=0;i<30;i++) {
+            demon.dec();
+        }
+    }
+}
+//测试类
+public class test {
+    public static void main(String[] args) throws InterruptedException {
+        Demon demon=new Demon();
+        Thread t1=new Thread(new IncThread(demon));
+        Thread t2=new Thread(new IncThread(demon));
+        Thread t3=new Thread(new DecThread(demon));
+        Thread t4=new Thread(new DecThread(demon));
+        t1.start();
+        t2.start();
+        t3.start();
+        t4.start();
+    }
+}
+--></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

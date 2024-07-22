@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>PCI桥和PCI设备 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#pci桥与pci设备的配置空间">PCI桥与PCI设备的配置空间</a></li>
+        <li><a href="#读取slot-capabilities">读取slot capabilities</a>
+          <ul>
+            <li><a href="#案例">案例</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>PCI桥和PCI设备</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#pci桥与pci设备的配置空间">PCI桥与PCI设备的配置空间</a></li>
+        <li><a href="#读取slot-capabilities">读取slot capabilities</a>
+          <ul>
+            <li><a href="#案例">案例</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/bios/PCI%E6%A1%A5%E5%92%8CPCI%E8%AE%BE%E5%A4%87/">PCI桥和PCI设备</a>
+  </h1>
+  
+  <h5>2023-05-04</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/bios/">bios</a>
+  </div>
+  
+
+
+
+<h2 id="pci桥与pci设备的配置空间">
+  PCI桥与PCI设备的配置空间
+  <a class="anchor" href="#pci%e6%a1%a5%e4%b8%8epci%e8%ae%be%e5%a4%87%e7%9a%84%e9%85%8d%e7%bd%ae%e7%a9%ba%e9%97%b4">#</a>
+</h2>
+<ul>
+<li>每一个PCI设备中（包括PCI桥）都包含一个配置空间。这个配置空间由HOST主桥管理，而PCI桥可以转发来自HOST主桥的配置访问。</li>
+<li>PCI设备的ID号由总线号（Bus Number）、设备号（Device Number）和功能号（Function Number）组成。</li>
+<li>Bus号在HOST主桥遍历PCI总线树时确定。系统软件使用DFS算法扫描PCI总线树上的所有PCI总线，并依次进行编号。</li>
+<li>Function号与PCI设备的具体设计有关。</li>
+<li>X86处理器定义了两个I/O端口寄存器，分别为CONFIG_ADDRESS（0xCF8）和CONFIG_DATA（0xCFC），X86处理器使用这两个I/O端口访问PCI设备的配置空间。</li>
+<li>PCI agent使用的配置空间如下图所示：</li>
+<li>
+  <img src="/img/book/pcie/2-9.jpg" alt="图2-9" />
+<ul>
+<li>（这张图要从右往左看）Vendor ID代表PCI设备的生产厂商，Device ID代表这个厂商生产的具体设备。</li>
+<li>Revision ID寄存器记录PCI设备的版本号。</li>
+<li>Class Code寄存器记载PCI设备的分类，该寄存器由三个字段组成，分别是Base Class Code、Sub Class Code和Interface，其中Base Class Code将PCI设备分类为显卡、网卡、PCI桥等设备。当Base Class Code是0X06，Sub class code是0x04、interface寄存器为0x00时，表示当前的PCI设备是一个桥。</li>
+<li>Header Type寄存器，第7位为1表示当前PCI设备是多Function设备，为0表示当前PCI设备是单Function设备，第0~6位表示当前PCI设备的类型，为0表示该设备使用PCI Agent设备的配置空间，为1表示使用PCI桥的配置空间。</li>
+<li>Subsystem ID和Subsystem Vendor ID：用于区分设备，有些通过4个ID可以确定一个设备。</li>
+<li>Expansion ROM base address寄存器：存放Option ROM程序的基地址。</li>
+<li>Capabilities Pointer寄存器：该寄存器存放Capabilities寄存器组的基地址，所有的PCIe设备都要支持Power Management Capability结构和PCI Express Capability结构，所以通过改指针可以找到这两个capability的位置。</li>
+<li>BAR寄存器保存PCI设备使用的地址空间的基地址。其中每一个设备最多可以有6个基地址空间。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li>PCI 桥的配置空间如下（图2-10）</li>
+<li>
+  <img src="/img/book/pcie/2-10.jpg" alt="图2-10" /></li>
+<li>PCI桥中只有两组BAR寄存器，这两组寄存器是可选的。如果PCI桥中不存在私有寄存器，可以不使用这两组寄存器设置BAR空间。</li>
+<li>Primary Bus寄存器保存上游的PCI总线号，Subordinate Bus寄存器存放当前PCI子树中编号最大的PCI总线树，Secondary Bus寄存器存放当前PCI桥使用的总线号。一个PCI桥管理的PCI总线号在Secondary Bus ~ Subordinate Bus之间。这两个寄存器的值由系统软件遍历PCI总线树时设置。</li>
+<li>I/O Limit和I/O Base寄存器：存放PCI子树中所有PCI设备使用的I/O地址空间的基地址和大小。</li>
+<li>MemoryLimit和Memory Base寄存器：存放PCI子树中PCI设备使用的MMIO基址和大小。</li>
+<li>Prefetchable Memory Limit和Prefetchable Memory Base：存放PCI子树中PCI设备使用的可预取MMIO基址和大小。</li>
+<li>I/O Base Upper 16 Bits和I/O Limit Upper 16寄存器：如果PCI桥支持32位I/O端口，这组寄存器提供I/O端口的高16位地址。</li>
+</ul>
+<h2 id="读取slot-capabilities">
+  读取slot capabilities
+  <a class="anchor" href="#%e8%af%bb%e5%8f%96slot-capabilities">#</a>
+</h2>
+<ul>
+<li>ep设备的SLOT号位于上一级桥的slot capabilities中，slot capabilities位于PCI Express Capability Structure中。PCI Express Capability Structure结构如下图，其Cap ID为0x10。</li>
+<li>
+  <img src="/img/bios/pcie/3.jpg" alt="" /></li>
+<li>slot号位于slot capabilities的19~31位。</li>
+<li>
+  <img src="/img/bios/pcie/4.jpg" alt="" /></li>
+</ul>
+<h3 id="案例">
+  案例
+  <a class="anchor" href="#%e6%a1%88%e4%be%8b">#</a>
+</h3>
+<ul>
+<li>下图硬盘的BDF为86:00.0，槽位号为37</li>
+<li>
+  <img src="/img/bios/pcie/5.jpg" alt="" /></li>
+<li>
+  <img src="/img/bios/pcie/6.jpg" alt="" /></li>
+<li>其上一级桥的slot capabilities位置如下图，<code>01 28 00 60</code>转换为二进制为<code>0000 0001 0010 1000 0000 0000 0110 0000</code>，其中31~19位为<code>0000 0001 0010 1</code>,将此二进制转为16进制为37。</li>
+<li>
+  <img src="/img/bios/pcie/7.jpg" alt="" /></li>
+</ul></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

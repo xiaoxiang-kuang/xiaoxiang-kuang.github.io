@@ -1,0 +1,1465 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>bios on 小象的blog</title>
+    <link>/tags/bios/</link>
+    <description>Recent content in bios on 小象的blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Fri, 12 Jan 2024 20:04:24 +0800</lastBuildDate><atom:link href="/tags/bios/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>HEST上报开发小结</title>
+      <link>/posts/bios/HEST%E4%B8%8A%E6%8A%A5%E5%BC%80%E5%8F%91%E5%B0%8F%E7%BB%93/</link>
+      <pubDate>Fri, 12 Jan 2024 20:04:24 +0800</pubDate>
+      
+      <guid>/posts/bios/HEST%E4%B8%8A%E6%8A%A5%E5%BC%80%E5%8F%91%E5%B0%8F%E7%BB%93/</guid>
+      <description>&lt;h2 id=&#34;1-hest表ghescper&#34;&gt;
+  1. HEST表、GHES、CPER
+  &lt;a class=&#34;anchor&#34; href=&#34;#1-hest%e8%a1%a8ghescper&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;APEI（ACPI Platform Error Interfaces）：提供了一种将错误信息传递给OS的机制。&lt;/li&gt;
+&lt;li&gt;APEI包含了四张ACPI表：
+&lt;ul&gt;
+&lt;li&gt;ERST（Error Record Serialization Table）&lt;/li&gt;
+&lt;li&gt;BERT（Boot Error Record Table）&lt;/li&gt;
+&lt;li&gt;HEST（Hardware Error Source Table）&lt;/li&gt;
+&lt;li&gt;EINJ (Error Injection Table)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;HEST用来将系统硬件错误传递给OSPM，HEST表的结构如下：&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/hest/3.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;GHES（Generic Hardware Error Source）通用硬件错误源，GHES是Error Source Structure的一种。除了GHES外，还有其他的一些错误源（IA-32 Architecture Machine Check Exception、PCI Express Root Port AER、PCI Express Device AER Structure）。&lt;/li&gt;
+&lt;li&gt;GHES的结构如下图，其中比较重要的字段为Error Status Address和Notify。
+&lt;ul&gt;
+&lt;li&gt;Error Status Address是一个地址，指向了一块大小固定的地址空间，该空间存放上报给OS的错误信息，结构如下图所示。&lt;/li&gt;
+&lt;li&gt;Notify表示当错误发生时如何上报给OS。（支持的方式包括SCI、Polled等）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/hest/4.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;CPER（Common Platform Error Record）：上图中的Error Section可以用来存放CPER（详见UEFI_SPEC的 N）。CPER的结构如下图：&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/hest/5.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;可以通过如下流程，将硬件错误上报给OS，流程如下：
+&lt;ol&gt;
+&lt;li&gt;新增一条GHES，并将此GHES插入到HEST中。保存GHES中申请的地址基址。
+&lt;ol&gt;
+&lt;li&gt;要求此GHES的Notify Type为Polled。使用Polled后OS会定期去轮询。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;创建CPER，将存在Error的物理地址写入到CPER中。&lt;/li&gt;
+&lt;li&gt;将CPER插入到GHES指向的物理地址中。（此步骤比较难，需要同步修改Generic Error Status Block和Generic Error Data Entry）。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;整个流程用到的数据结构的关系如下：&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/hest/6.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;2-linux串口配置&#34;&gt;
+  2. Linux串口配置
+  &lt;a class=&#34;anchor&#34; href=&#34;#2-linux%e4%b8%b2%e5%8f%a3%e9%85%8d%e7%bd%ae&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;开启Linux串口可以收集OS的日志，也可以解决OS下BIOS日志显示不全的问题&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;开启步骤如下：&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol&gt;
+&lt;li&gt;编译grub配置文件，在文件末尾添加如下的配置 &lt;code&gt;vim /etc/default/grub &lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;GRUB_CMDLINE_LINUX_DEFAULT=&amp;#34;console=tty0 console=ttyS0,115200n8&amp;#34;
+GRUB_TERMINAL=serial
+GRUB_SERIAL_COMMAND=&amp;#34;serial --speed=115200 --unit=0 --word=8 --parity=no --stop=1&amp;#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;执行如下命令生成grub配置文件。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;grub2-mkconfig  -o /boot/efi/EFI/centos/grub.cfg
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;3-编译linux内核&#34;&gt;
+  3. 编译Linux内核
+  &lt;a class=&#34;anchor&#34; href=&#34;#3-%e7%bc%96%e8%af%91linux%e5%86%85%e6%a0%b8&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;在使用CPER上报OS的过程中，发现dmesg一直报错&lt;code&gt;GHES:Failed to read error status block!&lt;/code&gt;，后续重新编译Linux内核，才定位到错误。&lt;/li&gt;
+&lt;li&gt;编译Linux内核流程如下：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol&gt;
+&lt;li&gt;在Github下载最新的Linux内核代码（下载最新的即可，老版本内核代码可能缺少后续更新的某些patch）：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/hest/1.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;将内核代码传到Linux服务器上，并进行解压。&lt;/li&gt;
+&lt;li&gt;将/boot路径下的config-xxx文件拷贝到内核代码的路径，并重命名为.config。&lt;code&gt;cp  /boot/config-4.18.0-193.el8.x86_64  .config&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;进入Linux内核目录，执行&lt;code&gt;make menuconfig&lt;/code&gt;，之后找找有没有自己感兴趣的配置，把它选上后，保存退出。&lt;/li&gt;
+&lt;li&gt;开始编译Linux内核，执行&lt;code&gt;make -j128&lt;/code&gt;，其中-j表示并行编译，可以加快编译速度，可以根据自己CPU的核心数来调整该值的大小。
+&lt;ol&gt;
+&lt;li&gt;如果出现报错，是因为缺少某些库，可以自己按照报错去搜一下需要安装的软件或者需要注释掉的选项。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;当编译完成后，执行&lt;code&gt;make modules_install&lt;/code&gt;来安装内核模块。&lt;/li&gt;
+&lt;li&gt;执行&lt;code&gt;make install&lt;/code&gt;安装Linux内核。&lt;/li&gt;
+&lt;li&gt;更新grub配置，让其重新扫描内核，并从新的Linux内核启动&lt;code&gt;grub2-mkconfig -o /boot/efi/EFI/centos/grub.cfg&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;如果以上步骤执行完后，重新启动可以看到grub中新增加了一个刚编译的内核的启动项。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/hest/2.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;内核中使用printk来添加打印信息，使用方式如下：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//KERN_ERR是打印级别
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;printk&lt;/span&gt;(KERN_ERR &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;%s: kpf acpi_hest_get_size(gdata) = 0x%x, data_len = 0x%x&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;, __func__, &lt;span style=&#34;color:#a6e22e&#34;&gt;acpi_hest_get_size&lt;/span&gt;(gdata), data_len);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;重新编译并安装内核后，使用&lt;code&gt;dmesg -w&lt;/code&gt;即可看到添加的打印信息。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;4-内存&#34;&gt;
+  4. 内存
+  &lt;a class=&#34;anchor&#34; href=&#34;#4-%e5%86%85%e5%ad%98&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;DIMM（Double In-line Memory Module）双列内存模组，双列指的是电路板两侧有两列金手指。&lt;/li&gt;
+&lt;li&gt;SDRAM（Synchronous Dynamic Random Access Memory）：同步动态随机存储器。同步指的是其时钟频率与CPU前端总线的系统时钟频率相同；动态指的是存储阵列需要不断的刷新来保证数据不丢失；随机指的是可以自由指定地址进行数据的读写。&lt;/li&gt;
+&lt;li&gt;RANK：也叫P-Bank（Physical Bank），P-Bank是一组内存芯片的集合，这个集合的总位宽必须要和CPU的数据位宽相同。
+&lt;ul&gt;
+&lt;li&gt;每个内存芯片都有自己的位宽（（SDRAM）存储单元容量=位宽，（DDR）存储单元容量=2×位宽），位宽就是每个传输周期提供的数据量。一般一个内存芯片的位宽为8Bit。&lt;/li&gt;
+&lt;li&gt;只有知道芯片位宽的情况下，才能确定P-BANK的数量。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;BANK：内存可以看作是一个表格，指定一个行（Row）和一个列（Column）后，就可以找到所需要的单元格了，这个单元格可以称为&lt;code&gt;存储单元&lt;/code&gt;（一个存储单元可以存nbit的数据（n取决于位宽）），这个表格就叫L-BANK（逻辑Bank，也叫BANK）。
+&lt;ul&gt;
+&lt;li&gt;一个BANK一般会包含多个表格。所以在进行寻址时，需要先确定是哪个BANK，然后在这个选定的L-BANK中选择相应的行和列进行寻址。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;内存芯片的容量（存储单元的容量） = 行数 x 列数 x L-BANK的数量。&lt;/li&gt;
+&lt;li&gt;DDR SDRAM（Double Data Rate SDRAM）：双倍数据流SDRAM。&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>微型计算机的组成</title>
+      <link>/posts/bios/%E5%BE%AE%E5%9E%8B%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%9A%84%E7%BB%84%E6%88%90/</link>
+      <pubDate>Mon, 09 Oct 2023 10:50:47 +0800</pubDate>
+      
+      <guid>/posts/bios/%E5%BE%AE%E5%9E%8B%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%9A%84%E7%BB%84%E6%88%90/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;冯●诺伊曼计算机的基本思想：
+&lt;ul&gt;
+&lt;li&gt;采用二进制形式表示数据和指令，指令由操作码和地址码组成。&lt;/li&gt;
+&lt;li&gt;将程序和数据存放在存储器中，计算机工作时从存储器取出指令来执行。&lt;/li&gt;
+&lt;li&gt;指令的执行时顺序的，程序分支由转移指令实现。&lt;/li&gt;
+&lt;li&gt;计算机由存储器、控制器、运算器、输入设备和输出设备组成。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;现代计算机讲5大部件成为了3个硬件子系统：处理器、存储系统、输入输出系统。处理器包括运算器和控制器；存储系统由寄存器、高速缓冲存储器和辅助存储器几个层次组成。输入输出设备统称为外部设备，简称外设或I/O设备。&lt;/li&gt;
+&lt;li&gt;冯●诺伊曼计算机采用二进制表示数据和指令，指令是控制计算机操作的指令，指令的二进制编码规则形成了指令的代码格式，指令由操作码和地址码组成。指令的操作码表示指令的操作，如加法操作、操作数是参与操作的数据，主要以寄存器或者存储器地址形式指明数据的来源，所以也成为地址码。&lt;/li&gt;
+&lt;li&gt;程序和数据在执行前需要存放在主存储器中，在执行时才从主存储器进入处理器。现代计算机中，主存储器是字节可寻址的，主存储器的每个存储单元都具有一个地址，保存一个字节的信息。只要指定了地址就能进行存取的方式被称为随机存取。&lt;/li&gt;
+&lt;li&gt;处理器的主要功能是从主存储器取指令，翻译指令代码的功能（译码），然后执行指令规定的操作。当一条指令执行完后，处理器会自动地去取下一条将要执行的指令，重复上述过程直到整个程序执行完毕。&lt;/li&gt;
+&lt;li&gt;为了简化各个部件的相互连接，现代计算机使用总线结构。微处理器内集成了控制器、运算器和若干高速存储单元（寄存器）。&lt;/li&gt;
+&lt;li&gt;存储系统由处理器内部的寄存器、高速缓冲存储器（Cache）、主存储器（即内存）和辅助存储器构成（如磁盘）。&lt;/li&gt;
+&lt;li&gt;I/O设备指的是输入设备和输出设备（外设），由于各种外设的工作速度、驱动方法差别很大，需要一个I/O接口充当外设和主机间的桥梁。较复杂的I/O接口电路通常制成独立的电路板。&lt;/li&gt;
+&lt;li&gt;总线用于多个部件的相互连接。系统总线指的是微机系统中，处理器与存储器和I/O设备进行信息交换的公共通道。总线有几十条到上百条信号线，总线信号一般可以分为3组：
+&lt;ul&gt;
+&lt;li&gt;地址总线：在该组信号线上，处理器单向输出将要访问的主存单元或I/O端口的地址信息。地址线的多少决定了系统能够直接寻址存储器的容量大小和外设端口范围。&lt;/li&gt;
+&lt;li&gt;数据总线：数据总线的多少决定了一次能够传输数据的位数。处理器进行读操作时，主存或者外设的数据通过该组信号线输入处理器，处理器进行写操作时，处理器的数据通过该组信号线输出到主存或者外设。&lt;/li&gt;
+&lt;li&gt;控制总线：控制总线用于协调系统中各个部件的操作。各类总线的特点主要取决于控制总线。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;中断是处理器正常执行程序的流程被某种原因打断并暂时停止，转向执行事先安排好的一段处理程序（中断处理程序），待处理程序结束后仍返回被中断的指令处继续执行的过程。中断来自处理器内部就是内部中断，也称为异常（Exception）；中断来自外部就是外部中断。例：指令的调试需要利用中断，PC以中断的方式响应键盘输入。&lt;/li&gt;
+&lt;li&gt;DMA(Direct Memory Access，直接存储器读取)指主存储器和外设间直接的、不通过处理器的高速数据传输方式。&lt;/li&gt;
+&lt;li&gt;控制芯片组（即多个控制芯片）提供主板上的关键逻辑电路，如主存控制单元、中断控制器、DMA控制器等，控制芯片决定主板的特性，如支持的主存类型和容量、支持的处理器类型。&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>xHCI</title>
+      <link>/posts/bios/XHCI/</link>
+      <pubDate>Thu, 14 Sep 2023 15:57:22 +0800</pubDate>
+      
+      <guid>/posts/bios/XHCI/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/xhci/1.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;USB Driver(USBD): 总线驱动，用来枚举USB设备，给USB设备安装Protocol。&lt;/li&gt;
+&lt;li&gt;Host Controller Driver(xHCD): xHC控制器驱动。&lt;/li&gt;
+&lt;li&gt;Host Controller (xHC):USB控制器，是一个硬件设备。&lt;/li&gt;
+&lt;li&gt;USB Device: 包括HUB和Function，比如鼠标、键盘。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;xhci介绍&#34;&gt;
+  XHCI介绍
+  &lt;a class=&#34;anchor&#34; href=&#34;#xhci%e4%bb%8b%e7%bb%8d&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;xHCI包含三个空间&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;主机配置空间：一般是PCI配置空间。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;MMIO空间：主要放一些寄存器（Capability Registers、Operational Registers、Runtime Registers和Doorbell Array）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;主机内存：主要放一些数据结构，比如Device Context Base Address Array, Device Contexts, Transfer Ring等。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+  &lt;img src=&#34;/img/xhci/2.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;xHCI支持的传输类型：Isochronous（等时传输）、Interrupt（中断传输）、Control（控制传输）、Bulk（批量传输）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Capability Register：这些值作为Host Controller Driver的参数。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Runtime和Operational Registers指定主机控制器配置和运行变化状态。系统软件通过该寄存器来控制和监控主机控制器的Operational状态。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;xHCI Extended Capabilities说明了xHC实现的一些可选特性。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Doorbell Array：最多支持256个Doorbell寄存器的数组，每个Doorbell寄存器都向系统软件提供了一种机制，用于通知xHC是否有域槽位或者Endpoint相关的工作要执行。Doorbell寄存器的DB Target字段表示按下门铃的原因。Doorbell寄存器0被主机控制器用域Command Ring管理。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Device Slot 表示USB设备的多个XHCI数据结构。每个设备由Device Context BaseAddress Array中的一个元素、Doorbell Array register中的一个寄存器和设备的Device Context组成。Slot ID用于标识特定的Device Slot。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Command Ring：软件使用Command Ring将Command传递给xHC。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Event Ring：xHC使用Event Ring将Command Completion和Asynchronous event传递给软件。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Transfer Ring：软件使用Transfer Ring为Endpoint安排工作。Transfer Ring是一个循环队列（队列中每个元素都是是Transfer Descriptor（TD）），每个TD定义了一个或多个数据Buffer。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;xhci数据结构&#34;&gt;
+  XHCI数据结构
+  &lt;a class=&#34;anchor&#34; href=&#34;#xhci%e6%95%b0%e6%8d%ae%e7%bb%93%e6%9e%84&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;device-context-base-address-array&#34;&gt;
+  Device Context Base Address Array
+  &lt;a class=&#34;anchor&#34; href=&#34;#device-context-base-address-array&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Device Context Base Address Array (DCBAA)是一个指针数组，数组的每个元素都指向了一个Device Context数据结构。数组最多255个元素。&lt;/li&gt;
+&lt;li&gt;DCBAA的数组下标就是SLOT ID。&lt;/li&gt;
+&lt;li&gt;当检测到插入了一个USB设备后：1. 软件初始化一个Device Context数据结构；2. 从xHC获取一个Slot ID；3. 将此Device Context的指针插入到DCBAA的SLOT ID的位置。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;device-context&#34;&gt;
+  Device Context
+  &lt;a class=&#34;anchor&#34; href=&#34;#device-context&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Device Context用来记录设备的配置和状态信息。&lt;/li&gt;
+&lt;li&gt;Device Context由32个数据结构组成，第一个数据结构是Slot Context，剩余的数据结构是Endpoint Context。&lt;/li&gt;
+&lt;li&gt;在枚举USB设备时，软件创建一个Device Context数据结构并初始化为0，在执行了Address Device命令后将该数据结构的所属权传递给xHC。在执行了Disable Slot命令后，xHC会失去该数据结构的所属权。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;typedef&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; _DEVICE_CONTEXT {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  SLOT_CONTEXT        Slot;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  ENDPOINT_CONTEXT    EP[&lt;span style=&#34;color:#ae81ff&#34;&gt;31&lt;/span&gt;];
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;} DEVICE_CONTEXT;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;slot-context&#34;&gt;
+  Slot Context
+  &lt;a class=&#34;anchor&#34; href=&#34;#slot-context&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Slot Context提供了control、state、addressing和电源管理。&lt;/li&gt;
+&lt;li&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;typedef&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; _SLOT_CONTEXT {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  UINT32    RouteString    : &lt;span style=&#34;color:#ae81ff&#34;&gt;20&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  UINT32    Speed          : &lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  UINT32    RsvdZ1         : &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  UINT32    MTT            : &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  UINT32    Hub            : &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  UINT32    ContextEntries : &lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  UINT32    MaxExitLatency : &lt;span style=&#34;color:#ae81ff&#34;&gt;16&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  UINT32    RootHubPortNum : &lt;span style=&#34;color:#ae81ff&#34;&gt;8&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  UINT32    PortNum        : &lt;span style=&#34;color:#ae81ff&#34;&gt;8&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  UINT32    TTHubSlotId    : &lt;span style=&#34;color:#ae81ff&#34;&gt;8&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  UINT32    TTPortNum      : &lt;span style=&#34;color:#ae81ff&#34;&gt;8&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  UINT32    TTT            : &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  UINT32    RsvdZ2         : &lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  UINT32    InterTarget    : &lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  UINT32    DeviceAddress  : &lt;span style=&#34;color:#ae81ff&#34;&gt;8&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  UINT32    RsvdZ3         : &lt;span style=&#34;color:#ae81ff&#34;&gt;19&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  UINT32    SlotState      : &lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  UINT32    RsvdZ4;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  UINT32    RsvdZ5;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  UINT32    RsvdZ6;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  UINT32    RsvdZ7;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;} SLOT_CONTEXT;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;endpoint-context&#34;&gt;
+  Endpoint Context
+  &lt;a class=&#34;anchor&#34; href=&#34;#endpoint-context&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Endpoint Context数据结构定义了特定的USB Endpoint的配置和状态。Endpoint Context字段包含了Endpoint相关的type、control、state和带宽信息。这些信息由USB设备提供。Endpoint Context还定义了一个TR Dequeue 指定字段，通常提供了一个指向了与此pipe关联的Transfer Ring。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;rings&#34;&gt;
+  Rings
+  &lt;a class=&#34;anchor&#34; href=&#34;#rings&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Ring是一个循环队列，xHC使用三种类型的Ring：
+&lt;ul&gt;
+&lt;li&gt;Command Ring：（每个XHC一个）软件使用Command Ring将命令发送给xHC。&lt;/li&gt;
+&lt;li&gt;Event Ring：（每个中断一个）xHC使用Event Ring将命令状态、结果传递给软件。&lt;/li&gt;
+&lt;li&gt;Transfer Ring：（每个Endpoint或Stream一个）Transfer Ring被用来在内存和设备Endpoint之间传输数据。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;command接口&#34;&gt;
+  Command接口
+  &lt;a class=&#34;anchor&#34; href=&#34;#command%e6%8e%a5%e5%8f%a3&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;为了管理xHC和连接到xHC的设备，xHC提供了一个Command Ring接口，一个Command Ring上的项目被称为CD（Command Descriptor）。&lt;/li&gt;
+&lt;li&gt;所有命令都会在Event Ring上生成一个命令完成事件，该事件用于报告命令完成状态。&lt;/li&gt;
+&lt;li&gt;xHCI 命令集合&lt;/li&gt;
+&lt;/ul&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;命令&lt;/th&gt;
+&lt;th&gt;描述&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;No Op&lt;/td&gt;
+&lt;td&gt;测试TRB Ring机制&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Enable Slot&lt;/td&gt;
+&lt;td&gt;返回设备的Slot  ID并将设备Slot状态从Disabled改为Default&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Disable Slot&lt;/td&gt;
+&lt;td&gt;将Device Slot从其他任何状态改为Disabled状态&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Address Device&lt;/td&gt;
+&lt;td&gt;启用Default Control Endpoint，（可选）向USB设备发出SET_ADDRESS命令并将Device Slot设置为Addressed状态&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Configure Endpoint&lt;/td&gt;
+&lt;td&gt;启用或者禁用设备的Enpoint&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Evaluate Context&lt;/td&gt;
+&lt;td&gt;告知xHC软件已经修改了选定的Context参数&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Reset Endpoint&lt;/td&gt;
+&lt;td&gt;复位Endpoint，该命令用于将一个halted endpoint恢复&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Stop Endpoint&lt;/td&gt;
+&lt;td&gt;停止Endpoint&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Set TR Dequeue Pointer&lt;/td&gt;
+&lt;td&gt;更新一个启用的endpoint的Transfer Ring Dequeue&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Reset Device&lt;/td&gt;
+&lt;td&gt;复位Device Slot，此命令用于在复位一个USB设备时同步Device Slot的状态&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;endpoint&#34;&gt;
+  Endpoint
+  &lt;a class=&#34;anchor&#34; href=&#34;#endpoint&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;一个USB设备支持最高31个Endpoints。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;usb设备初始化&#34;&gt;
+  USB设备初始化
+  &lt;a class=&#34;anchor&#34; href=&#34;#usb%e8%ae%be%e5%a4%87%e5%88%9d%e5%a7%8b%e5%8c%96&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;下面是一个连到ROOT HUB的USB设备初始化的流程：
+&lt;ol&gt;
+&lt;li&gt;当检测到一个USB设备连接后，xHC会将CCS和CSC置为1，并生成一个端口变更事件。&lt;/li&gt;
+&lt;li&gt;收到端口状态变更事件后，软件根据Port ID字段来确认是哪个Port生成的事件。&lt;/li&gt;
+&lt;li&gt;软件读取PORTSC寄存器。 USB3协议的Port尝试进入Enabled状态，连接的USB设备进入为&lt;strong&gt;Default&lt;/strong&gt;状态。&lt;/li&gt;
+&lt;li&gt;软件通过Enable Slot命令来从xHC获取设备的slot，XHC会返回一个SLOT ID。Enable Slot执行成功后，Device Slot会进入&lt;strong&gt;Enabled&lt;/strong&gt;状态。&lt;/li&gt;
+&lt;li&gt;获取到设备的slot后，软件初始化此slot关联的数据结构。
+&lt;ol&gt;
+&lt;li&gt;分配Input Context数据结构。&lt;/li&gt;
+&lt;li&gt;将Input Context中的Input Control Context的A0和A1标志位置为1。&lt;/li&gt;
+&lt;li&gt;初始化Input Slot Context数据结构，主要是设置Root Hub Port Number、Route String和Context Entries。&lt;/li&gt;
+&lt;li&gt;为Default Control Endpoint初始化Transfer Ring。&lt;/li&gt;
+&lt;li&gt;初始化Input Default Control Endpoint 0 Context，主要是设置EP type = Control、Max Packet Size等信息。&lt;/li&gt;
+&lt;li&gt;分配Output Device Context 数据结构，从Device Context Base Address Array中选择一个下标（Device Slot Id）用来指向Output Device Context数据结构。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;软件使用Address Device命令来给设备分配地址，并启用其Default Control Endpoint。此命令会将Device Slot从Enabled状态置为&lt;strong&gt;Addressed&lt;/strong&gt;状态，将USB设备从Default状态置为&lt;strong&gt;Address&lt;/strong&gt;状态。&lt;/li&gt;
+&lt;li&gt;对于LS，HS， 和SS设备，其Default Control Endpoint允许的包大小是固定的，分别为8、64、512字节。对于FS设备，系统软件需要做一些操作来决定最大包大小（此处省略）。&lt;/li&gt;
+&lt;li&gt;Default Control Endpoint配置完成后，系统软件可以获取到完整的Device Descriptor和Configuration Descriptor，以便将其交给适合的Class Drivers。（软件通过Endpoint 0的GET_DESCRIPTOR请求获取USB描述符）&lt;/li&gt;
+&lt;li&gt;软件会发出将Contxt Bit 0置为1的Evaluate Context命令，用来告知xHC最大退出延迟的值。此命令同样会修改Output Slot Context Interrupter部分字段的值。&lt;/li&gt;
+&lt;li&gt;Class Driver会使用Configure EndPoint命令来配置Device Slot，并通过Default Control Endpoint发出USB SET_CONFIGURATION请求来设置USB设备。需要成功设置完这两项操作，才能将USB设备的状态从Address到&lt;strong&gt;Configured&lt;/strong&gt;，并将Device SLot从Addressed变更为&lt;strong&gt;Configured&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;如果需要，系统软件可能会配置Alternate Interface。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;resetting-a-root-hub-port&#34;&gt;
+  Resetting a Root Hub Port
+  &lt;a class=&#34;anchor&#34; href=&#34;#resetting-a-root-hub-port&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;复位Root HUb port和连接上的USB设备。如果成功了，就会将PORT的状态设置为Enabled，并且可以获取到设备的Speed（位于PORTSC 的Port Speed）。&lt;/li&gt;
+&lt;li&gt;无论RESET是否执行成功，Port Reset Change（PRC）标志位都会置为1。如果PRC是从0变为1，则还会生成一个端口变更事件。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;device-slot-assignment&#34;&gt;
+  Device Slot Assignment
+  &lt;a class=&#34;anchor&#34; href=&#34;#device-slot-assignment&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;当执行完RESET PORT后，软件会向XHC发出一个Enable Slot命令（通过Command Ring），&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;device-slot-initialization&#34;&gt;
+  Device Slot Initialization
+  &lt;a class=&#34;anchor&#34; href=&#34;#device-slot-initialization&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;一旦USB设备获得了Slot ID，软件会初始化SLOT对应的数据结构，流程如下：
+&lt;ol&gt;
+&lt;li&gt;初始化Input Context Data 数据结构，将所有字段初始化为0。&lt;/li&gt;
+&lt;li&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;描述符&#34;&gt;
+  描述符
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%8f%8f%e8%bf%b0%e7%ac%a6&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;设备描述符&#34;&gt;
+  设备描述符
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e8%ae%be%e5%a4%87%e6%8f%8f%e8%bf%b0%e7%ac%a6&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;设备描述符用于表示USB设备的一般信息，如制造商ID、产品序列号等。&lt;/li&gt;
+&lt;li&gt;设备上电时，主机USB系统软件读取设备描述符的前8字节，得到endpoint所支持的最大数据包长度，后续控制传输就使用此值进行工作。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;typedef&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  UINT8     Length; &lt;span style=&#34;color:#75715e&#34;&gt;//描述符字节长度0X12
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  UINT8     DescriptorType; &lt;span style=&#34;color:#75715e&#34;&gt;//描述符的类型
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  UINT16    BcdUSB; &lt;span style=&#34;color:#75715e&#34;&gt;//USB设备支持的协议版本号
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  UINT8     DeviceClass;    &lt;span style=&#34;color:#75715e&#34;&gt;//设备类代码
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  UINT8     DeviceSubClass; &lt;span style=&#34;color:#75715e&#34;&gt;//子类代码
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  UINT8     DeviceProtocol; &lt;span style=&#34;color:#75715e&#34;&gt;//协议码
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  UINT8     MaxPacketSize0; &lt;span style=&#34;color:#75715e&#34;&gt;//断点0的最大包长度
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  UINT16    IdVendor;   &lt;span style=&#34;color:#75715e&#34;&gt;//厂商ID
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  UINT16    IdProduct;  &lt;span style=&#34;color:#75715e&#34;&gt;//产品ID
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  UINT16    BcdDevice;  &lt;span style=&#34;color:#75715e&#34;&gt;//设备发行号
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  UINT8     StrManufacturer;    &lt;span style=&#34;color:#75715e&#34;&gt;//厂商信息的字符串描述符索引值
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  UINT8     StrProduct; &lt;span style=&#34;color:#75715e&#34;&gt;//产品信息的字符串描述符索引值
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  UINT8     StrSerialNumber;    &lt;span style=&#34;color:#75715e&#34;&gt;//设备序列号信息的字符串描述符索引值
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  UINT8     NumConfigurations;  &lt;span style=&#34;color:#75715e&#34;&gt;//配置描述符数目
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;} USB_DEVICE_DESCRIPTOR;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;/*
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;案例
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;------------------------------------------
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;Device Descriptor	
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;bLength :	0x0012
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;bDescriptorType :	0x0001
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;bcdUSB :	0x0320  - Spec# = 03.20
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;bDeviceClass :	0x00    - Defined at Interface level
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;bDeviceSubClass :	0x00
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;bDeviceProtocol :	0x00
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;bMaxEP0Size :	0x09    - 9 bytes
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;idVendor :	0x0B95  - &amp;#34;ASIX Electronics Corp.&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;idProduct :	0x1790  - &amp;#34;AX88179 Gigabit Ethernet&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;bcdDevice :	0x0200  - Device# = 02.00
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;iManufacturer :	0x01    - &amp;#34;ASIX&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;iProduct :	0x02    - &amp;#34;AX88179A&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;iSerialNumber :	0x03    - &amp;#34;00F30573&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;bNumConfigurations :	0x03
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;------------------------------------------
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;*/&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+    </item>
+    
+    <item>
+      <title>事件</title>
+      <link>/posts/bios/%E4%BA%8B%E4%BB%B6/</link>
+      <pubDate>Tue, 25 Jul 2023 11:58:53 +0800</pubDate>
+      
+      <guid>/posts/bios/%E4%BA%8B%E4%BB%B6/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;UEFI的所有异步操作需要通过事件来完成。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;事件函数&#34;&gt;
+  事件函数
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e4%ba%8b%e4%bb%b6%e5%87%bd%e6%95%b0&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;waitforevent-等待事件发生&#34;&gt;
+  WaitForEvent 等待事件发生
+  &lt;a class=&#34;anchor&#34; href=&#34;#waitforevent-%e7%ad%89%e5%be%85%e4%ba%8b%e4%bb%b6%e5%8f%91%e7%94%9f&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;/**
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;  @retval EFI_SUCCESS           The event indicated by Index was signaled.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;  @retval EFI_INVALID_PARAMETER 1. NumberOfEvents is 0; 2. The event indicated by Index is of type EVT_NOTIFY_SIGNAL.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;  @retval EFI_UNSUPPORTED       The current TPL is not TPL_APPLICATION.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;**/&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;typedef&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;EFI_STATUS&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(EFIAPI &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;EFI_WAIT_FOR_EVENT)(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IN  UINTN                    NumberOfEvents,  &lt;span style=&#34;color:#75715e&#34;&gt;//event数组的长度
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  IN  EFI_EVENT                &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;Event,  &lt;span style=&#34;color:#75715e&#34;&gt;//event数组
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  OUT UINTN                    &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;Index   &lt;span style=&#34;color:#75715e&#34;&gt;//返回触发事件的下标
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  );
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;WaitForEvent是&lt;strong&gt;阻塞操作&lt;/strong&gt;，直到Event数组内任一事件被触发或者事件导致错误出现时，WaitForEvent才返回。&lt;/li&gt;
+&lt;li&gt;事件触发后返回index，并将事件重置为非触发状态。&lt;/li&gt;
+&lt;li&gt;EVT_NOTIFY_SIGNAL类型的事件似乎不能用WaitForEvent。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;createevent-创建事件&#34;&gt;
+  CreateEvent 创建事件
+  &lt;a class=&#34;anchor&#34; href=&#34;#createevent-%e5%88%9b%e5%bb%ba%e4%ba%8b%e4%bb%b6&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;/**
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;  @retval EFI_SUCCESS           The event structure was created.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;  @retval EFI_INVALID_PARAMETER One or more parameters are invalid.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;  @retval EFI_OUT_OF_RESOURCES  The event could not be allocated.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;**/&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;typedef&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;EFI_STATUS&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(EFIAPI &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;EFI_CREATE_EVENT)(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IN  UINT32                       Type,    &lt;span style=&#34;color:#75715e&#34;&gt;//事件类型
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  IN  EFI_TPL                      NotifyTpl,   &lt;span style=&#34;color:#75715e&#34;&gt;//Notification函数的优先级
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  IN  EFI_EVENT_NOTIFY             NotifyFunction,  &lt;span style=&#34;color:#75715e&#34;&gt;//Notification函数
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  IN  VOID                         &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;NotifyContext,  &lt;span style=&#34;color:#75715e&#34;&gt;//传给Notification函数的参数
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  OUT EFI_EVENT                    &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;Event   &lt;span style=&#34;color:#75715e&#34;&gt;//生成的事件
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  );
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;事件类型&#34;&gt;
+  事件类型
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e4%ba%8b%e4%bb%b6%e7%b1%bb%e5%9e%8b&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;事件类型可以是一种或多种基本类型的组合。常用的事件类型如下：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;类型&lt;/th&gt;
+&lt;th&gt;特征&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;EVT_TIMER&lt;/td&gt;
+&lt;td&gt;定时器事件，没有Notification函数，生成事件后需要调用setTimer服务设置时钟属性。事件可以通过SetTimer设置等待事件、到期后通过SignalEvent触发、通过WaitForEvent等待事件触发、通过CheckEvent检查事件&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;EVT_NOTIFY_WAIT&lt;/td&gt;
+&lt;td&gt;有一个Notification函数，当调用CheckEvent或WaitForEvent时，Notifyication函数会被放到待执行队列&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;EVT_NOTIFY_SIGNAL&lt;/td&gt;
+&lt;td&gt;有一个Notification函数，当前事件通过SignalEvent被触发时，这个Notification函数会被放到待执行队列&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;0X00000000&lt;/td&gt;
+&lt;td&gt;没有Notification函数，事件可以通过signalevent触发、waitforevent等待事件被触发、checkevent检查状态&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;ul&gt;
+&lt;li&gt;还有两种特殊的事件
+&lt;ul&gt;
+&lt;li&gt;EVT_SIGNAL_EXIT_BOOT_SERVICES：当ExitBootServices被执行时，事件被触发。&lt;/li&gt;
+&lt;li&gt;EVT_SIGNAL_VIRTUAL_ADDRESS_CHANGE：当SetVirtualAddressMap被调用时触发此类型的事件。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;优先级&#34;&gt;
+  优先级
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e4%bc%98%e5%85%88%e7%ba%a7&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;有四个预定义的优先级&lt;/li&gt;
+&lt;/ul&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;优先级&lt;/th&gt;
+&lt;th&gt;用法&lt;/th&gt;
+&lt;th&gt;函数&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;TPL_APPLICATION&lt;/td&gt;
+&lt;td&gt;优先级最低，当程序运行在此级别时，任务队列中没有任何处于就绪状态的Notification函数&lt;/td&gt;
+&lt;td&gt;下列安徽念书运行在此级别ExitBootServices()、WaitForEvent()等&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;TPL_CALLBACK&lt;/td&gt;
+&lt;td&gt;比较耗时的操作通常在这个优先级&lt;/td&gt;
+&lt;td&gt;Serial I/O Protocol、UnloadImage&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;TPL_NOTIFY&lt;/td&gt;
+&lt;td&gt;运行在这个级别的程序不允许阻塞，大部分Event的Notification函数允许在这个级别&lt;/td&gt;
+&lt;td&gt;Memory Allocation Services、HII Protocols&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;TPL_HIGH_LEVEL&lt;/td&gt;
+&lt;td&gt;UEFI内核全局变量的修改允许在这个级别&lt;/td&gt;
+&lt;td&gt;SignalEvent、stall&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h4 id=&#34;notification函数&#34;&gt;
+  Notification函数
+  &lt;a class=&#34;anchor&#34; href=&#34;#notification%e5%87%bd%e6%95%b0&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;typedef&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;VOID&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(EFIAPI &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;EFI_EVENT_NOTIFY)(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IN  EFI_EVENT                Event,   &lt;span style=&#34;color:#75715e&#34;&gt;//拥有此函数的事件
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  IN  VOID                     &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;Context &lt;span style=&#34;color:#75715e&#34;&gt;//上下文指针，在CreateEvent设置
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  );
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;根据上面的事件类型可知，EVT_NOTIFY_WAIT的函数会在等待事件的过程中调用，而EVT_NOTIFY_SIGNAL的Notification函数会在SignalEvent调用。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;createeventex&#34;&gt;
+  CreateEventEx
+  &lt;a class=&#34;anchor&#34; href=&#34;#createeventex&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;/**
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;  @retval EFI_SUCCESS           The event structure was created.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;  @retval EFI_INVALID_PARAMETER One or more parameters are invalid.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;  @retval EFI_OUT_OF_RESOURCES  The event could not be allocated.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;**/&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;typedef&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;EFI_STATUS&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(EFIAPI &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;EFI_CREATE_EVENT_EX)(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IN       UINT32                 Type,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IN       EFI_TPL                NotifyTpl,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IN       EFI_EVENT_NOTIFY       NotifyFunction OPTIONAL,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IN CONST VOID                   &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;NotifyContext OPTIONAL,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IN CONST EFI_GUID               &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;EventGroup    OPTIONAL,  &lt;span style=&#34;color:#75715e&#34;&gt;//事件组
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  OUT      EFI_EVENT              &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;Event
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  );
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;CreateEventEx用于生成事件并将事件加入事件组。当事件组中的任意事件被触发后，组中的所有事件都会被触发，进而组内所有的Notification函数都会被加入待执行队列，组内优先级最高的Notification函数会被先执行。&lt;/li&gt;
+&lt;li&gt;存在四个预定义的Event组：
+&lt;ul&gt;
+&lt;li&gt;EFI_EVENT_GROUP_EXIT_BOOT_SERVICES：当执行ExitBootServices触发组内所有的事件。&lt;/li&gt;
+&lt;li&gt;EFI_EVENT_GROUP_VIRTUAL_ADDRESS_CHANGE：当执行SetVirtualAddressMap触发组内所有的Event。&lt;/li&gt;
+&lt;li&gt;EFI_EVENT_GROUP_MEMORY_MAP_CHANGE：Memory Map改变时触发组内所有的Event。&lt;/li&gt;
+&lt;li&gt;EFI_EVENT_GROUP_READY_TO_BOOT：Boot Manager加载并且执行一个启动项时触发组内所有的Event。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;checkevent-检查事件状态&#34;&gt;
+  CheckEvent 检查事件状态
+  &lt;a class=&#34;anchor&#34; href=&#34;#checkevent-%e6%a3%80%e6%9f%a5%e4%ba%8b%e4%bb%b6%e7%8a%b6%e6%80%81&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;/**
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;  @retval EFI_SUCCESS           事件是触发态
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;  @retval EFI_NOT_READY         事件是非触发态
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;  @retval EFI_INVALID_PARAMETER 事件类型是EVT_NOTIFY_SIGNAL
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;**/&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;typedef&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;EFI_STATUS&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(EFIAPI &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;EFI_CHECK_EVENT)(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IN EFI_EVENT                Event
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  );
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;signalevent-触发事件&#34;&gt;
+  SignalEvent 触发事件
+  &lt;a class=&#34;anchor&#34; href=&#34;#signalevent-%e8%a7%a6%e5%8f%91%e4%ba%8b%e4%bb%b6&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;typedef&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;EFI_STATUS&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(EFIAPI &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;EFI_SIGNAL_EVENT)(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IN  EFI_EVENT                Event
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  );
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;将事件设置为触发态。如果该事件在一个组中，则将族中所有的事件设置为触发态。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;closeevent-关闭事件&#34;&gt;
+  CloseEvent 关闭事件
+  &lt;a class=&#34;anchor&#34; href=&#34;#closeevent-%e5%85%b3%e9%97%ad%e4%ba%8b%e4%bb%b6&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;typedef&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;EFI_STATUS&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(EFIAPI &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;EFI_CLOSE_EVENT)(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IN EFI_EVENT                Event
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  );
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;settimer&#34;&gt;
+  SetTimer
+  &lt;a class=&#34;anchor&#34; href=&#34;#settimer&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;EVT_TIMER是一类特殊的事件，可以通过SetTimer服务设置定时器属性。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;/**
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;  @retval EFI_SUCCESS           The event has been set to be signaled at the requested time.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;  @retval EFI_INVALID_PARAMETER Event or Type is not valid.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;**/&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;typedef&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;EFI_STATUS&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(EFIAPI &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;EFI_SET_TIMER)(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IN  EFI_EVENT                Event,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IN  EFI_TIMER_DELAY          Type,    &lt;span style=&#34;color:#75715e&#34;&gt;//定时器类型
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  IN  UINT64                   TriggerTime  &lt;span style=&#34;color:#75715e&#34;&gt;//过期事件，100ns为一个单位
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  );
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;定时器类型如下：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;类型&lt;/th&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;TimerCancel&lt;/td&gt;
+&lt;td&gt;取消定时器触发&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;TimerPeriodic&lt;/td&gt;
+&lt;td&gt;重复型定时器&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;TimerRelative&lt;/td&gt;
+&lt;td&gt;一次性定时器&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;ul&gt;
+&lt;li&gt;如果Type为TimerPeriodic并且TriggerTIme是0，则定时器每个时钟滴答触发一次。&lt;/li&gt;
+&lt;li&gt;生成定时器事件包含两步：
+&lt;ol&gt;
+&lt;li&gt;通过CreateEvent生成一个EVT_TIMER事件&lt;/li&gt;
+&lt;li&gt;通过SetTimer设置这个定时器事件的属性。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>PCIe总线概述</title>
+      <link>/posts/bios/PCIe%E6%80%BB%E7%BA%BF%E6%A6%82%E8%BF%B0/</link>
+      <pubDate>Thu, 04 May 2023 20:04:24 +0800</pubDate>
+      
+      <guid>/posts/bios/PCIe%E6%80%BB%E7%BA%BF%E6%A6%82%E8%BF%B0/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;PCIe总线使用高速差分总线，采用端到端的连接方式，因此在每一条PCIe链路中只能连接两个设备，这两个设备互为数据发送端和数据接收端。&lt;/li&gt;
+&lt;li&gt;PCIe链路使用“端到端的数据传送方式“，发送端和接收端都存在TX(发送逻辑)和RX（接收逻辑）,结构如下：&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/book/pcie/5.jpg&#34; alt=&#34;图4-1&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;在PCIe总线的物理链路的一个数据通路（lane）中，有两组差分信号，共四根信号线。发送端的TX和接收端的RX使用一组差分信号连接。该链路被称为发送端的发送链路，也是接收端的接收链路。一个PCIe链路可以由多个Lane组成。&lt;/li&gt;
+&lt;li&gt;告诉差分信号电气规范要求发送端串接一个电容，以进行AC耦合，该电容也被称为AC耦合电容。&lt;/li&gt;
+&lt;li&gt;PCIe链路使用差分信号进行数据传输，一个差分型号由D+和D-两根信号线组成，信号接收端通过比较这两个信号的差值，判断发送端发送的是逻辑1还是逻辑0。&lt;/li&gt;
+&lt;li&gt;使用差分信号能有效抑制电磁干扰（EMI），差分信号使用两根信号传送一位数据。&lt;/li&gt;
+&lt;li&gt;PCIe链路可以由多条Lane组成，目前PCIe支持1、2、4、8、12、16和32个Lane，即x1、x2、x4、x8、x12、x16、x32宽度的PCIe链路。&lt;/li&gt;
+&lt;li&gt;在PCIe总线中，使用GT(gigatransfer)计算PCIe链路的峰值带宽，计算公式为总线频率x数据位宽x2。&lt;/li&gt;
+&lt;li&gt;PCIe链路使用串行方式进行数据传输，但在芯片内部，数据总线仍然是并行的，因此PCIe链路接口需要进行串并转换。&lt;/li&gt;
+&lt;li&gt;PCIe总线物理链路之间的数据传送使用基于时钟的同步传送机制，但物理链路并没有时钟线，PCIe总线的接收端含有时钟恢复模块CDR（Clock Data Recovery），CDR从接收报文提取接收时钟，从而进行同步数据传输。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;pcie总线使用的信号&#34;&gt;
+  PCIe总线使用的信号
+  &lt;a class=&#34;anchor&#34; href=&#34;#pcie%e6%80%bb%e7%ba%bf%e4%bd%bf%e7%94%a8%e7%9a%84%e4%bf%a1%e5%8f%b7&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;PCIe设备使用两种电源信号供电，分为是V&lt;sub&gt;cc&lt;/sub&gt;和V&lt;sub&gt;aux&lt;/sub&gt;，其额定电压为3.3V。PCIe设备使用的主要逻辑模块使用V&lt;sub&gt;cc&lt;/sub&gt;供电，而一些与电源管理相关的逻辑使用V&lt;sub&gt;aux&lt;/sub&gt;供电。&lt;/li&gt;
+&lt;li&gt;在一个处理器系统中，一般最多提供x16的PCIe插槽，并使用PETp0~15、PETn0~15和PERp0~15、PERn0~15共64根信号线组成32对差分信号，其中16对PETXX信号用于发送链路。另外16对PERxx信号用于接收链路。除此之外，PCIe总线还使用了下列辅助信号。
+&lt;ol&gt;
+&lt;li&gt;PERST#信号：该信号为全局复位信号，由处理器系统提供。当该信号有效时，PCIe设备将进行复位操作。PCIe总线定义了多种复位方式，齐总cold reset和warm reset这两种复位方式的实现和该信号有关。&lt;/li&gt;
+&lt;li&gt;REFCLK+和REFCLK-信号：
+&lt;ul&gt;
+&lt;li&gt;在一个处理器系统中，可能含有很多PCIe设备，这些设备可以作为Add-In卡与PCIe插槽连接，也可以作为内置模块，与处理器提供的PCIe链路直接相连。PCIe设备与插槽都具有REFCLK+和REFCLK-信号。&lt;/li&gt;
+&lt;li&gt;PCIe插槽使用这组信号与处理器系统同步。&lt;/li&gt;
+&lt;li&gt;当PCIe设备作为Add-In卡连接在PCIe插槽时i，可以直接使用PCIe插槽提供的这组信号，也可以使用独立的参考时钟。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;WAKE#信号：当PCIe设备进入休眠状态，主电源已经停止供电时，PCIe设备使用该信号向处理器系统提交唤醒请求，使处理器系统重新为该PCIe设备提供主电源Vcc。WAKE#信号是可选的，产生该信号的硬件逻辑必须使用辅助电源Vaux供电。&lt;/li&gt;
+&lt;li&gt;SMCLK和SMDAT信号：这两个信号与x86的SMBus（System management bus）有关，SMBus由SMCLK和SMDAT信号组成。&lt;/li&gt;
+&lt;li&gt;JTAG信号：JTAG是一种国际标准测试协议，主要用于芯片的内部测试。正式产品中一般不暴力JTAG接口。&lt;/li&gt;
+&lt;li&gt;PRSNT1#和PRSNT2#信号：这两个信号和PCIe设备的热插拔有关。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;pcie总线的层次结构&#34;&gt;
+  PCIe总线的层次结构
+  &lt;a class=&#34;anchor&#34; href=&#34;#pcie%e6%80%bb%e7%ba%bf%e7%9a%84%e5%b1%82%e6%ac%a1%e7%bb%93%e6%9e%84&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;PCIe总线使用了串行连接的方式，并使用数据包（Packet）进行数据传输。&lt;/li&gt;
+&lt;li&gt;PCIe总线的层次结构如下：&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/book/pcie/6.jpg&#34; alt=&#34;图4-4&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;PCIe总线各个层次都是使用硬件逻辑实现的，在PCIe体系结构中，数据报文首先在设备的核心层（Device Core）中产生，然后经过设备的事务层（Transaction Layer）、数据链路层（Data Link Layer）和物理层（Physical Layer），最终发送出去，接收端的数据也需要通过物理层、数据链路层和事务层，最终到达核心层。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;事务层&#34;&gt;
+  事务层
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e4%ba%8b%e5%8a%a1%e5%b1%82&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;事务层定义了PCIe总线使用总线事务，这些总线事务可以通过Switch等设备传送到其他PCIe设备或者RC。RC也可以使用这些总线事务访问PCIe设备。&lt;/li&gt;
+&lt;li&gt;事务层接收来自PCIe设备核心层的数据，并将其封装成TLP（transaction layer packet）后，发向数据链路层。事务层还从数据链路层接收数据报文，然后转发到PCIe设备的核心层。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;数量链路层&#34;&gt;
+  数量链路层
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%95%b0%e9%87%8f%e9%93%be%e8%b7%af%e5%b1%82&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;数据链路层保证来自发送端事务层的报文可以可靠、完整地发送到接收端的数据链路层，来自事务层的报文再通过数据链路层时，被添加Sequence Number前缀和CRC后缀，数据链路层使用ACK/NAK协议保证报文的可靠传输。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;物理层&#34;&gt;
+  物理层
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e7%89%a9%e7%90%86%e5%b1%82&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;物理层是PCIe总线的最底层，将PCIe设备连在一起。PCIe总线的物理电气特性决定了PCIe链路只能采用端到端的连接方式。PCIe总线的物理层为PCIe设备间的数据通信提供了传送介质，为数据传送提供了可靠的物理环境。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;pcie链路的扩展&#34;&gt;
+  PCIe链路的扩展
+  &lt;a class=&#34;anchor&#34; href=&#34;#pcie%e9%93%be%e8%b7%af%e7%9a%84%e6%89%a9%e5%b1%95&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;PCIe使用端到端的数据传送方式，如果要连接多个设备，PCIe链路必须使用Switch扩展PCIe链路。&lt;/li&gt;
+&lt;li&gt;Switch由1个上游端口和2~n个下游端口组成。在一个switch中和RC直接或间接相连的端口为上游端口。&lt;/li&gt;
+&lt;li&gt;在switch中，有两个与端口相关的概念，egress和ingress，egress指的是发送端口，即数据离开switch的使用的端口，ingress端口指数据进入switch的使用的端口。&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>PCI桥和PCI设备</title>
+      <link>/posts/bios/PCI%E6%A1%A5%E5%92%8CPCI%E8%AE%BE%E5%A4%87/</link>
+      <pubDate>Thu, 04 May 2023 20:04:24 +0800</pubDate>
+      
+      <guid>/posts/bios/PCI%E6%A1%A5%E5%92%8CPCI%E8%AE%BE%E5%A4%87/</guid>
+      <description>&lt;h2 id=&#34;pci桥与pci设备的配置空间&#34;&gt;
+  PCI桥与PCI设备的配置空间
+  &lt;a class=&#34;anchor&#34; href=&#34;#pci%e6%a1%a5%e4%b8%8epci%e8%ae%be%e5%a4%87%e7%9a%84%e9%85%8d%e7%bd%ae%e7%a9%ba%e9%97%b4&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;每一个PCI设备中（包括PCI桥）都包含一个配置空间。这个配置空间由HOST主桥管理，而PCI桥可以转发来自HOST主桥的配置访问。&lt;/li&gt;
+&lt;li&gt;PCI设备的ID号由总线号（Bus Number）、设备号（Device Number）和功能号（Function Number）组成。&lt;/li&gt;
+&lt;li&gt;Bus号在HOST主桥遍历PCI总线树时确定。系统软件使用DFS算法扫描PCI总线树上的所有PCI总线，并依次进行编号。&lt;/li&gt;
+&lt;li&gt;Function号与PCI设备的具体设计有关。&lt;/li&gt;
+&lt;li&gt;X86处理器定义了两个I/O端口寄存器，分别为CONFIG_ADDRESS（0xCF8）和CONFIG_DATA（0xCFC），X86处理器使用这两个I/O端口访问PCI设备的配置空间。&lt;/li&gt;
+&lt;li&gt;PCI agent使用的配置空间如下图所示：&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/book/pcie/2-9.jpg&#34; alt=&#34;图2-9&#34; /&gt;
+&lt;ul&gt;
+&lt;li&gt;（这张图要从右往左看）Vendor ID代表PCI设备的生产厂商，Device ID代表这个厂商生产的具体设备。&lt;/li&gt;
+&lt;li&gt;Revision ID寄存器记录PCI设备的版本号。&lt;/li&gt;
+&lt;li&gt;Class Code寄存器记载PCI设备的分类，该寄存器由三个字段组成，分别是Base Class Code、Sub Class Code和Interface，其中Base Class Code将PCI设备分类为显卡、网卡、PCI桥等设备。当Base Class Code是0X06，Sub class code是0x04、interface寄存器为0x00时，表示当前的PCI设备是一个桥。&lt;/li&gt;
+&lt;li&gt;Header Type寄存器，第7位为1表示当前PCI设备是多Function设备，为0表示当前PCI设备是单Function设备，第0~6位表示当前PCI设备的类型，为0表示该设备使用PCI Agent设备的配置空间，为1表示使用PCI桥的配置空间。&lt;/li&gt;
+&lt;li&gt;Subsystem ID和Subsystem Vendor ID：用于区分设备，有些通过4个ID可以确定一个设备。&lt;/li&gt;
+&lt;li&gt;Expansion ROM base address寄存器：存放Option ROM程序的基地址。&lt;/li&gt;
+&lt;li&gt;Capabilities Pointer寄存器：该寄存器存放Capabilities寄存器组的基地址，所有的PCIe设备都要支持Power Management Capability结构和PCI Express Capability结构，所以通过改指针可以找到这两个capability的位置。&lt;/li&gt;
+&lt;li&gt;BAR寄存器保存PCI设备使用的地址空间的基地址。其中每一个设备最多可以有6个基地址空间。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;PCI 桥的配置空间如下（图2-10）&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/book/pcie/2-10.jpg&#34; alt=&#34;图2-10&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;PCI桥中只有两组BAR寄存器，这两组寄存器是可选的。如果PCI桥中不存在私有寄存器，可以不使用这两组寄存器设置BAR空间。&lt;/li&gt;
+&lt;li&gt;Primary Bus寄存器保存上游的PCI总线号，Subordinate Bus寄存器存放当前PCI子树中编号最大的PCI总线树，Secondary Bus寄存器存放当前PCI桥使用的总线号。一个PCI桥管理的PCI总线号在Secondary Bus ~ Subordinate Bus之间。这两个寄存器的值由系统软件遍历PCI总线树时设置。&lt;/li&gt;
+&lt;li&gt;I/O Limit和I/O Base寄存器：存放PCI子树中所有PCI设备使用的I/O地址空间的基地址和大小。&lt;/li&gt;
+&lt;li&gt;MemoryLimit和Memory Base寄存器：存放PCI子树中PCI设备使用的MMIO基址和大小。&lt;/li&gt;
+&lt;li&gt;Prefetchable Memory Limit和Prefetchable Memory Base：存放PCI子树中PCI设备使用的可预取MMIO基址和大小。&lt;/li&gt;
+&lt;li&gt;I/O Base Upper 16 Bits和I/O Limit Upper 16寄存器：如果PCI桥支持32位I/O端口，这组寄存器提供I/O端口的高16位地址。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;读取slot-capabilities&#34;&gt;
+  读取slot capabilities
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e8%af%bb%e5%8f%96slot-capabilities&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;ep设备的SLOT号位于上一级桥的slot capabilities中，slot capabilities位于PCI Express Capability Structure中。PCI Express Capability Structure结构如下图，其Cap ID为0x10。&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/bios/pcie/3.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;slot号位于slot capabilities的19~31位。&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/bios/pcie/4.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;案例&#34;&gt;
+  案例
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%a1%88%e4%be%8b&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;下图硬盘的BDF为86:00.0，槽位号为37&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/bios/pcie/5.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/bios/pcie/6.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;其上一级桥的slot capabilities位置如下图，&lt;code&gt;01 28 00 60&lt;/code&gt;转换为二进制为&lt;code&gt;0000 0001 0010 1000 0000 0000 0110 0000&lt;/code&gt;，其中31~19位为&lt;code&gt;0000 0001 0010 1&lt;/code&gt;,将此二进制转为16进制为37。&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/bios/pcie/7.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>Protocol</title>
+      <link>/posts/bios/protocol/</link>
+      <pubDate>Sat, 15 Apr 2023 16:26:02 +0800</pubDate>
+      
+      <guid>/posts/bios/protocol/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;Protocol是UEFI提供的接口函数。&lt;/li&gt;
+&lt;li&gt;每个Protocol都包含GUID、Protocol接口的结构体、和Protocol接口函数（Protocol服务）。&lt;/li&gt;
+&lt;li&gt;3个使用Protocol的函数OpenProtocol、HandleProtocol、LocateProtocol找到Protocol。&lt;/li&gt;
+&lt;li&gt;.efi文件（如EFI_DRIVER）加载到内存后被称为Image，ImageHandle是Image的句柄。一般模块的入口函数会有一个ImageHandle入参，该参数指向了内存中的Image。&lt;/li&gt;
+&lt;li&gt;UEFI扫描总线后，会为每个设备建立一个ControllerHandle句柄。即ControllerHandle指向了某个硬件。&lt;/li&gt;
+&lt;li&gt;每个Handle（对应的结构体为IHANDLE）都会有一个Protocols链表，存放自己的Protocol。所有的IHANDLE通过AllHandles链接起来。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;typedef&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  UINTN         Signature;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;/// All handles list of IHANDLE
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  LIST_ENTRY    AllHandles;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;/// List of PROTOCOL_INTERFACE&amp;#39;s for this handle
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  LIST_ENTRY    Protocols;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  UINTN         LocateRequest;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;/// The Handle Database Key value when this handle was last created or modified
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  UINT64        Key;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;} IHANDLE;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;openprotocol&#34;&gt;
+  OpenProtocol()
+  &lt;a class=&#34;anchor&#34; href=&#34;#openprotocol&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;typedef&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;EFI_STATUS&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(EFIAPI &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;EFI_OPEN_PROTOCOL)(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IN  EFI_HANDLE                Handle, &lt;span style=&#34;color:#75715e&#34;&gt;//安装了此Protocol的Handle
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  IN  EFI_GUID                  &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;Protocol,  &lt;span style=&#34;color:#75715e&#34;&gt;//要打开的Protocol的GUID
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  OUT VOID                      &lt;span style=&#34;color:#f92672&#34;&gt;**&lt;/span&gt;Interface  OPTIONAL,  &lt;span style=&#34;color:#75715e&#34;&gt;//返回打开的Protocol
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  IN  EFI_HANDLE                AgentHandle,    &lt;span style=&#34;color:#75715e&#34;&gt;//使用此Protocol的Image（存疑）
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  IN  EFI_HANDLE                ControllerHandle, &lt;span style=&#34;color:#75715e&#34;&gt;//如果打开的是Protocol是符合UEFI驱动模型的驱动，则此参数为控制Protocol接口的控制器，否则为可选的，可能为NULL
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  IN  UINT32                    Attributes  &lt;span style=&#34;color:#75715e&#34;&gt;//打开Protocol的参数
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  );
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;对于符合UEFI驱动模型的UEFI驱动而言，ControllerHandle是拥有该驱动的控制器，AgentHandle是拥有该EFI_DRIVER_BINGDING_PROTOCOL实例的句柄；&lt;/li&gt;
+&lt;li&gt;对于UEFI应用而言，ControllerHandle可以忽略，AgentHandle是该程序的句柄，即UefiMain函数的第一个参数。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;handleprotocol&#34;&gt;
+  HandleProtocol()
+  &lt;a class=&#34;anchor&#34; href=&#34;#handleprotocol&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;HandleProtocol不需要提供AgentHandle、ControllerHandle和Attributes。&lt;/li&gt;
+&lt;li&gt;HandleProtocol的AgentHandle为gDxeCoreImageHandle，ControllerHandle为NULL，Attributes为EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;/**
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;  @retval EFI_SUCCESS           成功返回指定的Protocol
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;  @retval EFI_UNSUPPORTED       此Handle没有安装此Protocol
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;**/&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;typedef&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;EFI_STATUS&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(EFIAPI &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;EFI_HANDLE_PROTOCOL)(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IN  EFI_HANDLE               Handle,  &lt;span style=&#34;color:#75715e&#34;&gt;//安装了此Protocol的Handle
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  IN  EFI_GUID                 &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;Protocol,   &lt;span style=&#34;color:#75715e&#34;&gt;//此Protocol的GUID
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  OUT VOID                     &lt;span style=&#34;color:#f92672&#34;&gt;**&lt;/span&gt;Interface  &lt;span style=&#34;color:#75715e&#34;&gt;//返回此Protocol的实例
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  );
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;locateprotocol&#34;&gt;
+  LocateProtocol()
+  &lt;a class=&#34;anchor&#34; href=&#34;#locateprotocol&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;当仅有一个Handle安装了某个Protocol时，可以使用LocateProtocol，该函数不需要提供安装了该Protocol的Handle。&lt;/li&gt;
+&lt;li&gt;如果多个Handle都安装了某个Protocol，就会顺序遍历HANDLE链表，找到第一个该Protocol实例。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;typedef&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;EFI_STATUS&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(EFIAPI &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;EFI_LOCATE_PROTOCOL)(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IN  EFI_GUID  &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;Protocol,  &lt;span style=&#34;color:#75715e&#34;&gt;//此Protocol的GUID
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  IN  VOID      &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;Registration  OPTIONAL,    &lt;span style=&#34;color:#75715e&#34;&gt;//不知道干啥用的，描述时从RegisterProtocolNotify()获得的key
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  OUT VOID      &lt;span style=&#34;color:#f92672&#34;&gt;**&lt;/span&gt;Interface &lt;span style=&#34;color:#75715e&#34;&gt;//返回此Protocol的实例
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  );
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;efi-driver-binding-protocol&#34;&gt;
+  EFI Driver Binding Protocol
+  &lt;a class=&#34;anchor&#34; href=&#34;#efi-driver-binding-protocol&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;从功能上划分，UEFI驱动分为以下类别：
+&lt;ul&gt;
+&lt;li&gt;符合UEFI驱动模型的驱动（UEFI Driver Model）：包括总线驱动（Bus Drivers）、设备驱动（Device Drivers）和混合驱动（Hybrid Drivers），一般用来驱动对应的硬件设备。&lt;/li&gt;
+&lt;li&gt;服务型驱动（Service Drivers）：这类驱动不管理任何设备，一般用来产生Protocol。&lt;/li&gt;
+&lt;li&gt;初始化驱动（Initializing Drivers）：不会产生任何句柄，也不会增加任何Protocol到系统数据库，主要用来初始化一些操作，执行完后就从系统内存中卸载。&lt;/li&gt;
+&lt;li&gt;根桥型驱动（Root Bridge Drivers）：用来初始化平台上的根桥控制器，并产生一个设备地址Protocol，以及访问总线设备的Protocol，一般用来通过总线驱动访问设备。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;一个完整的符合UEFI驱动模型的驱动程序，大致可分为EFI Driver Binding Protocol和驱动本身提供的服务。前者用来管理驱动，后者才是用户需要使用提供的部分。&lt;/li&gt;
+&lt;li&gt;所提供的服务一般为多个Protocol。&lt;/li&gt;
+&lt;li&gt;为了方便用户使用，驱动程序一般还会包括EFI Component Name Protocol，这个Protocol用来显示驱动信息。&lt;/li&gt;
+&lt;li&gt;EFI_DRIVER_BINDING_PROTOCOL的结构体如下：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; _EFI_DRIVER_BINDING_PROTOCOL {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  EFI_DRIVER_BINDING_SUPPORTED    Supported;  &lt;span style=&#34;color:#75715e&#34;&gt;//检查设备控制器是否支持驱动
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  EFI_DRIVER_BINDING_START        Start;  &lt;span style=&#34;color:#75715e&#34;&gt;//安装驱动并启动设备
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  EFI_DRIVER_BINDING_STOP         Stop; &lt;span style=&#34;color:#75715e&#34;&gt;//停止设备并卸载驱动
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  UINT32        Version;  &lt;span style=&#34;color:#75715e&#34;&gt;//版本
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  EFI_HANDLE    ImageHandle;  &lt;span style=&#34;color:#75715e&#34;&gt;//镜像句柄
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  EFI_HANDLE    DriverBindingHandle;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;};
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;接口变量ImageHandle是产生此Protocol实例的镜像句柄，DriverBindingHandle是安装了Protocol实例的句柄。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;supported接口函数&#34;&gt;
+  Supported()接口函数
+  &lt;a class=&#34;anchor&#34; href=&#34;#supported%e6%8e%a5%e5%8f%a3%e5%87%bd%e6%95%b0&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Supported()接口函数用来检测给定的设备控制器是否支持某驱动，函数原型如下：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;typedef&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;EFI_STATUS&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(EFIAPI &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;EFI_DRIVER_BINDING_SUPPORTED)(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;//Protocol实例
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  IN EFI_DRIVER_BINDING_PROTOCOL            &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;This,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;//设备控制器句柄
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  IN EFI_HANDLE                             ControllerHandle,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;//此参数对设备型驱动无效
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  IN EFI_DEVICE_PATH_PROTOCOL               &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;RemainingDevicePath OPTIONAL
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  );
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;start接口函数&#34;&gt;
+  Start()接口函数
+  &lt;a class=&#34;anchor&#34; href=&#34;#start%e6%8e%a5%e5%8f%a3%e5%87%bd%e6%95%b0&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;用来将驱动安装到设备上，并启动硬件设备。一般在此函数中使用InstallProtocolInterface()或InstallMultipleProtocolInterface()函数进行安装。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;typedef&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;EFI_STATUS&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(EFIAPI &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;EFI_DRIVER_BINDING_START)(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IN EFI_DRIVER_BINDING_PROTOCOL            &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;This,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IN EFI_HANDLE                             ControllerHandle,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IN EFI_DEVICE_PATH_PROTOCOL               &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;RemainingDevicePath OPTIONAL
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  );
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;stop接口函数&#34;&gt;
+  Stop()接口函数
+  &lt;a class=&#34;anchor&#34; href=&#34;#stop%e6%8e%a5%e5%8f%a3%e5%87%bd%e6%95%b0&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;用于停止硬件设备，并卸载驱动。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;typedef&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;EFI_STATUS&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(EFIAPI &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;EFI_DRIVER_BINDING_STOP)(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IN EFI_DRIVER_BINDING_PROTOCOL            &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;This,  &lt;span style=&#34;color:#75715e&#34;&gt;//Protocol实例
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  IN  EFI_HANDLE                            ControllerHandle, &lt;span style=&#34;color:#75715e&#34;&gt;//停止此控制器句柄上对应的驱动
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  IN  UINTN                                 NumberOfChildren, &lt;span style=&#34;color:#75715e&#34;&gt;//子控制器数量
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  IN  EFI_HANDLE                            &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;ChildHandleBuffer OPTIONAL &lt;span style=&#34;color:#75715e&#34;&gt;//子控制器数组
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  );
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;efi-component-name-protocol&#34;&gt;
+  EFI Component Name Protocol
+  &lt;a class=&#34;anchor&#34; href=&#34;#efi-component-name-protocol&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;为了方便用户使用，UEFI驱动通常会提供名字，以便向用户显示驱动信息。&lt;/li&gt;
+&lt;li&gt;此功能由EFI_COMPONENT_NAME_PROTOCOL和EFI_COMPONENT_NAME2_PROTOCOL实现，这两种Protocol的功能相同，结构体相同，仅语言代码的格式不同，前者使用的是ISO 639-2语言代码，后者使用的是RFC4646语言代码。&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>UEFI的不同文件</title>
+      <link>/posts/bios/UEFI%E7%9A%84%E4%B8%8D%E5%90%8C%E6%96%87%E4%BB%B6/</link>
+      <pubDate>Sat, 15 Apr 2023 16:26:02 +0800</pubDate>
+      
+      <guid>/posts/bios/UEFI%E7%9A%84%E4%B8%8D%E5%90%8C%E6%96%87%E4%BB%B6/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;模块（module）是UEFI上最小的可单独编译的代码单元，它包含INF文件，源代码和二进制文件。INF文件用来描述文件的行为。&lt;/li&gt;
+&lt;li&gt;包（package）是由模块、平台描述文件（DSC）和包声明文件（DEC）组成，可以不包含模块，也可以包含多个模块。&lt;/li&gt;
+&lt;li&gt;EDK2中定义了很多类型的模块：
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;类型&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;BASE&lt;/td&gt;
+&lt;td&gt;常用于库模块的开发&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;SEC&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;PEI_CORE&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;DXE_CORE&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;DXE_DRIVER&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;DXE_RUNTIME_DRIVER&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;DXE_SAL_DRIVER&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;DXE_SMM_DRIVER&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;UEFI_DRIVER&lt;/td&gt;
+&lt;td&gt;UEFI启动模块&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;UEFI_APPLICATION&lt;/td&gt;
+&lt;td&gt;UEFI应用模块&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;搭建uefi工程模块&#34;&gt;
+  搭建UEFI工程模块
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%90%ad%e5%bb%bauefi%e5%b7%a5%e7%a8%8b%e6%a8%a1%e5%9d%97&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;UEFI编译过程如下：&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/book/uefi_lb/1.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;dsc文件&#34;&gt;
+  DSC文件
+  &lt;a class=&#34;anchor&#34; href=&#34;#dsc%e6%96%87%e4%bb%b6&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;dsc文件（description）是平台描述文件，描述了模块、库和组件如何编译。文件中还包含很多的节标志如&lt;code&gt;[Defines]&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;在dsc文件中，经常用&lt;code&gt;！include&lt;/code&gt;来包含其他文件，用&lt;code&gt;#&lt;/code&gt;来表示注释。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;[Defines]&lt;/code&gt;中定义了各种变量，必须是dsc文件中的第一个。语法格式如下：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-dsc&#34; data-lang=&#34;dsc&#34;&gt;[Defines]
+  PLATFORM_NAME                  = MdeModule
+  PLATFORM_GUID                  = 587CE499-6CBE-43cd-94E2-186218569478
+  PLATFORM_VERSION               = 0.98
+  DSC_SPECIFICATION              = 0x00010005
+  #可选
+  OUTPUT_DIRECTORY               = Build/MdeModule
+  SUPPORTED_ARCHITECTURES        = IA32|X64|EBC|ARM|AARCH64|RISCV64|LOONGARCH64
+  BUILD_TARGETS                  = DEBUG|RELEASE|NOOPT
+  SKUID_IDENTIFIER               = DEFAULT
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;[BuildOptions]&lt;/code&gt;中给出编译器和相关的编译参数。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;[LibraryClasses]&lt;/code&gt;用来提供模块所使用的库入口，格式如下：&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;[LibraryClasses]
+  PeiCoreEntryPoint|MdePkg/Library/PeiCoreEntryPoint/PeiCoreEntryPoint.inf
+  PeimEntryPoint|MdePkg/Library/PeimEntryPoint/PeimEntryPoint.inf
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;[Components]&lt;/code&gt;用来定义模块编译，指定模块的INF文件所在的位置。格式如下：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;[Components]
+  MdeModulePkg/Application/HelloWorld/HelloWorld.inf
+  MdeModulePkg/Application/DumpDynPcd/DumpDynPcd.inf
+  
+  #这种格式下，{}内的内容只对当前的INF文件有效
+  AppPkg/Applications/LibSample/MyLibApp/MyLibApp.inf{
+    &amp;lt;LibraryClasses&amp;gt;
+    MyLibraryLib|AppPkg/Applications/LibSample/MyLibrary/MyLibrary.inf
+  }
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;inf文件&#34;&gt;
+  INF文件
+  &lt;a class=&#34;anchor&#34; href=&#34;#inf%e6%96%87%e4%bb%b6&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;inf文件是模块的工程文件，描述了模块的属性，如模块由哪些代码组成、依赖了哪些库等。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;EDK2的模块一般位于包的子目录下，如果是提供库的模块一般位于Library子目录下，如果是UEFI Application，一般位于Application下。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;INF文件包含很多节标志，包括&lt;code&gt;[Defines]&lt;/code&gt;、&lt;code&gt;[Sources]&lt;/code&gt;等。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;[Defines]&lt;/code&gt;中定义了各种变量，后续编译步骤中需要使用这些变量。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = Uefi_Main
+  FILE_GUID                      = 6937936E-ED34-44ab-AE97-1FA5E7ED2116
+  MODULE_TYPE                    = UEFI_APPLICATION
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = UefiMain
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;[Sources]&lt;/code&gt;用于列出模块中所有的源文件和资源文件，这些文件位于inf所在的目录或者子目录中。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;[Sources]
+  Uefi_Main.c
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;[BuildOptions]&lt;/code&gt;和dsc文件的&lt;code&gt;[BuildOptions]&lt;/code&gt;语法格式基本相同，INF文件只对本模块有效，DSC对包下所有模块有效。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;[Protocols]&lt;/code&gt;列出了模块时用到的协议，在INF文件中列出的是协议的GUID。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;[Protocols]
+  gEfiSimpleTextInputExProtocolGuid
+  gEfiGraphicsOutputProtocolGuid
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;LibraryClasses&lt;/code&gt;列出本模块需要链接的库。模块如果需要添加库，一般需要：
+&lt;ol&gt;
+&lt;li&gt;在INF文件下的&lt;code&gt;[LibraryClasses]&lt;/code&gt;中添加库名&lt;/li&gt;
+&lt;li&gt;在DES文件的&lt;code&gt;[LibraryClasses]&lt;/code&gt;中寻找这个库，如果没有，则需要添加编译此库的INF文件。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;[LibraryClasses]
+  UefiLib
+  ShellCEntryLib
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;[Packages]&lt;/code&gt;列出本模块引用的所有包的DEC文件。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;[Packages]
+  MdePkg/MdePkg.dec
+  ShellPkg/ShellPkg.dec
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;3种入口函数的uefi应用&#34;&gt;
+  3种入口函数的UEFI应用
+  &lt;a class=&#34;anchor&#34; href=&#34;#3%e7%a7%8d%e5%85%a5%e5%8f%a3%e5%87%bd%e6%95%b0%e7%9a%84uefi%e5%ba%94%e7%94%a8&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;&amp;lt;Uefi.h&amp;gt;&lt;/code&gt; 定义了UEFI中的基本数据类型和核心数据结构。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;&amp;lt;Library/UefiLib.h&amp;gt;&lt;/code&gt;提供通用的库函数。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;&amp;lt;Library/BaseLib.h&amp;gt;&lt;/code&gt;提供字符串处理、数学、文件路径处理等相关库函数。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;&amp;lt;Library/BaseMemoryLib.h&amp;gt;&lt;/code&gt; 处理内存的库函数。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;&amp;lt;Library/DebugLib.h&amp;gt;&lt;/code&gt;功能调试输出的库函数。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;ImageHandle指向了模块自身加载到内存的Image对象。SystemTable是UEFI应用和UEFI内核交互的桥梁，通过它可以获得UEFI提供的各种服务，包括BS服务和CS服务。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;在EFI_SYSTEM_TABLE的结构体中，提供了访问BS服务和RT服务的指针。针对一些常用的Protocol的接口，如ConsoleIn（键盘）和ConsoleOut（屏幕）也提供了访问指针。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;fdf文件&#34;&gt;
+  FDF文件
+  &lt;a class=&#34;anchor&#34; href=&#34;#fdf%e6%96%87%e4%bb%b6&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;Flash Description File FDF文件用来描述固件在Flash中的布局和位置。&lt;/li&gt;
+&lt;li&gt;一般来说，生成固件的源码中只有一个FDF文件，其作用是规定把哪些包编入Flash中，并确定编译的位置。&lt;/li&gt;
+&lt;li&gt;FDF文件由&lt;code&gt;[Defines] [FD] [FV] [Capsule] [VTF] [Rule] [OptionRom]&lt;/code&gt;等几个节组成。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol&gt;
+&lt;li&gt;[Defines]&lt;/li&gt;
+&lt;li&gt;[FD]
+&lt;ul&gt;
+&lt;li&gt;Firmware Device 即固件设备，常用的BIOS ROM就是一个FD。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;[FV]
+&lt;ul&gt;
+&lt;li&gt;Fireware Volume FV是固件的逻辑区域，相当于FD上的分区。这个节定义了镜像包含的组件和模块。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;</description>
+    </item>
+    
+    <item>
+      <title>UEFI启动流程</title>
+      <link>/posts/bios/UEFI%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/</link>
+      <pubDate>Fri, 17 Mar 2023 20:40:16 +0800</pubDate>
+      
+      <guid>/posts/bios/UEFI%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/</guid>
+      <description>&lt;h2 id=&#34;bios在计算机系统中的作用&#34;&gt;
+  BIOS在计算机系统中的作用
+  &lt;a class=&#34;anchor&#34; href=&#34;#bios%e5%9c%a8%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%b3%bb%e7%bb%9f%e4%b8%ad%e7%9a%84%e4%bd%9c%e7%94%a8&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;BIOS全称为基本输入输出系统，时存储在主板ROM中的一组程序代码，包括：
+&lt;ul&gt;
+&lt;li&gt;加电自检程序，用于开机时对硬件的检测。&lt;/li&gt;
+&lt;li&gt;系统初始化代码，包括硬件设备的初始化等。&lt;/li&gt;
+&lt;li&gt;基本的外围I/O处理的子程序代码。&lt;/li&gt;
+&lt;li&gt;CMOS设置程序。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;uefi系统组成&#34;&gt;
+  UEFI系统组成
+  &lt;a class=&#34;anchor&#34; href=&#34;#uefi%e7%b3%bb%e7%bb%9f%e7%bb%84%e6%88%90&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;UEFI提供给操作系统的接口包括启动服务（Boot Services，BS）和运行时服务（Runtime Service，RT）以及丰富的Protocol。&lt;/li&gt;
+&lt;li&gt;从OS Loader被加载，到OS Loader执行ExitBootServices这段时间内，是从UEFI环境向操作系统过渡的过程。这个过程中，OS Loader通过BS和RT使用UEFI提供的服务，将计算机系统资源逐渐转移到自己手中，这个过程称为TSL。&lt;/li&gt;
+&lt;li&gt;当OS Loader完全掌握了计算机系统资源时，BS也完成了使命。OS Loader调用ExitBootServices结束BS并回收BS占用的资源，之后计算机系统进入UEFI Runtime阶段。&lt;/li&gt;
+&lt;li&gt;在Runtime阶段只有RT继续为OS提供服务，BS已经从计算机系统中销毁。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;UEFI Images 包含可执行代码的二进制文件。&lt;/li&gt;
+&lt;li&gt;UEFI Services 是平台调用接口的集合，允许UEFI程序和操作系统调用。&lt;/li&gt;
+&lt;li&gt;UEFI Protocol 是一种数据结构，包含全局唯一标识符GUID、接口数据结构和服务。&lt;/li&gt;
+&lt;li&gt;UEFI System Table 所有UEFI镜像都会接到一个指向UEFI系统表的指针，通过它可以访问固件提供的UEFI Protocol。&lt;/li&gt;
+&lt;li&gt;启动服务提供的服务项包括：
+&lt;ul&gt;
+&lt;li&gt;Event服务：允许程序进行异步操作。&lt;/li&gt;
+&lt;li&gt;Timer（定时器）服务：配合Event提供定时器的功能。&lt;/li&gt;
+&lt;li&gt;内存管理：提供内存的分配和释放服务，管理系统的内存映射。&lt;/li&gt;
+&lt;li&gt;Protocol服务：&lt;/li&gt;
+&lt;li&gt;Image服务：&lt;/li&gt;
+&lt;li&gt;其他服务：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;运行时服务提供的服务项包括：
+&lt;ul&gt;
+&lt;li&gt;系统变量服务：读取或设置系统变量。&lt;/li&gt;
+&lt;li&gt;时间服务：提供读取和设定系统时间的功能。&lt;/li&gt;
+&lt;li&gt;内存虚拟地址服务：提供将内存的物理地址转换为虚拟地址的服务。&lt;/li&gt;
+&lt;li&gt;其他服务：如重启系统、更新BIOS等。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;uefi系统的启动过程&#34;&gt;
+  UEFI系统的启动过程
+  &lt;a class=&#34;anchor&#34; href=&#34;#uefi%e7%b3%bb%e7%bb%9f%e7%9a%84%e5%90%af%e5%8a%a8%e8%bf%87%e7%a8%8b&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/book/uefi/1.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;1-sec阶段security-phase&#34;&gt;
+  1. SEC阶段(Security Phase)
+  &lt;a class=&#34;anchor&#34; href=&#34;#1-sec%e9%98%b6%e6%ae%b5security-phase&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;UEFI系统开机或重启进入SEC阶段，它执行以下四种任务：
+&lt;ul&gt;
+&lt;li&gt;接收并处理系统启动和重启信号。&lt;/li&gt;
+&lt;li&gt;初始化临时存储区域：系统运行在SEC阶段时，仅CPU初始化，各种外部设备和内存都没有被初始化，因此系统需要一些临时的RAM区域。 临时RAM只能位于CPU内部。&lt;/li&gt;
+&lt;li&gt;作为可信系统的根：作为取得对系统控制权的第一部分，SEC阶段是整个可信系统的根。&lt;/li&gt;
+&lt;li&gt;传递系统参数给下一阶段：SEC阶段的一切工作都是为PEI阶段准备，最终将控制权交给PEI，同时要将现阶段的成果汇报给PEI。汇报的手段是将如下信息作为参数传递到PEI的入口函数。
+&lt;ul&gt;
+&lt;li&gt;系统当前状态。&lt;/li&gt;
+&lt;li&gt;可启动固件的地址和大小。&lt;/li&gt;
+&lt;li&gt;临时RAM区域的地址和大小。&lt;/li&gt;
+&lt;li&gt;栈的地址和大小。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;2-pei阶段pre-efi-initialization&#34;&gt;
+  2. PEI阶段(Pre-EFI Initialization)
+  &lt;a class=&#34;anchor&#34; href=&#34;#2-pei%e9%98%b6%e6%ae%b5pre-efi-initialization&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;PEI主要是为DXE准备执行环境，PEI的执行流程如下：&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/book/uefi/2.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;从功能上来讲，PEI可以分为：
+&lt;ul&gt;
+&lt;li&gt;PEI内核（PEI Foundation）：负责PEI基础服务和流程。&lt;/li&gt;
+&lt;li&gt;PEIM（PEI Module）派遣器：找到系统中所有的PEI模块，并根据依赖关系按顺序执行PEIM。PEI阶段对系统的初始化主要是由PEIM完成的。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;PEIM之间的通信是通过PPI（PEIM-to-PEIM Interfaces）完成。&lt;/li&gt;
+&lt;li&gt;在PEI阶段会初始化内存。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;3-dxe阶段drier-execution-environment&#34;&gt;
+  3. DXE阶段(Drier Execution Environment)
+  &lt;a class=&#34;anchor&#34; href=&#34;#3-dxe%e9%98%b6%e6%ae%b5drier-execution-environment&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;DXE阶段内存可以完全被使用，DXE执行阶段的流程如下：&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/book/uefi/3.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;DXE从功能上可以分为以下两部分：
+&lt;ul&gt;
+&lt;li&gt;DXE内核：负责DXE基础服务和执行流程。&lt;/li&gt;
+&lt;li&gt;DXE派遣器：负责调度执行DXE驱动，初始化系统设备。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;每个DXE驱动是一个独立的模块，DXE驱动之间通过Protocol通信。Protocol是一个特殊的结构体，每个Protocol对应一个GUID。&lt;/li&gt;
+&lt;li&gt;当所有的Driver都执行完后，系统完成初始化，调用BDS的入口函数，进入到BDS阶段。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;4-bds阶段boot-device-selection&#34;&gt;
+  4. BDS阶段(Boot Device Selection)
+  &lt;a class=&#34;anchor&#34; href=&#34;#4-bds%e9%98%b6%e6%ae%b5boot-device-selection&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;主要功能是执行启动策略：
+&lt;ul&gt;
+&lt;li&gt;初始化控制台设备。&lt;/li&gt;
+&lt;li&gt;加载必要的设备驱动。&lt;/li&gt;
+&lt;li&gt;根据系统设置加载和执行启动项。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;用户选中的某个启动项后，OS Loader启动，系统进入TSL阶段。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;5-tsl阶段transient-system-load&#34;&gt;
+  5. TSL阶段（Transient System Load）
+  &lt;a class=&#34;anchor&#34; href=&#34;#5-tsl%e9%98%b6%e6%ae%b5transient-system-load&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;TSL是OS Loader执行的第一阶段，在这个阶段OS Loader作为一个UEFI应用程序运行，系统资源仍由UEFI内核控制。&lt;/li&gt;
+&lt;li&gt;当启动服务的ExitBootServices服务被调用后，系统进入Run Time阶段。&lt;/li&gt;
+&lt;li&gt;TSL阶段被称为临时系统，它存在的目的就是为操作系统加载器准备执行环境。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;6-rt阶段run-time&#34;&gt;
+  6. RT阶段（Run Time)
+  &lt;a class=&#34;anchor&#34; href=&#34;#6-rt%e9%98%b6%e6%ae%b5run-time&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;系统进入RT阶段后，系统的控制权从UEFI内核转交到OS Loader手中，UEFI占用的各种资源被回收到OS Loader，仅有UEFI运行时服务保留给OS Loader和OS使用。&lt;/li&gt;
+&lt;li&gt;随着OS Loader的执行，OS最终取得对系统的控制权。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;7-al阶段after-life&#34;&gt;
+  7. AL阶段（After Life）
+  &lt;a class=&#34;anchor&#34; href=&#34;#7-al%e9%98%b6%e6%ae%b5after-life&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;在RT阶段，如果系统遇到灾难性错误，固件需要提供错误处理和灾难恢复机制。&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

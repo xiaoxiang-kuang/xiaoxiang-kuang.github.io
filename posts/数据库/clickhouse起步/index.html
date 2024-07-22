@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>clickhouse起步 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#clickhouse连接客户端">clickhouse连接客户端</a></li>
+            <li><a href="#数据库引擎">数据库引擎</a></li>
+            <li><a href="#表引擎">表引擎</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>clickhouse起步</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#clickhouse连接客户端">clickhouse连接客户端</a></li>
+            <li><a href="#数据库引擎">数据库引擎</a></li>
+            <li><a href="#表引擎">表引擎</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/clickhouse%E8%B5%B7%E6%AD%A5/">clickhouse起步</a>
+  </h1>
+  
+  <h5>2021-03-11</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
+  </div>
+  
+
+
+
+<ul>
+<li>online analytical processing of queries（OLAP）：联机分析</li>
+<li>clickhouse是一个用于OLAP的列式数据库管理系统（来自同一列的数据被存储在一起）。</li>
+<li><code>sudo service clickhouse-server start</code>启动clickhouse.</li>
+<li>clickhouse不要求主键唯一</li>
+</ul>
+<h3 id="clickhouse连接客户端">
+  clickhouse连接客户端
+  <a class="anchor" href="#clickhouse%e8%bf%9e%e6%8e%a5%e5%ae%a2%e6%88%b7%e7%ab%af">#</a>
+</h3>
+<h4 id="clickhouse-client">
+  clickhouse-client
+  <a class="anchor" href="#clickhouse-client">#</a>
+</h4>
+<ul>
+<li>
+  <a href="https://clickhouse.tech/docs/zh/interfaces/cli/#command-line-options">clickhouse-client命令行参数</a></li>
+<li><code>clickhouse-client</code>配置文件地址（使用以下第一个配置文件）
+<ul>
+<li>通过<code>--config-file</code>参数指定</li>
+<li><code>./clickhouse-client.xml</code></li>
+<li><code>~/.clickhouse-client/config.xml</code></li>
+<li><code>/etc/clickhouse-server/config.xml</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="mysql">
+  mysql
+  <a class="anchor" href="#mysql">#</a>
+</h4>
+<ul>
+<li>可以通过mysql命令工具连接，需要在配置文件中配置mysql_port：<code>&lt;mysql_port&gt;9004&lt;/mysql_port&gt;</code></li>
+<li>使用命令行工具mysql进行连接：<code>mysql --protocol tcp -u default -P 9004</code></li>
+</ul>
+<h3 id="数据库引擎">
+  数据库引擎
+  <a class="anchor" href="#%e6%95%b0%e6%8d%ae%e5%ba%93%e5%bc%95%e6%93%8e">#</a>
+</h3>
+<h4 id="mysql引擎">
+  mysql引擎
+  <a class="anchor" href="#mysql%e5%bc%95%e6%93%8e">#</a>
+</h4>
+<ul>
+<li>
+<p>用于将远程的mysql服务器中的表映射到clickhouse中，并允许对表进行insert和select查询等，但无法执行rename、create table、alter操作。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">DATABASE</span> [<span style="color:#66d9ef">IF</span> <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">EXISTS</span>] db_name [<span style="color:#66d9ef">ON</span> <span style="color:#66d9ef">CLUSTER</span> <span style="color:#66d9ef">cluster</span>] ENGINE <span style="color:#f92672">=</span> MYSQL(<span style="color:#e6db74">&#39;host:port&#39;</span>,[<span style="color:#e6db74">&#39;database&#39;</span><span style="color:#f92672">|</span> <span style="color:#66d9ef">database</span>],<span style="color:#e6db74">&#39;user&#39;</span>,<span style="color:#e6db74">&#39;password&#39;</span>)
+</span></span></code></pre></div></li>
+<li>
+<p>
+  <a href="https://clickhouse.tech/docs/en/engines/database-engines/mysql/#data_types-support">类型的对应</a>，其他的mysql数据类型全部转化为字符串</p>
+</li>
+</ul>
+<h3 id="表引擎">
+  表引擎
+  <a class="anchor" href="#%e8%a1%a8%e5%bc%95%e6%93%8e">#</a>
+</h3>
+<h4 id="merge-tree">
+  merge tree
+  <a class="anchor" href="#merge-tree">#</a>
+</h4>
+<ul>
+<li>
+<p>MergeTree：设计用于插入大量数据当一张表当中。数据可以以数据片段的形式一个接一个的快速写入，数据片段在后台按照一定的规则进行合并。</p>
+</li>
+<li>
+<p>SummingMergeTree：合并SummingMergeTree表的数据片断时，clickhouse会把所有具有<strong>相同主键的行合并为一行</strong>，该行包含了被合并的行中具有数值数据类型的列的汇总值。如果主键的组合方式使得单个键值对应于大量的行，则可以显著的减少存储空间并加快数据查询的速度。</p>
+</li>
+<li>
+<p>ReplacingMergeTree：该引擎会<strong>删除排序键值相同</strong>的重复项。适用于在后台清除重复的数据以节省空间，但不保证没有重复数据出现。在数据合并的时候，如果制定了Replcaing的参数，当参数未指定，则保留最后一条数据，当参数已指定，则保留ver值最大的版本。数据的去重只会在数据的合并期间进行，所以常常今天数据重复了，明天看数据还没有被去重。</p>
+</li>
+<li>
+<p>AggregateMergeTree：改变了数据片段的合并逻辑。clickhouse会将一个数据片段内所有具有相同主键的行替换为一行，这一行会存储一系列聚合函数的状态。可以使用AggregatingMergeTree表来做增量数据的聚合统计，包括物化视图的数据聚合。</p>
+</li>
+<li>
+<p>CollapsingMergeTree：会异步的删除掉所有字段的值都相等（除了列Sign，该列一个为1，一个为-1）的成对的行，下面这两行就会被删除。</p>
+<ul>
+<li>
+<table>
+<thead>
+<tr>
+<th>UserId</th>
+<th>PageViews</th>
+<th>Duration</th>
+<th>Sign</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>123</td>
+<td>5</td>
+<td>146</td>
+<td>1</td>
+</tr>
+<tr>
+<td>123</td>
+<td>5</td>
+<td>146</td>
+<td>-1</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>1是状态行，-1是状态取消行</p>
+</li>
+</ul>
+</li>
+<li>
+<p>VersionedCollapsingMergeTree：用于相同目的的折叠树但使用了不同的折叠算法，允许以多个线程的任何顺序插入数据。Version列有助于正确折叠行，即使他们以错误的顺序插入。而CollapsingMergeTree只允许严格的连续插入。</p>
+</li>
+</ul>
+<h5 id="mergetree">
+  MergeTree
+  <a class="anchor" href="#mergetree">#</a>
+</h5>
+<ul>
+<li>
+<p>数据可以以数据片段的形式一个接一个的快速写入，数据片段在后台按照一定的规则进行合并。</p>
+</li>
+<li>
+<p>存储的数据按主键排序；支持数据分区（如果指定分区键的话）；支持数据副本；支持数据采样。</p>
+</li>
+<li>
+<p>建表（
+  <a href="https://clickhouse.tech/docs/zh/engines/table-engines/mergetree-family/mergetree/#table_engine-mergetree-creating-a-table">更多介绍看这里</a>）</p>
+<ul>
+<li>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> [<span style="color:#66d9ef">IF</span> <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">EXISTS</span>] [db.]<span style="color:#66d9ef">table_name</span> [<span style="color:#66d9ef">ON</span> <span style="color:#66d9ef">CLUSTER</span> <span style="color:#66d9ef">cluster</span>]
+</span></span><span style="display:flex;"><span>(
+</span></span><span style="display:flex;"><span>	name [type1] [<span style="color:#66d9ef">DEFAULT</span><span style="color:#f92672">|</span>MATERIALIZED<span style="color:#f92672">|</span><span style="color:#66d9ef">ALIAS</span> expr1] [TTL expr1],
+</span></span><span style="display:flex;"><span>    name [type2] [<span style="color:#66d9ef">DEFAULT</span><span style="color:#f92672">|</span>MATERIALIZED<span style="color:#f92672">|</span><span style="color:#66d9ef">ALIAS</span> expr2] [TTL expr2]
+</span></span><span style="display:flex;"><span>    ...
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">INDEX</span> index_name1 expr1 <span style="color:#66d9ef">TYPE</span> type1(...) GRANULARITY value1,
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">INDEX</span> index_name2 expr2 <span style="color:#66d9ef">TYPE</span> type2(...) GRANULARITY value2
+</span></span><span style="display:flex;"><span>) ENGINE <span style="color:#f92672">=</span> MergeTree()
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">ORDER</span> <span style="color:#66d9ef">BY</span> expr
+</span></span><span style="display:flex;"><span>[PARTITION <span style="color:#66d9ef">BY</span> expr]
+</span></span><span style="display:flex;"><span>[<span style="color:#66d9ef">PRIMARY</span> <span style="color:#66d9ef">KEY</span> expr]
+</span></span><span style="display:flex;"><span>[SAMPLE <span style="color:#66d9ef">BY</span> expr]
+</span></span><span style="display:flex;"><span>[TTL expr [<span style="color:#66d9ef">DELETE</span><span style="color:#f92672">|</span><span style="color:#66d9ef">TO</span> DISK <span style="color:#e6db74">&#39;xxx&#39;</span><span style="color:#f92672">|</span><span style="color:#66d9ef">to</span> volume <span style="color:#e6db74">&#39;xxx&#39;</span>],...]
+</span></span><span style="display:flex;"><span>[SETTINGS name<span style="color:#f92672">=</span>value,..]
+</span></span></code></pre></div></li>
+<li>
+<p>ENGINE：引擎名和参数</p>
+</li>
+<li>
+<p>ORDER BY：排序键，可以是一组列的元组或任意的表达式。<strong>如果没有用PRIMARY KEY显式指定主键，clickhouse会使用排序键作为主键</strong>，如果不需要排序，可以使用ORDER BY tuple()</p>
+</li>
+<li>
+<p>PARTITION BY：分区键，要按月分区，可以使用表达式toYYYYMM(date_column)，这里date_column是一个Date类型的列，分区的格式会是YYYYMM</p>
+</li>
+<li>
+<p>PRIMARY KEY：主键，如果要选择与排序键不同的主键，可选。大部分时间不需要再专门指定一个primary key</p>
+</li>
+<li>
+<p>SIMPLE BY：用于抽样表达式，如果要用抽样表达式，主键中必须包含这个表达式。如<code>SAMPLE BY intHash32(UserID) ORDER BY (CounterID, EventDate, intHash32(UserID))</code></p>
+</li>
+<li>
+<p>TTL：可以为表设置，也可以为每个列单独设置</p>
+<ul>
+<li>表TTL：表可以设置一个用于移除过期行的表达式，当表中的行过期时，clickhouse会删除所有对应的行。clickhouse在数据片段合并的时候会删除掉过期的数据，如果在合并的过程中执行SELECT查询，则可能得到过期的数据。</li>
+</ul>
+</li>
+<li>
+<p>SETTINGS：控制MergeTree行为的额外参数</p>
+<ul>
+<li>index_granularity：索引力度</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>数据存储</p>
+<ul>
+<li>表由按主键排序的数据片段组成。</li>
+<li>当数据被插入到表中时，会创建多个数据片段并按主键的字典排序。</li>
+<li>不同分区的数据会被分成不同的片段，clickhouse在后台合并数据片段以便更高效存储。合并机制不保证具有相同主键的行全部合并到同一个数据片中。</li>
+<li>数据片段以wide或compact格式存储。wide格式下，每一列都会在文件系统中存储为单独的文件，compact模式下所有列都存储在同一个文件下。</li>
+<li>每个数据片段被逻辑分割成颗粒。颗粒是进行数据查询时最小的不可分割数据集。每个颗粒都包含整数个行。</li>
+</ul>
+</li>
+<li>
+<p>可以使用ORDER BY tuple()创建没有主键的表，这种情况下，clickhouse会根据数据插入的顺序存储。</p>
+</li>
+<li>
+<p>对于select查询，如果where子句中有下面这些表达式，就可以使用索引</p>
+<ul>
+<li>包含一个与主键/分区键中的部分字段或全部字段相等或不等的表达式。</li>
+<li>主键/分区键 in (xxx,xxx,xxx) 或者 主键/分区键 like &lsquo;xxx&rsquo;。</li>
+<li>基于主键/分区键的字段上的某些函数。</li>
+<li>基于主键/分区键的表达式的逻辑表达式。</li>
+</ul>
+</li>
+<li>
+<p>TTL</p>
+<ul>
+<li>TTL表达式的计算结果必须是日期或日期时间类型的字段</li>
+</ul>
+</li>
+</ul>
+<p>
+  <a href="https://clickhouse.tech/docs/zh/engines/table-engines/mergetree-family/mergetree/">MergeTree</a>这一块越看越迷惑，之后再来接着看吧。</p>
+<h4 id="日志引擎">
+  日志引擎
+  <a class="anchor" href="#%e6%97%a5%e5%bf%97%e5%bc%95%e6%93%8e">#</a>
+</h4>
+<ul>
+<li>是为了需要写入许多小数据量（少于一百万行）的表的场景而开发的。</li>
+</ul>
+<h5 id="该引擎的共同属性">
+  该引擎的共同属性
+  <a class="anchor" href="#%e8%af%a5%e5%bc%95%e6%93%8e%e7%9a%84%e5%85%b1%e5%90%8c%e5%b1%9e%e6%80%a7">#</a>
+</h5>
+<ol>
+<li>写入时将数据追加到文件末尾。</li>
+<li>不支持索引。</li>
+<li>非原子地写入数据。</li>
+</ol>
+<ul>
+<li>Log和StripeLog支持并行读取数据，Log引擎将表中的每一列使用不同的文件；StripeLog将所有的数据存储到一个文件中</li>
+</ul></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>python正则表达式 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#re模块">re模块</a></li>
+        <li><a href="#贪婪匹配">贪婪匹配</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>python正则表达式</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#re模块">re模块</a></li>
+        <li><a href="#贪婪匹配">贪婪匹配</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/python/python%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/">python正则表达式</a>
+  </h1>
+  
+  <h5>2021-03-15</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/python/">python</a>
+  </div>
+  
+
+
+
+<ul>
+<li><code>\d</code>匹配一个数字</li>
+<li><code>\w</code>匹配一个数字或字母</li>
+<li><code>.</code>匹配任意字符</li>
+<li><code>*</code>匹配0到多个字符，<code>+</code>匹配1到多个字符，<code>?</code>匹配0或1个字符，<code>{n}</code>表示n个字符，<code>{n,m}</code>表示n-m个字符</li>
+<li><code>\s</code>匹配一个空格（也包括tab）</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>\d{<span style="color:#ae81ff">3</span>}\s<span style="color:#f92672">+</span>\d<span style="color:#f92672">*</span>	<span style="color:#75715e">#匹配3个数字，后面至少有一个空格，再后面有可能有数字，有可能没数字</span>
+</span></span></code></pre></div><ul>
+<li><code>[]</code>可用于更精确的匹配</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>[<span style="color:#ae81ff">0</span><span style="color:#f92672">-</span><span style="color:#ae81ff">9</span>a<span style="color:#f92672">-</span>z\_] <span style="color:#75715e">#匹配一个数字或一个小写字母或一个下划线</span>
+</span></span></code></pre></div><ul>
+<li><code>A|B</code>可匹配A或B</li>
+<li><code>^</code>表示行的开头，<code>^\d</code>表示必须以数字开头</li>
+<li><code>$</code>表示行的结束，<code>$\d</code>表示必须以数字结束</li>
+</ul>
+<h2 id="re模块">
+  re模块
+  <a class="anchor" href="#re%e6%a8%a1%e5%9d%97">#</a>
+</h2>
+<ul>
+<li>因为python字符串本身也用<code>\</code>转义，可以使用<code>r</code>前缀，就可以不用考虑字符串转义了。<code>r'ABC\-001'</code></li>
+<li><code>re.match(r'\d{3}\-\d$'),'010-1')</code>，如果匹配成功就返回一个Mache对象，否则返回none。</li>
+<li><code>re.split(r'[\s\,]+','a,b, c  d')</code>，切割字符串，能切割出<code>['a','b','c']</code></li>
+<li>正则表达式还有提取字串的功能，用<code>()</code>表示的就是要提取的分组。<code>r'(\d{3})-(\d{3,8})'</code>就定义了两个组，可以使用<code>group(n)</code>方法提取出子串</li>
+</ul>
+<h2 id="贪婪匹配">
+  贪婪匹配
+  <a class="anchor" href="#%e8%b4%aa%e5%a9%aa%e5%8c%b9%e9%85%8d">#</a>
+</h2>
+<ul>
+<li>正则默认的时贪婪匹配，加个<code>?</code>就可以采用非贪婪匹配。<code>\d+?</code></li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>r <span style="color:#f92672">=</span> re<span style="color:#f92672">.</span>match(<span style="color:#e6db74">&#39;(\d+?)(0*)$&#39;</span>,<span style="color:#e6db74">&#39;1200000&#39;</span>)
+</span></span><span style="display:flex;"><span>print(r<span style="color:#f92672">.</span>groups())
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#结果(&#39;12&#39;, &#39;00000&#39;)</span>
+</span></span></code></pre></div></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

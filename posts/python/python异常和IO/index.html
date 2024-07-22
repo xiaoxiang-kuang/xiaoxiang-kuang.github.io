@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>python异常-IO-进程等 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#错误">错误</a></li>
+        <li><a href="#io">IO</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>python异常-IO-进程等</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#错误">错误</a></li>
+        <li><a href="#io">IO</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/python/python%E5%BC%82%E5%B8%B8%E5%92%8CIO/">python异常-IO-进程等</a>
+  </h1>
+  
+  <h5>2021-03-15</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/python/">python</a>
+  </div>
+  
+
+
+
+<h2 id="错误">
+  错误
+  <a class="anchor" href="#%e9%94%99%e8%af%af">#</a>
+</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>    i <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span> <span style="color:#f92672">/</span> int(<span style="color:#e6db74">&#39;a&#39;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">except</span> <span style="color:#a6e22e">ValueError</span> <span style="color:#66d9ef">as</span> e:
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#34;ValueError&#34;</span>,e)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">except</span> <span style="color:#a6e22e">ZeroDivisionError</span> <span style="color:#66d9ef">as</span> e:
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#34;ZeroDivisionError&#34;</span>,e)
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#raise如果不带参数，就会把当前错误原样抛出</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">raise</span> 
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">finally</span>:
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#34;END&#34;</span>)
+</span></span></code></pre></div><p>单元测试要用到了再回来补充：
+  <a href="https://www.liaoxuefeng.com/wiki/1016959663602400/1017604210683936">单元测试</a></p>
+<h2 id="io">
+  IO
+  <a class="anchor" href="#io">#</a>
+</h2>
+<ul>
+<li>
+<p>以读的方式打开一个文件对象<code>f = open('test.txt','r')</code></p>
+</li>
+<li>
+<p>文件使用完毕后必须关闭，因为文件对象会占用操作系统的资源。可以使用<code>with open('test.txt','r') as f:</code>，这种形式会自动帮我们调用close()方法。</p>
+</li>
+<li>
+<p>读取二进制文件<code>open('test','rb')</code>，读取非UTF-8编码的文件<code>open('gbk.txt', 'r', encoding = 'gbk')</code>，遇到编码错误后忽略<code>open('test', 'r', encoding = 'gbk', errors = 'ignore')</code>。</p>
+</li>
+<li>
+<p>写文件就是将<code>r</code>参数改为<code>w</code>参数，当在写文件时，操作系统往往不会立刻把数据写入磁盘，而是先缓存起来，只有调用close方法时才会保证把没有写入的数据全部写入磁盘。</p>
+</li>
+<li>
+<p>StringIO和BytesIO是在内存中读写数据。</p>
+</li>
+<li>
+<p>
+  <a href="https://www.liaoxuefeng.com/wiki/1016959663602400/1017624706151424">序列化</a></p>
+</li>
+</ul></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

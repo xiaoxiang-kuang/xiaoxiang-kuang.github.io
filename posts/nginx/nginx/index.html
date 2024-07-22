@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>nginx | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#常用配置">常用配置</a>
+          <ul>
+            <li><a href="#proxy_pass">proxy_pass</a></li>
+            <li><a href="#例">例：</a></li>
+          </ul>
+        </li>
+        <li><a href="#nginx内嵌的变量">nginx内嵌的变量</a></li>
+        <li><a href="#nginx指令">nginx指令</a>
+          <ul>
+            <li><a href="#rewrite">rewrite</a></li>
+            <li><a href="#if">if</a></li>
+            <li><a href="#return">return</a></li>
+            <li><a href="#set">set</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>nginx</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#常用配置">常用配置</a>
+          <ul>
+            <li><a href="#proxy_pass">proxy_pass</a></li>
+            <li><a href="#例">例：</a></li>
+          </ul>
+        </li>
+        <li><a href="#nginx内嵌的变量">nginx内嵌的变量</a></li>
+        <li><a href="#nginx指令">nginx指令</a>
+          <ul>
+            <li><a href="#rewrite">rewrite</a></li>
+            <li><a href="#if">if</a></li>
+            <li><a href="#return">return</a></li>
+            <li><a href="#set">set</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/nginx/nginx/">nginx</a>
+  </h1>
+  
+  <h5>2021-08-12</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/nginx/">nginx</a>
+  </div>
+  
+
+
+
+<ul>
+<li>
+<p>nginx默认的配置文件名是nginx.conf，位置在<code>/usr/local/nginx/conf</code>、<code>/etc/niginx</code>、或<code>/usr/local/etc/nginx</code>。通过<code>nginx -c xxx.conf</code>来指定配置文件。</p>
+</li>
+<li>
+<p>当nginx启动后，可以通过<code>nginx -s signal</code>来控制nginx，signal可以是：</p>
+<ul>
+<li>stop：快速关闭；quit：正常关闭；reload：重新加载配置文件；reopen：重新打开配置文件。</li>
+</ul>
+</li>
+<li>
+<p>配置文件可以包含多个<code>server</code>块，他们之间通过监听的端口和服务名来区分。一旦nginx决定使用哪个服server来处理请求，他就会根据server块内location的指令来匹配请求头中的url，①精确匹配优先级最高，遇到就返回结果；②普通匹配会选择location中前缀最长的那个，和顺序无关；③当location中有正则表达式时，会优先匹配正则表达式（正则级别比普通匹配优先级高，但比精确匹配优先级低），正则表达式的匹配顺序按照文件中的物理顺序匹配，只要匹配到一条正则，就会返回结果；如果没有匹配，就会取普通匹配中最匹配的那个。</p>
+</li>
+<li>
+<p>nginx的错误日志文件在<code>usr/local/nginx/logs</code>、<code>/var/log/nginx</code></p>
+</li>
+</ul>
+<h2 id="常用配置">
+  常用配置
+  <a class="anchor" href="#%e5%b8%b8%e7%94%a8%e9%85%8d%e7%bd%ae">#</a>
+</h2>
+<h3 id="proxy_pass">
+  proxy_pass
+  <a class="anchor" href="#proxy_pass">#</a>
+</h3>
+<ul>
+<li>使用<code>proxy_pass</code>来配置代理服务。代理服务的流程：server接收request-&gt;把request传给代理服务-&gt;获取代理服务的response-&gt;把response返回给客户端。</li>
+<li>proxy_pass有两个要注意的点
+<ul>
+<li>proxy_pass后面如果跟了一个完整的url，如<code>http://localhost:8080/xxx</code>，那么最后访问的时候就是location中匹配的那一部分替换成proxy_pass的url。</li>
+<li>proxy_pass后面如果跟的是如<code>http://localhost:8080</code>，那么最后访问的是proxy_pass的链接加上请求路径。</li>
+</ul>
+</li>
+</ul>
+<h3 id="例">
+  例：
+  <a class="anchor" href="#%e4%be%8b">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-nginx" data-lang="nginx"><span style="display:flex;"><span><span style="color:#66d9ef">server</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">listen</span> <span style="color:#ae81ff">80</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#最后的地址就是http://localhost:8080/journey/xxx
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">location</span> <span style="color:#e6db74">/journey</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">proxy_pass</span> <span style="color:#e6db74">http://localhost:8080</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#最后的地址就是http://localhost:8080/test/xxx，location对应的chat会被替换为url。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">location</span> <span style="color:#e6db74">/chat</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">proxy_pass</span> <span style="color:#e6db74">http://localhost:8080/test</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#将会映射到/html/tool这个路径下
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">location</span> <span style="color:#e6db74">/tool</span> {
+</span></span><span style="display:flex;"><span>    	<span style="color:#f92672">root</span> <span style="color:#e6db74">html</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#正则表达式以~开始，这里是匹配图片
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">location</span> ~ <span style="color:#e6db74">\.(gif|jpg|png)$</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">root</span> <span style="color:#e6db74">/data/images</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><strong>参考链接：</strong>
+  <a href="http://nginx.org/en/docs/beginners_guide.html">Beginner’s Guide (nginx.org)</a></p>
+<h2 id="nginx内嵌的变量">
+  nginx内嵌的变量
+  <a class="anchor" href="#nginx%e5%86%85%e5%b5%8c%e7%9a%84%e5%8f%98%e9%87%8f">#</a>
+</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-nginx" data-lang="nginx"><span style="display:flex;"><span><span style="color:#75715e">#等于在proxy_pass指令中指定的被代理服务的主机名和端口
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">$proxy_host</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#等于在proxy_pass中指定的服务的端口，或者是其服务的默认端口
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>$proxy_port
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#如果X-Forwarded-For属性未在请求头中，$proxy_add_x_forwarded_for的值就等于$remote_addr;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#如果X-Forwarded-For在请求头中，那$proxy_add_x_forwarded_for的值就等于上一个$proxy_add_x_forwarded_for加上&#34;,$remote_addr&#34;。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#例：proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>$proxy_add_x_forwarded_for
+</span></span></code></pre></div><h2 id="nginx指令">
+  nginx指令
+  <a class="anchor" href="#nginx%e6%8c%87%e4%bb%a4">#</a>
+</h2>
+<h3 id="rewrite">
+  rewrite
+  <a class="anchor" href="#rewrite">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>语法: rewrite regex replacement <span style="color:#f92672">[</span>flag<span style="color:#f92672">]</span>;
+</span></span><span style="display:flex;"><span>context: server,location,if
+</span></span><span style="display:flex;"><span>rewrite指令按照它出现的顺序来执行，可以通过flag来终止执行，如果replacement以<span style="color:#e6db74">&#34;http://,https://或者</span>$scheme<span style="color:#e6db74">&#34;</span>开始，就会直接返回客户端。
+</span></span><span style="display:flex;"><span>flag可以是last、break、redirect、permanent。
+</span></span><span style="display:flex;"><span>redirect是暂时重定向302，permanent是永久重定向301。
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>rewrite ^<span style="color:#f92672">(</span>.*<span style="color:#f92672">)</span>$ https://localhost$1 permanent;
+</span></span></code></pre></div><h3 id="if">
+  if
+  <a class="anchor" href="#if">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>语法: <span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>condition<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>...<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>context: server, localtion
+</span></span><span style="display:flex;"><span>condition包括：
+</span></span><span style="display:flex;"><span>  1. 变量名，当变量为空或者为<span style="color:#e6db74">&#34;0&#34;</span>时是false；
+</span></span><span style="display:flex;"><span>  2. 变量和字符串通过<span style="color:#e6db74">&#34;=&#34;</span>或者<span style="color:#e6db74">&#34;!=&#34;</span>来比较；
+</span></span><span style="display:flex;"><span>  3. 变量和正则表达式比较【比较符号： ~（大小写敏感）、~*（大小写）不敏感、!~、!~*】，可以通过<span style="color:#f92672">()</span>来捕获数据。
+</span></span><span style="display:flex;"><span>  4. 使用-f 或!-f检测文件书否存在；
+</span></span><span style="display:flex;"><span>  5. 使用-d 或!-d检测目录是否存在；
+</span></span><span style="display:flex;"><span>  6. 使用-e 或!-e 检测文件、目录、符号连接是否存在；
+</span></span><span style="display:flex;"><span>  7. 使用-x 或!-x 检测是否是可执行文件。
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>$http_user_agent ~ MSIE<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    rewrite ^<span style="color:#f92672">(</span>.*<span style="color:#f92672">)</span>$ /msie/$1 break;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>$http_cookie ~* <span style="color:#e6db74">&#34;id=([^;]+)(?:;|</span>$<span style="color:#e6db74">)&#34;</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    set $id $1;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>$request_method <span style="color:#f92672">=</span> POST<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> 405;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><h3 id="return">
+  return
+  <a class="anchor" href="#return">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>语法: <span style="color:#66d9ef">return</span> code <span style="color:#f92672">[</span>text<span style="color:#f92672">]</span>;
+</span></span><span style="display:flex;"><span>     <span style="color:#66d9ef">return</span> code URL;
+</span></span><span style="display:flex;"><span>     <span style="color:#66d9ef">return</span> URL;
+</span></span><span style="display:flex;"><span>context: server,location,if
+</span></span><span style="display:flex;"><span>返回特定的状态码，返回444会不发送响应头就关闭连接。
+</span></span><span style="display:flex;"><span>可以指定一个重定向的URL（301，302，303，307，308），或者响应体text（其他的code）。
+</span></span></code></pre></div><h3 id="set">
+  set
+  <a class="anchor" href="#set">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>语法: set $variable value;
+</span></span><span style="display:flex;"><span>context: server,location,if
+</span></span><span style="display:flex;"><span>给变量赋值，值可以是变量、字符串或者变量和字符串的组合。
+</span></span></code></pre></div></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

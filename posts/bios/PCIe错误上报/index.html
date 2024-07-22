@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>PCIe错误上报 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#错误检测机制">错误检测机制</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>PCIe错误上报</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#错误检测机制">错误检测机制</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/bios/PCIe%E9%94%99%E8%AF%AF%E4%B8%8A%E6%8A%A5/">PCIe错误上报</a>
+  </h1>
+  
+  <h5>2024-05-16</h5>
+
+
+
+  
+
+  
+
+
+
+<ul>
+<li>PCIe定义了两种错误报告机制，baseline error reporting capabilities 和advanced error reporting capability（AER）。所有的PCIe设备都要支持baseline error reporting，AER是可选的。</li>
+<li>PCIe定义了两种错误，UCE和CE，其中UCE可以进一步分为Fatal UCE和Non-Fatal UCE。</li>
+<li>
+  <img src="/img/bios/pcie/error_classification.jpg" alt="" /></li>
+</ul>
+<h3 id="错误检测机制">
+  错误检测机制
+  <a class="anchor" href="#%e9%94%99%e8%af%af%e6%a3%80%e6%b5%8b%e6%9c%ba%e5%88%b6">#</a>
+</h3>
+<ul>
+<li>
+<p>包含三种错误检测机制</p>
+<ul>
+<li>Completion Status（用来向requester上报错误）</li>
+<li>Error Messages（用来向HOST上报错误）</li>
+<li>Error Forwarding（data poisoning）</li>
+</ul>
+</li>
+<li>
+<p>其中BIOS侧用的比较多的是Error Messages，可以用来向主机报告错误。</p>
+</li>
+<li>
+<p>EP上的Error Messages会被发送到相应的Root Ports。</p>
+</li>
+<li>
+<p>Error Message包括ERR_COR(CE)、ERR_NONFATAL(NON-FATAL UCE)、ERR_FATAL(FATAL UCE)</p>
+</li>
+</ul>
+<h4 id="error-messages">
+  Error Messages
+  <a class="anchor" href="#error-messages">#</a>
+</h4>
+<ul>
+<li>EP上的Error Messages会被发送到相应的Root Ports。</li>
+<li>Error Message包括ERR_COR(CE)、ERR_NONFATAL(NON-FATAL UCE)、ERR_FATAL(FATAL UCE)</li>
+</ul>
+<hr>
+<ul>
+<li>
+<p>Root Port是一个PCI-PCI Bridge结构，是从PCIe Root Complex出来的PCIe Link。</p>
+</li>
+<li>
+<p>
+  <img src="/img/bios/pcie/root_port.jpg" alt="" /></p>
+</li>
+<li>
+<p>PCIe配置空间为0~0xFFF，其中0~0xFF为PCI兼容配置空间(PCI-compatible region)，0x40~0xFF会存放Capability结构，PCI Express Capability就位于0x40~0xFF的位置。0x100~0xFFF是PCIe扩展配置空间（PCI Express Extended Configuration Space）。PCI兼容配置空间可以通过传统的IO寄存器和ECAM访问，PCIe扩展配置空间只能通过ECAM访问（PCI Express Enhanced Configuration Access Mechanism）</p>
+</li>
+<li>
+<p>
+  <img src="/img/bios/pcie/configuration_space_layout.jpg" alt="" /></p>
+</li>
+<li>
+<p>PCI Express Capability的结构如下图所示，所有的PCIe设备都需要支持该Capability，</p>
+</li>
+<li>
+<p>
+  <img src="/img/bios/pcie/pcie_cap.jpg" alt="" /></p>
+</li>
+<li>
+<p>PCI Express Extended Capability寄存器位于PCI配置空间的0xFF之后，在0x100~0xFFF这段空间。AER寄存器就位于这段空间。</p>
+</li>
+<li>
+<p>
+  <img src="/img/bios/pcie/aer_cap.jpg" alt="" /></p>
+</li>
+<li>
+<p>往AER的CE MASK寄存器对应BIT写1，可以屏蔽对应CE上报。</p>
+</li>
+<li>
+<p>error messages生成的流程</p>
+</li>
+<li>
+<p>
+  <img src="/img/bios/pcie/flowchart_err_msg.jpg" alt="" /></p>
+</li>
+<li>
+<p>error messages上报流程</p>
+</li>
+<li>
+<p>
+  <img src="/img/bios/pcie/error_msg_control.jpg" alt="" /></p>
+</li>
+<li>
+<p>某些情况下，NON-FATAL 的错误可能是不需要执行任何的恢复动作的，比如软件尝试从一个不存在的设置执行一个读取操作，Completion中的UR Status将会报告一个错误，此时如果软件为Completer额外产生一个ERR_NONFATAL Message，就可能会导致系统运行异常。</p>
+</li>
+<li>
+<p>Advisory Non-Fatal Error cases可以让在产生NON_FATAL ERROR时发送ERR_COR Message。如果需要让Advisory Non-Fatal Error cases处理NON_FATAL ERROR为更严重的情况，可以将该ERR的严重级别设置为FATAL，这种情况下Agent将会以ERR_FATAL发出该错误。
+下图描述了ERROR MESSAGES的生成流程。</p>
+</li>
+</ul></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

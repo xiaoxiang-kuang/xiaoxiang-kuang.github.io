@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>Hugo模板 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#变量">变量</a></li>
+        <li><a href="#函数">函数</a></li>
+        <li><a href="#includes">includes</a></li>
+        <li><a href="#logic">logic</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>Hugo模板</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#变量">变量</a></li>
+        <li><a href="#函数">函数</a></li>
+        <li><a href="#includes">includes</a></li>
+        <li><a href="#logic">logic</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/%E5%85%B6%E4%BB%96/hugo%E6%A8%A1%E6%9D%BF/">Hugo模板</a>
+  </h1>
+  
+  <h5>2022-01-03</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/%E5%85%B6%E4%BB%96/">其他</a>
+  </div>
+  
+
+
+
+<ul>
+<li>
+<p>hugo使用go的&quot;html/template&quot;和&quot;text/template&quot;库作为模板的基础。</p>
+</li>
+<li>
+<p>go模板是添加了变量和函数的html文件。他们都被包裹在<code>{{}}</code>中。</p>
+</li>
+<li>
+<p>一个预定义的变量可以是已存在在当前的作用域中或者是一个自定义的变量。</p>
+</li>
+<li>
+<p>多个函数的参数可以使用空格分开，类似与<code>{{ add 1 2 }}</code>（add函数接收1和2这两个参数）。</p>
+</li>
+<li>
+<p>方法和函数可以通过<code>.</code>来访问访问。如获取在文章front matter中定义的bar<code>{{ .Params.bar }}</code></p>
+</li>
+<li>
+<p>圆括号可以用来将items组合在一起<code>{{ if or (isset .Params &quot;alt&quot;) (isset .Params &quot;caption&quot;) }} Caption {{ end }}</code></p>
+</li>
+<li>
+<p>原始字符可以包含换行。</p>
+</li>
+</ul>
+<h2 id="变量">
+  变量
+  <a class="anchor" href="#%e5%8f%98%e9%87%8f">#</a>
+</h2>
+<ul>
+<li>在hugo中，每个模板都有一个Page对象，.Title是Page的一个元素之一。当Page是模板的默认作用域时，title可以通过<code>.</code>直接来带哦用<code>{{.Title }}</code>。</li>
+<li>自定义变量需要有<code>$</code>前缀。</li>
+<li>变量可以存储在自定义变量中并在稍后被引用。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>{{ <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">address</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">&#34;123 Main St.&#34;</span>}}
+</span></span><span style="display:flex;"><span>{{ <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">address</span> }}
+</span></span></code></pre></div><ul>
+<li>变量可以使用<code>=</code>来重新定义。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>{{ <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#66d9ef">var</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">&#34;Hugo Page&#34;</span> }}
+</span></span><span style="display:flex;"><span>{{ <span style="color:#66d9ef">if</span> .<span style="color:#a6e22e">IsHome</span> }}
+</span></span><span style="display:flex;"><span>    {{ <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#66d9ef">var</span> = <span style="color:#e6db74">&#34;Hogo Home&#34;</span> }}
+</span></span><span style="display:flex;"><span>{{ <span style="color:#a6e22e">end</span> }}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Var</span> <span style="color:#a6e22e">is</span> {{ <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#66d9ef">var</span> }}
+</span></span></code></pre></div><h2 id="函数">
+  函数
+  <a class="anchor" href="#%e5%87%bd%e6%95%b0">#</a>
+</h2>
+<ul>
+<li>go模板只提供了一些基本的函数，但也提供了扩展原始集的机制。</li>
+<li>调用函数使用他们的名字跟上需要的参数，参数需要用空格隔开。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>{{ <span style="color:#a6e22e">add</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">2</span> }}
+</span></span><span style="display:flex;"><span>&lt;!<span style="color:#f92672">--</span><span style="color:#960050;background-color:#1e0010">数字求和，输出</span><span style="color:#ae81ff">3</span><span style="color:#f92672">--</span>&gt;
+</span></span><span style="display:flex;"><span>{{ <span style="color:#a6e22e">lt</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">2</span> }}
+</span></span><span style="display:flex;"><span>&lt;!<span style="color:#f92672">--</span><span style="color:#960050;background-color:#1e0010">比较大小，输出</span><span style="color:#66d9ef">true</span><span style="color:#f92672">--</span>&gt;
+</span></span></code></pre></div><h2 id="includes">
+  includes
+  <a class="anchor" href="#includes">#</a>
+</h2>
+<ul>
+<li>一个模板中包含另一个模板。</li>
+<li>hugo中的模板位置都是在<code>layouts/</code>目录开始。</li>
+<li><code>partial</code>函数用来包含部分模板</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>&lt;!<span style="color:#f92672">--</span><span style="color:#960050;background-color:#1e0010">包含</span><span style="color:#a6e22e">layouts</span><span style="color:#f92672">/</span><span style="color:#a6e22e">partials</span><span style="color:#f92672">/</span><span style="color:#a6e22e">header</span>.<span style="color:#a6e22e">html</span><span style="color:#f92672">--</span>&gt;
+</span></span><span style="display:flex;"><span>{{ <span style="color:#a6e22e">partial</span> <span style="color:#e6db74">&#34;header.html&#34;</span> . }}
+</span></span></code></pre></div><ul>
+<li><code>template</code>函数用来在老版本的hugo中包含模板和用来调用内部模板。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>{{ <span style="color:#a6e22e">template</span> <span style="color:#e6db74">&#34;_indernal/opengraph.html&#34;</span> . }}
+</span></span></code></pre></div><h2 id="logic">
+  logic
+  <a class="anchor" href="#logic">#</a>
+</h2>
+<ul>
+<li>使用<code>range</code>来进行迭代。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>{{ <span style="color:#66d9ef">range</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">array</span> }}
+</span></span><span style="display:flex;"><span>    &lt;!<span style="color:#f92672">--</span>.<span style="color:#960050;background-color:#1e0010">代表$</span><span style="color:#a6e22e">aray</span><span style="color:#960050;background-color:#1e0010">的一个元素</span><span style="color:#f92672">--</span>&gt;
+</span></span><span style="display:flex;"><span>    {{ . }}
+</span></span><span style="display:flex;"><span>{{ <span style="color:#a6e22e">end</span> }}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;!<span style="color:#f92672">--</span><span style="color:#960050;background-color:#1e0010">将数组的元素的值赋值给变量</span><span style="color:#f92672">--</span>&gt;
+</span></span><span style="display:flex;"><span>{{ <span style="color:#66d9ef">range</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">elem_val</span> <span style="color:#f92672">:=</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">array</span> }}
+</span></span><span style="display:flex;"><span>    {{ <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">elem_val</span> }}
+</span></span><span style="display:flex;"><span>{{ <span style="color:#a6e22e">end</span> }}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;!<span style="color:#f92672">--</span><span style="color:#960050;background-color:#1e0010">将数组的元素的下标和值都复制给变量</span><span style="color:#f92672">--</span>&gt;
+</span></span><span style="display:flex;"><span>{{ <span style="color:#66d9ef">range</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">elem_index</span>, <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">elem_val</span> <span style="color:#f92672">:=</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">array</span> }}
+</span></span><span style="display:flex;"><span>   {{ <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">elem_index</span> }} <span style="color:#f92672">--</span> {{ <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">elem_val</span> }}
+</span></span><span style="display:flex;"><span>{{ <span style="color:#a6e22e">end</span> }}
+</span></span></code></pre></div></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

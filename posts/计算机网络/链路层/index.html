@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>链路层 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#概述">概述</a></li>
+        <li><a href="#crc校验">CRC校验</a></li>
+        <li><a href="#多路访问协议">多路访问协议</a></li>
+        <li><a href="#mac地址">MAC地址</a></li>
+        <li><a href="#arp">ARP</a></li>
+        <li><a href="#以太网">以太网</a>
+          <ul>
+            <li><a href="#以太网帧格式">以太网帧格式</a></li>
+          </ul>
+        </li>
+        <li><a href="#链路层交换机">链路层交换机</a>
+          <ul>
+            <li><a href="#转发和过滤">转发和过滤</a></li>
+          </ul>
+        </li>
+        <li><a href="#无线局域网ieee80211wi-fi">无线局域网IEEE802.11(Wi-Fi)</a>
+          <ul>
+            <li><a href="#80211帧">802.11帧</a></li>
+            <li><a href="#控制帧">控制帧</a></li>
+            <li><a href="#数据帧分片和聚合">数据帧、分片和聚合</a></li>
+            <li><a href="#环回地址">环回地址</a></li>
+            <li><a href="#mtu和路径mtu">MTU和路径MTU</a></li>
+            <li><a href="#隧道">隧道</a></li>
+            <li><a href="#与链路层相关的攻击">与链路层相关的攻击</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>链路层</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#概述">概述</a></li>
+        <li><a href="#crc校验">CRC校验</a></li>
+        <li><a href="#多路访问协议">多路访问协议</a></li>
+        <li><a href="#mac地址">MAC地址</a></li>
+        <li><a href="#arp">ARP</a></li>
+        <li><a href="#以太网">以太网</a>
+          <ul>
+            <li><a href="#以太网帧格式">以太网帧格式</a></li>
+          </ul>
+        </li>
+        <li><a href="#链路层交换机">链路层交换机</a>
+          <ul>
+            <li><a href="#转发和过滤">转发和过滤</a></li>
+          </ul>
+        </li>
+        <li><a href="#无线局域网ieee80211wi-fi">无线局域网IEEE802.11(Wi-Fi)</a>
+          <ul>
+            <li><a href="#80211帧">802.11帧</a></li>
+            <li><a href="#控制帧">控制帧</a></li>
+            <li><a href="#数据帧分片和聚合">数据帧、分片和聚合</a></li>
+            <li><a href="#环回地址">环回地址</a></li>
+            <li><a href="#mtu和路径mtu">MTU和路径MTU</a></li>
+            <li><a href="#隧道">隧道</a></li>
+            <li><a href="#与链路层相关的攻击">与链路层相关的攻击</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E9%93%BE%E8%B7%AF%E5%B1%82/">链路层</a>
+  </h1>
+  
+  <h5>2021-11-24</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>
+  </div>
+  
+
+
+
+<h2 id="概述">
+  概述
+  <a class="anchor" href="#%e6%a6%82%e8%bf%b0">#</a>
+</h2>
+<ul>
+<li>链路层有两种不同类型的链路层信道，第一种是广播信道，因为许多主机与相同的广播信道相连，需要使用媒体访问协议来协调传输帧。第二种类型是点对点通信联络，由链路一端的单个发送方和链路另一端的单个接收方组成，许多链路层协议都是为点对点链路设计的，如点对点协议（PPP）和高级数据链路控制（HDLC）。</li>
+<li>媒体访问控制协议（MAC）规定了帧在链路上传输的规则，对于在链路的一端只有一个发送方，链路的另一端仅有一个接收方的点对点链路，MAC协议比较简单，任何时刻发送方都能发送帧；当多个节点共享单个广播链路时，MAC协议需要协调多个节点的帧传输。</li>
+<li>链路层的主体部分是在网络适配器中（也叫网络接口卡Network Interface Card NIC）实现，链路层控制器的很多功能使用硬件实现。</li>
+<li>在发送端，控制器取得了由协议栈高层生成并存储在主机内存的数据报，在链路层帧中封装该数据报，然后遵循协议将该帧传入到链路中；在接收端接收整个帧，抽出网络层数据包，如果链路层执行差错检测，则需要发宋控制器在该帧的首部设置差错检测比特，由接收控制器执行差错检测。</li>
+</ul>
+<h2 id="crc校验">
+  CRC校验
+  <a class="anchor" href="#crc%e6%a0%a1%e9%aa%8c">#</a>
+</h2>
+<ul>
+<li>
+<p>Cyclic Redundancy Check循环冗余检测。</p>
+</li>
+<li>
+<p>原理是</p>
+<ol>
+<li>发送方和接收方先协商个数G，接收方在发送的数据D后添加数据R，使得DR（如D为11011101，R为1100，则DR为110111011100）能被G整除。并要求G的最左边位置为1，G比R多一位。</li>
+<li>接收方收到数据后，用G除以DR&rsquo;，如果余数为0，则数据正确，否则数据错误。</li>
+<li>R可以通过G和D计算，计算方法如下：</li>
+</ol>
+<p>
+  <img src="/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e9%93%be%e8%b7%af%e5%b1%82/1.jpg" alt="" /></p>
+</li>
+</ul>
+<h2 id="多路访问协议">
+  多路访问协议
+  <a class="anchor" href="#%e5%a4%9a%e8%b7%af%e8%ae%bf%e9%97%ae%e5%8d%8f%e8%ae%ae">#</a>
+</h2>
+<ul>
+<li>广播信道中的所有节点都能传输帧，这可能会导致碰撞，通常当碰撞发生时，没有一个节点能有效地获得任何传输的帧。为了确保广播信道能执行有用的工作，需要使用某种方式来协调节点的数据传输。</li>
+<li>时隙ALOHA：
+<ul>
+<li>所有的帧由L比特组成，事件被划分为L/R秒的时隙；一个时隙等于传输一帧的时间；节点只在时隙起点开始传输帧；</li>
+<li>当节点有一个新的帧要发送时，他等到下一个时隙开始传输整个帧；</li>
+<li>如果没有碰撞，该节点成功传输它的帧。</li>
+<li>如果有碰撞，该节点检测到这次碰撞，并在后续中该节点以概率p（0&lt;p&lt;1）在每个时隙中重传他的帧，直到该帧被传输出去。</li>
+</ul>
+</li>
+<li>具有碰撞检测的载波侦听多路访问协议（CSMA/CD）是指一个节点在传输前先监听信道，当存在其他节点正在信道上传输帧时，节点等待直到检测到没有数据传输时才开始传输；节点传输时会一直侦听信道，当它检测到另一个节点也在传输帧时，它就停止传输，并等待一个时间后重新传输。</li>
+<li>CSMA/CD等待的时间使用的是二进制指数后退算法，该算法如下：当传输一个帧是，在该帧尽力了一连串的n次碰撞后，节点随机地从[0, 1, 2, &hellip;, 2 <sup>n</sup>-1]中选择一个K值。</li>
+</ul>
+<h2 id="mac地址">
+  MAC地址
+  <a class="anchor" href="#mac%e5%9c%b0%e5%9d%80">#</a>
+</h2>
+<ul>
+<li>并不是主机具有链路层地址，而是他们的网络接口具有链路层地址；具有多个网络接口的主机具有多个链路层地址。</li>
+<li>链路层交换机的任务是在主机和路由器之间承载数据报，主机或者路由器不必明确的将帧发送到交换机。</li>
+<li>MAC地址共2<sup>48</sup>位，通常采用十六进制表示，如1A-23-F9-CD-06-9B。</li>
+<li>当某些适配器向目的适配器发送一个帧时，发送适配器将目的适配器的MAC地址插入到该帧中， 并将该帧发送到局域网上。</li>
+<li>有一个特殊的MAC广播地址，FF-FF-FF-FF-FF-FF，适用于发送适配器需要让其他局域网上的其他适配器接收并处理它发送的帧。</li>
+</ul>
+<h2 id="arp">
+  ARP
+  <a class="anchor" href="#arp">#</a>
+</h2>
+<ul>
+<li>Address Resolution Protocol，地址解析协议。</li>
+<li>ARP为在同一个子网上的主机和路由器接口解析IP地址，获得MAC地址。</li>
+<li>每台主机或路由器中都有一个ARP表，包含了IP地址到MAC地址的映射关系。该表也包含了一个TTL，表示从表中删除映射的时间。通常的过期时间是20分钟。</li>
+<li>ARP的处理流程如下：
+<ul>
+<li>A主机向子网中广播一个ARP分组，该分组中包含源和目的IP地址,源MAC地址，目的MAC地址为FF-FF-FF-FF-FF-FF。</li>
+<li>由于是广播地址，每个适配器都将该帧中的ARP分组向上传递给ARP模块，ARP模块检查它的IP地址是否和ARP分组中的目的IP地址是否匹配。</li>
+<li>如果匹配，将向A主机发送一个带有A主机需要的目的MAC地址的ARP分组。</li>
+<li>A主机更新他的ARP表。</li>
+<li>
+  <img src="/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e9%93%be%e8%b7%af%e5%b1%82/2.jpg" alt="" /></li>
+</ul>
+</li>
+</ul>
+<h2 id="以太网">
+  以太网
+  <a class="anchor" href="#%e4%bb%a5%e5%a4%aa%e7%bd%91">#</a>
+</h2>
+<ul>
+<li>早期使用总线拓扑的以太网是一种广播局域网，即所有传输的帧都会被该总线上所有的适配器处理。</li>
+<li>集线器（hub）是一种物理层设备，作用与各个比特，当一个0或1的比特到达一个接口时，集线器只会重新生成这个比特，将其能量强度放大，并向其他的所有接口传输出去。采用基于集线器的星形拓扑的以太网实际上也是一个广播局域网。当某集线器同时从两个不同的接口接收到帧时，将出现一次碰撞。</li>
+<li>交换机（switch）是链路层设备，使用交换机的以太网安装采用星形拓扑，交换机不仅是无碰撞的，也是“存储-转发”。</li>
+</ul>
+<h3 id="以太网帧格式">
+  以太网帧格式
+  <a class="anchor" href="#%e4%bb%a5%e5%a4%aa%e7%bd%91%e5%b8%a7%e6%a0%bc%e5%bc%8f">#</a>
+</h3>
+<ul>
+<li>
+<p>
+  <img src="/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e9%93%be%e8%b7%af%e5%b1%82/3.jpg" alt="" /></p>
+</li>
+<li>
+<p>前导字段前7个字节是用来确定一个帧的到达时间，并确定编码位之间的时间量。最后一个字节固定值为0xAB。</p>
+</li>
+<li>
+<p>源地址和目的地址都指的是适配器的地址，当接收方收到一个帧，如果帧的内容是自身的地址或者是广播地址，它会将帧的数据字段传递给网络层，如果它收到了具有任何其他MAC地址的帧，则丢弃。</p>
+</li>
+<li>
+<p>类型字段指定以太网上层使用的协议。</p>
+</li>
+<li>
+<p>数据字段最小是46字节，如果IP数据报小于46字节，数据包必须被填充到46字节。当采用填充时，传递到网络层的数据报还包括填充部分，网络层使用IP数据包首部中的长度字段来去除填充部分。</p>
+</li>
+<li>
+<p>CRC的目的是使得接收适配器检测帧中是否引入了差错。</p>
+</li>
+<li>
+<p>以太网采用无连接服务，向网络层提供不可靠服务，当适配器收到一个帧后，它对该帧执行CRC校验，当该帧不通过CRC校验时，设配器只会丢弃该帧而不会通知发送端。</p>
+</li>
+</ul>
+<h2 id="链路层交换机">
+  链路层交换机
+  <a class="anchor" href="#%e9%93%be%e8%b7%af%e5%b1%82%e4%ba%a4%e6%8d%a2%e6%9c%ba">#</a>
+</h2>
+<ul>
+<li>交换机对子网中的主机和路由器是透明的，这意味这当某主机向另一台主机发送一个帧，并不知道某交换机会接收该帧并把它转发到另一个节点。交换机输出接口设置有缓存。</li>
+<li>使用交换机能消除碰撞，交换机将链路彼此隔离。</li>
+</ul>
+<h3 id="转发和过滤">
+  转发和过滤
+  <a class="anchor" href="#%e8%bd%ac%e5%8f%91%e5%92%8c%e8%bf%87%e6%bb%a4">#</a>
+</h3>
+<ul>
+<li>过滤决定一个帧是否应该转发到某个接口还是应当将其丢弃。</li>
+<li>转发决定一个帧应该被导向哪个接口，并把该帧移动到哪些接口上。</li>
+<li>交换机的过滤和转发基于交换机表（switch table）实现，该交换机表包含局域网上某些主机和路由器但不必是全部的表项。交换机表中包含：1. MAC地址；2MAC地址对应的接口；3. 该信息放到交换机表中的时间。</li>
+<li>交换机的工作流程如下，假设A帧从x接口到达，目的地址为DD-DD-DD-DD-DD-DD：
+<ul>
+<li>如果表中没有DD-DD-DD-DD-DD-DD，则交换机向除x外所有的接口广播该帧。</li>
+<li>如果表中有DD-DD-DD-DD-DD-DD，并且对应的接口为x，则交换机丢弃该帧。</li>
+<li>如果表中有DD-DD-DD-DD-DD-DD，并且对应的接口不为x，则交换机将该帧转发到接口y上。</li>
+</ul>
+</li>
+<li>交换机表是自学习的，通过如下方式实现：
+<ol>
+<li>交换机表初始为空。</li>
+<li>对于每个接口收到的入帧，该交换机在其表中存储该帧源MAC地址、该帧到达的接口和当前时间。</li>
+<li>如果一段时间（老化期）后，交换机没有收到源MAC地址在该表里的数据后，就从该表里删除这个地址。</li>
+</ol>
+</li>
+<li>交换机是即用即插设备，不需要网络管理员手动维护。交换机是全双工的，任何接口都能同时发送和接收。</li>
+</ul>
+<h2 id="无线局域网ieee80211wi-fi">
+  无线局域网IEEE802.11(Wi-Fi)
+  <a class="anchor" href="#%e6%97%a0%e7%ba%bf%e5%b1%80%e5%9f%9f%e7%bd%91ieee80211wi-fi">#</a>
+</h2>
+<ul>
+<li>
+<p>Wi-Fi（无线保真），一个接入点（AP）网络下面可以包含多个站（STA），一个AP和相关的站被称为一个基本服务集（BSS)。AP之间使用一种有线的分布式服务（称为DS），形成一个扩展服务集（ESS），这种方式通常被称为基础设施模式。</p>
+<h3 id="80211帧">
+  802.11帧
+  <a class="anchor" href="#80211%e5%b8%a7">#</a>
+</h3>
+</li>
+</ul>
+<p>
+  <img src="/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e9%93%be%e8%b7%af%e5%b1%82/802.11.png" alt="" /></p>
+<ul>
+<li>物理层会聚程序（PLCP）头部以独立于物理层的方式提供特定的物理层信息。</li>
+<li>MPDU的帧控制字包括三种类型：管理帧、控制帧和数据帧。MPDU的剩余字段由帧类型来决定。</li>
+</ul>
+<h4 id="管理帧">
+  管理帧
+  <a class="anchor" href="#%e7%ae%a1%e7%90%86%e5%b8%a7">#</a>
+</h4>
+<ul>
+<li>管理帧用于创建维持、终止站和接入点之间的连接。</li>
+<li>管理帧也被确定是否采用加密，传输网络名称（SSID或ESSID），支持哪种传输速率，以及采用的时间数据库等。</li>
+<li>当一个Wi-Fi接口”扫描“临近的接入点时，这些帧被用于提供必要的信息。</li>
+<li>扫描是一个站发现可用的网络以及相关配置信息的过程。一个站可以主动侦测网络，在扫描时传输一个特殊的管理帧（&ldquo;探测请求&rdquo;)。这些探测请求有一定的限制，以保证802.11流量不在非802.11频率上传输。</li>
+</ul>
+<h3 id="控制帧">
+  控制帧
+  <a class="anchor" href="#%e6%8e%a7%e5%88%b6%e5%b8%a7">#</a>
+</h3>
+<ul>
+<li>控制帧和帧确认被用于一种流量的控制方式，流量控制有助于接收方是一个过快的发送方降低发送速度，帧确认有助于发送方知道哪些帧已被正确接收。</li>
+<li>802.11网络支持可选的请求发送/明确发送（RTS/CTS），通过放缓传输来进行流量控制。当RTS/CTS启用时，一个站在发送数据帧之前发送一个RTS帧，当接收方愿意接收额外的流量时，这个站会开启一个时间窗口，用于向确认接受的站发送数据帧。</li>
+<li>RTS和CTS帧比较短，因此他们不会长期使用信道。如果一个分组的大小足够大，AP通常为每个分组启动一次RTS/CTS交换。通常AP都提供一个称为分组大小阈值的配置选项，超过阈值的帧将会导致一个RTS帧优先于数据帧发送。大多数设备生产商设置的默认值是500字节。</li>
+<li>802.11采用一种重传/确认的方法来重传。确认是对预期在一定时间内接受的一个单播帧（802.11a/b/g）或一组帧(802.11n/e)的响应。组播和广播帧没有相关的确认，在指定时间内没有收到对应的ACK会导致帧的重传。</li>
+</ul>
+<h3 id="数据帧分片和聚合">
+  数据帧、分片和聚合
+  <a class="anchor" href="#%e6%95%b0%e6%8d%ae%e5%b8%a7%e5%88%86%e7%89%87%e5%92%8c%e8%81%9a%e5%90%88">#</a>
+</h3>
+<ul>
+<li>通常802.11帧和链路层（LLC）帧之间存在一对一关系，他们保证更高层协议是可用的。但是802.11支持帧分片，可将一个帧分为多个分片。根据802.11n的规定，它也支持帧聚合，可将多个帧合并发送以减少开销。</li>
+<li>当使用帧分片时，每个分片都有自己的MAC头部和尾部的CRC，并且他们独立于其他分片处理。当信道有明显的干扰时，分片有助于提高性能。分片仅用于目的地址为单播的帧，为了具备这种能力，顺序控制字段包含一个分片号（4位）和一个序列号（12位）。如果一个帧经过分片，所有分片包含相同的序列号值，没相邻的分片的分片号之差为1。由于分片号字段长度为4位，同一帧最多可能有15个分片。帧控制字中的更多标志字段表示更多分片还没有到达。最后一个分片将这个位置设置为0。接收方将接收的同一序列号的分片根据分片号重组成原始帧。当所有包含同一序列号的分片被接收，并且最后一个分片将更多标志字段设为0时，这个帧被重组并交给更高层协议来处理。</li>
+<li>分片并不常使用，分片大小通常可设为256字节至2048字节，并作为一个阈值，只要超过了阈值的帧才被分片。</li>
+</ul>
+<h3 id="环回地址">
+  环回地址
+  <a class="anchor" href="#%e7%8e%af%e5%9b%9e%e5%9c%b0%e5%9d%80">#</a>
+</h3>
+<ul>
+<li>通常使用一个虚拟的环回网络接口来实现。它像一个真正的网络接口，但实际上是一个由操作系统提供的专用软件。</li>
+<li>以127开头的IPv4地址被保留位环回地址，linux为环回地址分配的IPv4地址为127.0.0.1（IPv6为::1），为它分配的名称为localhost。</li>
+<li>传输层和网络层对数据执行完整的处理流程，在数据离开网络层时将其回送给网络层协议栈。在linux中环回接口被称为lo。</li>
+</ul>
+<h3 id="mtu和路径mtu">
+  MTU和路径MTU
+  <a class="anchor" href="#mtu%e5%92%8c%e8%b7%af%e5%be%84mtu">#</a>
+</h3>
+<ul>
+<li>在很多链路层中，携带的高层协议PDU的帧大小是有限的，以太网的有效载荷通常被限制为1500字节。这种特征被称为最大传输单元(MTU)。</li>
+<li>当两台主机之间跨越多个网络通信时，每条链路可能由不同大小的MTU，最小的MTU被称为路径MTU。</li>
+<li>任何两台主机之间的路径MTU可能会改变。路径MTU不需要在两个方向上相同。</li>
+</ul>
+<h3 id="隧道">
+  隧道
+  <a class="anchor" href="#%e9%9a%a7%e9%81%93">#</a>
+</h3>
+<ul>
+<li>一般来说，隧道是在高层（或同等层）中携带低层数据。如在IPv4分组中携带IPv4数据，在一个UDP分组中携带以太网数据。</li>
+<li>隧道转变了严格分层的思路。</li>
+<li>用于建立隧道的常用协议包括：通用路由封装（GRE）、点对点隧道协议（PPTP）和第二层隧道协议（L2TP）。</li>
+</ul>
+<h3 id="与链路层相关的攻击">
+  与链路层相关的攻击
+  <a class="anchor" href="#%e4%b8%8e%e9%93%be%e8%b7%af%e5%b1%82%e7%9b%b8%e5%85%b3%e7%9a%84%e6%94%bb%e5%87%bb">#</a>
+</h3>
+<ul>
+<li>在传统的有线以太网中，接口可以被设置为混杂模式，这允许它接收目的地不是自己的流量。当介质是共享电缆时，该功能允许任意一台连接以太网的电力计算机获取到别人的帧并检查内容。在使用交换机后，这变的不容易了。</li>
+</ul></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

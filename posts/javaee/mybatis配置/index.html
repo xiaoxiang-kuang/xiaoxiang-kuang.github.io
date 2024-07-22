@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>mybatis配置 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#总览">总览</a></li>
+            <li><a href="#属性properties">属性properties</a></li>
+            <li><a href="#类型别名typealiases">类型别名typeAliases</a></li>
+            <li><a href="#环境变量environments">环境变量environments</a></li>
+            <li><a href="#数据库标识databaseidprovider">数据库标识databaseIdProvider</a></li>
+            <li><a href="#映射器">映射器</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>mybatis配置</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#总览">总览</a></li>
+            <li><a href="#属性properties">属性properties</a></li>
+            <li><a href="#类型别名typealiases">类型别名typeAliases</a></li>
+            <li><a href="#环境变量environments">环境变量environments</a></li>
+            <li><a href="#数据库标识databaseidprovider">数据库标识databaseIdProvider</a></li>
+            <li><a href="#映射器">映射器</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/javaee/mybatis%E9%85%8D%E7%BD%AE/">mybatis配置</a>
+  </h1>
+  
+  <h5>2021-11-02</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">java</a>
+  </div>
+  
+
+
+
+<h3 id="总览">
+  总览
+  <a class="anchor" href="#%e6%80%bb%e8%a7%88">#</a>
+</h3>
+<ul>
+<li><code>configuration</code> 配置
+<ul>
+<li><code>properties</code> 属性</li>
+<li><code>settings</code> 设置</li>
+<li><code>typeAliases</code> 类型别名</li>
+<li><code>typeHandlers</code> 类型处理器</li>
+<li><code>objectFactory</code> 对象工厂</li>
+<li><code>plugins</code> 插件</li>
+<li><code>environments</code> 环境变量
+<ul>
+<li><code>environment</code>
+<ul>
+<li><code>transactionManager</code> 事务管理器</li>
+<li><code>dataSource</code> 数据源</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>databaseIdProvider</code> 数据库标识</li>
+<li><code>mappers</code> 映射器</li>
+</ul>
+</li>
+</ul>
+<h3 id="属性properties">
+  属性properties
+  <a class="anchor" href="#%e5%b1%9e%e6%80%a7properties">#</a>
+</h3>
+<ul>
+<li>设置好的属性可以在整个配置文件中使用。</li>
+<li>通过方法参数传递的属性优先级最高，resource/url属性中指定的位置文件次之，properties元素中指定的属性优先级最低。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#f92672">&lt;properties</span> <span style="color:#a6e22e">resource=</span><span style="color:#e6db74">&#34;org/mybatis/example/config.properties&#34;</span><span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;username&#34;</span> <span style="color:#a6e22e">value=</span><span style="color:#e6db74">&#34;dev_user&#34;</span><span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">&lt;!-- 启用默认值设置，使用方式为${username:prod_user} --&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;org.apache.ibatis.parsing.PropertyParser.enable-default-value&#34;</span> <span style="color:#a6e22e">value=</span><span style="color:#e6db74">&#34;true&#34;</span><span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/properties&gt;</span>
+</span></span></code></pre></div><h3 id="类型别名typealiases">
+  类型别名typeAliases
+  <a class="anchor" href="#%e7%b1%bb%e5%9e%8b%e5%88%ab%e5%90%8dtypealiases">#</a>
+</h3>
+<ul>
+<li>指定类型别名</li>
+<li>内建的一些类型别名，如：string、long、integer、float、map、arraylist、date等</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#f92672">&lt;typeAliases&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;typeAlias</span> <span style="color:#a6e22e">alias=</span><span style="color:#e6db74">&#34;author&#34;</span> <span style="color:#a6e22e">type=</span><span style="color:#e6db74">&#34;domain.blog.Author&#34;</span><span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">&lt;!-- 每一个在包domain.blog中的类，会默认使用该类的首字母小写的类名作为它的别名 --&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;package</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;domain.blog&#34;</span><span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/typeAliases&gt;</span>
+</span></span></code></pre></div><h3 id="环境变量environments">
+  环境变量environments
+  <a class="anchor" href="#%e7%8e%af%e5%a2%83%e5%8f%98%e9%87%8fenvironments">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#f92672">&lt;environments</span> <span style="color:#a6e22e">default=</span><span style="color:#e6db74">&#34;development&#34;</span><span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">&lt;!--  type用来指定数据源，内建了三种数据源UNPOOLED|POOLED|JNDI，可以通过实现接口DataSourceFactory来使用第三方数据源 --&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;dataSource</span> <span style="color:#a6e22e">type=</span><span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;driver&#34;</span> <span style="color:#a6e22e">value=</span><span style="color:#e6db74">&#34;${driver}&#34;</span><span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;url&#34;</span> <span style="color:#a6e22e">value=</span><span style="color:#e6db74">&#34;${url}&#34;</span><span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;username&#34;</span> <span style="color:#a6e22e">value=</span><span style="color:#e6db74">&#34;${username}&#34;</span><span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;password&#34;</span> <span style="color:#a6e22e">value=</span><span style="color:#e6db74">&#34;${password}&#34;</span><span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;/dataSource&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;/environment&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/environments&gt;</span>
+</span></span></code></pre></div><h3 id="数据库标识databaseidprovider">
+  数据库标识databaseIdProvider
+  <a class="anchor" href="#%e6%95%b0%e6%8d%ae%e5%ba%93%e6%a0%87%e8%af%86databaseidprovider">#</a>
+</h3>
+<ul>
+<li>mybatis可以根据不同的数据库厂商执行不同的语句。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#f92672">&lt;databaseIdProvider</span> <span style="color:#a6e22e">type=</span><span style="color:#e6db74">&#34;DB_VENDOR&#34;</span><span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;SQL Server&#34;</span> <span style="color:#a6e22e">value=</span><span style="color:#e6db74">&#34;sqlserver&#34;</span><span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;DB2&#34;</span> <span style="color:#a6e22e">value=</span><span style="color:#e6db74">&#34;db2&#34;</span><span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;MySQL&#34;</span> <span style="color:#a6e22e">value=</span><span style="color:#e6db74">&#34;mysql&#34;</span> <span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/databaseIdProvider&gt;</span>
+</span></span></code></pre></div><ul>
+<li>使用方式</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#f92672">&lt;select</span> <span style="color:#a6e22e">id=</span><span style="color:#e6db74">&#34;select&#34;</span> <span style="color:#a6e22e">resultType=</span><span style="color:#e6db74">&#34;map&#34;</span> <span style="color:#a6e22e">databaseId=</span><span style="color:#e6db74">&#34;mysql&#34;</span><span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>	select * from mysql
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/select&gt;</span>
+</span></span></code></pre></div><h3 id="映射器">
+  映射器
+  <a class="anchor" href="#%e6%98%a0%e5%b0%84%e5%99%a8">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#f92672">&lt;mappers&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;mapper</span> <span style="color:#a6e22e">resource=</span><span style="color:#e6db74">&#34;org/mybatis/builder/AuthorMapper.xml&#34;</span><span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;mapper</span> <span style="color:#a6e22e">url=</span><span style="color:#e6db74">&#34;file:///var/mappers/PostMapper.xml&#34;</span><span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;mapper</span> <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;org.mybatis.builder.PostMapper&#34;</span><span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;package</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;org.mybatis.builder&#34;</span><span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/mappers&gt;</span>
+</span></span></code></pre></div></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

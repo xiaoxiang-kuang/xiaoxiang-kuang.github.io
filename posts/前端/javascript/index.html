@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>Javascript | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#基本语法">基本语法</a>
+          <ul>
+            <li><a href="#ifelse">if&hellip;else</a></li>
+            <li><a href="#switch">switch</a></li>
+            <li><a href="#三元运算符">三元运算符</a></li>
+            <li><a href="#循环语句">循环语句</a></li>
+            <li><a href="#break和continue">break和continue</a></li>
+          </ul>
+        </li>
+        <li><a href="#数据类型">数据类型</a>
+          <ul>
+            <li><a href="#六种数据类型">六种数据类型</a></li>
+            <li><a href="#typeof运算符">typeof运算符</a></li>
+            <li><a href="#nullundefined和布尔值">null、undefined和布尔值</a></li>
+            <li><a href="#布尔值">布尔值</a></li>
+          </ul>
+        </li>
+        <li><a href="#数值">数值</a>
+          <ul>
+            <li><a href="#整数和浮点数">整数和浮点数</a></li>
+            <li><a href="#数值的表示方法">数值的表示方法</a></li>
+            <li><a href="#nan">NaN</a></li>
+            <li><a href="#infinity">Infinity</a></li>
+            <li><a href="#相关函数">相关函数</a></li>
+          </ul>
+        </li>
+        <li><a href="#字符串">字符串</a>
+          <ul>
+            <li><a href="#length">length</a></li>
+          </ul>
+        </li>
+        <li><a href="#对象">对象</a>
+          <ul>
+            <li><a href="#对象引用">对象引用</a></li>
+            <li><a href="#对象属性">对象属性</a></li>
+            <li><a href="#属性的查看">属性的查看</a></li>
+            <li><a href="#属性的删除">属性的删除</a></li>
+            <li><a href="#属性是否存在in-运算符">属性是否存在：in 运算符</a></li>
+            <li><a href="#属性的遍历forin-循环">属性的遍历：for&hellip;in 循环</a></li>
+          </ul>
+        </li>
+        <li><a href="#函数">函数</a>
+          <ul>
+            <li><a href="#function">function</a></li>
+            <li><a href="#函数表达式">函数表达式</a></li>
+            <li><a href="#name属性">name属性</a></li>
+          </ul>
+        </li>
+        <li><a href="#数组">数组</a>
+          <ul>
+            <li><a href="#length-属性">length 属性</a></li>
+            <li><a href="#forin-循环">for&hellip;in 循环</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>Javascript</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#基本语法">基本语法</a>
+          <ul>
+            <li><a href="#ifelse">if&hellip;else</a></li>
+            <li><a href="#switch">switch</a></li>
+            <li><a href="#三元运算符">三元运算符</a></li>
+            <li><a href="#循环语句">循环语句</a></li>
+            <li><a href="#break和continue">break和continue</a></li>
+          </ul>
+        </li>
+        <li><a href="#数据类型">数据类型</a>
+          <ul>
+            <li><a href="#六种数据类型">六种数据类型</a></li>
+            <li><a href="#typeof运算符">typeof运算符</a></li>
+            <li><a href="#nullundefined和布尔值">null、undefined和布尔值</a></li>
+            <li><a href="#布尔值">布尔值</a></li>
+          </ul>
+        </li>
+        <li><a href="#数值">数值</a>
+          <ul>
+            <li><a href="#整数和浮点数">整数和浮点数</a></li>
+            <li><a href="#数值的表示方法">数值的表示方法</a></li>
+            <li><a href="#nan">NaN</a></li>
+            <li><a href="#infinity">Infinity</a></li>
+            <li><a href="#相关函数">相关函数</a></li>
+          </ul>
+        </li>
+        <li><a href="#字符串">字符串</a>
+          <ul>
+            <li><a href="#length">length</a></li>
+          </ul>
+        </li>
+        <li><a href="#对象">对象</a>
+          <ul>
+            <li><a href="#对象引用">对象引用</a></li>
+            <li><a href="#对象属性">对象属性</a></li>
+            <li><a href="#属性的查看">属性的查看</a></li>
+            <li><a href="#属性的删除">属性的删除</a></li>
+            <li><a href="#属性是否存在in-运算符">属性是否存在：in 运算符</a></li>
+            <li><a href="#属性的遍历forin-循环">属性的遍历：for&hellip;in 循环</a></li>
+          </ul>
+        </li>
+        <li><a href="#函数">函数</a>
+          <ul>
+            <li><a href="#function">function</a></li>
+            <li><a href="#函数表达式">函数表达式</a></li>
+            <li><a href="#name属性">name属性</a></li>
+          </ul>
+        </li>
+        <li><a href="#数组">数组</a>
+          <ul>
+            <li><a href="#length-属性">length 属性</a></li>
+            <li><a href="#forin-循环">for&hellip;in 循环</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/%E5%89%8D%E7%AB%AF/javascript/">Javascript</a>
+  </h1>
+  
+  <h5>2022-01-31</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/%E5%89%8D%E7%AB%AF/">前端</a>
+  </div>
+  
+
+
+
+<h2 id="基本语法">
+  基本语法
+  <a class="anchor" href="#%e5%9f%ba%e6%9c%ac%e8%af%ad%e6%b3%95">#</a>
+</h2>
+<ul>
+<li>
+<p>变量如果只声明而没有赋值，则该变量的值是<code>undefined</code>。</p>
+</li>
+<li>
+<p>js是一种动态类型语言，变量的类型没有限制，变量可以随时更改类型。</p>
+</li>
+<li>
+<p>js引擎的工作方式是先解析代码，获取所有被声明的变量，然后再一行行的运行，这会使得所有变量的声明语句，都会被提升到代码的头部。</p>
+</li>
+<li>
+<p>变量命名规则如下：第一个字符可以是任意Unicode字母以及<code>$</code>和<code>_</code>，第二个字符及后面的字符还可以用数字0-9。</p>
+</li>
+</ul>
+<h3 id="ifelse">
+  if&hellip;else
+  <a class="anchor" href="#ifelse">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">m</span> <span style="color:#f92672">===</span> <span style="color:#ae81ff">3</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 满足条件时，执行的语句
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>} <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 不满足条件时，执行的语句
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><h3 id="switch">
+  switch
+  <a class="anchor" href="#switch">#</a>
+</h3>
+<ul>
+<li><code>switch</code>语句后面的表达式，与<code>case</code>语句后面的表示式比较运行结果时，采用的是严格相等运算符（<code>===</code>），这意味着比较时不会发生类型转换。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">switch</span> (<span style="color:#a6e22e">x</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">case</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#39;x 等于1&#39;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">case</span> <span style="color:#ae81ff">2</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#39;x 等于2&#39;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">default</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#39;x 等于其他值&#39;</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="三元运算符">
+  三元运算符
+  <a class="anchor" href="#%e4%b8%89%e5%85%83%e8%bf%90%e7%ae%97%e7%ac%a6">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>(<span style="color:#a6e22e">条件</span>) <span style="color:#f92672">?</span> <span style="color:#a6e22e">表达式1</span> <span style="color:#f92672">:</span> <span style="color:#a6e22e">表达式2</span>
+</span></span></code></pre></div><h3 id="循环语句">
+  循环语句
+  <a class="anchor" href="#%e5%be%aa%e7%8e%af%e8%af%ad%e5%8f%a5">#</a>
+</h3>
+<h4 id="while">
+  while
+  <a class="anchor" href="#while">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">while</span> (<span style="color:#a6e22e">i</span> <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">100</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#39;i 当前为：&#39;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">i</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">i</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="for">
+  for
+  <a class="anchor" href="#for">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">x</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> <span style="color:#f92672">&lt;</span> <span style="color:#a6e22e">x</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#a6e22e">i</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="dowhile">
+  do&hellip;while
+  <a class="anchor" href="#dowhile">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">x</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">do</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#a6e22e">i</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>} <span style="color:#66d9ef">while</span>(<span style="color:#a6e22e">i</span> <span style="color:#f92672">&lt;</span> <span style="color:#a6e22e">x</span>);
+</span></span></code></pre></div><h3 id="break和continue">
+  break和continue
+  <a class="anchor" href="#break%e5%92%8ccontinue">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">5</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#a6e22e">i</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">i</span> <span style="color:#f92672">===</span> <span style="color:#ae81ff">3</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">while</span> (<span style="color:#a6e22e">i</span> <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">100</span>){
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">i</span> <span style="color:#f92672">%</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">===</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">continue</span>;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#39;i 当前为：&#39;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">i</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="数据类型">
+  数据类型
+  <a class="anchor" href="#%e6%95%b0%e6%8d%ae%e7%b1%bb%e5%9e%8b">#</a>
+</h2>
+<h3 id="六种数据类型">
+  六种数据类型
+  <a class="anchor" href="#%e5%85%ad%e7%a7%8d%e6%95%b0%e6%8d%ae%e7%b1%bb%e5%9e%8b">#</a>
+</h3>
+<ul>
+<li>数值（number）：整数和小数（比如<code>1</code>和<code>3.14</code>）。</li>
+<li>字符串（string）：文本（比如<code>Hello World</code>）。</li>
+<li>布尔值（boolean）：表示真伪的两个特殊值，即<code>true</code>（真）和<code>false</code>（假）。</li>
+<li><code>undefined</code>：表示“未定义”或不存在，即由于目前没有定义，所以此处暂时没有任何值。</li>
+<li><code>null</code>：表示空值，即此处的值为空。</li>
+<li>对象（object）：各种值组成的集合。</li>
+</ul>
+<h3 id="typeof运算符">
+  typeof运算符
+  <a class="anchor" href="#typeof%e8%bf%90%e7%ae%97%e7%ac%a6">#</a>
+</h3>
+<p><code>typeof</code>运算符可以返回一个值的数据类型。</p>
+<p>数值、字符串、布尔值分别返回<code>number</code>、<code>string</code>、<code>boolean</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">typeof</span> <span style="color:#ae81ff">123</span> <span style="color:#75715e">// &#34;number&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">typeof</span> <span style="color:#e6db74">&#39;123&#39;</span> <span style="color:#75715e">// &#34;string&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">typeof</span> <span style="color:#66d9ef">false</span> <span style="color:#75715e">// &#34;boolean&#34;
+</span></span></span></code></pre></div><p>函数返回<code>function</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">f</span>() {}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">typeof</span> <span style="color:#a6e22e">f</span>
+</span></span></code></pre></div><p><code>undefined</code>返回<code>undefined</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">typeof</span> <span style="color:#66d9ef">undefined</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// &#34;undefined&#34;
+</span></span></span></code></pre></div><p><code>typeof</code>可以用来检查一个没有声明的变量，而不报错。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">typeof</span> <span style="color:#a6e22e">v</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// &#34;undefined&#34;
+</span></span></span></code></pre></div><p>对象返回<code>object</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">typeof</span> window <span style="color:#75715e">// &#34;object&#34;
+</span></span></span></code></pre></div><p><code>null</code>返回<code>object</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">typeof</span> <span style="color:#66d9ef">null</span>
+</span></span></code></pre></div><p>空数组（<code>[]</code>）的类型也是<code>object</code>，在 JavaScript 内部，数组本质上只是一种特殊的对象。</p>
+<h3 id="nullundefined和布尔值">
+  null、undefined和布尔值
+  <a class="anchor" href="#nullundefined%e5%92%8c%e5%b8%83%e5%b0%94%e5%80%bc">#</a>
+</h3>
+<ul>
+<li>
+<p>null是一个表示“空”的对象，转为数值时为0；undefined是一个表示&quot;此处无定义&quot;的原始值，转为数值时为NaN。</p>
+</li>
+<li>
+<p><code>undefined</code>表示“未定义”。</p>
+</li>
+</ul>
+<h3 id="布尔值">
+  布尔值
+  <a class="anchor" href="#%e5%b8%83%e5%b0%94%e5%80%bc">#</a>
+</h3>
+<p>下面的值都会被转为<code>false</code>。</p>
+<ul>
+<li><code>undefined</code></li>
+<li><code>null</code></li>
+<li><code>false</code></li>
+<li><code>0</code></li>
+<li><code>NaN</code></li>
+<li><code>&quot;&quot;</code>或<code>''</code>（空字符串）</li>
+</ul>
+<p>空数组（<code>[]</code>）和空对象（<code>{}</code>）对应的布尔值，都是<code>true</code>。</p>
+<h2 id="数值">
+  数值
+  <a class="anchor" href="#%e6%95%b0%e5%80%bc">#</a>
+</h2>
+<h3 id="整数和浮点数">
+  整数和浮点数
+  <a class="anchor" href="#%e6%95%b4%e6%95%b0%e5%92%8c%e6%b5%ae%e7%82%b9%e6%95%b0">#</a>
+</h3>
+<p>JavaScript 内部，所有数字都是以64位浮点数形式储存，即使整数也是如此。所以，<code>1</code>与<code>1.0</code>是相同的，是同一个数。</p>
+<h3 id="数值的表示方法">
+  数值的表示方法
+  <a class="anchor" href="#%e6%95%b0%e5%80%bc%e7%9a%84%e8%a1%a8%e7%a4%ba%e6%96%b9%e6%b3%95">#</a>
+</h3>
+<p>JavaScript 的数值有多种表示方法，默认情况下，JavaScript 内部会自动将八进制、十六进制、二进制转为十进制。</p>
+<ul>
+<li>十进制：没有前导0的数值。</li>
+<li>八进制：有前缀<code>0o</code>或<code>0O</code>的数值，或者有前导0、且只用到0-7的八个阿拉伯数字的数值。</li>
+<li>十六进制：有前缀<code>0x</code>或<code>0X</code>的数值。</li>
+<li>二进制：有前缀<code>0b</code>或<code>0B</code>的数值。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#ae81ff">0xff</span> <span style="color:#75715e">// 255
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#ae81ff">0o377</span> <span style="color:#75715e">// 255
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#ae81ff">0b11</span> <span style="color:#75715e">// 3
+</span></span></span></code></pre></div><p>数值也可以采用科学计数法表示，下面是几个科学计数法的例子。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#ae81ff">123e3</span> <span style="color:#75715e">// 123000
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#ae81ff">123e-3</span> <span style="color:#75715e">// 0.123
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#f92672">-</span><span style="color:#ae81ff">3.1</span><span style="color:#a6e22e">E</span><span style="color:#f92672">+</span><span style="color:#ae81ff">12</span>
+</span></span><span style="display:flex;"><span>.<span style="color:#ae81ff">1e-23</span>
+</span></span></code></pre></div><h3 id="nan">
+  NaN
+  <a class="anchor" href="#nan">#</a>
+</h3>
+<p><code>NaN</code>是 JavaScript 的特殊值，表示“非数字”（Not a Number），主要出现在将字符串解析成数字出错的场合。</p>
+<pre tabindex="0"><code>5 - &#39;x&#39; // NaN
+</code></pre><p><code>NaN</code>不是独立的数据类型，而是一个特殊数值，它的数据类型依然属于<code>Number</code>，使用<code>typeof</code>运算符可以看得很清楚。</p>
+<p><code>NaN</code>不等于任何值，包括它本身。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">NaN</span> <span style="color:#f92672">===</span> <span style="color:#66d9ef">NaN</span> <span style="color:#75715e">// false
+</span></span></span></code></pre></div><h3 id="infinity">
+  Infinity
+  <a class="anchor" href="#infinity">#</a>
+</h3>
+<p>Infinity表示“无穷”，用来表示两种场景。一种是一个正的数值太大，或一个负的数值太小，无法表示；另一种是非0数值除以0，得到Infinity。</p>
+<p><code>Infinity</code>有正负之分，<code>Infinity</code>表示正的无穷，<code>-Infinity</code>表示负的无穷。</p>
+<p><code>Infinity</code>大于一切数值（除了<code>NaN</code>），<code>-Infinity</code>小于一切数值（除了<code>NaN</code>）。</p>
+<p><code>Infinity</code>的四则运算，符合无穷的数学计算规则。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#ae81ff">5</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">Infinity</span> <span style="color:#75715e">// Infinity
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#ae81ff">5</span> <span style="color:#f92672">-</span> <span style="color:#66d9ef">Infinity</span> <span style="color:#75715e">// -Infinity
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">Infinity</span> <span style="color:#f92672">/</span> <span style="color:#ae81ff">5</span> <span style="color:#75715e">// Infinity
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#ae81ff">5</span> <span style="color:#f92672">/</span> <span style="color:#66d9ef">Infinity</span> <span style="color:#75715e">// 0
+</span></span></span></code></pre></div><h3 id="相关函数">
+  相关函数
+  <a class="anchor" href="#%e7%9b%b8%e5%85%b3%e5%87%bd%e6%95%b0">#</a>
+</h3>
+<h4 id="parseint">
+  parseInt
+  <a class="anchor" href="#parseint">#</a>
+</h4>
+<p><code>parseInt</code>方法用于将字符串转为整数。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>parseInt(<span style="color:#e6db74">&#39;123&#39;</span>) <span style="color:#75715e">// 123
+</span></span></span></code></pre></div><p>如果字符串头部有空格，空格会被自动去除。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>parseInt(<span style="color:#e6db74">&#39;   81&#39;</span>) <span style="color:#75715e">// 81
+</span></span></span></code></pre></div><p>如果<code>parseInt</code>的参数不是字符串，则会先转为字符串再转换。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>parseInt(<span style="color:#ae81ff">1.23</span>) <span style="color:#75715e">// 1
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 等同于
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>parseInt(<span style="color:#e6db74">&#39;1.23&#39;</span>) <span style="color:#75715e">// 1
+</span></span></span></code></pre></div><p>字符串转为整数的时候，是一个个字符依次转换，如果遇到不能转为数字的字符，就不再进行下去，返回已经转好的部分。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>parseInt(<span style="color:#e6db74">&#39;8a&#39;</span>) <span style="color:#75715e">// 8
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>parseInt(<span style="color:#e6db74">&#39;12**&#39;</span>) <span style="color:#75715e">// 12
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>parseInt(<span style="color:#e6db74">&#39;12.34&#39;</span>) <span style="color:#75715e">// 12
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>parseInt(<span style="color:#e6db74">&#39;15e2&#39;</span>) <span style="color:#75715e">// 15
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>parseInt(<span style="color:#e6db74">&#39;15px&#39;</span>) <span style="color:#75715e">// 15
+</span></span></span></code></pre></div><p>如果字符串的第一个字符不能转化为数字（后面跟着数字的正负号除外），返回<code>NaN</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>parseInt(<span style="color:#e6db74">&#39;abc&#39;</span>) <span style="color:#75715e">// NaN
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>parseInt(<span style="color:#e6db74">&#39;+1&#39;</span>) <span style="color:#75715e">// 1
+</span></span></span></code></pre></div><p>对于那些会自动转为科学计数法的数字，<code>parseInt</code>会将科学计数法的表示方法视为字符串，因此导致一些奇怪的结果。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>parseInt(<span style="color:#ae81ff">1000000000000000000000.5</span>) <span style="color:#75715e">// 1
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 等同于
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>parseInt(<span style="color:#e6db74">&#39;1e+21&#39;</span>) <span style="color:#75715e">// 1
+</span></span></span></code></pre></div><h4 id="parsefloat">
+  parseFloat
+  <a class="anchor" href="#parsefloat">#</a>
+</h4>
+<p><code>parseFloat</code>方法用于将一个字符串转为浮点数。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>parseFloat(<span style="color:#e6db74">&#39;3.14&#39;</span>) <span style="color:#75715e">// 3.14
+</span></span></span></code></pre></div><p>如果字符串符合科学计数法，则会进行相应的转换。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>parseFloat(<span style="color:#e6db74">&#39;314e-2&#39;</span>) <span style="color:#75715e">// 3.14
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>parseFloat(<span style="color:#e6db74">&#39;0.0314E+2&#39;</span>) <span style="color:#75715e">// 3.14
+</span></span></span></code></pre></div><p>如果字符串包含不能转为浮点数的字符，则不再进行往后转换，返回已经转好的部分。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>parseFloat(<span style="color:#e6db74">&#39;3.14more non-digit characters&#39;</span>) <span style="color:#75715e">// 3.14
+</span></span></span></code></pre></div><p><code>parseFloat</code>方法会自动过滤字符串前导的空格。</p>
+<pre tabindex="0"><code>parseFloat(&#39;\t\v\r12.34\n &#39;) // 12.34
+</code></pre><p>如果参数不是字符串，或者字符串的第一个字符不能转化为浮点数，则返回<code>NaN</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>parseFloat([]) <span style="color:#75715e">// NaN
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>parseFloat(<span style="color:#e6db74">&#39;&#39;</span>) <span style="color:#75715e">// NaN
+</span></span></span></code></pre></div><h4 id="isnan">
+  isNaN
+  <a class="anchor" href="#isnan">#</a>
+</h4>
+<p><code>isNaN</code>方法可以用来判断一个值是否为<code>NaN</code>。</p>
+<pre tabindex="0"><code>isNaN(NaN) // true
+isNaN(123) // false
+</code></pre><p>但是，<code>isNaN</code>只对数值有效，如果传入其他值，会被先转成数值。比如，传入字符串的时候，字符串会被先转成<code>NaN</code>，所以最后返回<code>true</code>，<code>isNaN</code>为<code>true</code>的值，有可能不是<code>NaN</code>，而是一个字符串。</p>
+<p>判断<code>NaN</code>更可靠的方法是，利用<code>NaN</code>为唯一不等于自身的值的这个特点，进行判断。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">myIsNaN</span>(<span style="color:#a6e22e">value</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">value</span> <span style="color:#f92672">!==</span> <span style="color:#a6e22e">value</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="isfinite">
+  isFinite
+  <a class="anchor" href="#isfinite">#</a>
+</h4>
+<p><code>isFinite</code>方法返回一个布尔值，表示某个值是否为正常的数值。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>isFinite(<span style="color:#66d9ef">Infinity</span>) <span style="color:#75715e">// false
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>isFinite(<span style="color:#f92672">-</span><span style="color:#66d9ef">Infinity</span>) <span style="color:#75715e">// false
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>isFinite(<span style="color:#66d9ef">NaN</span>) <span style="color:#75715e">// false
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>isFinite(<span style="color:#66d9ef">undefined</span>) <span style="color:#75715e">// false
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>isFinite(<span style="color:#66d9ef">null</span>) <span style="color:#75715e">// true
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>isFinite(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>) <span style="color:#75715e">// true
+</span></span></span></code></pre></div><h2 id="字符串">
+  字符串
+  <a class="anchor" href="#%e5%ad%97%e7%ac%a6%e4%b8%b2">#</a>
+</h2>
+<p>字符串就是零个或多个排在一起的字符，放在单引号或双引号之中。</p>
+<p>字符串可以被视为字符数组，因此可以使用数组的方括号运算符，用来返回某个位置的字符（位置编号从0开始）。但无法改变字符串之中的单个字符。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">s</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;hello&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">s</span>[<span style="color:#ae81ff">0</span>] <span style="color:#75715e">// &#34;h&#34;
+</span></span></span></code></pre></div><h3 id="length">
+  length
+  <a class="anchor" href="#length">#</a>
+</h3>
+<p><code>length</code>属性返回字符串的长度。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">s</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;hello&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">length</span> <span style="color:#75715e">// 5
+</span></span></span></code></pre></div><h2 id="对象">
+  对象
+  <a class="anchor" href="#%e5%af%b9%e8%b1%a1">#</a>
+</h2>
+<p>对象就是一组“键值对”（key-value）的集合，是一种无序的复合数据集合。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">obj</span> <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">foo</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Hello&#39;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">bar</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;World&#39;</span>
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><p>对象的所有键都是字符串，所以加不加引号都可以。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">obj</span> <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#39;foo&#39;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Hello&#39;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#39;bar&#39;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;World&#39;</span>
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><p>对象的每一个键又称为“属性”（property），它的“键值”可以是任何数据类型。如果一个属性的值为函数，通常把这个属性称为“方法”，它可以像函数那样调用。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">obj</span> <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">p</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">function</span> (<span style="color:#a6e22e">x</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">x</span>;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">obj</span>.<span style="color:#a6e22e">p</span>(<span style="color:#ae81ff">1</span>) <span style="color:#75715e">// 2
+</span></span></span></code></pre></div><p>属性可以动态创建，不必在对象声明时就指定。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">obj</span> <span style="color:#f92672">=</span> {};
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">obj</span>.<span style="color:#a6e22e">foo</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">123</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">obj</span>.<span style="color:#a6e22e">foo</span> <span style="color:#75715e">// 123
+</span></span></span></code></pre></div><h3 id="对象引用">
+  对象引用
+  <a class="anchor" href="#%e5%af%b9%e8%b1%a1%e5%bc%95%e7%94%a8">#</a>
+</h3>
+<p>如果不同的变量名指向同一个对象，那么它们都是这个对象的引用，也就是说指向同一个内存地址。修改其中一个变量，会影响到其他所有变量。</p>
+<h3 id="对象属性">
+  对象属性
+  <a class="anchor" href="#%e5%af%b9%e8%b1%a1%e5%b1%9e%e6%80%a7">#</a>
+</h3>
+<p>读取对象的属性，有两种方法，一种是使用点运算符，还有一种是使用方括号运算符。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">obj</span> <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">p</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Hello World&#39;</span>
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">obj</span>.<span style="color:#a6e22e">p</span> <span style="color:#75715e">// &#34;Hello World&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//如果使用方括号运算符，键名必须放在引号里面
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">obj</span>[<span style="color:#e6db74">&#39;p&#39;</span>] <span style="color:#75715e">// &#34;Hello World&#34;
+</span></span></span></code></pre></div><p>点运算符和方括号运算符，不仅可以用来读取值，还可以用来赋值。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">obj</span> <span style="color:#f92672">=</span> {};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">obj</span>.<span style="color:#a6e22e">foo</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Hello&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">obj</span>[<span style="color:#e6db74">&#39;bar&#39;</span>] <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;World&#39;</span>;
+</span></span></code></pre></div><h3 id="属性的查看">
+  属性的查看
+  <a class="anchor" href="#%e5%b1%9e%e6%80%a7%e7%9a%84%e6%9f%a5%e7%9c%8b">#</a>
+</h3>
+<p>查看一个对象本身的所有属性，可以使用<code>Object.keys</code>方法。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">obj</span> <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">key1</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">key2</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Object.<span style="color:#a6e22e">keys</span>(<span style="color:#a6e22e">obj</span>);
+</span></span></code></pre></div><h3 id="属性的删除">
+  属性的删除
+  <a class="anchor" href="#%e5%b1%9e%e6%80%a7%e7%9a%84%e5%88%a0%e9%99%a4">#</a>
+</h3>
+<p><code>delete</code>命令用于删除对象的属性，删除成功后返回<code>true</code>。</p>
+<p>删除一个不存在的属性，<code>delete</code>不报错，而且返回<code>true</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">obj</span> <span style="color:#f92672">=</span> { <span style="color:#a6e22e">p</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span> };
+</span></span><span style="display:flex;"><span>Object.<span style="color:#a6e22e">keys</span>(<span style="color:#a6e22e">obj</span>) <span style="color:#75715e">// [&#34;p&#34;]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">delete</span> <span style="color:#a6e22e">obj</span>.<span style="color:#a6e22e">p</span> <span style="color:#75715e">// true
+</span></span></span></code></pre></div><h3 id="属性是否存在in-运算符">
+  属性是否存在：in 运算符
+  <a class="anchor" href="#%e5%b1%9e%e6%80%a7%e6%98%af%e5%90%a6%e5%ad%98%e5%9c%a8in-%e8%bf%90%e7%ae%97%e7%ac%a6">#</a>
+</h3>
+<p><code>in</code>运算符用于检查对象是否包含某个属性。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">obj</span> <span style="color:#f92672">=</span> { <span style="color:#a6e22e">p</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span> };
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;p&#39;</span> <span style="color:#66d9ef">in</span> <span style="color:#a6e22e">obj</span> <span style="color:#75715e">// true
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#e6db74">&#39;toString&#39;</span> <span style="color:#66d9ef">in</span> <span style="color:#a6e22e">obj</span> <span style="color:#75715e">// true
+</span></span></span></code></pre></div><h3 id="属性的遍历forin-循环">
+  属性的遍历：for&hellip;in 循环
+  <a class="anchor" href="#%e5%b1%9e%e6%80%a7%e7%9a%84%e9%81%8d%e5%8e%86forin-%e5%be%aa%e7%8e%af">#</a>
+</h3>
+<p><code>for...in</code>循环用来遍历一个对象的全部属性。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">obj</span> <span style="color:#f92672">=</span> {<span style="color:#a6e22e">a</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span>, <span style="color:#a6e22e">b</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">2</span>, <span style="color:#a6e22e">c</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">3</span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">i</span> <span style="color:#66d9ef">in</span> <span style="color:#a6e22e">obj</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#39;键名：&#39;</span>, <span style="color:#a6e22e">i</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#39;键值：&#39;</span>, <span style="color:#a6e22e">obj</span>[<span style="color:#a6e22e">i</span>]);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><code>for...in</code>循环有两个使用注意点。</p>
+<ul>
+<li>它遍历的是对象所有可遍历（enumerable）的属性，会跳过不可遍历的属性。</li>
+<li>它不仅遍历对象自身的属性，还遍历继承的属性。</li>
+</ul>
+<h2 id="函数">
+  函数
+  <a class="anchor" href="#%e5%87%bd%e6%95%b0">#</a>
+</h2>
+<h3 id="function">
+  function
+  <a class="anchor" href="#function">#</a>
+</h3>
+<p><code>function</code>命令声明的代码区块，就是一个函数。<code>function</code>命令后面是函数名，函数名后面是一对圆括号，里面是传入函数的参数。函数体放在大括号里面。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">print</span>(<span style="color:#a6e22e">s</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#a6e22e">s</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="函数表达式">
+  函数表达式
+  <a class="anchor" href="#%e5%87%bd%e6%95%b0%e8%a1%a8%e8%be%be%e5%bc%8f">#</a>
+</h3>
+<p>除了用<code>function</code>命令声明函数，还可以采用变量赋值的写法。</p>
+<pre tabindex="0"><code>var print = function(s) {
+  console.log(s);
+};
+</code></pre><h3 id="name属性">
+  name属性
+  <a class="anchor" href="#name%e5%b1%9e%e6%80%a7">#</a>
+</h3>
+<p>函数的<code>name</code>属性返回函数的名字。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">f1</span>() {}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">f1</span>.<span style="color:#a6e22e">name</span> <span style="color:#75715e">// &#34;f1&#34;
+</span></span></span></code></pre></div><h2 id="数组">
+  数组
+  <a class="anchor" href="#%e6%95%b0%e7%bb%84">#</a>
+</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">arr</span> <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;a&#39;</span>, <span style="color:#e6db74">&#39;b&#39;</span>, <span style="color:#e6db74">&#39;c&#39;</span>];
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//除了在定义时赋值，数组也可以先定义后赋值。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//任何类型的数据，都可以放入数组。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">arr</span> <span style="color:#f92672">=</span> [];
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">arr</span>[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;a&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">arr</span>[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> [<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>];
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">arr</span>[<span style="color:#ae81ff">2</span>] <span style="color:#f92672">=</span> {<span style="color:#a6e22e">a</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span>};
+</span></span></code></pre></div><p>数组属于一种特殊的对象。<code>typeof</code>运算符会返回数组的类型是<code>object</code>。</p>
+<p><code>Object.keys</code>方法返回数组的所有键名。可以看到数组的键名就是整数0、1、2。</p>
+<p>JavaScript 语言规定，对象的键名一律为字符串，所以，数组的键名其实也是字符串。</p>
+<h3 id="length-属性">
+  length 属性
+  <a class="anchor" href="#length-%e5%b1%9e%e6%80%a7">#</a>
+</h3>
+<p>数组的<code>length</code>属性，返回数组的成员数量。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>[<span style="color:#e6db74">&#39;a&#39;</span>, <span style="color:#e6db74">&#39;b&#39;</span>, <span style="color:#e6db74">&#39;c&#39;</span>].<span style="color:#a6e22e">length</span> <span style="color:#75715e">// 3
+</span></span></span></code></pre></div><h3 id="forin-循环">
+  for&hellip;in 循环
+  <a class="anchor" href="#forin-%e5%be%aa%e7%8e%af">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">=</span> [<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>];
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">i</span> <span style="color:#66d9ef">in</span> <span style="color:#a6e22e">a</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">i</span>]);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

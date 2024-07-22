@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>密码学起步 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>密码学起步</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/%E5%AF%86%E7%A0%81%E5%AD%A6/%E5%AF%86%E7%A0%81%E5%AD%A6%E8%B5%B7%E6%AD%A5/">密码学起步</a>
+  </h1>
+  
+  <h5>2021-08-25</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/">信息安全</a>
+  </div>
+  
+
+
+
+<ul>
+<li>
+<p>信息安全面临的威胁：</p>
+<ul>
+<li>机密性：秘密被泄露</li>
+<li>完整性：信息被篡改</li>
+<li>认证：伪装成发送者</li>
+<li>不可否认性：事后否认自己没做</li>
+</ul>
+</li>
+<li>
+<p>密码的常识：</p>
+<ul>
+<li>不要使用保密的密码算法</li>
+<li>使用低强度的密码比不进行任何加密更危险</li>
+<li>任何密码总有一天都会被破解</li>
+<li>密码只是信息安全的一部分</li>
+</ul>
+</li>
+<li>
+<p>报文的最初形式称为<strong>明文</strong></p>
+</li>
+<li>
+<p>使用<strong>加密算法</strong>加密明文，生成的加密报文称为<strong>密文</strong>，加密算法往往是已知的。</p>
+</li>
+<li>
+<p><strong>密钥</strong>K<sub>A</sub>是一串数字或者字符，加密算法以密钥和明文报文m为输入，生成的密文为输出。用K<sub>A</sub>(m)表示。</p>
+</li>
+<li>
+<p>解密算法使用密钥K<sub>B</sub>和密文作为输入，通过计算K<sub>B</sub>(K<sub>A</sub>(m))得到m。</p>
+</li>
+<li>
+<p><strong>对称密码</strong>（symmetric cryptography）是指在加密和解密时使用同一密钥的方式。</p>
+</li>
+<li>
+<p><strong>公钥密码</strong>（pulbic-key cryptography）是指在加密和解密时使用不同密钥的方式。又称为非对称密码（asymmetric cryptography）。</p>
+</li>
+<li>
+<p>混合密码系统（hybrid cryptosystem）是将对称密钥和公钥密码结合起来的密码方式。</p>
+</li>
+<li>
+<p><strong>单向散列函数</strong>（one-way hash function）是一种保证完整性的密码技术。</p>
+</li>
+<li>
+<p><strong>消息认证码</strong>（message authentication code）是一种能够保证消息完整性和提供认证的密码技术。</p>
+</li>
+<li>
+<p><strong>数字签名</strong>（digital signature）是一种能确保完整性、提供认证并防止否认的密码技术。</p>
+</li>
+<li>
+<p><strong>伪随机数生成器</strong>（Pseudo Random Number Generator，PRNG）是一种能够模拟产生随机数列的算法，随机数承担着密钥生成的重要职责，在web中进行SSL/TLS通信时，会生成一个仅用于当前通信的临时密钥，这个密钥是基于伪随机数器生成的。</p>
+</li>
+</ul>
+<h4 id="凯撒密码">
+  凯撒密码
+  <a class="anchor" href="#%e5%87%af%e6%92%92%e5%af%86%e7%a0%81">#</a>
+</h4>
+<ul>
+<li>将明文报文中的每个字母用字母表中该字母后第k个字母进行替换，允许回绕。</li>
+<li>密钥空间（keyspace）是指能够使用的“所有密钥的集合”，所有可以使用的密钥的总数越大，密钥空间越大，凯撒密码的密钥空间的大小是25。</li>
+<li>很容易进行暴力破解。</li>
+</ul>
+<h4 id="简单替换密码">
+  简单替换密码
+  <a class="anchor" href="#%e7%ae%80%e5%8d%95%e6%9b%bf%e6%8d%a2%e5%af%86%e7%a0%81">#</a>
+</h4>
+<ul>
+<li>将字母表中的26个字母，分别将这26个字母本身建立一对一对应关系（替换表）。加密过程是依次将明文中的每一个字母按照替换表替换成另一个字母。</li>
+<li>很难通过暴力破解，因为它的密钥总数是26x25x24&hellip;x2x1。</li>
+<li>通过频率分析，就能破解。其利用明文中的字母出现的频率和密文中的字母出现的频率一致的特性。</li>
+</ul></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

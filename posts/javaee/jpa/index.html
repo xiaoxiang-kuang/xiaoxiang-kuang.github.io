@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>jpa | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#jpa方法支持的关键字">jpa方法支持的关键字</a></li>
+            <li><a href="#ddl-auto">ddl-auto</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>jpa</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#jpa方法支持的关键字">jpa方法支持的关键字</a></li>
+            <li><a href="#ddl-auto">ddl-auto</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/javaee/jpa/">jpa</a>
+  </h1>
+  
+  <h5>2021-08-18</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">java</a>
+  </div>
+  
+
+
+
+<h3 id="jpa方法支持的关键字">
+  jpa方法支持的关键字
+  <a class="anchor" href="#jpa%e6%96%b9%e6%b3%95%e6%94%af%e6%8c%81%e7%9a%84%e5%85%b3%e9%94%ae%e5%ad%97">#</a>
+</h3>
+<div style="overflow:auto;">
+<table>
+<thead>
+<tr>
+<th>关键字</th>
+<th>例子</th>
+<th>jpql</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Distinct</td>
+<td>findDistinctByLastnameAndFirstname</td>
+<td>select distinct &hellip; where x.lastname=?1 and x.firstname=?2</td>
+</tr>
+<tr>
+<td>And</td>
+<td>findByFirstnameAndLastname</td>
+<td>&hellip; where x.firstname=?1 and x.lastname=?2</td>
+</tr>
+<tr>
+<td>Or</td>
+<td>findByFirstNameOrLastname</td>
+<td>&hellip; where x.firstname=?1 and x.lastname=?2</td>
+</tr>
+<tr>
+<td>Is,Equals</td>
+<td>findByFirstname,findByFirstnameIs,findByFirstnameEquals</td>
+<td>&hellip; where x.firstname=?1</td>
+</tr>
+<tr>
+<td>Between</td>
+<td>findByStartDateBetween</td>
+<td>&hellip; where x.startDate between ?1 and ?2</td>
+</tr>
+<tr>
+<td>LessThan</td>
+<td>findByAgeLessThan</td>
+<td>&hellip; where x.age &lt;?1</td>
+</tr>
+<tr>
+<td>LessThanEqual</td>
+<td>findByAgeLessThanEqual</td>
+<td>&hellip; where x.age?=?1</td>
+</tr>
+<tr>
+<td>GreaterThan</td>
+<td>findByAgeGreaterThan</td>
+<td>&hellip; where x.age&gt;?1</td>
+</tr>
+<tr>
+<td>After</td>
+<td>findByStartDateAfter</td>
+<td>&hellip; where x.startDate &gt;?1</td>
+</tr>
+<tr>
+<td>Before</td>
+<td>findByStartDateBefore</td>
+<td>&hellip; where x.startDate&lt;?1</td>
+</tr>
+<tr>
+<td>IsNull,Null</td>
+<td>findByAge(Is)Null</td>
+<td>&hellip; where x.age is null</td>
+</tr>
+<tr>
+<td>IsNotNull,NotNull</td>
+<td>findByAge(Is)NotNull</td>
+<td>&hellip; where x.age not null</td>
+</tr>
+<tr>
+<td>Like</td>
+<td>findByFirstnameLike</td>
+<td>&hellip; where x.firstname like?1</td>
+</tr>
+<tr>
+<td>NotLike</td>
+<td>findByFirstnameNotLike</td>
+<td>&hellip; where x.firstname not like ?1</td>
+</tr>
+<tr>
+<td>StartingWith</td>
+<td>findByFirstnameStartingWith</td>
+<td>… where x.firstname like ?1` (参数后面加%）</td>
+</tr>
+<tr>
+<td>EndingWith</td>
+<td>findByFirstnameEndingWith</td>
+<td><code>… where x.firstname like ?1</code> （参数前面加%）</td>
+</tr>
+<tr>
+<td>Containing</td>
+<td>findByFirstnameContaining</td>
+<td><code>… where x.firstname like ?1</code> （参数前后加%）</td>
+</tr>
+<tr>
+<td>OrderBy</td>
+<td>findByAgeOrderByLastnameDesc</td>
+<td>… where x.age = ?1 order by x.lastname desc</td>
+</tr>
+<tr>
+<td>Not</td>
+<td>findByLastnameNot</td>
+<td>… where x.lastname &lt;&gt; ?1</td>
+</tr>
+<tr>
+<td>In</td>
+<td>findByAgeIn(Collection//&lt;Age//&gt; ages)</td>
+<td>… where x.age in ?1</td>
+</tr>
+<tr>
+<td>NotIn</td>
+<td>findByAgeNotIn(Collection<Age> ages)</td>
+<td>… where x.age not in ?1</td>
+</tr>
+<tr>
+<td>True</td>
+<td>findByActiveTrue</td>
+<td>… where x.active = true</td>
+</tr>
+<tr>
+<td>False</td>
+<td>findByActiveFalse()</td>
+<td>… where x.active = false</td>
+</tr>
+<tr>
+<td>IgnoreCase</td>
+<td>findByFirstnameIgnoreCase</td>
+<td>… where UPPER(x.firstname) = UPPER(?1)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="ddl-auto">
+  ddl-auto
+  <a class="anchor" href="#ddl-auto">#</a>
+</h3>
+<ul>
+<li>none：禁用ddl；</li>
+<li>validate：验证表结构，不对数据库有任何修改；</li>
+<li>update：如果启动时表格式不一样则更新表，原有数据保留</li>
+<li>create：启动时删除数据库中的表，然后创建；</li>
+<li>create-drop：启动时删除数据库中的表，然后创建，退出时删除数据表。</li>
+</ul></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

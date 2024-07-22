@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>信息安全 on 小象的blog</title>
+    <link>/tags/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/</link>
+    <description>Recent content in 信息安全 on 小象的blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Wed, 12 Oct 2022 20:32:32 +0800</lastBuildDate><atom:link href="/tags/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>PKI</title>
+      <link>/posts/%E5%AF%86%E7%A0%81%E5%AD%A6/PKI/</link>
+      <pubDate>Wed, 12 Oct 2022 20:32:32 +0800</pubDate>
+      
+      <guid>/posts/%E5%AF%86%E7%A0%81%E5%AD%A6/PKI/</guid>
+      <description>&lt;h2 id=&#34;pki概述&#34;&gt;
+  PKI概述
+  &lt;a class=&#34;anchor&#34; href=&#34;#pki%e6%a6%82%e8%bf%b0&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;PKI（public key infrastructure）公钥基础设施，指为了有效运用公钥而制定一系列规范和规格的总称。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;PKI组成：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;用户：使用证书的人。&lt;/li&gt;
+&lt;li&gt;认证机构：颁发证书。&lt;/li&gt;
+&lt;li&gt;仓储：保存证书。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/PKI/1.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;证书：全称是公钥证书，包括此人的一些信息、此人的公钥，并由认证机对公钥施加的数字签名。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;数字签名（假设Alice要发送一条消息给Bob）：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Alice用单向散列函数计算消息的散列值。&lt;/li&gt;
+&lt;li&gt;Alice用自己的私钥对散列值进行加密。&lt;/li&gt;
+&lt;li&gt;Alice将消息和签名发送给Bob。&lt;/li&gt;
+&lt;li&gt;Bob用Alice的公钥对接收到的签名进行解密。&lt;/li&gt;
+&lt;li&gt;Bob将签名解密后得到的散列值和Alice直接发送的消息的散列值进行对比。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/PKI/3.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;CA（Certification Authority）认证机构，管理证书，包括如下功能：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;生成密钥对（也可以由用户生成）&lt;/li&gt;
+&lt;li&gt;对个人身份进行认证&lt;/li&gt;
+&lt;li&gt;生成并颁发证书&lt;/li&gt;
+&lt;li&gt;作废证书&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;RA（Registration Authority）注册机构，生成密钥对和个人身份认证可以交给RA来做，这样CA就只用颁发证书。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;仓库是保存证书的数据库，PKI用户需要的时候从中获取证书。仓库也叫证书目录。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;认证机构的工作&#34;&gt;
+  认证机构的工作
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e8%ae%a4%e8%af%81%e6%9c%ba%e6%9e%84%e7%9a%84%e5%b7%a5%e4%bd%9c&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;在认证机构生成证书密钥对的情况下，认证机构需要将私钥发送给用户。&lt;/li&gt;
+&lt;li&gt;在用户自行生成密钥对的情况下，用户会请求认证机构生成证书。认证机构会用私钥进行数字签名来生成证书，证书的格式由X.509定义。&lt;/li&gt;
+&lt;li&gt;如果认证机构要作废证书，即使从仓库中删除证书也无法作废，因为用户会保存证书的副本，而认证机构又不能入侵用户电脑删除副本。
+&lt;ul&gt;
+&lt;li&gt;如果需要作废证书，认证机构需要制作一张证书作废清单（Certificate Revocation List），简称CRL。&lt;/li&gt;
+&lt;li&gt;PKI用户需要从认证机构获取最新的CRL，查询证书是否已经作废。&lt;/li&gt;
+&lt;li&gt;假如我由Bob的证书，该证书有合法的认证机构签名，而且也在有效期内，仅凭这些不能说明该证书是有效的，还需要查询认证机构最新的CRL，来确认该证书是否有效（但很多软件并没有及时更新CRL）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;证书的层级关系&#34;&gt;
+  证书的层级关系
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e8%af%81%e4%b9%a6%e7%9a%84%e5%b1%82%e7%ba%a7%e5%85%b3%e7%b3%bb&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;认证机构使用私钥对用户的公钥进行数字签名，并生成了证书。用户需要使用认证机构的公钥，对数字签名进行验证。用来验证数字签名的认证机构的公钥的合法性可以由其他的认证机构施加以数字签名，从而形成了一个证书链。证书链的终点是根CA。根机构一般给自己颁发证书，叫做自签名（self-signature）。&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/PKI/2.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;浏览器可以保存根机构的证书。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;tls流程&#34;&gt;
+  TLS流程
+  &lt;a class=&#34;anchor&#34; href=&#34;#tls%e6%b5%81%e7%a8%8b&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/PKI/4.png&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>对称密钥</title>
+      <link>/posts/%E5%AF%86%E7%A0%81%E5%AD%A6/%E5%AF%B9%E7%A7%B0%E5%AF%86%E9%92%A5/</link>
+      <pubDate>Wed, 25 Aug 2021 12:00:39 +0000</pubDate>
+      
+      <guid>/posts/%E5%AF%86%E7%A0%81%E5%AD%A6/%E5%AF%B9%E7%A7%B0%E5%AF%86%E9%92%A5/</guid>
+      <description>&lt;p&gt;用相同的密钥进行加密和解密&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;异或（XOR）（exclusive or）⊕&lt;/li&gt;
+&lt;li&gt;如果将01001100记为A，10101010记为B，A于B的xor运算结果为（不进位）11100110。将结果在xorB，又得到了A。只选择一个合适的B，仅仅使用XOR就能得到一个高强度的密文。&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>密码学起步</title>
+      <link>/posts/%E5%AF%86%E7%A0%81%E5%AD%A6/%E5%AF%86%E7%A0%81%E5%AD%A6%E8%B5%B7%E6%AD%A5/</link>
+      <pubDate>Wed, 25 Aug 2021 10:58:28 +0000</pubDate>
+      
+      <guid>/posts/%E5%AF%86%E7%A0%81%E5%AD%A6/%E5%AF%86%E7%A0%81%E5%AD%A6%E8%B5%B7%E6%AD%A5/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;信息安全面临的威胁：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;机密性：秘密被泄露&lt;/li&gt;
+&lt;li&gt;完整性：信息被篡改&lt;/li&gt;
+&lt;li&gt;认证：伪装成发送者&lt;/li&gt;
+&lt;li&gt;不可否认性：事后否认自己没做&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;密码的常识：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;不要使用保密的密码算法&lt;/li&gt;
+&lt;li&gt;使用低强度的密码比不进行任何加密更危险&lt;/li&gt;
+&lt;li&gt;任何密码总有一天都会被破解&lt;/li&gt;
+&lt;li&gt;密码只是信息安全的一部分&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;报文的最初形式称为&lt;strong&gt;明文&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;使用&lt;strong&gt;加密算法&lt;/strong&gt;加密明文，生成的加密报文称为&lt;strong&gt;密文&lt;/strong&gt;，加密算法往往是已知的。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;密钥&lt;/strong&gt;K&lt;sub&gt;A&lt;/sub&gt;是一串数字或者字符，加密算法以密钥和明文报文m为输入，生成的密文为输出。用K&lt;sub&gt;A&lt;/sub&gt;(m)表示。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;解密算法使用密钥K&lt;sub&gt;B&lt;/sub&gt;和密文作为输入，通过计算K&lt;sub&gt;B&lt;/sub&gt;(K&lt;sub&gt;A&lt;/sub&gt;(m))得到m。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;对称密码&lt;/strong&gt;（symmetric cryptography）是指在加密和解密时使用同一密钥的方式。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;公钥密码&lt;/strong&gt;（pulbic-key cryptography）是指在加密和解密时使用不同密钥的方式。又称为非对称密码（asymmetric cryptography）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;混合密码系统（hybrid cryptosystem）是将对称密钥和公钥密码结合起来的密码方式。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;单向散列函数&lt;/strong&gt;（one-way hash function）是一种保证完整性的密码技术。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;消息认证码&lt;/strong&gt;（message authentication code）是一种能够保证消息完整性和提供认证的密码技术。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;数字签名&lt;/strong&gt;（digital signature）是一种能确保完整性、提供认证并防止否认的密码技术。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;伪随机数生成器&lt;/strong&gt;（Pseudo Random Number Generator，PRNG）是一种能够模拟产生随机数列的算法，随机数承担着密钥生成的重要职责，在web中进行SSL/TLS通信时，会生成一个仅用于当前通信的临时密钥，这个密钥是基于伪随机数器生成的。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;凯撒密码&#34;&gt;
+  凯撒密码
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%87%af%e6%92%92%e5%af%86%e7%a0%81&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;将明文报文中的每个字母用字母表中该字母后第k个字母进行替换，允许回绕。&lt;/li&gt;
+&lt;li&gt;密钥空间（keyspace）是指能够使用的“所有密钥的集合”，所有可以使用的密钥的总数越大，密钥空间越大，凯撒密码的密钥空间的大小是25。&lt;/li&gt;
+&lt;li&gt;很容易进行暴力破解。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;简单替换密码&#34;&gt;
+  简单替换密码
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e7%ae%80%e5%8d%95%e6%9b%bf%e6%8d%a2%e5%af%86%e7%a0%81&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;将字母表中的26个字母，分别将这26个字母本身建立一对一对应关系（替换表）。加密过程是依次将明文中的每一个字母按照替换表替换成另一个字母。&lt;/li&gt;
+&lt;li&gt;很难通过暴力破解，因为它的密钥总数是26x25x24&amp;hellip;x2x1。&lt;/li&gt;
+&lt;li&gt;通过频率分析，就能破解。其利用明文中的字母出现的频率和密文中的字母出现的频率一致的特性。&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>网络安全</title>
+      <link>/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/</link>
+      <pubDate>Sun, 01 Aug 2021 11:39:10 +0000</pubDate>
+      
+      <guid>/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/</guid>
+      <description>&lt;p&gt;安全通信需要具有下列的特性&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;机密性：仅有发送方和希望的接收方能够理解传输报文的内容。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;报文完整性：确保其通信内容在传输的过程中未被改变。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;端点鉴别：发送方和接收方都能证实通信过程所涉及的另一方。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;运行安全性：确保网络安全。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;密码学&#34;&gt;
+  密码学
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%af%86%e7%a0%81%e5%ad%a6&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;报文的最初形式称为&lt;strong&gt;明文&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;使用&lt;strong&gt;加密算法&lt;/strong&gt;加密明文，生成的加密报文称为&lt;strong&gt;密文&lt;/strong&gt;，加密算法往往是已知的。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;密钥&lt;/strong&gt;K&lt;sub&gt;A&lt;/sub&gt;是一串数字或者字符，加密算法以密钥和明文报文m为输入，生成的密文为输出。用K&lt;sub&gt;A&lt;/sub&gt;(m)表示。&lt;/p&gt;
+&lt;p&gt;解密算法使用密钥K&lt;sub&gt;B&lt;/sub&gt;和密文作为输入，通过计算K&lt;sub&gt;B&lt;/sub&gt;(K&lt;sub&gt;A&lt;/sub&gt;(m))得到m&lt;/p&gt;
+&lt;h3 id=&#34;对称密钥密码体制&#34;&gt;
+  对称密钥密码体制
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%af%b9%e7%a7%b0%e5%af%86%e9%92%a5%e5%af%86%e7%a0%81%e4%bd%93%e5%88%b6&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;凯撒密码
+&lt;ul&gt;
+&lt;li&gt;将明文报文中的每个字母用字母表中该字母后第k个字母进行替换，允许回绕。&lt;/li&gt;
+&lt;li&gt;缺点：密钥值只有25个&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;单码代替密码
+&lt;ul&gt;
+&lt;li&gt;使用字母表中的一个字母替换另一个字母。需要给定一个替换表，每个字母都有唯一一个的替换字母。&lt;/li&gt;
+&lt;li&gt;缺点：由于是定向替换，当对密文进行统计分析，并且常见的两三个字母的组合（in、on、the）往往是一起出现，而且如果入侵者知道该密文具有某些可能的东西，破解该密文就不那么困难了。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;多码代替密码
+&lt;ul&gt;
+&lt;li&gt;使用多个单码来替换明文的字母，即从多个字母中选一个代替明文中的一个字母，如何选怎呢？需要指定一个次序，比如第一次选择多个字母的第一个，第二次选择多个字母的第二个，第三次选择多个字母的第二个（122），然后按照这个顺序循环多次，直到完成加密。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;块密码：要加密的报文被处理为k比特的块。例如。如果k=64，字报文被划分为多个64比特的块，每块被独立加密。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;密码块链接&lt;/strong&gt;：使用块密码时，如果有多个明文块可能是相同的，将会产生相同的密文，解决方式是：发送方为第i个块生成一个随机的k比特数，通过将该数与第i个明文块异或，再将结果加密。该方法有一个问题，就是传输的时候需要两倍的带宽，块密码使用了一种称为密码块链接（Cipher Block Chaining，CBC）的技术，基本思想是只传输一个随机值，剩余的让发送方和接收方计算。流程如下：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;发送方生成一个随机的k比特串，称为初始向量c(0)，发送方以明文方式发送。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;对于第一个块，发送方计算m(1)⊕c(0)，然后加密得到c(1)=K&lt;sub&gt;s&lt;/sub&gt;(m(1)⊕c(0))。发送方向接收方发送加密块c(1)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;对于第i个块，发送方根据c(i)=K&lt;sub&gt;s&lt;/sub&gt;(m(1)⊕c(i-1))向接收方发送第i个密文块。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;公开密钥加密&#34;&gt;
+  公开密钥加密
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%85%ac%e5%bc%80%e5%af%86%e9%92%a5%e5%8a%a0%e5%af%86&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;世界上任何人都都可以得到&lt;strong&gt;公钥&lt;/strong&gt;（public key）K&lt;sub&gt;B&lt;/sub&gt;&lt;sup&gt;+&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;只有主人知道的&lt;strong&gt;私钥&lt;/strong&gt;（private key）K&lt;sub&gt;B&lt;/sub&gt;&lt;sup&gt;-&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;假如A要和B通信，A首先要取得B的公钥，然后用这个公钥和一个众所周知的加密算法加密他要传给B的报文m，即K&lt;sub&gt;B&lt;/sub&gt;&lt;sup&gt;+&lt;/sup&gt;(m)，B接到A的加密报文后，用其私钥和一个众所周知的解密算法解密报文，即计算K&lt;sub&gt;B&lt;/sub&gt;&lt;sup&gt;-&lt;/sup&gt;(K&lt;sub&gt;B&lt;/sub&gt;&lt;sup&gt;+&lt;/sup&gt;(m))，这样就得到了最初的明文m。此外还有K&lt;sub&gt;B&lt;/sub&gt;&lt;sup&gt;-&lt;/sup&gt;(K&lt;sub&gt;B&lt;/sub&gt;&lt;sup&gt;+&lt;/sup&gt;(m)) = K&lt;sub&gt;B&lt;/sub&gt;&lt;sup&gt;+&lt;/sup&gt;(K&lt;sub&gt;B&lt;/sub&gt;&lt;sup&gt;-&lt;/sup&gt;(m))=m。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;RSA
+&lt;ul&gt;
+&lt;li&gt;生成RSA的公钥和私钥
+&lt;ol&gt;
+&lt;li&gt;选择两个大素数p和q，p和q越大，破解RSA越困难，执行加密和解密所用的时间也越长。推荐p和q的乘积为1024比特的数量级&lt;/li&gt;
+&lt;li&gt;计算n=pq，z=(p-1)(q-1)&lt;/li&gt;
+&lt;li&gt;选择一个小于n的数e，使得e和z没有公因数，e用来加密&lt;/li&gt;
+&lt;li&gt;求得一个数d使得ed-1可以被z整除，d将用来解密（ed mod z = 1）&lt;/li&gt;
+&lt;li&gt;外界可用的公钥K&lt;sub&gt;B&lt;/sub&gt;&lt;sup&gt;+&lt;/sup&gt;是一对数（n，e），私钥K&lt;sub&gt;B&lt;/sub&gt;&lt;sup&gt;-&lt;/sup&gt;是一对数（n，d）&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;加密和解密过程
+&lt;ol&gt;
+&lt;li&gt;A给B发送一个由整数m表示的比特组合，m&amp;lt;n。加密后的值c=m&lt;sup&gt;e&lt;/sup&gt; mod n，将密文c发送给B&lt;/li&gt;
+&lt;li&gt;B通过计算获得m，m=c&lt;sup&gt;d&lt;/sup&gt; mod n&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;会话密钥：RSA的指数运算极其耗时，在实际应用中，RSA通常与对称密钥结合使用。首先，A选择一个用于加密数据本身的密钥，这个密钥有时候称为会话密钥K&lt;sub&gt;s&lt;/sub&gt;。A通过公钥将K&lt;sub&gt;s&lt;/sub&gt;传输给B，B通过私钥解密后，就获取了K&lt;sub&gt;s&lt;/sub&gt;，然后使用K&lt;sub&gt;s&lt;/sub&gt;来传输数据。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;报文完整性和数字签名&#34;&gt;
+  报文完整性和数字签名
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%8a%a5%e6%96%87%e5%ae%8c%e6%95%b4%e6%80%a7%e5%92%8c%e6%95%b0%e5%ad%97%e7%ad%be%e5%90%8d&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;密码散列函数&#34;&gt;
+  密码散列函数
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%af%86%e7%a0%81%e6%95%a3%e5%88%97%e5%87%bd%e6%95%b0&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;密码散列函数的性质：找到任意两个不同的报文x和y使得H(x)=H(y)，在计算上是不可能的。&lt;/p&gt;
+&lt;p&gt;算法：MD5(128位)、SHA-1(160位)&lt;/p&gt;
+&lt;p&gt;为了执行报文完整性，A和B需要共享秘密s，这个共享的秘密是个比特串，被称为&lt;strong&gt;鉴别密钥&lt;/strong&gt;。使用这个共享秘密，报文完整性能够执行如下：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;A生成报文m，用s级联m生成m+s，并计算散列H(m+s)。H(m+s)被称为&lt;strong&gt;报文鉴别码&lt;/strong&gt;(Message Authentication Code,MAC)。&lt;/li&gt;
+&lt;li&gt;A将MAC附加到报文m上，生成扩展报文(m,H(m+s))，将该扩展报文发送给B。&lt;/li&gt;
+&lt;li&gt;B收到扩展报文(m,h)，由于知道s，计算出报文鉴别码H(m+s)，如果其等于h，则证明一切正常。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;数字签名&#34;&gt;
+  数字签名
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%95%b0%e5%ad%97%e7%ad%be%e5%90%8d&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;数字签名是B先使用散列函数对报文生成散列，使用私钥对散列进行加密（数字签名）。&lt;/p&gt;
+&lt;p&gt;A获取到了B的明文报文和已经数字签名的报文摘要，先使用B的公钥解密数字签名，得到一个散列结果，再使用散列函数获取报文的散列，如果这两个散列匹配，则可以确信报文的完整性和发送方。&lt;/p&gt;
+&lt;h3 id=&#34;公钥认证&#34;&gt;
+  公钥认证
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%85%ac%e9%92%a5%e8%ae%a4%e8%af%81&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;证实一个公钥属于某个特定的实体。&lt;/p&gt;
+&lt;p&gt;将公钥与特定的实体绑定通常是由认证中心（Certification Authority，CA）完成的。CA证实了一个实体的真实身份；一旦CA验证了某个实体的身份，这个CA会生成一个将其身份和实体的公钥绑定起来的证书。&lt;/p&gt;
+&lt;h2 id=&#34;使tcp连接安全ssl&#34;&gt;
+  使TCP连接安全：SSL
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e4%bd%bftcp%e8%bf%9e%e6%8e%a5%e5%ae%89%e5%85%a8ssl&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;SSL：Secure Socket Layer，安全套接口协议&lt;/p&gt;
+&lt;p&gt;TLS：Transport Layer Security，TLS 运输层安全性，是SSL版本3的一个稍加修改的版本&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

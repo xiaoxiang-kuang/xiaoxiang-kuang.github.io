@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>python起步 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#python基础">python基础</a>
+          <ul>
+            <li><a href="#数据类型和变量">数据类型和变量</a></li>
+            <li><a href="#字符串和编码">字符串和编码</a></li>
+            <li><a href="#结构">结构</a></li>
+            <li><a href="#函数">函数</a></li>
+          </ul>
+        </li>
+        <li><a href="#其他">其他</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>python起步</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#python基础">python基础</a>
+          <ul>
+            <li><a href="#数据类型和变量">数据类型和变量</a></li>
+            <li><a href="#字符串和编码">字符串和编码</a></li>
+            <li><a href="#结构">结构</a></li>
+            <li><a href="#函数">函数</a></li>
+          </ul>
+        </li>
+        <li><a href="#其他">其他</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/python/python%E8%B5%B7%E6%AD%A5/">python起步</a>
+  </h1>
+  
+  <h5>2021-03-11</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/python/">python</a>
+  </div>
+  
+
+
+
+<h2 id="python基础">
+  python基础
+  <a class="anchor" href="#python%e5%9f%ba%e7%a1%80">#</a>
+</h2>
+<h3 id="数据类型和变量">
+  数据类型和变量
+  <a class="anchor" href="#%e6%95%b0%e6%8d%ae%e7%b1%bb%e5%9e%8b%e5%92%8c%e5%8f%98%e9%87%8f">#</a>
+</h3>
+<ul>
+<li>整数：可以是任意大小</li>
+<li>浮点数：除了小数外还可以用科学计数法：1.23e9</li>
+<li>字符串：以<code>&quot;</code>或<code>'</code>括起来的文本，python允许使用<code>r''</code>表示引号内部的字符串默认不转义，python允许用<code>'''...'''</code>的格式表示多行内容</li>
+<li>布尔值：<code>True</code>或<code>False</code>，可以进行<code>and</code> <code>or</code> <code>not</code>运算</li>
+<li>空值：<code>None</code>，不等于0</li>
+<li>列表list：如<code>classmate=['xiaoming','lihua',123,True]</code>，list是一个可变的有序表。
+<ul>
+<li>可以使用append函数追加到末尾</li>
+<li>可以使用insert（i，参数）插入到指定位置</li>
+<li>删除末尾元素使用pop（），删除指定位置元素用pop（i）</li>
+</ul>
+</li>
+<li>元组tuple：<code>classmate=('xiaoming','lihua',123,True)</code>，一旦初始化就不能修改
+<ul>
+<li>当只有一个元素要这么定义：<code>classmate=('hel',)</code></li>
+</ul>
+</li>
+<li>字典dict：<code>d = {'Michael': 95, 'Bob': 75, 'Tracy': 85}</code>键值对
+<ul>
+<li>可以通过get(key)或d[key]获取值</li>
+<li>可以通过d[key]=xxx直接赋值</li>
+<li>可以通过pop(key)删除键值对</li>
+<li>可以通过in判断key是否存在</li>
+<li>key必须是不可变对象</li>
+</ul>
+</li>
+<li>set：要创建一个set，需要一个list作为输入集合，
+<ul>
+<li>set是一组key的集合，无序，不重复。</li>
+<li>add(xxx)可以向set里面加元素，remove(xxx)可以删除元素</li>
+</ul>
+</li>
+<li>变量：可以把任意类型数据赋值给同一个变量（不同类型也可以）</li>
+<li>常量：用全大写的变量名表示常量是一个习惯上的用法。</li>
+<li>除法：python中有两种除法，一种是<code>/</code>：计算结果是浮点数，一种是<code> //</code>：计算结果是整数（这种称为地板除），python还提供了余数运算：<code>%</code></li>
+</ul>
+<h3 id="字符串和编码">
+  字符串和编码
+  <a class="anchor" href="#%e5%ad%97%e7%ac%a6%e4%b8%b2%e5%92%8c%e7%bc%96%e7%a0%81">#</a>
+</h3>
+<ul>
+<li>在计算机内存中，统一使用unicode编码，当需要保存到硬盘或者传输的时候，就会转化为UTF-8编码</li>
+<li>用记事本编辑时，从文件中读取的UTF-8会被转化为Unicode字符到内存中</li>
+<li>python3字符串是以unicode编码的，可以通过<code>ord()</code>获取字符串的整数表示，<code>chr()</code>把编码转换为对应的字符</li>
+<li>当这么写时-&gt;<code>b'ABC'</code>表示bytes类型，每个字符只占一个字节。</li>
+<li>以Unicode表示的字符串通过ecnode()方法可以编码位指定的bytes，如<code>'中文'.encode('utf-8')</code></li>
+<li><code>len('xxx')</code>可以知道包含了几个字符。</li>
+</ul>
+<h3 id="结构">
+  结构
+  <a class="anchor" href="#%e7%bb%93%e6%9e%84">#</a>
+</h3>
+<h4 id="选择结构非0非空字符串非空list就表示true">
+  选择结构:非0，非空字符串、非空list就表示True
+  <a class="anchor" href="#%e9%80%89%e6%8b%a9%e7%bb%93%e6%9e%84%e9%9d%9e0%e9%9d%9e%e7%a9%ba%e5%ad%97%e7%ac%a6%e4%b8%b2%e9%9d%9e%e7%a9%balist%e5%b0%b1%e8%a1%a8%e7%a4%batrue">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>age <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> age <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">18</span>:
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#39;adult&#39;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">elif</span> age <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">6</span>:
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#39;teenager&#39;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#39;kid&#39;</span>)
+</span></span></code></pre></div><h4 id="循环结构">
+  循环结构
+  <a class="anchor" href="#%e5%be%aa%e7%8e%af%e7%bb%93%e6%9e%84">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>sum <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#0~100</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> x <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">101</span>):
+</span></span><span style="display:flex;"><span>    sum <span style="color:#f92672">=</span> sum <span style="color:#f92672">+</span> x
+</span></span><span style="display:flex;"><span>print(sum)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sum <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>n <span style="color:#f92672">=</span> <span style="color:#ae81ff">99</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">while</span> n <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>:
+</span></span><span style="display:flex;"><span>    sum <span style="color:#f92672">=</span> sum <span style="color:#f92672">+</span> n
+</span></span><span style="display:flex;"><span>    n <span style="color:#f92672">=</span> n <span style="color:#f92672">-</span> <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>print(sum)
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#break和continue也有</span>
+</span></span></code></pre></div><h3 id="函数">
+  函数
+  <a class="anchor" href="#%e5%87%bd%e6%95%b0">#</a>
+</h3>
+<ul>
+<li>python内置了很多函数，可以直接调用，如print、input、len、max、int、float、str、bool等</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">my_abs</span>(x):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> x <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">0</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> x
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#f92672">-</span>x
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#空函数，pass也可用在其他地方，如if里面</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">nop</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">pass</span>
+</span></span></code></pre></div><ul>
+<li>可以返回多个值，会转化成tuple</li>
+<li>函数参数中可以设置默认参数，必选参数必须放在默认参数前面</li>
+<li>可以不按顺序提供部分默认参数，但要把参数名写上</li>
+<li>定义可变参数是在参数前面增加一个*，如<code>def calc(*numbers)</code>
+<ul>
+<li>当已经有了list或tuple，要调用一个可变参数，可以<code>calc(*nums)</code></li>
+</ul>
+</li>
+<li>关键字参数：<code>def person(name, age, **kw):</code>会在函数内部自动组装成一个dict
+<ul>
+<li>可以传入多个键值对，也可以传入一个dict（<code>person('Jack', 24, **extra)</code>）</li>
+</ul>
+</li>
+<li>命名关键字参数：<code>def person(name, age, *, city, job):</code>
+<ul>
+<li>调用方式<code>person('Jack', 24, city='Beijing', job='Engineer')</code></li>
+<li>命名关键字参数必须传入参数名</li>
+</ul>
+</li>
+<li>上面这些都可以组合</li>
+</ul>
+<h2 id="其他">
+  其他
+  <a class="anchor" href="#%e5%85%b6%e4%bb%96">#</a>
+</h2>
+<ul>
+<li>切片：<code>L[:2]</code>切出下标为0和1的元素</li>
+<li>for in可用来迭代，判断是否可迭代可以用collections的Iterable类型判断。
+<ul>
+<li><code>isinstance('abc',Iterable)</code></li>
+</ul>
+</li>
+<li>range(1:10)可用来生成1到9</li>
+<li>列表生成器<code>[x*x for x in range(1,11) if x%2==0]</code></li>
+<li>赋值语句<code>a, b = b, a</code>是通过tuple实现的，相当于<code>t = (b, a) a = t[0] b = t[1]</code></li>
+<li>凡是可以作用于for循环的对象都是Iterable类型，凡是可作用于next()函数的对象都是Iterator类型</li>
+<li>函数也是一个对象，函数对象可以赋值给变量。</li>
+<li>任何代码的第一个字符串都被视为模块的文档注释，<code>__author__</code>变量可以把作者写进去</li>
+<li>导入模块<code>import sys</code>，sys的argv变量用list存储了命令行的所有参数，argv的第一个参数是py文件的名称</li>
+<li>类似<code>__xxx__</code>的变量是特殊变量，类似<code>_xxx_</code>和<code>_xxx</code>的变量是非公开变量（private）。</li>
+<li>命名类用UpperCamelCase（第一个字母大写，后面采用驼峰命名法），命名函数和方法采用lowercase_with_underscores（小写带下划线），</li>
+</ul></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>python面向对象 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#类的定义">类的定义</a></li>
+        <li><a href="#动态绑定">动态绑定</a></li>
+        <li><a href="#getter和setter">getter和setter</a></li>
+        <li><a href="#__iter__和__next__"><code>__iter__</code>和<code>__next__</code></a></li>
+        <li><a href="#__getattr__"><code>__getattr__</code></a></li>
+        <li><a href="#枚举">枚举</a></li>
+        <li><a href="#type和metaclass">type和metaclass</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>python面向对象</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#类的定义">类的定义</a></li>
+        <li><a href="#动态绑定">动态绑定</a></li>
+        <li><a href="#getter和setter">getter和setter</a></li>
+        <li><a href="#__iter__和__next__"><code>__iter__</code>和<code>__next__</code></a></li>
+        <li><a href="#__getattr__"><code>__getattr__</code></a></li>
+        <li><a href="#枚举">枚举</a></li>
+        <li><a href="#type和metaclass">type和metaclass</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/python/python%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/">python面向对象</a>
+  </h1>
+  
+  <h5>2021-03-14</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/python/">python</a>
+  </div>
+  
+
+
+
+<ul>
+<li>python中所有数据类型都可视为对象。</li>
+<li>所有的类都会继承object类。</li>
+<li>类中定义函数的第一个参数是self，调用时不用传递该参数。</li>
+<li>属性前面加<code>__</code>（两个下划线）就变成了一个私有属性。双下划线开头，双下划线结尾的是特殊变量，特殊变量是可以直接访问的，不是private变量。一个下划线开头的变量名是可以被外部访问的，但是按约定俗称的规定，请把它视为私有变量。</li>
+<li>双下划线开头的属性不能被外部访问是因为这个属性被改名字了。</li>
+<li>判断一个变量是否是某个类型可以用isinstance()判断，判断对象类型可以使用type方法。</li>
+<li>使用dir()可获得对象的所有属性和方法。</li>
+<li>自己写的类如果也想用len()方法的话，可以自己写一个<code>__len__</code>方法。实际上，当我们使用len()方法的时候，它会自动去调用该对象的<code>__len__()</code>方法。</li>
+<li><code>__str__</code>相当于java中的<code>toString</code>，还有一个<code>__repr__</code>是返回开发者看到的字符串。</li>
+<li><code>__getitem__</code>可按下标访问数据的项。</li>
+<li>任何类只要定义一个<code>__call__</code>方法，就可以对实例进行调用。</li>
+</ul>
+<h2 id="类的定义">
+  类的定义
+  <a class="anchor" href="#%e7%b1%bb%e7%9a%84%e5%ae%9a%e4%b9%89">#</a>
+</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Student</span>(object):
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#类属性</span>
+</span></span><span style="display:flex;"><span>    name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Student&#39;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __init__(self, name):
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#实例属性</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>name <span style="color:#f92672">=</span> name
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#编写程序不要对实例属性和类属性使用相同的名字，因为相同名称的实例属性将屏蔽掉类属性        </span>
+</span></span></code></pre></div><h2 id="动态绑定">
+  动态绑定
+  <a class="anchor" href="#%e5%8a%a8%e6%80%81%e7%bb%91%e5%ae%9a">#</a>
+</h2>
+<ul>
+<li>当创建了一个对象后，我们可以给该对象绑定任何属性和方法，但是该属性和方法只在当前对象上有效。为了给所有实例都绑定方法，可以给class绑定方法。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Student</span>(object):
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#可以用来限制class实例能添加的属性，仅对当前类实例起作用，对继承的子类不起作用</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#除非在子类中也定义__slots__，这样子类实例允许定义的属性就是自身的__slots__加上父类的__slots__</span>
+</span></span><span style="display:flex;"><span>    __slots__ <span style="color:#f92672">=</span> (<span style="color:#e6db74">&#39;name&#39;</span>, <span style="color:#e6db74">&#39;age&#39;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">set_age</span>(self, age)
+</span></span><span style="display:flex;"><span>    self<span style="color:#f92672">.</span>age <span style="color:#f92672">=</span> age
+</span></span><span style="display:flex;"><span>s <span style="color:#f92672">=</span> Student()
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#给对象动态绑定了一个属性</span>
+</span></span><span style="display:flex;"><span>s<span style="color:#f92672">.</span>name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;xiaoxiang&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#给对象动态绑定一个方法，只在该对象上有效</span>
+</span></span><span style="display:flex;"><span>s<span style="color:#f92672">.</span>set_age <span style="color:#f92672">=</span> MethodType(set_age, s)
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#给类动态绑定一个方法</span>
+</span></span><span style="display:flex;"><span>Student<span style="color:#f92672">.</span>set_age <span style="color:#f92672">=</span> set_age
+</span></span></code></pre></div><h2 id="getter和setter">
+  getter和setter
+  <a class="anchor" href="#getter%e5%92%8csetter">#</a>
+</h2>
+<ul>
+<li>使用@property代替getter，以及创建setter的方法见下面的代码</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Student</span>:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@property</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">name</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> self<span style="color:#f92672">.</span>_name
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@name.setter</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">name</span>(self, name):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>_name <span style="color:#f92672">=</span> name
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>student <span style="color:#f92672">=</span> Student()
+</span></span><span style="display:flex;"><span>student<span style="color:#f92672">.</span>name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;xiaoxiang&#39;</span>
+</span></span><span style="display:flex;"><span>print(student<span style="color:#f92672">.</span>name)
+</span></span></code></pre></div><h2 id="__iter__和__next__">
+  <code>__iter__</code>和<code>__next__</code>
+  <a class="anchor" href="#__iter__%e5%92%8c__next__">#</a>
+</h2>
+<ul>
+<li>如果一个类想被用于for-in，就必须实现<code>__iter__</code>和<code>__next__</code>方法</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Fib</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __init__(self):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>a <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>b <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __iter__(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#实例自身就是迭代对象</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> self
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __next__(self):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>a, self<span style="color:#f92672">.</span>b <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>b, self<span style="color:#f92672">.</span>b <span style="color:#f92672">+</span> self<span style="color:#f92672">.</span>a
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>a <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">100</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">raise</span> <span style="color:#a6e22e">StopIteration</span>()
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#返回下一个值</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> self<span style="color:#f92672">.</span>a
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> Fib():
+</span></span><span style="display:flex;"><span>    print(i)
+</span></span></code></pre></div><h2 id="__getattr__">
+  <code>__getattr__</code>
+  <a class="anchor" href="#__getattr__">#</a>
+</h2>
+<ul>
+<li><code>__getattr__</code>用于动态返回一个属性，只在没有找到属性的情况下才会调用该方法。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Url</span>:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __init__(self, item <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&#39;</span>):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>item <span style="color:#f92672">=</span> item
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __getattr__(self, item):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> Url(<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">/</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">%</span>(self<span style="color:#f92672">.</span>item, item))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __str__(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> self<span style="color:#f92672">.</span>item
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    __repr__ <span style="color:#f92672">=</span> __str__
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(Url()<span style="color:#f92672">.</span>xiaoxiang<span style="color:#f92672">.</span>ayu<span style="color:#f92672">.</span>liuchan<span style="color:#f92672">.</span>list)
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#结果：/xiaoxiang/ayu/liuchan/list</span>
+</span></span></code></pre></div><h2 id="枚举">
+  枚举
+  <a class="anchor" href="#%e6%9e%9a%e4%b8%be">#</a>
+</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> enum <span style="color:#f92672">import</span> Enum, unique
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#该注解用于保证没有重复值</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@unique</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Weekday</span>(Enum):
+</span></span><span style="display:flex;"><span>    Sun <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span> <span style="color:#75715e"># Sun的value被设定为0</span>
+</span></span><span style="display:flex;"><span>    Mon <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>    Tue <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>    Wed <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>    Thu <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>    Fri <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>
+</span></span><span style="display:flex;"><span>    Sat <span style="color:#f92672">=</span> <span style="color:#ae81ff">6</span>
+</span></span></code></pre></div><h2 id="type和metaclass">
+  type和metaclass
+  <a class="anchor" href="#type%e5%92%8cmetaclass">#</a>
+</h2>
+<ul>
+<li>class（类）的类型就是type，对象的类型就是类名</li>
+<li>可以通过type()函数依次传入3个参数来创建一个class对象：①class的名称；②继承的父类集合；③class的方法名称与函数绑定。<code>type('hello', (object, ), dict(hello = 'hello world'))</code></li>
+<li>通过type()函数创建的类和直接写class是完全一样的，因为python解释器遇到class定义时，仅仅是扫描一下class定义的语法，然后调用type()函数创建出class。</li>
+<li>可以把类看作是metaclass（元类）创建出来的实例。</li>
+<li>metaclass后面用到了再来看吧，链接在这-&gt;
+  <a href="https://www.liaoxuefeng.com/wiki/1016959663602400/1017592449371072">metaclass</a></li>
+</ul></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

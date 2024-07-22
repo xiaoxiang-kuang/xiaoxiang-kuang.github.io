@@ -1,0 +1,654 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>python on 小象的blog</title>
+    <link>/tags/python/</link>
+    <description>Recent content in python on 小象的blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Tue, 16 Mar 2021 15:38:07 +0000</lastBuildDate><atom:link href="/tags/python/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>django起步</title>
+      <link>/posts/python/django%E8%B5%B7%E6%AD%A5/</link>
+      <pubDate>Tue, 16 Mar 2021 15:38:07 +0000</pubDate>
+      
+      <guid>/posts/python/django%E8%B5%B7%E6%AD%A5/</guid>
+      <description>&lt;h2 id=&#34;起步&#34;&gt;
+  起步
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e8%b5%b7%e6%ad%a5&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;django项目目录&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysite&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    manage&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;py &lt;span style=&#34;color:#75715e&#34;&gt;#管理django项目的命令行工具&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    mysite&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;	&lt;span style=&#34;color:#75715e&#34;&gt;#python包，名字就是当引用它内部任何东西时需要用到的python包名&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        __init__&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;py	&lt;span style=&#34;color:#75715e&#34;&gt;#告诉python这个目录应该被认为是一个python包&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        settings&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;py	&lt;span style=&#34;color:#75715e&#34;&gt;#项目的配置文件&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        urls&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;py &lt;span style=&#34;color:#75715e&#34;&gt;#url声明&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        asgi&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;py &lt;span style=&#34;color:#75715e&#34;&gt;#运行在asgi兼容的web服务器上的入口&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        wsgi&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;py &lt;span style=&#34;color:#75715e&#34;&gt;#运行在wsgi兼容的web服务器上的入口&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;运行项目的命令&lt;code&gt;python manage.py runserver&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;创建一个应用&lt;code&gt;python manage.py startapp polls&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;应用urls.py中使用到的函数path()有四个参数，两个必须参数route和view，两个可选参数kwargs和name
+&lt;ul&gt;
+&lt;li&gt;route是一个匹配URL的准则，当响应一个请求时，他会从urlpatterns的第一项开始，按顺序依次匹配列表中的项。这些准则不会匹配get和post参数或域名&lt;/li&gt;
+&lt;li&gt;view：当找到了一个匹配的准则，就会调用这个特定的视图函数，并传入一个HttpRequest对象作为第一个参数，被捕获的参数以关键字参数的形式传入。&lt;/li&gt;
+&lt;li&gt;kwages：任意个关键字参数可作为一个字典传递给目标视图函数。&lt;/li&gt;
+&lt;li&gt;name：为url取名&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;函数include()允许引用其他URLconfs&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;模型&#34;&gt;
+  模型
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%a8%a1%e5%9e%8b&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;设置mysitesittingspy&#34;&gt;
+  设置mysite/sittings.py
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e8%ae%be%e7%bd%aemysitesittingspy&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;设置时区&lt;code&gt;TIME_ZONE = &#39;Asia/Shanghai&#39; USE_TZ = True&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;当启用了时区支持（即&lt;code&gt;USE_TZ = True&lt;/code&gt;），Django将在数据库中以UTC存储日期信息，而在模板和表单中转化为最终用户的时区&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;设置数据库&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;INSTALLED_APPS&lt;/code&gt;是在项目中启用的Django应用，这里面的某些应用需要数据表，可以用&lt;code&gt;python manage.py migrate&lt;/code&gt;生成&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;创建模型&#34;&gt;
+  创建模型
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%88%9b%e5%bb%ba%e6%a8%a1%e5%9e%8b&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;模型设真实数据的描述，它包含了存储的数据所必要的字段和行为。&lt;/li&gt;
+&lt;li&gt;Django的迁移代码是从模型文件中自动生成的&lt;/li&gt;
+&lt;li&gt;每个模型都是&lt;code&gt;django.db.models.Model&lt;/code&gt;类的子类，每个模型有许多的类变量，他们都表示一个数据库的字段，每个字段都是Field类的实例，每个Field类实例变量的名字也是数据库的列名。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#polls/models.py&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; django.db &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; models
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Choice&lt;/span&gt;(models&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Model):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    question &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; models&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ForeignKey(Question, on_delete&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;models&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;CASCADE)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    choice_text &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; models&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;CharField(max_length&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;200&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    votes &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; models&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;IntegerField(default&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;激活和修改模型&#34;&gt;
+  激活和修改模型
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%bf%80%e6%b4%bb%e5%92%8c%e4%bf%ae%e6%94%b9%e6%a8%a1%e5%9e%8b&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;首先把应用安装到项目中，在&lt;code&gt;INSTALLED_APPS&lt;/code&gt;中添加&lt;code&gt;polls.apps.PollsConfig&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;执行&lt;code&gt;python manage.py makemigrations polls&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;迁移数据存放在应用的&lt;code&gt;migrations/0001_initial.py&lt;/code&gt;中，可以通过&lt;code&gt;python manage.py sqlmigrate polls 0001&lt;/code&gt;来查看对应的sql&lt;/li&gt;
+&lt;li&gt;运行&lt;code&gt;python manage.py migtate&lt;/code&gt;来应用数据库迁移&lt;/li&gt;
+&lt;li&gt;通过&lt;code&gt;python manage.py shell&lt;/code&gt;可进入当前项目对应的命令行&lt;/li&gt;
+&lt;li&gt;给模型增加&lt;code&gt;__str__&lt;/code&gt;方法能带来一些方便&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;django管理页面&#34;&gt;
+  Django管理页面
+  &lt;a class=&#34;anchor&#34; href=&#34;#django%e7%ae%a1%e7%90%86%e9%a1%b5%e9%9d%a2&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;首先创建一个能登陆管理界面的用户&lt;code&gt;python manage.py createsuperuser&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;将创建的models注册，以便后台可以管理&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#polls/admin.py&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; django.contrib &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; admin
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; .models &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; Question
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;admin&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;site&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;register(Question)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;运行项目&lt;code&gt;python manage.py runserver&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;视图view&#34;&gt;
+  视图view
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e8%a7%86%e5%9b%beview&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;向应用的views.py中添加视图函数，这些函数的第一个参数是request，也以有第二、第三个参数。每个视图必须做的只有返回一个包含请求页面内容的HttpResponse对象或者抛出一个异常&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;detail&lt;/span&gt;(request, question_id):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    context &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;question_id&amp;#39;&lt;/span&gt;: question_id,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;#template = loader.get_template(&amp;#39;xxx/xxxx.html&amp;#39;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;#return HttpResponse(template.render(context, request))&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; render(request, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;xxx/xxxx.html&amp;#39;&lt;/span&gt;, context)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;当使用模型的get函数获取对象，如果不存在，可以抛出Http404错误，Django提供了一个快捷函数&lt;code&gt;get_object_or_404&lt;/code&gt;，&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;将这些视图添加加到应用的urls.py中&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#为url名称添加命名空间&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;app_name &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;polls&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;urlpatterns &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;#...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;#int:是一个转换器，决定了应该以什么变量类型匹配这部分url路径&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    path(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;&amp;lt;int:question_id&amp;gt;/detail/&amp;#39;&lt;/span&gt;, views&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;detail, name&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;detail&amp;#39;&lt;/span&gt;),
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;当其他人访问网站的某个页面时，比如&amp;rsquo;polls/34/detail&amp;rsquo;，django将会载入项目的urls.py模块，因为这在&lt;strong&gt;ROOT_URLCONF&lt;/strong&gt;中配置了，然后django寻找名为urlpatterns变量并按顺序匹配正则表达式，在找到匹配项&amp;rsquo;polls/&amp;rsquo;，它切掉了匹配的文本&amp;rsquo;polls/&amp;rsquo;，将剩余文本&#39;34/detail&amp;rsquo;发送至&amp;rsquo;polls.urls&amp;rsquo;中做进一步处理&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;模板&#34;&gt;
+  模板
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%a8%a1%e6%9d%bf&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;在应用路径下创建templates目录，项目的&lt;strong&gt;TEMPLATES&lt;/strong&gt;配置项描述了django如何载入和渲染模板，默认将&lt;strong&gt;APP_DIRS&lt;/strong&gt;设置为True，这一选项让DjangoTemplates能在每个INSTALLED_APPS文件夹中寻找templates子目录。&lt;/li&gt;
+&lt;li&gt;由于django能直接访问到templates文件夹，为了放置出现模板文件名冲突，最好的方法就是将它们放到一个与自身应用重名的子文件夹里&lt;/li&gt;
+&lt;li&gt;指向具有命名空间的视图&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;&lt;span style=&#34;color:#f92672&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;href&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;{% url &amp;#39;polls:detail&amp;#39; question.id %}&amp;#34;&lt;/span&gt;&amp;gt;{{ context.question_id }}&amp;lt;/&lt;span style=&#34;color:#f92672&#34;&gt;a&lt;/span&gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;无论何时，当需要创建一个改变服务器端数据的表单时，请使用post。&lt;/li&gt;
+&lt;li&gt;django自带了一个非常有用的防御系统，所有针对内部url的post表单都应该使用&lt;code&gt;{% csrf_token %}&lt;/code&gt;模板标签。&lt;/li&gt;
+&lt;li&gt;request.POST是一个字典类型对象，可以通过关键字来获取提交的数据，获取的值永远是字符串。如果key提供错误，将会抛出一个KeyError。&lt;/li&gt;
+&lt;li&gt;函数reverse()能避免在视图函数中硬编码url，他需要我们给出想要跳转的视图的名字和该视图所对应的url模式中需要给该视图提供的参数。&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>python正则表达式</title>
+      <link>/posts/python/python%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/</link>
+      <pubDate>Mon, 15 Mar 2021 20:22:32 +0000</pubDate>
+      
+      <guid>/posts/python/python%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;\d&lt;/code&gt;匹配一个数字&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;\w&lt;/code&gt;匹配一个数字或字母&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;.&lt;/code&gt;匹配任意字符&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;*&lt;/code&gt;匹配0到多个字符，&lt;code&gt;+&lt;/code&gt;匹配1到多个字符，&lt;code&gt;?&lt;/code&gt;匹配0或1个字符，&lt;code&gt;{n}&lt;/code&gt;表示n个字符，&lt;code&gt;{n,m}&lt;/code&gt;表示n-m个字符&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;\s&lt;/code&gt;匹配一个空格（也包括tab）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;\d{&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;}\s&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;\d&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;	&lt;span style=&#34;color:#75715e&#34;&gt;#匹配3个数字，后面至少有一个空格，再后面有可能有数字，有可能没数字&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;[]&lt;/code&gt;可用于更精确的匹配&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;9&lt;/span&gt;a&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;z\_] &lt;span style=&#34;color:#75715e&#34;&gt;#匹配一个数字或一个小写字母或一个下划线&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;A|B&lt;/code&gt;可匹配A或B&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;^&lt;/code&gt;表示行的开头，&lt;code&gt;^\d&lt;/code&gt;表示必须以数字开头&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;$&lt;/code&gt;表示行的结束，&lt;code&gt;$\d&lt;/code&gt;表示必须以数字结束&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;re模块&#34;&gt;
+  re模块
+  &lt;a class=&#34;anchor&#34; href=&#34;#re%e6%a8%a1%e5%9d%97&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;因为python字符串本身也用&lt;code&gt;\&lt;/code&gt;转义，可以使用&lt;code&gt;r&lt;/code&gt;前缀，就可以不用考虑字符串转义了。&lt;code&gt;r&#39;ABC\-001&#39;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;re.match(r&#39;\d{3}\-\d$&#39;),&#39;010-1&#39;)&lt;/code&gt;，如果匹配成功就返回一个Mache对象，否则返回none。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;re.split(r&#39;[\s\,]+&#39;,&#39;a,b, c  d&#39;)&lt;/code&gt;，切割字符串，能切割出&lt;code&gt;[&#39;a&#39;,&#39;b&#39;,&#39;c&#39;]&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;正则表达式还有提取字串的功能，用&lt;code&gt;()&lt;/code&gt;表示的就是要提取的分组。&lt;code&gt;r&#39;(\d{3})-(\d{3,8})&#39;&lt;/code&gt;就定义了两个组，可以使用&lt;code&gt;group(n)&lt;/code&gt;方法提取出子串&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;贪婪匹配&#34;&gt;
+  贪婪匹配
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e8%b4%aa%e5%a9%aa%e5%8c%b9%e9%85%8d&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;正则默认的时贪婪匹配，加个&lt;code&gt;?&lt;/code&gt;就可以采用非贪婪匹配。&lt;code&gt;\d+?&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;r &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; re&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;match(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;(\d+?)(0*)$&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;1200000&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;print(r&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;groups())
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#结果(&amp;#39;12&amp;#39;, &amp;#39;00000&amp;#39;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+    </item>
+    
+    <item>
+      <title>python模块</title>
+      <link>/posts/python/python%E6%A8%A1%E5%9D%97/</link>
+      <pubDate>Mon, 15 Mar 2021 19:35:28 +0000</pubDate>
+      
+      <guid>/posts/python/python%E6%A8%A1%E5%9D%97/</guid>
+      <description>&lt;h2 id=&#34;datetime&#34;&gt;
+  datetime
+  &lt;a class=&#34;anchor&#34; href=&#34;#datetime&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; datetime &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; datetime,timedelta
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;获取当前时间&lt;code&gt;datetime.now()&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;指定的某个日期和时间&lt;code&gt;datetime(2021,3,15,19,48)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;将datetime类型转化为timestamp，（timestamp是一个浮点数，整数位表示秒） &lt;code&gt;datetime(2021,3,15,19,49).timestamp()&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;timestamp转化为datetime &lt;code&gt;datetime.fromtimestamp(1615809156.889315)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;str转换为datetime &lt;code&gt;datetime.strptime(&#39;2021-3-15 19:55:59&#39;,&#39;%Y-%m-%d %H:%M:%S&#39;)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;datetime转str &lt;code&gt;datetime.now().strftime(&#39;%a,%b %d %H:%M&#39;)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;datetime加减 &lt;code&gt;datetime.now() + timedelta(days = 1, hours = 10)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;时区转换&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;utc_dt &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; datetime&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;utcnow()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;utc_dt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;astimezone(timezone(timedelta(hours&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;8&lt;/span&gt;)))
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;collections&#34;&gt;
+  collections
+  &lt;a class=&#34;anchor&#34; href=&#34;#collections&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;namedtuple：是一个函数，可以用来创建一个自定义的tuple对象，同时规定了tuple元素的个数，并可以用属性而不是索引来引用tuple的某个元素。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; collections &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; namedtuple
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Point &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; nametuple(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Point&amp;#39;&lt;/span&gt;,[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;x&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;y&amp;#39;&lt;/span&gt;])
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;p &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; Point(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;deque：双向列表，方法有&lt;code&gt;append()、pop()、appendleft()、popleft()&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;defaultdict：和dict类似，但是在key不存在的时候返回一个默认值。&lt;/li&gt;
+&lt;li&gt;OrderedDict：key会按照插入的顺序排序&lt;/li&gt;
+&lt;li&gt;ChainMap：可以把一组dict串起来组成一个逻辑上的dict，本身也是一个dict，但在查找的时候，会按照顺序在内部的dict依次查找。&lt;/li&gt;
+&lt;li&gt;Counter是一个计数器，可以统计字符出现的个数，实际上也是dict的子类&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;base64&#34;&gt;
+  base64
+  &lt;a class=&#34;anchor&#34; href=&#34;#base64&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;base64是一种用64个字符表示任意二进制数据的方法，64个字符指的是&lt;code&gt;A-Z, a-z, 0-9, +, /&lt;/code&gt;。实现方法是将3个字节(3x8bit)的二进制数据编码为4字节(4x6bit，6bit的数据刚好能用上面这64个字符表示)的数据。6bit的数据刚好能用这64个字符表示。&lt;/li&gt;
+&lt;li&gt;编码&lt;code&gt;base64.b64encode(b&#39;binary&#39;)&lt;/code&gt;；解码&lt;code&gt;base64.b64decode(b&#39;binary&#39;)&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;hashlib&#34;&gt;
+  hashlib
+  &lt;a class=&#34;anchor&#34; href=&#34;#hashlib&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;摘要算法又称为哈希算法，散列算法，它通过一个函数，把任意长度的数据转化为一个固定长度的数据串。它是一个单向函数，对原始数据做一点点的修改都会导致计算出的摘要完全不同。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; hashlib
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;md5 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; hashlib&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;md5()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#也可以将串分开，多次调用update方法&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;md5&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;update(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;xiaoxiang.space&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;encode(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;utf-8&amp;#34;&lt;/span&gt;))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#md5结果是128bit，通常用32位的16进制表示&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;print(md5&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;hexdigest())
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sha1 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; hashlib&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;sha1()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sha1&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;update(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;xiaoxiang.space&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;encode(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;utf-8&amp;#34;&lt;/span&gt;))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#sha1的结果是160bit，通常用一个40位的16进制字符串表示&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;print(sha1&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;hexdigest())
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;itertools&#34;&gt;
+  itertools
+  &lt;a class=&#34;anchor&#34; href=&#34;#itertools&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;无限迭代器&lt;code&gt;itertools.count()&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;cycle()会把传入的一个序列无限重复下去&lt;code&gt;itertools.cycle(&#39;ABC&#39;)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;repeat()可以把一个元素无限重复下去，提供了第二个参数可以限定重复次数&lt;code&gt;itertools.repeat(&#39;A&#39;, 3)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;可通过takewhile()根据函数条件来截取一个有限的序列。&lt;/li&gt;
+&lt;li&gt;chain()可以把一组迭代对象串联起来，形成一个更大的迭代器。&lt;code&gt;itertools.chain(&#39;ABC&#39;, &#39;XYZ&#39;)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;groupby()可以把迭代器中相邻的重复元素挑出来放在一起。挑选规则是通过函数完成的，只要作用于函数的两个元素返回的值相等，这两个元素就被认为是一组的，函数的返回值作为组的key。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;contextlib&#34;&gt;
+  contextlib
+  &lt;a class=&#34;anchor&#34; href=&#34;#contextlib&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;任何对象，只要正确实现了上下文管理，就可以用于with语句。实现上下文管理是通过&lt;code&gt;__enter__&lt;/code&gt;和&lt;code&gt;__exit__&lt;/code&gt;这两个方法实现的。可以通过contextlib标准库中的&lt;code&gt;@contextmanager&lt;/code&gt;来实现上下文管理（更简单）&lt;/li&gt;
+&lt;li&gt;有时候，我们希望在某段代码执行前后自动执行特定代码，也可以通过@contextmanager实现&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; contextlib
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;@contextlib.contextmanager&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;tag&lt;/span&gt;(name):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    print(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;%s&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;%&lt;/span&gt;name)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;yield&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    print(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;lt;/&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;%s&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;%&lt;/span&gt;name)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;with&lt;/span&gt; tag(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;h1&amp;#34;&lt;/span&gt;):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    print(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;hello&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    print(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;world&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;如果一个对象没有实现上下文，就不能把他用于with语句，可以用closing()来将该对象变成上下文。&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>python异常-IO-进程等</title>
+      <link>/posts/python/python%E5%BC%82%E5%B8%B8%E5%92%8CIO/</link>
+      <pubDate>Mon, 15 Mar 2021 13:58:56 +0000</pubDate>
+      
+      <guid>/posts/python/python%E5%BC%82%E5%B8%B8%E5%92%8CIO/</guid>
+      <description>&lt;h2 id=&#34;错误&#34;&gt;
+  错误
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e9%94%99%e8%af%af&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;try&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    i &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt; int(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;a&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;except&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;ValueError&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; e:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    print(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;ValueError&amp;#34;&lt;/span&gt;,e)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;except&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;ZeroDivisionError&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; e:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    print(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;ZeroDivisionError&amp;#34;&lt;/span&gt;,e)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;#raise如果不带参数，就会把当前错误原样抛出&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;raise&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;finally&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    print(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;END&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;单元测试要用到了再回来补充：
+  &lt;a href=&#34;https://www.liaoxuefeng.com/wiki/1016959663602400/1017604210683936&#34;&gt;单元测试&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;io&#34;&gt;
+  IO
+  &lt;a class=&#34;anchor&#34; href=&#34;#io&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;以读的方式打开一个文件对象&lt;code&gt;f = open(&#39;test.txt&#39;,&#39;r&#39;)&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;文件使用完毕后必须关闭，因为文件对象会占用操作系统的资源。可以使用&lt;code&gt;with open(&#39;test.txt&#39;,&#39;r&#39;) as f:&lt;/code&gt;，这种形式会自动帮我们调用close()方法。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;读取二进制文件&lt;code&gt;open(&#39;test&#39;,&#39;rb&#39;)&lt;/code&gt;，读取非UTF-8编码的文件&lt;code&gt;open(&#39;gbk.txt&#39;, &#39;r&#39;, encoding = &#39;gbk&#39;)&lt;/code&gt;，遇到编码错误后忽略&lt;code&gt;open(&#39;test&#39;, &#39;r&#39;, encoding = &#39;gbk&#39;, errors = &#39;ignore&#39;)&lt;/code&gt;。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;写文件就是将&lt;code&gt;r&lt;/code&gt;参数改为&lt;code&gt;w&lt;/code&gt;参数，当在写文件时，操作系统往往不会立刻把数据写入磁盘，而是先缓存起来，只有调用close方法时才会保证把没有写入的数据全部写入磁盘。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;StringIO和BytesIO是在内存中读写数据。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+  &lt;a href=&#34;https://www.liaoxuefeng.com/wiki/1016959663602400/1017624706151424&#34;&gt;序列化&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>python面向对象</title>
+      <link>/posts/python/python%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/</link>
+      <pubDate>Sun, 14 Mar 2021 15:39:50 +0000</pubDate>
+      
+      <guid>/posts/python/python%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;python中所有数据类型都可视为对象。&lt;/li&gt;
+&lt;li&gt;所有的类都会继承object类。&lt;/li&gt;
+&lt;li&gt;类中定义函数的第一个参数是self，调用时不用传递该参数。&lt;/li&gt;
+&lt;li&gt;属性前面加&lt;code&gt;__&lt;/code&gt;（两个下划线）就变成了一个私有属性。双下划线开头，双下划线结尾的是特殊变量，特殊变量是可以直接访问的，不是private变量。一个下划线开头的变量名是可以被外部访问的，但是按约定俗称的规定，请把它视为私有变量。&lt;/li&gt;
+&lt;li&gt;双下划线开头的属性不能被外部访问是因为这个属性被改名字了。&lt;/li&gt;
+&lt;li&gt;判断一个变量是否是某个类型可以用isinstance()判断，判断对象类型可以使用type方法。&lt;/li&gt;
+&lt;li&gt;使用dir()可获得对象的所有属性和方法。&lt;/li&gt;
+&lt;li&gt;自己写的类如果也想用len()方法的话，可以自己写一个&lt;code&gt;__len__&lt;/code&gt;方法。实际上，当我们使用len()方法的时候，它会自动去调用该对象的&lt;code&gt;__len__()&lt;/code&gt;方法。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;__str__&lt;/code&gt;相当于java中的&lt;code&gt;toString&lt;/code&gt;，还有一个&lt;code&gt;__repr__&lt;/code&gt;是返回开发者看到的字符串。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;__getitem__&lt;/code&gt;可按下标访问数据的项。&lt;/li&gt;
+&lt;li&gt;任何类只要定义一个&lt;code&gt;__call__&lt;/code&gt;方法，就可以对实例进行调用。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;类的定义&#34;&gt;
+  类的定义
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e7%b1%bb%e7%9a%84%e5%ae%9a%e4%b9%89&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Student&lt;/span&gt;(object):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;#类属性&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    name &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Student&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; __init__(self, name):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;#实例属性&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;name &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; name
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#编写程序不要对实例属性和类属性使用相同的名字，因为相同名称的实例属性将屏蔽掉类属性        &lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;动态绑定&#34;&gt;
+  动态绑定
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%8a%a8%e6%80%81%e7%bb%91%e5%ae%9a&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;当创建了一个对象后，我们可以给该对象绑定任何属性和方法，但是该属性和方法只在当前对象上有效。为了给所有实例都绑定方法，可以给class绑定方法。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Student&lt;/span&gt;(object):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;#可以用来限制class实例能添加的属性，仅对当前类实例起作用，对继承的子类不起作用&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;#除非在子类中也定义__slots__，这样子类实例允许定义的属性就是自身的__slots__加上父类的__slots__&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    __slots__ &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;name&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;age&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;set_age&lt;/span&gt;(self, age)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;age &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; age
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;s &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; Student()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#给对象动态绑定了一个属性&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;s&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;name &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;xiaoxiang&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#给对象动态绑定一个方法，只在该对象上有效&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;s&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_age &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; MethodType(set_age, s)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#给类动态绑定一个方法&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Student&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_age &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; set_age
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;getter和setter&#34;&gt;
+  getter和setter
+  &lt;a class=&#34;anchor&#34; href=&#34;#getter%e5%92%8csetter&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;使用@property代替getter，以及创建setter的方法见下面的代码&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Student&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#a6e22e&#34;&gt;@property&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;name&lt;/span&gt;(self):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_name
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#a6e22e&#34;&gt;@name.setter&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;name&lt;/span&gt;(self, name):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_name &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; name
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;student &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; Student()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;student&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;name &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;xiaoxiang&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;print(student&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;name)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;__iter__和__next__&#34;&gt;
+  &lt;code&gt;__iter__&lt;/code&gt;和&lt;code&gt;__next__&lt;/code&gt;
+  &lt;a class=&#34;anchor&#34; href=&#34;#__iter__%e5%92%8c__next__&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;如果一个类想被用于for-in，就必须实现&lt;code&gt;__iter__&lt;/code&gt;和&lt;code&gt;__next__&lt;/code&gt;方法&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Fib&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; __init__(self):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;a &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;b &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; __iter__(self):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;#实例自身就是迭代对象&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; self
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; __next__(self):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;a, self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;b &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;b, self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;b &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;a
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;a &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;100&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;raise&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;StopIteration&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;#返回下一个值&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;a
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; Fib():
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    print(i)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;__getattr__&#34;&gt;
+  &lt;code&gt;__getattr__&lt;/code&gt;
+  &lt;a class=&#34;anchor&#34; href=&#34;#__getattr__&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;__getattr__&lt;/code&gt;用于动态返回一个属性，只在没有找到属性的情况下才会调用该方法。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Url&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; __init__(self, item &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt;):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;item &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; item
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; __getattr__(self, item):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; Url(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;%s&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;%s&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;%&lt;/span&gt;(self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;item, item))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; __str__(self):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;item
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    __repr__ &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; __str__
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;print(Url()&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;xiaoxiang&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ayu&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;liuchan&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;list)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#结果：/xiaoxiang/ayu/liuchan/list&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;枚举&#34;&gt;
+  枚举
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%9e%9a%e4%b8%be&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; enum &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; Enum, unique
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#该注解用于保证没有重复值&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;@unique&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Weekday&lt;/span&gt;(Enum):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    Sun &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;# Sun的value被设定为0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    Mon &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    Tue &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    Wed &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    Thu &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    Fri &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    Sat &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;6&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;type和metaclass&#34;&gt;
+  type和metaclass
+  &lt;a class=&#34;anchor&#34; href=&#34;#type%e5%92%8cmetaclass&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;class（类）的类型就是type，对象的类型就是类名&lt;/li&gt;
+&lt;li&gt;可以通过type()函数依次传入3个参数来创建一个class对象：①class的名称；②继承的父类集合；③class的方法名称与函数绑定。&lt;code&gt;type(&#39;hello&#39;, (object, ), dict(hello = &#39;hello world&#39;))&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;通过type()函数创建的类和直接写class是完全一样的，因为python解释器遇到class定义时，仅仅是扫描一下class定义的语法，然后调用type()函数创建出class。&lt;/li&gt;
+&lt;li&gt;可以把类看作是metaclass（元类）创建出来的实例。&lt;/li&gt;
+&lt;li&gt;metaclass后面用到了再来看吧，链接在这-&amp;gt;
+  &lt;a href=&#34;https://www.liaoxuefeng.com/wiki/1016959663602400/1017592449371072&#34;&gt;metaclass&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>python起步</title>
+      <link>/posts/python/python%E8%B5%B7%E6%AD%A5/</link>
+      <pubDate>Thu, 11 Mar 2021 09:27:54 +0000</pubDate>
+      
+      <guid>/posts/python/python%E8%B5%B7%E6%AD%A5/</guid>
+      <description>&lt;h2 id=&#34;python基础&#34;&gt;
+  python基础
+  &lt;a class=&#34;anchor&#34; href=&#34;#python%e5%9f%ba%e7%a1%80&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;数据类型和变量&#34;&gt;
+  数据类型和变量
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%95%b0%e6%8d%ae%e7%b1%bb%e5%9e%8b%e5%92%8c%e5%8f%98%e9%87%8f&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;整数：可以是任意大小&lt;/li&gt;
+&lt;li&gt;浮点数：除了小数外还可以用科学计数法：1.23e9&lt;/li&gt;
+&lt;li&gt;字符串：以&lt;code&gt;&amp;quot;&lt;/code&gt;或&lt;code&gt;&#39;&lt;/code&gt;括起来的文本，python允许使用&lt;code&gt;r&#39;&#39;&lt;/code&gt;表示引号内部的字符串默认不转义，python允许用&lt;code&gt;&#39;&#39;&#39;...&#39;&#39;&#39;&lt;/code&gt;的格式表示多行内容&lt;/li&gt;
+&lt;li&gt;布尔值：&lt;code&gt;True&lt;/code&gt;或&lt;code&gt;False&lt;/code&gt;，可以进行&lt;code&gt;and&lt;/code&gt; &lt;code&gt;or&lt;/code&gt; &lt;code&gt;not&lt;/code&gt;运算&lt;/li&gt;
+&lt;li&gt;空值：&lt;code&gt;None&lt;/code&gt;，不等于0&lt;/li&gt;
+&lt;li&gt;列表list：如&lt;code&gt;classmate=[&#39;xiaoming&#39;,&#39;lihua&#39;,123,True]&lt;/code&gt;，list是一个可变的有序表。
+&lt;ul&gt;
+&lt;li&gt;可以使用append函数追加到末尾&lt;/li&gt;
+&lt;li&gt;可以使用insert（i，参数）插入到指定位置&lt;/li&gt;
+&lt;li&gt;删除末尾元素使用pop（），删除指定位置元素用pop（i）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;元组tuple：&lt;code&gt;classmate=(&#39;xiaoming&#39;,&#39;lihua&#39;,123,True)&lt;/code&gt;，一旦初始化就不能修改
+&lt;ul&gt;
+&lt;li&gt;当只有一个元素要这么定义：&lt;code&gt;classmate=(&#39;hel&#39;,)&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;字典dict：&lt;code&gt;d = {&#39;Michael&#39;: 95, &#39;Bob&#39;: 75, &#39;Tracy&#39;: 85}&lt;/code&gt;键值对
+&lt;ul&gt;
+&lt;li&gt;可以通过get(key)或d[key]获取值&lt;/li&gt;
+&lt;li&gt;可以通过d[key]=xxx直接赋值&lt;/li&gt;
+&lt;li&gt;可以通过pop(key)删除键值对&lt;/li&gt;
+&lt;li&gt;可以通过in判断key是否存在&lt;/li&gt;
+&lt;li&gt;key必须是不可变对象&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;set：要创建一个set，需要一个list作为输入集合，
+&lt;ul&gt;
+&lt;li&gt;set是一组key的集合，无序，不重复。&lt;/li&gt;
+&lt;li&gt;add(xxx)可以向set里面加元素，remove(xxx)可以删除元素&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;变量：可以把任意类型数据赋值给同一个变量（不同类型也可以）&lt;/li&gt;
+&lt;li&gt;常量：用全大写的变量名表示常量是一个习惯上的用法。&lt;/li&gt;
+&lt;li&gt;除法：python中有两种除法，一种是&lt;code&gt;/&lt;/code&gt;：计算结果是浮点数，一种是&lt;code&gt; //&lt;/code&gt;：计算结果是整数（这种称为地板除），python还提供了余数运算：&lt;code&gt;%&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;字符串和编码&#34;&gt;
+  字符串和编码
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%ad%97%e7%ac%a6%e4%b8%b2%e5%92%8c%e7%bc%96%e7%a0%81&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;在计算机内存中，统一使用unicode编码，当需要保存到硬盘或者传输的时候，就会转化为UTF-8编码&lt;/li&gt;
+&lt;li&gt;用记事本编辑时，从文件中读取的UTF-8会被转化为Unicode字符到内存中&lt;/li&gt;
+&lt;li&gt;python3字符串是以unicode编码的，可以通过&lt;code&gt;ord()&lt;/code&gt;获取字符串的整数表示，&lt;code&gt;chr()&lt;/code&gt;把编码转换为对应的字符&lt;/li&gt;
+&lt;li&gt;当这么写时-&amp;gt;&lt;code&gt;b&#39;ABC&#39;&lt;/code&gt;表示bytes类型，每个字符只占一个字节。&lt;/li&gt;
+&lt;li&gt;以Unicode表示的字符串通过ecnode()方法可以编码位指定的bytes，如&lt;code&gt;&#39;中文&#39;.encode(&#39;utf-8&#39;)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;len(&#39;xxx&#39;)&lt;/code&gt;可以知道包含了几个字符。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;结构&#34;&gt;
+  结构
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e7%bb%93%e6%9e%84&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;h4 id=&#34;选择结构非0非空字符串非空list就表示true&#34;&gt;
+  选择结构:非0，非空字符串、非空list就表示True
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e9%80%89%e6%8b%a9%e7%bb%93%e6%9e%84%e9%9d%9e0%e9%9d%9e%e7%a9%ba%e5%ad%97%e7%ac%a6%e4%b8%b2%e9%9d%9e%e7%a9%balist%e5%b0%b1%e8%a1%a8%e7%a4%batrue&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;age &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; age &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;18&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    print(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;adult&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;elif&lt;/span&gt; age &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;6&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    print(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;teenager&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    print(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;kid&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;循环结构&#34;&gt;
+  循环结构
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%be%aa%e7%8e%af%e7%bb%93%e6%9e%84&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sum &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#0~100&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; x &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(&lt;span style=&#34;color:#ae81ff&#34;&gt;101&lt;/span&gt;):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    sum &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sum &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; x
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;print(sum)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sum &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;n &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;99&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;while&lt;/span&gt; n &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    sum &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sum &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; n
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    n &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; n &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;print(sum)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#break和continue也有&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;函数&#34;&gt;
+  函数
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%87%bd%e6%95%b0&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;python内置了很多函数，可以直接调用，如print、input、len、max、int、float、str、bool等&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;my_abs&lt;/span&gt;(x):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; x &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; x
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;x
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#空函数，pass也可用在其他地方，如if里面&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;nop&lt;/span&gt;():
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;pass&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;可以返回多个值，会转化成tuple&lt;/li&gt;
+&lt;li&gt;函数参数中可以设置默认参数，必选参数必须放在默认参数前面&lt;/li&gt;
+&lt;li&gt;可以不按顺序提供部分默认参数，但要把参数名写上&lt;/li&gt;
+&lt;li&gt;定义可变参数是在参数前面增加一个*，如&lt;code&gt;def calc(*numbers)&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;当已经有了list或tuple，要调用一个可变参数，可以&lt;code&gt;calc(*nums)&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;关键字参数：&lt;code&gt;def person(name, age, **kw):&lt;/code&gt;会在函数内部自动组装成一个dict
+&lt;ul&gt;
+&lt;li&gt;可以传入多个键值对，也可以传入一个dict（&lt;code&gt;person(&#39;Jack&#39;, 24, **extra)&lt;/code&gt;）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;命名关键字参数：&lt;code&gt;def person(name, age, *, city, job):&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;调用方式&lt;code&gt;person(&#39;Jack&#39;, 24, city=&#39;Beijing&#39;, job=&#39;Engineer&#39;)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;命名关键字参数必须传入参数名&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;上面这些都可以组合&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;其他&#34;&gt;
+  其他
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%85%b6%e4%bb%96&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;切片：&lt;code&gt;L[:2]&lt;/code&gt;切出下标为0和1的元素&lt;/li&gt;
+&lt;li&gt;for in可用来迭代，判断是否可迭代可以用collections的Iterable类型判断。
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;isinstance(&#39;abc&#39;,Iterable)&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;range(1:10)可用来生成1到9&lt;/li&gt;
+&lt;li&gt;列表生成器&lt;code&gt;[x*x for x in range(1,11) if x%2==0]&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;赋值语句&lt;code&gt;a, b = b, a&lt;/code&gt;是通过tuple实现的，相当于&lt;code&gt;t = (b, a) a = t[0] b = t[1]&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;凡是可以作用于for循环的对象都是Iterable类型，凡是可作用于next()函数的对象都是Iterator类型&lt;/li&gt;
+&lt;li&gt;函数也是一个对象，函数对象可以赋值给变量。&lt;/li&gt;
+&lt;li&gt;任何代码的第一个字符串都被视为模块的文档注释，&lt;code&gt;__author__&lt;/code&gt;变量可以把作者写进去&lt;/li&gt;
+&lt;li&gt;导入模块&lt;code&gt;import sys&lt;/code&gt;，sys的argv变量用list存储了命令行的所有参数，argv的第一个参数是py文件的名称&lt;/li&gt;
+&lt;li&gt;类似&lt;code&gt;__xxx__&lt;/code&gt;的变量是特殊变量，类似&lt;code&gt;_xxx_&lt;/code&gt;和&lt;code&gt;_xxx&lt;/code&gt;的变量是非公开变量（private）。&lt;/li&gt;
+&lt;li&gt;命名类用UpperCamelCase（第一个字母大写，后面采用驼峰命名法），命名函数和方法采用lowercase_with_underscores（小写带下划线），&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

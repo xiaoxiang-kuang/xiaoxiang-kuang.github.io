@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>docker | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#restart策略">restart策略</a></li>
+          </ul>
+        </li>
+        <li><a href="#docker-compose">docker-compose</a></li>
+        <li><a href="#dockerfile">dockerfile</a>
+          <ul>
+            <li><a href="#多阶段构建">多阶段构建</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>docker</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#restart策略">restart策略</a></li>
+          </ul>
+        </li>
+        <li><a href="#docker-compose">docker-compose</a></li>
+        <li><a href="#dockerfile">dockerfile</a>
+          <ul>
+            <li><a href="#多阶段构建">多阶段构建</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/javaee/docker/">docker</a>
+  </h1>
+  
+  <h5>2021-08-31</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">java</a>
+  </div>
+  
+
+
+
+<ul>
+<li>容器container是一个进程，容器运行于属于自己的独立的命名空间，因此容器可以拥有自己的root文件系统、网络配置、进程空间等。容器内的应用进程直接运行于宿主机的内核。</li>
+<li>镜像image包含了容器的文件系统，也包含了很多其他的配置。（镜像运行起来就是容器）。docker镜像是分层的结构，镜像构建时会一层层的构建，前一层是后一层的基础，每一层构建完就不会再发生改变，后一层的任何改变只会发生在自己的这一层。如删除前一层的文件，实际上不是真的删除前一层的文件，而是仅在当前层标记该文件已删除。在最终容器运行的时候，虽然不会看到这个文件，但是该文件实际上会一直跟随镜像。</li>
+<li>Dockerfile用来创建镜像，docker-compose指定如何运行镜像。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>docker ps <span style="color:#75715e">#获取已运行的容器</span>
+</span></span><span style="display:flex;"><span>docker ps -a <span style="color:#75715e">#获取所有的容器</span>
+</span></span><span style="display:flex;"><span>docker images <span style="color:#75715e">#获取所有镜像</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#从仓库下载一个镜像</span>
+</span></span><span style="display:flex;"><span>docker pull nginx:latest
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#将镜像保存到本地</span>
+</span></span><span style="display:flex;"><span>docker save -o docker-nginx.tar nginx
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#从本地导入镜像</span>
+</span></span><span style="display:flex;"><span>docker load -i docker-nginx.tar
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#运行一个镜像，-d后台运行。-p将主机的端口映射到容器的端口。</span>
+</span></span><span style="display:flex;"><span>docker run -d -p 80:80 image_name:image_version
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#启动一个shell，执行了两个命令，第一个命令随机挑选了一个数并写到了txt文件中，第二个命令让容器保持运行</span>
+</span></span><span style="display:flex;"><span>docker run -d ubuntu bash -c <span style="color:#e6db74">&#34;shuf -i 1-10000 -n 1 -o /data.txt &amp;&amp; tail -f /dev/null&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#启动镜像，并执行后面的命令</span>
+</span></span><span style="display:flex;"><span>docker run -it ubuntu ls /
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#--name 指定容器的名称</span>
+</span></span><span style="display:flex;"><span>docker run -d -p 17106:3306 --name 171-mysql  mysql8:171-uam
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#进入容器中，-i保持stdin打开，-t分配一个终端</span>
+</span></span><span style="display:flex;"><span>docker exec -i -t &lt;container-id&gt; /bin/bash 
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#查看容器内此txt文件内容</span>
+</span></span><span style="display:flex;"><span>docker exec &lt;container-id&gt; cat /data.txt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#停止容器运行</span>
+</span></span><span style="display:flex;"><span>docker stop &lt;container-id&gt; 
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#移除容器</span>
+</span></span><span style="display:flex;"><span>docker rm &lt;container-id&gt; 
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#停止并移除容器运行</span>
+</span></span><span style="display:flex;"><span>docker rm -f &lt;container-id&gt; 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#根据当前路径的dockerfile构建一个镜像。-t给镜像起个名字。</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># . 表示在当前路径下，可以使用一个.dockerignore文件来忽略某些文件。</span>
+</span></span><span style="display:flex;"><span>docker build -f Dockerfile -t image_name:image_version .
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#创建一个named volume</span>
+</span></span><span style="display:flex;"><span>docker volume create todo-db
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#将volumn挂载到/etc/todos路径下</span>
+</span></span><span style="display:flex;"><span>docker run -dp 3000:3000 -v todo_db:/etc/todos image_name:image_version
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#查看此named volume的信息</span>
+</span></span><span style="display:flex;"><span>docker volume inspect todo-db 
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#使用了一个bind mounts，将主机的当前路径挂载到容器内的/app路径</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#-w表示当前的工作路径，-d表示后台运行，-c表示执行后面的命令，-p表示端口映射</span>
+</span></span><span style="display:flex;"><span>docker run -dp 3000:3000  -w /app -v <span style="color:#e6db74">&#34;</span><span style="color:#66d9ef">$(</span>pwd<span style="color:#66d9ef">)</span><span style="color:#e6db74">:/app&#34;</span> node:12-alpine sh -c <span style="color:#e6db74">&#34;yarn install &amp;&amp; yarn run dev&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#查看logs，-f表示跟随日志输出</span>
+</span></span><span style="display:flex;"><span>docker logs -f &lt;container-id&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#创建了一个network</span>
+</span></span><span style="display:flex;"><span>docker network create todo-app
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#启动了一个mysql容器，并接入到network，使用-e定义了初始化数据库用的环境变量，</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#mysql还支持MYSQL_HOST（mysql server的主机名）,MYSQL_USER。docker自动创建了一个todo-mysql-data的volume。</span>
+</span></span><span style="display:flex;"><span>docker run -d --network todo-app --network-alias mysql <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>-v todo-mysql-data:/var/lib/mysql <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>-e MYSQL_ROOT_PASSWORD<span style="color:#f92672">=</span>secret <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>-e MYSQL_DATABASE<span style="color:#f92672">=</span>todos <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>mysql:5.7
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#输入密码后就能进入到mysql中</span>
+</span></span><span style="display:flex;"><span>docker exec -it &lt;mysql-container-id&gt; mysql -p
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#加入到这个网络，并进入到bash</span>
+</span></span><span style="display:flex;"><span>docker run -it --network todo-app image_name:image_version /bin/sh
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#扫描一个镜像</span>
+</span></span><span style="display:flex;"><span>docker scan image_name:image_version
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#查看创建历史，--no-trunc获取全部输出</span>
+</span></span><span style="display:flex;"><span>docker image history <span style="color:#f92672">[</span>--no-trunc<span style="color:#f92672">]</span> mysql:5.7
+</span></span></code></pre></div><h3 id="restart策略">
+  restart策略
+  <a class="anchor" href="#restart%e7%ad%96%e7%95%a5">#</a>
+</h3>
+<ul>
+<li>当使用<code>docker run</code>命令时可以使用<code>--restart</code>来配置容器的重启策略。可选的标志如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>flag</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>no</td>
+<td>任何情况下不会自动重启容器(默认)</td>
+</tr>
+<tr>
+<td>on-failure[:max-retries]</td>
+<td>当容器由于错误(退出代码为非0)而退出时会重启容器。使用<code>:max-retries</code>来限制容器尝试重启的次数。</td>
+</tr>
+<tr>
+<td>always</td>
+<td>始终在容器停止时重启，除非容器是被手动停止的。在docker重新启动时容器也会重启。</td>
+</tr>
+<tr>
+<td>unless-stopped</td>
+<td>类似于always，但是当容器停止后，重启docker容器并不会启动。</td>
+</tr>
+</tbody>
+</table>
+<p>参考链接: 
+  <a href="https://docs.docker.com/config/containers/start-containers-automatically/#use-a-restart-policy">use-a-restart-policy</a></p>
+<h2 id="docker-compose">
+  docker-compose
+  <a class="anchor" href="#docker-compose">#</a>
+</h2>
+<ul>
+<li><code>docker-compose version</code>获取版本信息。</li>
+<li>创建一个叫<code>docker-compose.yml</code>的文件，如将下面这个命令转化为docker-compose。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e">#转换前</span>
+</span></span><span style="display:flex;"><span>docker run -dp 3000:3000 -w /app -v <span style="color:#e6db74">&#34;</span><span style="color:#66d9ef">$(</span>pwd<span style="color:#66d9ef">)</span><span style="color:#e6db74">:/app&#34;</span> --network todo-app <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -e MYSQL_HOST<span style="color:#f92672">=</span>mysql -e MYSQL_USER<span style="color:#f92672">=</span>root <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -e MYSQL_PASSWORD<span style="color:#f92672">=</span>secret -e MYSQL_DB<span style="color:#f92672">=</span>todos <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  node:12-alpine  sh -c <span style="color:#e6db74">&#34;yarn install &amp;&amp; yarn run dev&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#转换前</span>
+</span></span><span style="display:flex;"><span>docker run -d <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --network todo-app --network-alias mysql <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -v todo-mysql-data:/var/lib/mysql <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -e MYSQL_ROOT_PASSWORD<span style="color:#f92672">=</span>secret -e MYSQL_DATABASE<span style="color:#f92672">=</span>todos <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  mysql:5.7
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#75715e">#转换后</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">version</span>: <span style="color:#e6db74">&#34;3.7&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">services</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">app</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">image</span>: <span style="color:#ae81ff">node:12-alpine</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">ports</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">3000</span>:<span style="color:#ae81ff">3000</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">working_dir</span>: <span style="color:#ae81ff">/app</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#docker compose中volume定义可以使用相对路径。</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">volumes</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">./:/app</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">command</span>: <span style="color:#ae81ff">sh -c &#34;yarn install &amp;&amp; yarn run dev&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">environment</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">MYSQL_HOST</span>: <span style="color:#ae81ff">mysql</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">MYSQL_USER</span>: <span style="color:#ae81ff">root</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">MYSQL_PASSWORD</span>: <span style="color:#ae81ff">secret</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">MYSQL_DB</span>: <span style="color:#ae81ff">todos</span>
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">mysql</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">image</span>: <span style="color:#ae81ff">mysql:5.7</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">volumes</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">todo-mysql-data:/var/lib/mysql</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">environment</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">MYSQL_ROOT_PASSWORD</span>: <span style="color:#ae81ff">secret</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">MYSQL_DATABASE</span>: <span style="color:#ae81ff">todos</span>
+</span></span><span style="display:flex;"><span>      
+</span></span><span style="display:flex;"><span><span style="color:#f92672">volumes</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">todo-mysql-data</span>:
+</span></span></code></pre></div><ul>
+<li>使用<code>docker-compose up -d</code>命令执行，-d参数使得在后台运行，这个命令会自动在应用间创建network。</li>
+<li>使用<code>docker-compose logs -f</code>来查看日志。-f表示follow，会将日志的变化输出到控制台。
+<ul>
+<li>使用<code>docker-compose logs -f app</code>来查看特定服务的日志。</li>
+</ul>
+</li>
+<li><code>docker-compose down [--volumes]</code>关闭并移除，&ndash;volumes指定是否删除volumes。</li>
+</ul>
+<h2 id="dockerfile">
+  dockerfile
+  <a class="anchor" href="#dockerfile">#</a>
+</h2>
+<ul>
+<li>一个Dockerfile大部分情况下以FROM指令开始，FROM指令指定了构建的父镜像。</li>
+<li><code>ENV</code>用来设置环境变量，通过<code>${xxx}</code>的方式使用。</li>
+<li>CMD在docker run时运行，RUN在docker build时运行。</li>
+<li>RUN会在新的一层执行命令。</li>
+</ul>
+<h3 id="多阶段构建">
+  多阶段构建
+  <a class="anchor" href="#%e5%a4%9a%e9%98%b6%e6%ae%b5%e6%9e%84%e5%bb%ba">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dockerfile" data-lang="dockerfile"><span style="display:flex;"><span><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> maven AS build</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">WORKDIR</span><span style="color:#e6db74"> /app</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> . .<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> mvn package<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> tomcat</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> --from<span style="color:#f92672">=</span>build /app/target/file.war /usr/local/tomcat/webapps <span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div><p><strong>参考链接：</strong>
+  <a href="https://docs.docker.com/get-started/">Orientation and setup | Docker Documentation</a></p></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

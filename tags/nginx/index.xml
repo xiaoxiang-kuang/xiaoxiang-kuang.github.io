@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>nginx on 小象的blog</title>
+    <link>/tags/nginx/</link>
+    <description>Recent content in nginx on 小象的blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Thu, 19 May 2022 15:25:24 +0800</lastBuildDate><atom:link href="/tags/nginx/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>目录映射</title>
+      <link>/posts/nginx/%E7%9B%AE%E5%BD%95%E6%98%A0%E5%B0%84/</link>
+      <pubDate>Thu, 19 May 2022 15:25:24 +0800</pubDate>
+      
+      <guid>/posts/nginx/%E7%9B%AE%E5%BD%95%E6%98%A0%E5%B0%84/</guid>
+      <description>&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-nginx&#34; data-lang=&#34;nginx&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;server&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;listen&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;20000&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;location&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;/&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;root&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;/opt/share&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;#开启自动映射目录
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;autoindex&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;on&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;charset&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;utf-8&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;#时间设置为本地时间
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;autoindex_localtime&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;on&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;#通过字节精确表示大小
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;autoindex_exact_size&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;on&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+    </item>
+    
+    <item>
+      <title>Https配置</title>
+      <link>/posts/nginx/https%E9%85%8D%E7%BD%AE/</link>
+      <pubDate>Thu, 05 May 2022 15:33:30 +0800</pubDate>
+      
+      <guid>/posts/nginx/https%E9%85%8D%E7%BD%AE/</guid>
+      <description>&lt;h1 id=&#34;nginx的https配置&#34;&gt;
+  nginx的https配置
+  &lt;a class=&#34;anchor&#34; href=&#34;#nginx%e7%9a%84https%e9%85%8d%e7%bd%ae&#34;&gt;#&lt;/a&gt;
+&lt;/h1&gt;
+&lt;h2 id=&#34;配置流程&#34;&gt;
+  配置流程
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e9%85%8d%e7%bd%ae%e6%b5%81%e7%a8%8b&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;编译nginx需要带上&lt;code&gt;--with-http_ssl_module&lt;/code&gt;选项。编译失败可能是缺少依赖，安装对应依赖即可。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;./configure --prefix=/opt/nginx --with-http_ssl_module
+make
+make install
+&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;生成证书，在控制台中依次执行以下命令，执行完成后将生成的文件移动到/opt/nginx/ssl下。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;openssl genrsa -des3 -out uam.key&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;输入密码:********
+再次输入密码:********
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;openssl req -new -key uam.key -out uam.csr&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;输入密码:********
+依次输入如下
+Country Name (2 letter code) [AU]:CN
+State or Province Name (full name) [Some-State]:shaanxi
+Locality Name (eg, city) []:xian
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:xiaoxiang
+Organizational Unit Name (eg, section) []:
+Common Name (e.g. server FQDN or YOUR name) []:
+Email Address []:
+Please enter the following &amp;#39;extra&amp;#39; attributes
+to be sent with your certificate request
+A challenge password []:
+An optional company name []:
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;openssl rsa -in uam.key  -out uam.nopass.key&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;输入密码:********
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;openssl req -new -x509 -days 3650 -key uam.nopass.key  -out uam.crt&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;依次输入如下
+Country Name (2 letter code) [AU]:CN
+State or Province Name (full name) [Some-State]:shaanxi
+Locality Name (eg, city) []:xian
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:xiaoxiang
+Organizational Unit Name (eg, section) []:
+Common Name (e.g. server FQDN or YOUR name) []:
+Email Address []:
+&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;nginx中http块中添加如下配置：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;    server {
+        listen       443 ssl;
+
+        #使用https，证书位置
+        ssl_certificate /opt/nginx/ssl/uam.crt;
+        ssl_certificate_key /opt/nginx/ssl/uam.nopass.key;
+
+        location /{
+            proxy_pass http://localhost:80; 
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+        #http转发到https
+        error_page 497 https://$host:$server_port$request_uri;
+        error_page   500 502 503 504  /50x.html;
+     }
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;配置介绍&#34;&gt;
+  配置介绍
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e9%85%8d%e7%bd%ae%e4%bb%8b%e7%bb%8d&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;https配置&#34;&gt;
+  https配置
+  &lt;a class=&#34;anchor&#34; href=&#34;#https%e9%85%8d%e7%bd%ae&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;nginx配置https，只有listen后面的&lt;code&gt;ssl&lt;/code&gt;、&lt;code&gt;ssl_certificate&lt;/code&gt;和&lt;code&gt;ssl_certificate_key&lt;/code&gt;这三个参数是必须的。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;server {
+    listen              443 ssl;
+    server_name         www.example.com;
+    ssl_certificate     www.example.com.crt;
+    ssl_certificate_key www.example.com.key;
+    ...
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;ssl_protocols&lt;/code&gt;和&lt;code&gt;ssl_ciphers&lt;/code&gt;可以限制SSL/TLS的版本和密码，默认情况下nginx会使用&lt;code&gt;ssl_protocols TLSv1 TLSv1.1 TLSv1.2&lt;/code&gt;和&lt;code&gt;ssl_ciphers HIGH:!aNULL:!MD5&lt;/code&gt;，所以一般情况下不需要手动配置。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;https优化&#34;&gt;
+  https优化
+  &lt;a class=&#34;anchor&#34; href=&#34;#https%e4%bc%98%e5%8c%96&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;SSL会消耗额外的CPU资源，在多核的CPU上应该使&lt;code&gt;worker_processes&lt;/code&gt;配置为不少于CPU核心数的值(可以将该参数设置为auto，这时nginx会自动调整工作进程数为CPU数量)。&lt;/li&gt;
+&lt;li&gt;CPU最密集的行为是SSL握手，有两种方式可以降低握手次数：
+&lt;ul&gt;
+&lt;li&gt;使用&lt;code&gt;keepalive_timeout&lt;/code&gt;，使用该参数可以是多个请求通过同一个连接，后面的请求可以复用SSL会话。&lt;/li&gt;
+&lt;li&gt;通过&lt;code&gt;ssl_session_cache&lt;/code&gt;可以将会话存储到工作进程之间共享的SSL会话缓存中，1MB的缓存可以包含大约4000个会话，默认缓存超时时间为5分钟，可以使用&lt;code&gt;ssl_session_timeout&lt;/code&gt;来设置超时时间。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;worker_processes auto;
+
+http {
+    ssl_session_cache   shared:SSL:10m;
+    ssl_session_timeout 10m;
+
+    server {
+        listen              443 ssl;
+        server_name         www.example.com;
+        keepalive_timeout   70;
+
+        ssl_certificate     www.example.com.crt;
+        ssl_certificate_key www.example.com.key;
+        ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
+        ssl_ciphers         HIGH:!aNULL:!MD5;
+        ...
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;一个server中包含http和https&#34;&gt;
+  一个server中包含http和https
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e4%b8%80%e4%b8%aaserver%e4%b8%ad%e5%8c%85%e5%90%abhttp%e5%92%8chttps&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;可以在一个server块中处理http请求和https请求&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;server {
+    listen              80;
+    listen              443 ssl;
+    server_name         www.example.com;
+    ssl_certificate     www.example.com.crt;
+    ssl_certificate_key www.example.com.key;
+    ...
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;无法使用基于server_name的多个https服务&#34;&gt;
+  无法使用基于server_name的多个HTTPS服务
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%97%a0%e6%b3%95%e4%bd%bf%e7%94%a8%e5%9f%ba%e4%ba%8eserver_name%e7%9a%84%e5%a4%9a%e4%b8%aahttps%e6%9c%8d%e5%8a%a1&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;当为一个IP配置了多个域名时，使用server_name并不能区分这些域名所对应的server块。案例如下：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;server {
+    listen          443 ssl;
+    server_name     www.example.com;
+    ssl_certificate www.example.com.crt;
+    ...
+}
+
+server {
+    listen          443 ssl;
+    server_name     www.example.org;
+    ssl_certificate www.example.org.crt;
+    ...
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;这个例子中无论输入哪个域名，浏览器都返回默认的证书(即&lt;code&gt;www.example.com&lt;/code&gt;的证书)。因为SSL连接是建立在浏览器发送HTTP请求之前，nginx不能知道当前发送请求的是哪个域名，所以它只能返回默认的服务证书。&lt;/li&gt;
+&lt;li&gt;目前的解决方法是为每个HTTPS的server分配一个IP地址。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;server {
+    listen          192.168.1.1:443 ssl;
+    server_name     www.example.com;
+    ssl_certificate www.example.com.crt;
+    ...
+}
+
+server {
+    listen          192.168.1.2:443 ssl;
+    server_name     www.example.org;
+    ssl_certificate www.example.org.crt;
+    ...
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;相关链接 
+  &lt;a href=&#34;http://nginx.org/en/docs/http/configuring_https_servers.html&#34;&gt;Configuring HTTPS servers (nginx.org)&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>serve_name</title>
+      <link>/posts/nginx/serve_name/</link>
+      <pubDate>Tue, 05 Apr 2022 19:14:13 +0800</pubDate>
+      
+      <guid>/posts/nginx/serve_name/</guid>
+      <description>&lt;p&gt;server_name可以决定使用哪个server块来处理请求，server_name可以是精确的名称、通配符和正则表达式。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;server {
+    listen       80;
+    server_name  example.org  www.example.org;
+    ...
+}
+
+server {
+    listen       80;
+    server_name  *.example.org;
+    ...
+}
+
+server {
+    listen       80;
+    server_name  mail.*;
+    ...
+}
+
+server {
+    listen       80;
+    server_name  ~^(?&amp;lt;user&amp;gt;.+)\.example\.net$;
+    ...
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;当按照域名来访问服务时，如果可以匹配多个server_name，就会按照如下的顺序来进行匹配：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;精确的名称。&lt;/li&gt;
+&lt;li&gt;以星号开头的最长通配符，如&lt;code&gt;*.exmaple.org&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;以星号结束的最长通配符，如&lt;code&gt;mail.*&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;第一个匹配的正则表达式(按照在配置文件出现的先后顺序)。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;通配符&#34;&gt;
+  通配符
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e9%80%9a%e9%85%8d%e7%ac%a6&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;包含星号的通配符只能出现在name的开始或者结束的地方，且只能在点号&lt;code&gt;.&lt;/code&gt;的旁边。&lt;code&gt;www.*.example.org&lt;/code&gt;和&lt;code&gt;w*.example.org&lt;/code&gt;都是非法的。这种情况下可以使用正则表达式。如&lt;code&gt;~^www\..+\.example\.org$&lt;/code&gt;和&lt;code&gt;~^w.*\.example\.org$&lt;/code&gt;。星号可以匹配name的好几个部分，如&lt;code&gt;*.example.org&lt;/code&gt;不仅可以匹配&lt;code&gt;www.example.org&lt;/code&gt;也可以匹配&lt;code&gt;www.sub.example.org&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;如&lt;code&gt;.example.org&lt;/code&gt;这种特殊格式的通配符不仅可以匹配&lt;code&gt;example.org&lt;/code&gt;，还可以匹配通配符&lt;code&gt;*.example.org&lt;/code&gt;。&lt;/p&gt;
+&lt;h2 id=&#34;正则表达式&#34;&gt;
+  正则表达式
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%ad%a3%e5%88%99%e8%a1%a8%e8%be%be%e5%bc%8f&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;nginx使用的正则表达式和Perl编程语言(即PCRE)兼容。如果要使用正则表达式，server_name必须以波浪线开始。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-nginx&#34; data-lang=&#34;nginx&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;server_name&lt;/span&gt; ~&lt;span style=&#34;color:#e6db74&#34;&gt;^www\d+\.example\.net$;`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果不以波浪线开头，它会被认为是一个精确的名称，如果表达式中包含星号，它会被认为是一个通配符名称。&lt;code&gt;^&lt;/code&gt;和&lt;code&gt;$&lt;/code&gt;在逻辑上是必须要有的。域名中的&lt;code&gt;.&lt;/code&gt;需要被转义，因为&lt;code&gt;.&lt;/code&gt;也是正则的元字符。当正则表达式中包含&lt;code&gt;{&lt;/code&gt;和&lt;code&gt;}&lt;/code&gt;时，正则需要被括起来。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-nginx&#34; data-lang=&#34;nginx&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;server_name&lt;/span&gt;  &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;~^(?&amp;lt;name&amp;gt;\w\d&lt;/span&gt;{&lt;span style=&#34;color:#f92672&#34;&gt;1,3}+)\.example\.net$&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;否则nginx在启动时会报错。&lt;/p&gt;
+&lt;p&gt;命名正则表达式捕获组可以当作一个变量使用:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-nginx&#34; data-lang=&#34;nginx&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;server&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;server_name&lt;/span&gt;   ~&lt;span style=&#34;color:#e6db74&#34;&gt;^(www\.)?(?&amp;lt;domain&amp;gt;.+)$;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#e6db74&#34;&gt;location&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;/&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;root&lt;/span&gt;   &lt;span style=&#34;color:#e6db74&#34;&gt;/sites/&lt;/span&gt;$domain;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;PCRE支持下面这几种语法&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;?&amp;lt;name&amp;gt;&lt;/code&gt; 和&lt;code&gt;?&#39;name&#39;&lt;/code&gt;Perl5.10兼容语法，自PCRE-7.0开始支持。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;?P&amp;lt;name&amp;gt;&lt;/code&gt; Python兼容依法，自PCRE-4.0开始支持。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;当nginx启动失败并显示以下错误时:&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;pcre_compile() failed: unrecognized character after (?&amp;lt; in ...
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这表示PCRE库版本太久，可以使用&lt;code&gt;?P&amp;lt;name&amp;gt;&lt;/code&gt;语法代替。捕获组也可以使用数字形式。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-nginx&#34; data-lang=&#34;nginx&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;server&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;server_name&lt;/span&gt;   ~&lt;span style=&#34;color:#e6db74&#34;&gt;^(www\.)?(.+)$;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#e6db74&#34;&gt;location&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;/&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;root&lt;/span&gt;   &lt;span style=&#34;color:#e6db74&#34;&gt;/sites/&lt;/span&gt;$2;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然而，这种用法仅限于简单的情况，因为数字引用很容易被覆盖。&lt;/p&gt;
+&lt;!--
+## 复杂的name
+http://nginx.org/en/docs/http/server_names.html
+--&gt;</description>
+    </item>
+    
+    <item>
+      <title>nginx负载均衡</title>
+      <link>/posts/nginx/nginx%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/</link>
+      <pubDate>Mon, 13 Sep 2021 16:09:24 +0000</pubDate>
+      
+      <guid>/posts/nginx/nginx%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/</guid>
+      <description>&lt;p&gt;nginx支持三种负载均衡的方法：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;轮询（round-robin）：按照顺序分配服务。&lt;/li&gt;
+&lt;li&gt;least-connected：下一个请求被分配给连接数最少的服务。&lt;/li&gt;
+&lt;li&gt;ip-hash：通过一个哈希算法来决定一个ip地址访问哪个后台服务，能保证一个ip一定会访问一个相同的后台服务（除非后台服务不可访问）。这种方式解决的问题是：如果某个ip已经登录了某个服务，当用户再次访问时会定位到该服务，解决了会话丢失的问题。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;轮询算法默认情况&#34;&gt;
+  轮询算法（默认情况）
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e8%bd%ae%e8%af%a2%e7%ae%97%e6%b3%95%e9%bb%98%e8%ae%a4%e6%83%85%e5%86%b5&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-nginx&#34; data-lang=&#34;nginx&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;http&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;upstream&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;myapp1&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;server&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;example1.com&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;server&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;example2.com&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;server&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;example3.com&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;server&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;listen&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;80&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;location&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;/&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#f92672&#34;&gt;proxy_pass&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;http://myapp1&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;使用least_conn命令的least-connected算法&#34;&gt;
+  使用least_conn命令的least-connected算法。
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e4%bd%bf%e7%94%a8least_conn%e5%91%bd%e4%bb%a4%e7%9a%84least-connected%e7%ae%97%e6%b3%95&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-nginx&#34; data-lang=&#34;nginx&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;upstream&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;myapp1&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;least_conn&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;server&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;example1.com&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;server&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;example2.com&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;server&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;example3.com&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;使用ip_hash命令的ip-hash算法&#34;&gt;
+  使用ip_hash命令的ip-hash算法。
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e4%bd%bf%e7%94%a8ip_hash%e5%91%bd%e4%bb%a4%e7%9a%84ip-hash%e7%ae%97%e6%b3%95&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-nginx&#34; data-lang=&#34;nginx&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;upstream&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;myapp1&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;ip_hash&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;server&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;example1.com&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;server&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;example2.com&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;server&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;example3.com&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;权重&#34;&gt;
+  权重
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%9d%83%e9%87%8d&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-nginx&#34; data-lang=&#34;nginx&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;upstream&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;myapp1&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;server&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;srv1.example.com&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;weight=3&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;server&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;srv2.example.com&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;server&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;srv3.example.com&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;参考链接：&lt;/strong&gt;
+  &lt;a href=&#34;http://nginx.org/en/docs/http/load_balancing.html&#34;&gt;Using nginx as HTTP load balancer&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>nginx</title>
+      <link>/posts/nginx/nginx/</link>
+      <pubDate>Thu, 12 Aug 2021 10:03:28 +0000</pubDate>
+      
+      <guid>/posts/nginx/nginx/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;nginx默认的配置文件名是nginx.conf，位置在&lt;code&gt;/usr/local/nginx/conf&lt;/code&gt;、&lt;code&gt;/etc/niginx&lt;/code&gt;、或&lt;code&gt;/usr/local/etc/nginx&lt;/code&gt;。通过&lt;code&gt;nginx -c xxx.conf&lt;/code&gt;来指定配置文件。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;当nginx启动后，可以通过&lt;code&gt;nginx -s signal&lt;/code&gt;来控制nginx，signal可以是：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;stop：快速关闭；quit：正常关闭；reload：重新加载配置文件；reopen：重新打开配置文件。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;配置文件可以包含多个&lt;code&gt;server&lt;/code&gt;块，他们之间通过监听的端口和服务名来区分。一旦nginx决定使用哪个服server来处理请求，他就会根据server块内location的指令来匹配请求头中的url，①精确匹配优先级最高，遇到就返回结果；②普通匹配会选择location中前缀最长的那个，和顺序无关；③当location中有正则表达式时，会优先匹配正则表达式（正则级别比普通匹配优先级高，但比精确匹配优先级低），正则表达式的匹配顺序按照文件中的物理顺序匹配，只要匹配到一条正则，就会返回结果；如果没有匹配，就会取普通匹配中最匹配的那个。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;nginx的错误日志文件在&lt;code&gt;usr/local/nginx/logs&lt;/code&gt;、&lt;code&gt;/var/log/nginx&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;常用配置&#34;&gt;
+  常用配置
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%b8%b8%e7%94%a8%e9%85%8d%e7%bd%ae&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;proxy_pass&#34;&gt;
+  proxy_pass
+  &lt;a class=&#34;anchor&#34; href=&#34;#proxy_pass&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;使用&lt;code&gt;proxy_pass&lt;/code&gt;来配置代理服务。代理服务的流程：server接收request-&amp;gt;把request传给代理服务-&amp;gt;获取代理服务的response-&amp;gt;把response返回给客户端。&lt;/li&gt;
+&lt;li&gt;proxy_pass有两个要注意的点
+&lt;ul&gt;
+&lt;li&gt;proxy_pass后面如果跟了一个完整的url，如&lt;code&gt;http://localhost:8080/xxx&lt;/code&gt;，那么最后访问的时候就是location中匹配的那一部分替换成proxy_pass的url。&lt;/li&gt;
+&lt;li&gt;proxy_pass后面如果跟的是如&lt;code&gt;http://localhost:8080&lt;/code&gt;，那么最后访问的是proxy_pass的链接加上请求路径。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;例&#34;&gt;
+  例：
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e4%be%8b&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-nginx&#34; data-lang=&#34;nginx&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;server&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#f92672&#34;&gt;listen&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;80&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;#最后的地址就是http://localhost:8080/journey/xxx
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;location&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;/journey&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;proxy_pass&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;http://localhost:8080&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;#最后的地址就是http://localhost:8080/test/xxx，location对应的chat会被替换为url。
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;location&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;/chat&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;proxy_pass&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;http://localhost:8080/test&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;#将会映射到/html/tool这个路径下
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;location&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;/tool&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    	&lt;span style=&#34;color:#f92672&#34;&gt;root&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;html&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;#正则表达式以~开始，这里是匹配图片
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;location&lt;/span&gt; ~ &lt;span style=&#34;color:#e6db74&#34;&gt;\.(gif|jpg|png)$&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;root&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;/data/images&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;参考链接：&lt;/strong&gt;
+  &lt;a href=&#34;http://nginx.org/en/docs/beginners_guide.html&#34;&gt;Beginner’s Guide (nginx.org)&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;nginx内嵌的变量&#34;&gt;
+  nginx内嵌的变量
+  &lt;a class=&#34;anchor&#34; href=&#34;#nginx%e5%86%85%e5%b5%8c%e7%9a%84%e5%8f%98%e9%87%8f&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-nginx&#34; data-lang=&#34;nginx&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#等于在proxy_pass指令中指定的被代理服务的主机名和端口
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;$proxy_host&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#等于在proxy_pass中指定的服务的端口，或者是其服务的默认端口
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;$proxy_port
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#如果X-Forwarded-For属性未在请求头中，$proxy_add_x_forwarded_for的值就等于$remote_addr;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#如果X-Forwarded-For在请求头中，那$proxy_add_x_forwarded_for的值就等于上一个$proxy_add_x_forwarded_for加上&amp;#34;,$remote_addr&amp;#34;。
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#例：proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;$proxy_add_x_forwarded_for
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;nginx指令&#34;&gt;
+  nginx指令
+  &lt;a class=&#34;anchor&#34; href=&#34;#nginx%e6%8c%87%e4%bb%a4&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;rewrite&#34;&gt;
+  rewrite
+  &lt;a class=&#34;anchor&#34; href=&#34;#rewrite&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;语法: rewrite regex replacement &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;flag&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;context: server,location,if
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;rewrite指令按照它出现的顺序来执行，可以通过flag来终止执行，如果replacement以&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;http://,https://或者&lt;/span&gt;$scheme&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;开始，就会直接返回客户端。
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;flag可以是last、break、redirect、permanent。
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;redirect是暂时重定向302，permanent是永久重定向301。
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;rewrite ^&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;.*&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;$ https://localhost$1 permanent;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;if&#34;&gt;
+  if
+  &lt;a class=&#34;anchor&#34; href=&#34;#if&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;语法: &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;condition&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;...&lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;context: server, localtion
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;condition包括：
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  1. 变量名，当变量为空或者为&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;0&amp;#34;&lt;/span&gt;时是false；
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  2. 变量和字符串通过&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;=&amp;#34;&lt;/span&gt;或者&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;!=&amp;#34;&lt;/span&gt;来比较；
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  3. 变量和正则表达式比较【比较符号： ~（大小写敏感）、~*（大小写）不敏感、!~、!~*】，可以通过&lt;span style=&#34;color:#f92672&#34;&gt;()&lt;/span&gt;来捕获数据。
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  4. 使用-f 或!-f检测文件书否存在；
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  5. 使用-d 或!-d检测目录是否存在；
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  6. 使用-e 或!-e 检测文件、目录、符号连接是否存在；
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  7. 使用-x 或!-x 检测是否是可执行文件。
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;$http_user_agent ~ MSIE&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    rewrite ^&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;.*&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;$ /msie/$1 break;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;$http_cookie ~* &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;id=([^;]+)(?:;|&lt;/span&gt;$&lt;span style=&#34;color:#e6db74&#34;&gt;)&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    set $id $1;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;$request_method &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; POST&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; 405;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;return&#34;&gt;
+  return
+  &lt;a class=&#34;anchor&#34; href=&#34;#return&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;语法: &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; code &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;text&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; code URL;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; URL;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;context: server,location,if
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;返回特定的状态码，返回444会不发送响应头就关闭连接。
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;可以指定一个重定向的URL（301，302，303，307，308），或者响应体text（其他的code）。
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;set&#34;&gt;
+  set
+  &lt;a class=&#34;anchor&#34; href=&#34;#set&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;语法: set $variable value;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;context: server,location,if
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;给变量赋值，值可以是变量、字符串或者变量和字符串的组合。
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>操作系统 on 小象的blog</title>
+    <link>/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</link>
+    <description>Recent content in 操作系统 on 小象的blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Sun, 12 Apr 2020 19:52:47 +0000</lastBuildDate><atom:link href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>死锁</title>
+      <link>/posts/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%AD%BB%E9%94%81/</link>
+      <pubDate>Sun, 12 Apr 2020 19:52:47 +0000</pubDate>
+      
+      <guid>/posts/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%AD%BB%E9%94%81/</guid>
+      <description>&lt;h3 id=&#34;系统资源&#34;&gt;
+  系统资源
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e7%b3%bb%e7%bb%9f%e8%b5%84%e6%ba%90&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;可抢占资源：某进程获得该类资源后，该资源可以被系统或其他进程访问。比如CPU、内存。&lt;/li&gt;
+&lt;li&gt;不可抢占资源：某进程获得该类资源后，该资源不能被其他进程抢占，只能在进程使用完毕后由该进程自己释放。&lt;strong&gt;讨论死锁所指的资源一般指不可抢占资源&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;死锁产生的必要条件&#34;&gt;
+  死锁产生的必要条件
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%ad%bb%e9%94%81%e4%ba%a7%e7%94%9f%e7%9a%84%e5%bf%85%e8%a6%81%e6%9d%a1%e4%bb%b6&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;互斥条件：任一时刻一个资源仅被一个进程占用。&lt;/li&gt;
+&lt;li&gt;请求和保持条件：一个进程请求资源得不到满足而阻塞自己时，并不释放已经分配给它的资源。&lt;/li&gt;
+&lt;li&gt;不剥夺条件：进程获得的资源在未使用完毕不可能被其他进程占有，只能由该进程自己释放。&lt;/li&gt;
+&lt;li&gt;循环等待：若干进程形成一个循环等待链，链中每一个进程都在等待改链中下一个进程占有的资源。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;死锁的预防&#34;&gt;
+  死锁的预防
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%ad%bb%e9%94%81%e7%9a%84%e9%a2%84%e9%98%b2&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;破坏请求和保持条件：每个进程在运行之前一次性申请他所需要的全部资源，并在资源未满足时不运行。&lt;/li&gt;
+&lt;li&gt;破坏不剥夺：当一个已经占有资源的进程又提出新的资源请求，而并没有得到满足时，则必须释放他所获取的所有资源而进入阻塞状态。&lt;/li&gt;
+&lt;li&gt;破坏循环等待：采用资源有序分配策列，将系统中的资源进行编号，进程必须按照顺序去申请资源。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;死锁的避免&#34;&gt;
+  死锁的避免
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%ad%bb%e9%94%81%e7%9a%84%e9%81%bf%e5%85%8d&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;安全状态&lt;/strong&gt;是指在某一时刻，系统中存在一个包含所有进程的进程序列，按照该进程序列的顺序为所有进程分配资源，则所有进程的资源需求都可以得到满足。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;银行家算法&#34;&gt;
+  银行家算法
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e9%93%b6%e8%a1%8c%e5%ae%b6%e7%ae%97%e6%b3%95&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;在进程提出资源申请时，先判断此次分配是否会导致系统进入不安全状态。如果会进入不安全状态，就暂时不答应这次请求，让进程先阻塞。&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>临界资源</title>
+      <link>/posts/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%B8%B4%E7%95%8C%E8%B5%84%E6%BA%90/</link>
+      <pubDate>Thu, 09 Apr 2020 11:18:52 +0000</pubDate>
+      
+      <guid>/posts/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%B8%B4%E7%95%8C%E8%B5%84%E6%BA%90/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;临界资源：某段时间内只能允许一个进程使用的资源。&lt;/li&gt;
+&lt;li&gt;临界区：进程中访问临界资源的代码段。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;进程&lt;/span&gt;P1
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tmp1&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;s;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tmp1&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;tmp1&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;s&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;tmp1;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;进程&lt;/span&gt;P2
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tmp2&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;s;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tmp2&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;tmp2&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;s&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;tmp2;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;当并发执行进程&lt;/span&gt;P1&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;和进程&lt;/span&gt;P2&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;时，可能会造成&lt;/span&gt;s&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;的结果无法预测&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;此时，我们可以将&lt;/span&gt;s&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;设置为临界资源，让进程&lt;/span&gt;P1&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;和&lt;/span&gt;P2&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;互斥的访问&lt;/span&gt;s&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;，&lt;/span&gt;P1&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;和&lt;/span&gt;P2&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;的代码就叫做临界区。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+    </item>
+    
+    <item>
+      <title>系统调用</title>
+      <link>/posts/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/</link>
+      <pubDate>Thu, 09 Apr 2020 11:01:05 +0000</pubDate>
+      
+      <guid>/posts/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;系统调用是操作系统提供给应用程序使用的接口，应用程序可以发出系统调用请求来获取操作系统的服务。&lt;/li&gt;
+&lt;li&gt;在用户程序中，凡是和资源有关的操作（如存储分配、io操作、文件管理等），都必须由系统调用的方式向操作系统提出服务请求，由操作系统代为完成。这样可以保证系统的稳定性和安全性。&lt;/li&gt;
+&lt;li&gt;系统调用的相关处理运行在核心态。&lt;/li&gt;
+&lt;li&gt;有些库函数会封装一些系统调用。&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>中断</title>
+      <link>/posts/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%B8%AD%E6%96%AD/</link>
+      <pubDate>Thu, 09 Apr 2020 10:31:26 +0000</pubDate>
+      
+      <guid>/posts/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%B8%AD%E6%96%AD/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;当中断发生时，cpu立即进入核心态。&lt;/li&gt;
+&lt;li&gt;当中断发生后，当前运行的进程暂停运行，并由操作系统内核对中断进行处理。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;用户态 —&amp;gt;核心态&lt;/strong&gt; 是通过中断实现的，并且中断是唯一途径。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;核心态—&amp;gt;用户态&lt;/strong&gt; 是通过执行一个特权指令，将程序状态字psw的标志设置为“用户态”。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;中断处理过程&#34;&gt;
+  中断处理过程
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e4%b8%ad%e6%96%ad%e5%a4%84%e7%90%86%e8%bf%87%e7%a8%8b&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;
+  &lt;img src=&#34;/img/%e4%b8%ad%e6%96%ad/1.jpg&#34; alt=&#34;中断&#34; /&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;执行完每个指令后，cpu会检查当前是否有外部中断信号。&lt;/li&gt;
+&lt;li&gt;如果检测到了外部中断信号，则需要保护现场。&lt;/li&gt;
+&lt;li&gt;根据中断信号类型转入相应的中断处理程序。&lt;/li&gt;
+&lt;li&gt;恢复原进程的cpu环境并退出中断，返回原程序并继续执行。&lt;/li&gt;
+&lt;/ol&gt;</description>
+    </item>
+    
+    <item>
+      <title>管程</title>
+      <link>/posts/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E7%AE%A1%E7%A8%8B/</link>
+      <pubDate>Tue, 07 Apr 2020 22:12:14 +0000</pubDate>
+      
+      <guid>/posts/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E7%AE%A1%E7%A8%8B/</guid>
+      <description>&lt;h5 id=&#34;管程是一种特殊的软件模块由这些部分组成&#34;&gt;
+  管程是一种特殊的软件模块，由这些部分组成：
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e7%ae%a1%e7%a8%8b%e6%98%af%e4%b8%80%e7%a7%8d%e7%89%b9%e6%ae%8a%e7%9a%84%e8%bd%af%e4%bb%b6%e6%a8%a1%e5%9d%97%e7%94%b1%e8%bf%99%e4%ba%9b%e9%83%a8%e5%88%86%e7%bb%84%e6%88%90&#34;&gt;#&lt;/a&gt;
+&lt;/h5&gt;
+&lt;ol&gt;
+&lt;li&gt;局部与管程的共享数据结构说明；&lt;/li&gt;
+&lt;li&gt;对该数据结构进行操作的一组过程；&lt;/li&gt;
+&lt;li&gt;对局部于管程的共享数据设置初始值的语句；&lt;/li&gt;
+&lt;li&gt;管程有一个名字。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h5 id=&#34;管程的基本特征&#34;&gt;
+  管程的基本特征：
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e7%ae%a1%e7%a8%8b%e7%9a%84%e5%9f%ba%e6%9c%ac%e7%89%b9%e5%be%81&#34;&gt;#&lt;/a&gt;
+&lt;/h5&gt;
+&lt;ol&gt;
+&lt;li&gt;局部于管程的数据只能被局部于管程的过程访问；&lt;/li&gt;
+&lt;li&gt;一个进程只有通过调用管程内的过程才能进入管程访问共享数据；&lt;/li&gt;
+&lt;li&gt;每次仅允许一个进程在管程内执行某个内部过程。&lt;/li&gt;
+&lt;/ol&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

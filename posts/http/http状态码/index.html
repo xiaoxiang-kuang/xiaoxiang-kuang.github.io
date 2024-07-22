@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>http状态码 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#消息响应">消息响应</a></li>
+        <li><a href="#成功响应">成功响应</a></li>
+        <li><a href="#重定向">重定向</a></li>
+        <li><a href="#客户端响应">客户端响应</a></li>
+        <li><a href="#服务端响应">服务端响应</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>http状态码</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#消息响应">消息响应</a></li>
+        <li><a href="#成功响应">成功响应</a></li>
+        <li><a href="#重定向">重定向</a></li>
+        <li><a href="#客户端响应">客户端响应</a></li>
+        <li><a href="#服务端响应">服务端响应</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/http/http%E7%8A%B6%E6%80%81%E7%A0%81/">http状态码</a>
+  </h1>
+  
+  <h5>2021-08-17</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/http/">http</a>
+  </div>
+  
+
+
+
+<h2 id="消息响应">
+  消息响应
+  <a class="anchor" href="#%e6%b6%88%e6%81%af%e5%93%8d%e5%ba%94">#</a>
+</h2>
+<ul>
+<li><code>101 Switching Protocol</code> 表示正在切换协议。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span><span style="color:#66d9ef">HTTP</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1.1</span> <span style="color:#ae81ff">101</span> <span style="color:#a6e22e">Switching Protocols</span>
+</span></span><span style="display:flex;"><span>Upgrade<span style="color:#f92672">:</span> <span style="color:#ae81ff">websocket</span>
+</span></span><span style="display:flex;"><span>Connection<span style="color:#f92672">:</span> <span style="color:#ae81ff">Upgrade</span>
+</span></span></code></pre></div><h2 id="成功响应">
+  成功响应
+  <a class="anchor" href="#%e6%88%90%e5%8a%9f%e5%93%8d%e5%ba%94">#</a>
+</h2>
+<ul>
+<li><code>200 OK</code>请求成功。</li>
+<li><code>201 CREATED</code>请求已成功，通常是POST、PUT请求后返回的响应。</li>
+</ul>
+<h2 id="重定向">
+  重定向
+  <a class="anchor" href="#%e9%87%8d%e5%ae%9a%e5%90%91">#</a>
+</h2>
+<ul>
+<li><code>301 MOVED PERMENENTLY</code>请求的资源已经被永久移动到新位置。</li>
+<li><code>302 FOUND</code>重定向是临时的。</li>
+<li><code>304 Not Modified</code> 当文档内容没有修改，服务器会返回这个状态码，304响应禁止包含消息体。</li>
+</ul>
+<h2 id="客户端响应">
+  客户端响应
+  <a class="anchor" href="#%e5%ae%a2%e6%88%b7%e7%ab%af%e5%93%8d%e5%ba%94">#</a>
+</h2>
+<ul>
+<li><code>400 BAD REQUEST</code>请求参数有误。</li>
+<li><code>401 UNAUTHORIZED</code>当前请求需要用户验证。</li>
+<li><code>403 FORBIDDEN</code>服务器已经理解请求，但是拒绝执行。</li>
+<li><code>404 NOT FOUND</code>请求资源未找到。</li>
+<li><code>405 Method Not Allowed</code> 请求方法不能被用于请求相应的资源。该响应必须返回一个Allow头用以表述当前资源能够接受的请求方法的列表。</li>
+<li><code>414 URI Too Long</code> 请求的URI长度超过了服务器能够解释的长度，因此服务器拒绝对该请求提供服务。通常是因为超过了GET方法传输数据的上限，可以改为POST方法。</li>
+</ul>
+<h2 id="服务端响应">
+  服务端响应
+  <a class="anchor" href="#%e6%9c%8d%e5%8a%a1%e7%ab%af%e5%93%8d%e5%ba%94">#</a>
+</h2>
+<ul>
+<li><code>500 INTERNAL SERVER ERROR</code>服务器内部错误。</li>
+<li><code>502 BAD GATEWAY</code>服务器作为网关需要得到处理该请求的响应，但得到了一个错误的响应。</li>
+<li><code>503 SERVICE UNAVILABLE</code>服务器没有准备好处理请求。</li>
+</ul>
+<p><strong>参考链接：</strong>
+  <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status">HTTP 响应代码 - HTTP | MDN (mozilla.org)</a></p></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

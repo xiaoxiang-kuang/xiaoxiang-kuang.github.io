@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>String | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#string的基本特性">String的基本特性</a></li>
+            <li><a href="#字符串的拼接操作">字符串的拼接操作</a></li>
+            <li><a href="#部分源码分析">部分源码分析</a></li>
+            <li><a href="#部分考点分析">部分考点分析</a></li>
+            <li><a href="#intern">intern</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>String</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#string的基本特性">String的基本特性</a></li>
+            <li><a href="#字符串的拼接操作">字符串的拼接操作</a></li>
+            <li><a href="#部分源码分析">部分源码分析</a></li>
+            <li><a href="#部分考点分析">部分考点分析</a></li>
+            <li><a href="#intern">intern</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/javase/String/">String</a>
+  </h1>
+  
+  <h5>2020-09-25</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">java</a>
+  </div>
+  
+
+
+
+<h3 id="string的基本特性">
+  String的基本特性
+  <a class="anchor" href="#string%e7%9a%84%e5%9f%ba%e6%9c%ac%e7%89%b9%e6%80%a7">#</a>
+</h3>
+<ul>
+<li>
+<p>String类的声明为final。</p>
+</li>
+<li>
+<p>String实现了Serializable接口：表明字符串是支持序列化的。实现了Comparable接口：表面字符串是可以比较大小。</p>
+</li>
+<li>
+<p>String再jdk8及以前使用 final char[] value存储字符串数据，jdk9改为byte[]。</p>
+</li>
+<li>
+<p>String的字符串常量池是一个固定大小的hashtable，在jdk7中默认大小是60013，（jdk8中1009是可以设置的最小值），使用<b>-XX:StringTableSize=</b>可以设置StringTable的长度。如果字符串常量池中的字符串非常多，就可能会造成hash冲突，从而导致链表变得很长（链表长度大于8时会转化成红黑树），但还是会导致性能下降（比如在调用intern时）。</p>
+</li>
+<li>
+<p>字符串的拼接操作</p>
+<ul>
+<li>常量与常量的拼接是放在String Pool中，原因是编译期优化。</li>
+<li>只要其中有一个是变量，结果就放在堆中。变量拼接的原理是StringBuilder。</li>
+<li>如果拼接的结果调用intern方法，则主动将常量池中还没有的字符串放入池中，并返回其地址（如果String Pool中有，则直接返回其地址），下面还要对intern进行讨论。</li>
+</ul>
+</li>
+</ul>
+<h3 id="字符串的拼接操作">
+  字符串的拼接操作
+  <a class="anchor" href="#%e5%ad%97%e7%ac%a6%e4%b8%b2%e7%9a%84%e6%8b%bc%e6%8e%a5%e6%93%8d%e4%bd%9c">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>String s1<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;a&#34;</span><span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>String s2<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;b&#34;</span><span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>String s3<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;ab&#34;</span><span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>String s4<span style="color:#f92672">=</span>s1<span style="color:#f92672">+</span>s2<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">如果被拼接的字符串中有变量，执行字符串拼接操作会进行如下几个步骤
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">①StringBuilder s=new StringBuilder();
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">②s.append(s1); s.append(s2);
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">③s.toString();
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">如果要被拼接的字符串中全是常量或者常量引用，则仍然使用编译器优化，不会涉及到上面三步。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">*/</span>
+</span></span><span style="display:flex;"><span>System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>s4<span style="color:#f92672">==</span>s3<span style="color:#f92672">);</span><span style="color:#75715e">//false
+</span></span></span></code></pre></div><h3 id="部分源码分析">
+  部分源码分析
+  <a class="anchor" href="#%e9%83%a8%e5%88%86%e6%ba%90%e7%a0%81%e5%88%86%e6%9e%90">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">//下面这两行代码输出的结果为什么是nullabc呢？一起来分析一下源码吧
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>String s<span style="color:#f92672">=</span><span style="color:#66d9ef">null</span><span style="color:#f92672">+</span><span style="color:#e6db74">&#34;abc&#34;</span><span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>s<span style="color:#f92672">);</span><span style="color:#75715e">//nullabc
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//StringBuilder类，当传入一个对象时会将该对象转化成一个字符串
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">public</span> StringBuilder <span style="color:#a6e22e">append</span><span style="color:#f92672">(</span>Object obj<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> append<span style="color:#f92672">(</span>String<span style="color:#f92672">.</span><span style="color:#a6e22e">valueOf</span><span style="color:#f92672">(</span>obj<span style="color:#f92672">));</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//String类，当该对象为null时，会返回一个&#34;null&#34;字符串，否则返回该对象的toString方法
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> String <span style="color:#a6e22e">valueOf</span><span style="color:#f92672">(</span>Object obj<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#f92672">(</span>obj <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">?</span> <span style="color:#e6db74">&#34;null&#34;</span> <span style="color:#f92672">:</span> obj<span style="color:#f92672">.</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><h3 id="部分考点分析">
+  部分考点分析
+  <a class="anchor" href="#%e9%83%a8%e5%88%86%e8%80%83%e7%82%b9%e5%88%86%e6%9e%90">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>String s<span style="color:#f92672">=</span><span style="color:#66d9ef">new</span> String<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;ab&#34;</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">创建了两个对象
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">对象1：new String(&#34;ab&#34;);
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">对象2：常量池中的&#34;ab&#34;;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">*/</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>String s1<span style="color:#f92672">=</span><span style="color:#66d9ef">new</span> String<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;a&#34;</span><span style="color:#f92672">)+</span><span style="color:#66d9ef">new</span> String<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;b&#34;</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">创建了6个对象
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">对象1：new StringBuilder();
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">对象2：new String(&#34;a&#34;);
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">对象3：常量池中的&#34;a&#34;;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">对象4：new String(&#34;b&#34;);
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">对象5：常量池中的&#34;b&#34;;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">对象6：当append操作结束后，会调用StringBuilder的toString方法，将StringBuilder对象转化为String对象，
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	此时又发生了一次new的操作:new String(value, 0, count);
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">tips：这里虽然创建了6个对象，但实际上在常量池中并没有创建&#34;ab&#34;;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">*/</span>
+</span></span></code></pre></div><h3 id="intern">
+  intern
+  <a class="anchor" href="#intern">#</a>
+</h3>
+<p>从jdk7开始，当我们调用String对象的intern()方法：</p>
+<ul>
+<li>如果常量池中有这个字符串，则返回常量池中该串的地址。</li>
+<li>如果常量池中没有该串，则会把<strong>对象的引用地址</strong>复制一份，放入常量池，并返回常量池中的引用地址。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>String s1<span style="color:#f92672">=</span><span style="color:#66d9ef">new</span> String<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;ab&#34;</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>s1<span style="color:#f92672">.</span><span style="color:#a6e22e">intern</span><span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>String s2<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;ab&#34;</span><span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>s1<span style="color:#f92672">==</span>s2<span style="color:#f92672">);</span><span style="color:#75715e">//false;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#75715e">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">这是因为一个是堆中的对象，一个是常量池中的对象
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">*/</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>String s3<span style="color:#f92672">=</span><span style="color:#66d9ef">new</span> String<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;a&#34;</span><span style="color:#f92672">)+</span><span style="color:#66d9ef">new</span> String<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;b&#34;</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>s3<span style="color:#f92672">.</span><span style="color:#a6e22e">intern</span><span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>String s4<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;ab&#34;</span><span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>s3<span style="color:#f92672">==</span>s4<span style="color:#f92672">);</span><span style="color:#75715e">//true(jdk7及以上版本的结果);
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#75715e">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">这个是不是感觉很匪夷所思？
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">原因是在创建了s3之后，常量池中并没有&#34;ab&#34;这个对象，
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">而在执行s3.intern()后，常量池中多了一个指向堆中的对象的指针，
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">所以当执行s4=&#34;ab&#34;时，s4实际上也是指向了堆中创建的那个对象。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">为什么这么做呢？指针才占4个字节，用指针省空间。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">*/</span>
+</span></span></code></pre></div></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

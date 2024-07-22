@@ -1,0 +1,1251 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>数据库 on 小象的blog</title>
+    <link>/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/</link>
+    <description>Recent content in 数据库 on 小象的blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Sun, 20 Mar 2022 16:14:44 +0800</lastBuildDate><atom:link href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>InnoDB</title>
+      <link>/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/InnoDB/</link>
+      <pubDate>Sun, 20 Mar 2022 16:14:44 +0800</pubDate>
+      
+      <guid>/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/InnoDB/</guid>
+      <description>&lt;h2 id=&#34;innodb&#34;&gt;
+  InnoDB
+  &lt;a class=&#34;anchor&#34; href=&#34;#innodb&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;mysql服务器中负责对表中的数据读取和写入工作的部分是存储引擎，真实数据在不同存储引擎中存放的格式一般是不同的。&lt;/li&gt;
+&lt;li&gt;innodb会将数据划分为若干个页，以页作为磁盘和内存交互的基本单位，页也是innodb管理存储空间的基本单位，页的默认大小为16KB。一般情况下，一次最少从磁盘中读取16KB的内容到内存中，一次最少把内存中的16KB内容刷新到磁盘中。&lt;/li&gt;
+&lt;li&gt;innodb有4中行格式COMPACT、PEDUNDANT、DYNAMIC、COMPRESSED。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;CREATE TABLE 表名(列的信息) ROW_FORMAT=行格式名称;
+ALTER TABLE 表名 ROW_FORMAT=行格式名称;
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;compact行格式&#34;&gt;
+  COMPACT行格式
+  &lt;a class=&#34;anchor&#34; href=&#34;#compact%e8%a1%8c%e6%a0%bc%e5%bc%8f&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;
+  &lt;img src=&#34;/img/%e6%95%b0%e6%8d%ae%e5%ba%93/mysql/1.jpg&#34; alt=&#34;COMPACT行格式&#34; /&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;记录的额外信息，包含3个部分：变长字段的长度列表、NULL值列表和记录头信息。
+&lt;ol&gt;
+&lt;li&gt;mysql支持一些变长的数据类型，如varchar、text和blob，变长数据类型占用的字节数也是不固定的，所以在存储数据时要把这些数据占用的字节数也存起来。一个变长的数据占用的存储空间分为两部分：真正的数据内容和该数据占用的字节数。各变长字段的真实数据占用的字节数按照列的顺序逆序存放。&lt;/li&gt;
+&lt;li&gt;当使用定长编码的字符集时（如ascii），CHAR(10)列所占用的字节数不会被加到变长字段长度列表中，而当采用变长编码的字符集时，CHAR(10)列所占用的字节数就会被加到变长字段的长度列表中。此外，采用变长编码字符集的CHAR(M)至少占用M个字节，而VARCHAR(M)没有这个要求。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;记录头信息由固定的5字节组成。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;
+  &lt;img src=&#34;/img/%e6%95%b0%e6%8d%ae%e5%ba%93/mysql/2.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;名称&lt;/th&gt;
+&lt;th&gt;大小(bit)&lt;/th&gt;
+&lt;th&gt;描述&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;deleted_flag&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;标识该记录是否被删除。所有被删除的记录会组成一个垃圾链表，之后若有新的记录插入到表中，他们就可能覆盖掉这些记录所占用的存储空间。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;min_rec_flag&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;B+树每层非叶子节点中的最小的目录项记录都会添加该标记&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;n_owned&lt;/td&gt;
+&lt;td&gt;4&lt;/td&gt;
+&lt;td&gt;一个页面中的记录会被分为多个组，每个组的最后那条记录会在n_owned中记录该组内由几条记录。其他的记录中该字段为0&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;heap_no&lt;/td&gt;
+&lt;td&gt;13&lt;/td&gt;
+&lt;td&gt;表示当前记录在页面堆中的相对位置&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;record_type&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;表示当前记录的类型，0表示普通记录，1表示B+树非叶节点的目录项，2表示Infimum记录，3表示Supremum记录&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;next_record&lt;/td&gt;
+&lt;td&gt;16&lt;/td&gt;
+&lt;td&gt;表示下一条记录的相对位置。下一条记录指的是按照主键值从小到大的顺序排列的下一条记录。infimum记录的下一条记录就是本页中主键最小的记录，本页中主键最大的记录的下一条记录就是supremum记录。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;mysql默认会为每个记录添加一些隐藏列。innodb的主键生成策略：优先使用用户自定义的主键作为主键，如果没有主键，就选取一个不允许存储为NULL的UNIQUE键作为主键，如果没有，innodb会为表默认添加一个名为row_id的隐藏列作为主键。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;列名&lt;/th&gt;
+&lt;th&gt;占用空间&lt;/th&gt;
+&lt;th&gt;描述&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;row_id(DB_ROW_ID)&lt;/td&gt;
+&lt;td&gt;6字节&lt;/td&gt;
+&lt;td&gt;非必须，行ID，唯一标识一条记录&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;trx_id(DB_TRX_ID)&lt;/td&gt;
+&lt;td&gt;6字节&lt;/td&gt;
+&lt;td&gt;必须，事务ID&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;roll_pointer(DB_ROLL_PTR)&lt;/td&gt;
+&lt;td&gt;7字节&lt;/td&gt;
+&lt;td&gt;必须，回滚指针。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;innodb是以页为基本单位来管理存储空间的，一个页的大小通常是16KB，有时候一个页存不了一条记录，所以mysql中会有溢出列的概念。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;COMPACT和REDUNDANT行格式中，对于存储占用的空间非常多的列，在记录的真实数据处只会存储该列的一部分数据，而把剩余的数据分散存储到其他的几个页中，然后在记录真实数据处用20字节存储指向这些页的地址和这些页的数据占用的字节数。溢出列之间是使用链表连接起来的。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;DYNAMIC和COMPRESSED类似于COMPACT行格式，但是在处理溢出列有点差异，他们不会在记录真实数据处存储列真实数据的前768字节，而是把所有的列都存到溢出页中。COMPRESSED行格式会采用压缩算法对页面进行压缩。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;innodb数据页结构&#34;&gt;
+  innodb数据页结构
+  &lt;a class=&#34;anchor&#34; href=&#34;#innodb%e6%95%b0%e6%8d%ae%e9%a1%b5%e7%bb%93%e6%9e%84&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;一个数据页可以被划分为7个部分，分别如下：
+&lt;ul&gt;
+&lt;li&gt;File Header：表示页的一些通用信息，占固定的38字节。&lt;/li&gt;
+&lt;li&gt;Page Header：表示数据页专有的一些信息，占固定的56字节。&lt;/li&gt;
+&lt;li&gt;Infimum和Supremum：两个虚拟的伪记录，分别表示页中最小记录和最大记录，占固定的26字节。&lt;/li&gt;
+&lt;li&gt;User Records：真正存储插入的记录，大小不固定。&lt;/li&gt;
+&lt;li&gt;Free Space：页中尚未使用的部分，大小不固定。&lt;/li&gt;
+&lt;li&gt;Page Directory：页中某些记录的相对位置，是各个槽对应的记录在页面中的地址偏移量；大小不固定，插入的记录越多，这部分占用的空间越多。&lt;/li&gt;
+&lt;li&gt;File Trailer：用于检验页是否完整，占固定的8字节。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;一条完整的记录时可以比大小的，比较记录的大小就是比较主键的大小。&lt;/li&gt;
+&lt;li&gt;User Records中的记录之间亲密物件的排列，这种结构称为堆(heap)。把一条记录在堆中的相对位置称为heap_no，靠前的heap_no相对较小，innodb会自动给每个页中加上两条记录，这两条记录一条为最小记录(infimum)，一条为页面的最大记录(supremum)。这两条记录的heap_no最小。堆中的heap_no在分配之后就不会发生改变了，即使之后删除了堆中的某条记录。&lt;/li&gt;
+&lt;li&gt;每个记录的头信息中都有一个next_record属性，可以是页面中的所有记录串联成一个单向链表。&lt;/li&gt;
+&lt;li&gt;Innodb会把页中的记录划分为若干个组，每个组的最后一个记录的地址偏移量作为一个槽，存放在Page Directory中，一个槽占用2字节。&lt;/li&gt;
+&lt;li&gt;在一个页中根据主键查找记录是非常快的，步骤为：通过二分法确定该记录所在分组对应的槽，并找到改槽所在分组中主键值最小的那条记录；通过记录的next_record遍历改槽所在组中的各个记录。&lt;/li&gt;
+&lt;li&gt;每个数据页的File Header都有上一页和下一页的编号，所有的数据页会组成一个双向链表。&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>瀚高</title>
+      <link>/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/%E7%80%9A%E9%AB%98/</link>
+      <pubDate>Mon, 27 Sep 2021 18:54:53 +0000</pubDate>
+      
+      <guid>/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/%E7%80%9A%E9%AB%98/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;psql --username highgo  --host 127.0.0.1 --port 5866 --password&lt;/code&gt; 登录到数据库
+&lt;ul&gt;
+&lt;li&gt;-U (&amp;ndash;username), -h(&amp;ndash;host), -p(&amp;ndash;port), -W(&amp;ndash;password)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;#&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;关闭三权分立，能解决很多的权限问题，生产环境不建议关闭&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;#&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;以&lt;/span&gt;syssso&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;登录，修改后重启，默认为&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;on&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;，可以改为&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;off&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;select&lt;/span&gt; set_secure_param(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;hg_sepofpowers&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;off&amp;#39;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;开启远程连接&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#修改postgresql.conf&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;listen_addresses &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;0.0.0.0&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#修改pg_hba.conf，加上&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;host    all             all             0.0.0.0/0               sm3
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;postgresql&#34;&gt;
+  postgresql
+  &lt;a class=&#34;anchor&#34; href=&#34;#postgresql&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# 配置步骤&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;adduser postgres
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mkdir /usr/local/pgsql/data
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;chown postgres /usr/local/pgsql/data
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;su - postgres
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/usr/local/pgsql/bin/postgres -D /usr/local/pgsql/data &amp;gt;logfile 2&amp;gt;&amp;amp;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &amp;amp;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/usr/local/pgsql/bin/createdb test
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/usr/local/pgsql/bin/pgsql test
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#启动psql&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;postgres -D /usr/local/pgsql/data &amp;gt;logfile 2&amp;gt;&amp;amp;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &amp;amp;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;pg_ctl start -l logfile
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#psql登录后&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\d&lt;/span&gt;n 查看模式
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\l&lt;/span&gt; 查看数据库
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\d&lt;/span&gt;t myschema.* 列出table
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\d&lt;/span&gt;g 列出所有角色
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#密码永不失效 valid until &amp;#39;infinity&amp;#39;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;create user davide with createdb password &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;1234!@#$QWERqwer&amp;#39;&lt;/span&gt;  valid &lt;span style=&#34;color:#66d9ef&#34;&gt;until&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;2005-01-01&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;alter role davide with password &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;1234qwer!&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#设置到期时间&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;alter role syssso valid &lt;span style=&#34;color:#66d9ef&#34;&gt;until&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;infinity&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#创建数据库，并指定拥有者&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;CREATE DATABASE sales &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;OWNER salesapp&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#创建数据库&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;create database koal_database
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#创建一个模式&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;CREATE SCHEMA myschema;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#将数据库的权限分给别人&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;grant all privileges on database  koal_database to koal;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#移除权限&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;revoke all privileges on database koal_database from koal;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#导出一个数据库&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;pg_dump mydb &amp;gt; db.sql
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#导入一个脚本到新建的数据库newdb&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;psql -d newdb -f db.sql
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;psql有些不属于sql的内部命令，它们以反斜线开头，获取帮助&lt;code&gt;\h&lt;/code&gt;，退出命令&lt;code&gt;\q&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>clickhouse类型及函数</title>
+      <link>/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/clickhouse%E7%B1%BB%E5%9E%8B%E5%8F%8A%E5%87%BD%E6%95%B0/</link>
+      <pubDate>Thu, 25 Mar 2021 14:35:49 +0000</pubDate>
+      
+      <guid>/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/clickhouse%E7%B1%BB%E5%9E%8B%E5%8F%8A%E5%87%BD%E6%95%B0/</guid>
+      <description>&lt;h2 id=&#34;类型&#34;&gt;
+  类型
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e7%b1%bb%e5%9e%8b&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;decimalps-decimal32s-decimal64s-decimal128s&#34;&gt;
+  Decimal(P,S), Decimal32(S), Decimal64(S), Decimal128(S)
+  &lt;a class=&#34;anchor&#34; href=&#34;#decimalps-decimal32s-decimal64s-decimal128s&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;有符号的&lt;strong&gt;定点数&lt;/strong&gt;，可在加减乘中保持精度，除法的最低有效数字会被丢弃（不舍入）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;参数&#34;&gt;
+  参数
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%8f%82%e6%95%b0&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;P表示精度，有效范围是[1:38]，决定可以有多少个十进制的数字&lt;/li&gt;
+&lt;li&gt;S表示规模，有效范围是[0:P]，决定数字的小数部分中包含的小数位数&lt;/li&gt;
+&lt;li&gt;P[1:9]对应Decimal32(S)&lt;/li&gt;
+&lt;li&gt;P[10:18]对应Decimal64(S)&lt;/li&gt;
+&lt;li&gt;P[19:38]对应Decimal128(S)&lt;/li&gt;
+&lt;li&gt;
+  &lt;a href=&#34;https://clickhouse.tech/docs/zh/single/#decimalp-s-decimal32s-decimal64s-decimal128s&#34;&gt;精度&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;函数&#34;&gt;
+  函数
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%87%bd%e6%95%b0&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;parsedatetimebestefforttime_string-time_zone&#34;&gt;
+  parseDateTimeBestEffort(time_string[, time_zone])
+  &lt;a class=&#34;anchor&#34; href=&#34;#parsedatetimebestefforttime_string-time_zone&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;把其他类型的时间日期转换为DateTime数据类型。&lt;/li&gt;
+&lt;li&gt;支持的格式：&lt;code&gt;timestamp&lt;/code&gt; &lt;code&gt;YYYYMMDDHHMMSS &lt;/code&gt; &lt;code&gt;DD/MM/YYYY hh:mm:ss &lt;/code&gt; &lt;code&gt;YYYY-MM-DD hh:mm:ss&lt;/code&gt;等&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;show-create-table&#34;&gt;
+  SHOW CREATE TABLE
+  &lt;a class=&#34;anchor&#34; href=&#34;#show-create-table&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;返回创建该表的语句&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;类型转换&#34;&gt;
+  类型转换
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e7%b1%bb%e5%9e%8b%e8%bd%ac%e6%8d%a2&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;clickhouse是强类型，他不会在类型之间进行隐式转换。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;totypenamex&#34;&gt;
+  toTypeName(x)
+  &lt;a class=&#34;anchor&#34; href=&#34;#totypenamex&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;返回该参数的类型&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>clickhouse集群配置</title>
+      <link>/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/clickhouse%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE/</link>
+      <pubDate>Wed, 17 Mar 2021 13:56:31 +0000</pubDate>
+      
+      <guid>/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/clickhouse%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;查看集群&lt;code&gt;select * from system.clusters&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;分片shard是指包含数据不同部分的服务器。要读取所有数据，必须访问所有分片。&lt;/li&gt;
+&lt;li&gt;副本replica是存储复制数据的服务器，要读取所有数据，访问一个切片上的任意副本上的数据即可。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;集群部署&#34;&gt;
+  集群部署
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e9%9b%86%e7%be%a4%e9%83%a8%e7%bd%b2&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;在群集的所有机器上安装clickhouse服务端&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;在配置文件中设置群集配置&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;remote_servers&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;perftest_1shards_1replicas&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    	&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;shard&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        	&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;replica&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            	&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;host&amp;gt;&lt;/span&gt;localhost&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;/host&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;port&amp;gt;&lt;/span&gt;9000&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;/port&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;/replica&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;/shard&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;/perftest_1shards_1replicas&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;/remote_servers&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;在集群上创建本地表&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;在集群上创建分布式表&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;分布式表实际上是一种视图（view），从分布式表中执行select查询会使用集群所有分片的资源。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;internal_replication&lt;/code&gt;：
+&lt;ul&gt;
+&lt;li&gt;当参数为true时，写操作只选择一个正常的副本写入数据。如果表是复制表Replicated*Merge，请使用此方案。&lt;/li&gt;
+&lt;li&gt;当为false时，写操作会将数据写入所有副本。因为不会检查副本一致性，随着时间的推移，副本数据可能不一样。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;数据副本&#34;&gt;
+  数据副本
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%95%b0%e6%8d%ae%e5%89%af%e6%9c%ac&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;对于INSERT和ALTER语句操作数据时会在压缩的情况下被复制。&lt;/li&gt;
+&lt;li&gt;CREATE、DROP、ATTACH、DETACH和RENAME语句只会在单个服务器上执行，不会被复制。
+&lt;ul&gt;
+&lt;li&gt;可复制表的不同副本可以有不同的名称&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;如果配置文件中没有设置ZooKeeper，则无法创建复制表，并且现在任何现有的复制表都将变为只读。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;创建复制表&#34;&gt;
+  创建复制表
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%88%9b%e5%bb%ba%e5%a4%8d%e5%88%b6%e8%a1%a8&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-SQL&#34; data-lang=&#34;SQL&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;CREATE&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;TABLE&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;table_name&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	EventDate DateTime,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    CounterID UInt32,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    UserID UInt32,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    Ver UInt16
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;)ENGINE &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; ReplicatedReplacingMergeTree(zoo_path, replica_name, other_parameters)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;PARTITION &lt;span style=&#34;color:#66d9ef&#34;&gt;BY&lt;/span&gt; toYYYYMM(EventDate)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;ORDER&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;BY&lt;/span&gt; (CounterID, EventDate, intHash32(UserID))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;SAMPLE &lt;span style=&#34;color:#66d9ef&#34;&gt;BY&lt;/span&gt; intHash32(UserID)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+    </item>
+    
+    <item>
+      <title>clickhouse-statement</title>
+      <link>/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/clickhouse-statement/</link>
+      <pubDate>Thu, 11 Mar 2021 17:01:03 +0000</pubDate>
+      
+      <guid>/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/clickhouse-statement/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;可以在system.data_type_families中检查某个数据类型的名称是否大小写敏感，case_insensitive=1表示大小写不敏感。看完后我建议数据类型的命名首字母大写，并采用驼峰命名法。&lt;/li&gt;
+&lt;li&gt;除了标准sql的关键字和许多其他数据库实现的一些关键字，clickhouse其他的关键字都是大小写敏感的！所以如果你发现语句看上去没错，执行就是有问题，看看是不是大小写出问题了。&lt;/li&gt;
+&lt;li&gt;关键字不是保留的，它们仅在相应的上下文中才会被处理。&lt;/li&gt;
+&lt;li&gt;变量名可以使用反引号包含起来。&lt;/li&gt;
+&lt;li&gt;别名在查询和子查询中是全局可见的。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;select&#34;&gt;
+  select
+  &lt;a class=&#34;anchor&#34; href=&#34;#select&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;select子句是在 from、where、group by等所有操作完成后计算的，如果select子句中包含聚集函数，&lt;strong&gt;clickhouse会在执行group by期间处理这些聚集函数&lt;/strong&gt;。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;如果要用re2正则表达式匹配列，可以使用COLUMNS（‘xxx’），这样可以一次匹配多个列（对于是否常用我持否定态度）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;当FROM被省略时，数据从system.one表中读取&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;ARRAY JOIN&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;对于包含数组列的表来说是一种常见的操作，用于生成一个新表（新表有一列将包含数组中的每一个元素，其他列可能会出现元素重复）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;DISTINCT&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;不支持select包含有数组的列&lt;/li&gt;
+&lt;li&gt;当ORDER BY 被省略且LIMIT被定义时，在读取所需数量的不同行后立即停止运行。&lt;/li&gt;
+&lt;li&gt;DISTINCT在ORDER BY之前执行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;alter&#34;&gt;
+  alter
+  &lt;a class=&#34;anchor&#34; href=&#34;#alter&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;仅支持MergeTree家族，Merge以及Distributed等引擎表。&lt;/li&gt;
+&lt;li&gt;alter操作会阻塞对表的所有读写操作。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;列操作&#34;&gt;
+  列操作
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%88%97%e6%93%8d%e4%bd%9c&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;增加列
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;ADD COLUMN [IF NOT EXISTS] name [type]  [default_expr] [codec] [AFTER name_after]&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;使用指定的name、type、codec以及default_expr往表中增加新的列。&lt;/li&gt;
+&lt;li&gt;如果sql中包含IF NOT EXISTS，执行语句如果已存在，则clickhouse不会报错，不能将新的列添加到表的开始位置，当指定了AFTER name_after，则会将新的列添加到指定列的后面。&lt;/li&gt;
+&lt;li&gt;添加列仅仅是改变原有表的结构，不会对已有数据产生影响。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;删除列
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;DROP COLUMN [IF EXISTS] name&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;清空列
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;CLEAR COLUMN [IF EXISTS] name IN PARTITION partition_name&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;重置指定分区中的值。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;增加注释
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;COMMENT COLUMN [IF EXISTS] name &#39;comment&#39;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;每个列都可以包含注释，注释信息在DESCRIBE table中查看&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;改变列的值类型，默认表达式，TTL
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;MODIFY COLUMN [IF EXISTS] name [type] [default_expr] [TTL] &lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;当改变列的类型时，列的值也被转换了，如同对列使用toType函数一样，执行起来要花费很长时间。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>clickhouse起步</title>
+      <link>/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/clickhouse%E8%B5%B7%E6%AD%A5/</link>
+      <pubDate>Thu, 11 Mar 2021 10:00:32 +0000</pubDate>
+      
+      <guid>/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/clickhouse%E8%B5%B7%E6%AD%A5/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;online analytical processing of queries（OLAP）：联机分析&lt;/li&gt;
+&lt;li&gt;clickhouse是一个用于OLAP的列式数据库管理系统（来自同一列的数据被存储在一起）。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;sudo service clickhouse-server start&lt;/code&gt;启动clickhouse.&lt;/li&gt;
+&lt;li&gt;clickhouse不要求主键唯一&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;clickhouse连接客户端&#34;&gt;
+  clickhouse连接客户端
+  &lt;a class=&#34;anchor&#34; href=&#34;#clickhouse%e8%bf%9e%e6%8e%a5%e5%ae%a2%e6%88%b7%e7%ab%af&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;h4 id=&#34;clickhouse-client&#34;&gt;
+  clickhouse-client
+  &lt;a class=&#34;anchor&#34; href=&#34;#clickhouse-client&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;
+  &lt;a href=&#34;https://clickhouse.tech/docs/zh/interfaces/cli/#command-line-options&#34;&gt;clickhouse-client命令行参数&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;clickhouse-client&lt;/code&gt;配置文件地址（使用以下第一个配置文件）
+&lt;ul&gt;
+&lt;li&gt;通过&lt;code&gt;--config-file&lt;/code&gt;参数指定&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;./clickhouse-client.xml&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;~/.clickhouse-client/config.xml&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;/etc/clickhouse-server/config.xml&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;mysql&#34;&gt;
+  mysql
+  &lt;a class=&#34;anchor&#34; href=&#34;#mysql&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;可以通过mysql命令工具连接，需要在配置文件中配置mysql_port：&lt;code&gt;&amp;lt;mysql_port&amp;gt;9004&amp;lt;/mysql_port&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;使用命令行工具mysql进行连接：&lt;code&gt;mysql --protocol tcp -u default -P 9004&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;数据库引擎&#34;&gt;
+  数据库引擎
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%95%b0%e6%8d%ae%e5%ba%93%e5%bc%95%e6%93%8e&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;h4 id=&#34;mysql引擎&#34;&gt;
+  mysql引擎
+  &lt;a class=&#34;anchor&#34; href=&#34;#mysql%e5%bc%95%e6%93%8e&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;用于将远程的mysql服务器中的表映射到clickhouse中，并允许对表进行insert和select查询等，但无法执行rename、create table、alter操作。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;CREATE&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;DATABASE&lt;/span&gt; [&lt;span style=&#34;color:#66d9ef&#34;&gt;IF&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;NOT&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;EXISTS&lt;/span&gt;] db_name [&lt;span style=&#34;color:#66d9ef&#34;&gt;ON&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;CLUSTER&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;cluster&lt;/span&gt;] ENGINE &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; MYSQL(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;host:port&amp;#39;&lt;/span&gt;,[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;database&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;database&lt;/span&gt;],&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;user&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;password&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+  &lt;a href=&#34;https://clickhouse.tech/docs/en/engines/database-engines/mysql/#data_types-support&#34;&gt;类型的对应&lt;/a&gt;，其他的mysql数据类型全部转化为字符串&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;表引擎&#34;&gt;
+  表引擎
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e8%a1%a8%e5%bc%95%e6%93%8e&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;h4 id=&#34;merge-tree&#34;&gt;
+  merge tree
+  &lt;a class=&#34;anchor&#34; href=&#34;#merge-tree&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;MergeTree：设计用于插入大量数据当一张表当中。数据可以以数据片段的形式一个接一个的快速写入，数据片段在后台按照一定的规则进行合并。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;SummingMergeTree：合并SummingMergeTree表的数据片断时，clickhouse会把所有具有&lt;strong&gt;相同主键的行合并为一行&lt;/strong&gt;，该行包含了被合并的行中具有数值数据类型的列的汇总值。如果主键的组合方式使得单个键值对应于大量的行，则可以显著的减少存储空间并加快数据查询的速度。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;ReplacingMergeTree：该引擎会&lt;strong&gt;删除排序键值相同&lt;/strong&gt;的重复项。适用于在后台清除重复的数据以节省空间，但不保证没有重复数据出现。在数据合并的时候，如果制定了Replcaing的参数，当参数未指定，则保留最后一条数据，当参数已指定，则保留ver值最大的版本。数据的去重只会在数据的合并期间进行，所以常常今天数据重复了，明天看数据还没有被去重。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;AggregateMergeTree：改变了数据片段的合并逻辑。clickhouse会将一个数据片段内所有具有相同主键的行替换为一行，这一行会存储一系列聚合函数的状态。可以使用AggregatingMergeTree表来做增量数据的聚合统计，包括物化视图的数据聚合。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;CollapsingMergeTree：会异步的删除掉所有字段的值都相等（除了列Sign，该列一个为1，一个为-1）的成对的行，下面这两行就会被删除。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;UserId&lt;/th&gt;
+&lt;th&gt;PageViews&lt;/th&gt;
+&lt;th&gt;Duration&lt;/th&gt;
+&lt;th&gt;Sign&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;123&lt;/td&gt;
+&lt;td&gt;5&lt;/td&gt;
+&lt;td&gt;146&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;123&lt;/td&gt;
+&lt;td&gt;5&lt;/td&gt;
+&lt;td&gt;146&lt;/td&gt;
+&lt;td&gt;-1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;1是状态行，-1是状态取消行&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;VersionedCollapsingMergeTree：用于相同目的的折叠树但使用了不同的折叠算法，允许以多个线程的任何顺序插入数据。Version列有助于正确折叠行，即使他们以错误的顺序插入。而CollapsingMergeTree只允许严格的连续插入。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h5 id=&#34;mergetree&#34;&gt;
+  MergeTree
+  &lt;a class=&#34;anchor&#34; href=&#34;#mergetree&#34;&gt;#&lt;/a&gt;
+&lt;/h5&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;数据可以以数据片段的形式一个接一个的快速写入，数据片段在后台按照一定的规则进行合并。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;存储的数据按主键排序；支持数据分区（如果指定分区键的话）；支持数据副本；支持数据采样。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;建表（
+  &lt;a href=&#34;https://clickhouse.tech/docs/zh/engines/table-engines/mergetree-family/mergetree/#table_engine-mergetree-creating-a-table&#34;&gt;更多介绍看这里&lt;/a&gt;）&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;CREATE&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;TABLE&lt;/span&gt; [&lt;span style=&#34;color:#66d9ef&#34;&gt;IF&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;NOT&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;EXISTS&lt;/span&gt;] [db.]&lt;span style=&#34;color:#66d9ef&#34;&gt;table_name&lt;/span&gt; [&lt;span style=&#34;color:#66d9ef&#34;&gt;ON&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;CLUSTER&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;cluster&lt;/span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	name [type1] [&lt;span style=&#34;color:#66d9ef&#34;&gt;DEFAULT&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt;MATERIALIZED&lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;ALIAS&lt;/span&gt; expr1] [TTL expr1],
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    name [type2] [&lt;span style=&#34;color:#66d9ef&#34;&gt;DEFAULT&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt;MATERIALIZED&lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;ALIAS&lt;/span&gt; expr2] [TTL expr2]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ...
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;INDEX&lt;/span&gt; index_name1 expr1 &lt;span style=&#34;color:#66d9ef&#34;&gt;TYPE&lt;/span&gt; type1(...) GRANULARITY value1,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;INDEX&lt;/span&gt; index_name2 expr2 &lt;span style=&#34;color:#66d9ef&#34;&gt;TYPE&lt;/span&gt; type2(...) GRANULARITY value2
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;) ENGINE &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; MergeTree()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;ORDER&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;BY&lt;/span&gt; expr
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[PARTITION &lt;span style=&#34;color:#66d9ef&#34;&gt;BY&lt;/span&gt; expr]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[&lt;span style=&#34;color:#66d9ef&#34;&gt;PRIMARY&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;KEY&lt;/span&gt; expr]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[SAMPLE &lt;span style=&#34;color:#66d9ef&#34;&gt;BY&lt;/span&gt; expr]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[TTL expr [&lt;span style=&#34;color:#66d9ef&#34;&gt;DELETE&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;TO&lt;/span&gt; DISK &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;xxx&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;to&lt;/span&gt; volume &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;xxx&amp;#39;&lt;/span&gt;],...]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[SETTINGS name&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;value,..]
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;ENGINE：引擎名和参数&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;ORDER BY：排序键，可以是一组列的元组或任意的表达式。&lt;strong&gt;如果没有用PRIMARY KEY显式指定主键，clickhouse会使用排序键作为主键&lt;/strong&gt;，如果不需要排序，可以使用ORDER BY tuple()&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;PARTITION BY：分区键，要按月分区，可以使用表达式toYYYYMM(date_column)，这里date_column是一个Date类型的列，分区的格式会是YYYYMM&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;PRIMARY KEY：主键，如果要选择与排序键不同的主键，可选。大部分时间不需要再专门指定一个primary key&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;SIMPLE BY：用于抽样表达式，如果要用抽样表达式，主键中必须包含这个表达式。如&lt;code&gt;SAMPLE BY intHash32(UserID) ORDER BY (CounterID, EventDate, intHash32(UserID))&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;TTL：可以为表设置，也可以为每个列单独设置&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;表TTL：表可以设置一个用于移除过期行的表达式，当表中的行过期时，clickhouse会删除所有对应的行。clickhouse在数据片段合并的时候会删除掉过期的数据，如果在合并的过程中执行SELECT查询，则可能得到过期的数据。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;SETTINGS：控制MergeTree行为的额外参数&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;index_granularity：索引力度&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;数据存储&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;表由按主键排序的数据片段组成。&lt;/li&gt;
+&lt;li&gt;当数据被插入到表中时，会创建多个数据片段并按主键的字典排序。&lt;/li&gt;
+&lt;li&gt;不同分区的数据会被分成不同的片段，clickhouse在后台合并数据片段以便更高效存储。合并机制不保证具有相同主键的行全部合并到同一个数据片中。&lt;/li&gt;
+&lt;li&gt;数据片段以wide或compact格式存储。wide格式下，每一列都会在文件系统中存储为单独的文件，compact模式下所有列都存储在同一个文件下。&lt;/li&gt;
+&lt;li&gt;每个数据片段被逻辑分割成颗粒。颗粒是进行数据查询时最小的不可分割数据集。每个颗粒都包含整数个行。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;可以使用ORDER BY tuple()创建没有主键的表，这种情况下，clickhouse会根据数据插入的顺序存储。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;对于select查询，如果where子句中有下面这些表达式，就可以使用索引&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;包含一个与主键/分区键中的部分字段或全部字段相等或不等的表达式。&lt;/li&gt;
+&lt;li&gt;主键/分区键 in (xxx,xxx,xxx) 或者 主键/分区键 like &amp;lsquo;xxx&amp;rsquo;。&lt;/li&gt;
+&lt;li&gt;基于主键/分区键的字段上的某些函数。&lt;/li&gt;
+&lt;li&gt;基于主键/分区键的表达式的逻辑表达式。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;TTL&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;TTL表达式的计算结果必须是日期或日期时间类型的字段&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;
+  &lt;a href=&#34;https://clickhouse.tech/docs/zh/engines/table-engines/mergetree-family/mergetree/&#34;&gt;MergeTree&lt;/a&gt;这一块越看越迷惑，之后再来接着看吧。&lt;/p&gt;
+&lt;h4 id=&#34;日志引擎&#34;&gt;
+  日志引擎
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%97%a5%e5%bf%97%e5%bc%95%e6%93%8e&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;是为了需要写入许多小数据量（少于一百万行）的表的场景而开发的。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h5 id=&#34;该引擎的共同属性&#34;&gt;
+  该引擎的共同属性
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e8%af%a5%e5%bc%95%e6%93%8e%e7%9a%84%e5%85%b1%e5%90%8c%e5%b1%9e%e6%80%a7&#34;&gt;#&lt;/a&gt;
+&lt;/h5&gt;
+&lt;ol&gt;
+&lt;li&gt;写入时将数据追加到文件末尾。&lt;/li&gt;
+&lt;li&gt;不支持索引。&lt;/li&gt;
+&lt;li&gt;非原子地写入数据。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;Log和StripeLog支持并行读取数据，Log引擎将表中的每一列使用不同的文件；StripeLog将所有的数据存储到一个文件中&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>mysql</title>
+      <link>/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql/</link>
+      <pubDate>Thu, 04 Feb 2021 15:58:03 +0000</pubDate>
+      
+      <guid>/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql/</guid>
+      <description>&lt;h2 id=&#34;mysql起步&#34;&gt;
+  mysql起步
+  &lt;a class=&#34;anchor&#34; href=&#34;#mysql%e8%b5%b7%e6%ad%a5&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;查询版本和当前时间&lt;code&gt;select version(),current_date;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;mysql执行结束后会显示返回了多少行和用了多长时间，受网络其他因素影响&lt;/li&gt;
+&lt;li&gt;当输入多行，打算不执行这句sql语句，输入&lt;code&gt;\c&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;自带的的mysql database描述了用户的访问权限。&lt;/li&gt;
+&lt;li&gt;unix下数据库名是大小写相关的。建议在创建数据库的时候要么全大写，要么全小写，可以在刚安装的时候修改my.cnf文件。&lt;/li&gt;
+&lt;li&gt;相邻的带引号的多个字符串会拼接成一个字符串。下面这两个等价：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;a string&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;a&amp;#39;&amp;#39;string&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;linux上mysql布局&#34;&gt;
+  linux上mysql布局
+  &lt;a class=&#34;anchor&#34; href=&#34;#linux%e4%b8%8amysql%e5%b8%83%e5%b1%80&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;文件资源&lt;/th&gt;
+&lt;th&gt;位置&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;客户端程序和脚本&lt;/td&gt;
+&lt;td&gt;/usr/bin&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;mysqld server&lt;/td&gt;
+&lt;td&gt;/usr/sbin&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;配置文件地址&lt;/td&gt;
+&lt;td&gt;/etc/my.cnf&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;数据存放目录&lt;/td&gt;
+&lt;td&gt;/var/lib/mysql&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;错误日志文件&lt;/td&gt;
+&lt;td&gt;/var/log/mysqld.log&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;secure_file_priv&lt;/td&gt;
+&lt;td&gt;/var/lib/mysql-files&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;System V init script&lt;/td&gt;
+&lt;td&gt;/etc/init.d/mysqld&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Systemd服务&lt;/td&gt;
+&lt;td&gt;mysqld&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Pid文件&lt;/td&gt;
+&lt;td&gt;/var/run/mysql/mysqld.pid&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Socket&lt;/td&gt;
+&lt;td&gt;/var/lib/mysql/mysql.sock&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;使用手册&lt;/td&gt;
+&lt;td&gt;/usr/share/man&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;字符集文件等其他文件&lt;/td&gt;
+&lt;td&gt;/usr/share/mysql&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;库&lt;/td&gt;
+&lt;td&gt;/usr/lib/mysql&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;参考链接：&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;
+  &lt;a href=&#34;https://dev.mysql.com/doc/refman/8.0/en/linux-installation-rpm.html&#34;&gt;MySQL :: MySQL 8.0 Reference Manual :: 2.5.4 Installing MySQL on Linux Using RPM Packages from Oracle&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;mysql安装&#34;&gt;
+  mysql安装
+  &lt;a class=&#34;anchor&#34; href=&#34;#mysql%e5%ae%89%e8%a3%85&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;systemctl start mysqld&lt;/code&gt;启动mysql。&lt;/li&gt;
+&lt;li&gt;mysql安装后，会自动创建超级用户&lt;code&gt;&#39;root&#39;@&#39;localhost&#39;&lt;/code&gt;，其密码在&lt;code&gt;/var/log/mysqld.log&lt;/code&gt;，使用&lt;code&gt;grep &#39;temporary password&#39; /var/log/mysqld.log&lt;/code&gt;来寻找密码。&lt;/li&gt;
+&lt;li&gt;修改密码&lt;code&gt;ALTER USER &#39;root&#39;@&#39;localhost&#39; IDENTIFIED BY &#39;newPassword&#39;&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;mysql8修改成简单的密码会报错（试了下mysql5.7也会报错，解决方法一样）。解决流程如下：
+&lt;ol&gt;
+&lt;li&gt;mysql8增加了一组变量来控制密码的长度、强度等。通过&lt;code&gt;SHOW VARIABLES LIKE &#39;validate_password%&#39;&lt;/code&gt;来查看。&lt;/li&gt;
+&lt;li&gt;validate_password.length用来要求密码的最小长度，这个参数不得小于&lt;code&gt;validate_password.number_count+validate_password.special_char_count+2*validate_password.mixed_case_count)&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;validate_password.policy会影响validate_password的其他变量是否有效（除validate_password.check_user_name），它的值可以为0(LOW)，1(MEDIUM)，2(STRONG)。为0则只检查length这个变量。&lt;/li&gt;
+&lt;li&gt;更改策略：&lt;code&gt;set global validate_password.policy=0;set global validate_password.number=4;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;参考链接：&lt;/strong&gt;
+  &lt;a href=&#34;https://dev.mysql.com/doc/refman/8.0/en/validate-password-options-variables.html&#34;&gt;MySQL :: MySQL 8.0 Reference Manual :: 6.4.3.2 Password Validation Options and Variables&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;mysql配置&#34;&gt;
+  mysql配置
+  &lt;a class=&#34;anchor&#34; href=&#34;#mysql%e9%85%8d%e7%bd%ae&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;mysql配置文件被划分为多个组，每个组有一个组名，用[]括起来。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;[mysqld]
+default-storage-engine=InnoDB
+validate_password=OFF
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;mysql账户管理&#34;&gt;
+  mysql账户管理
+  &lt;a class=&#34;anchor&#34; href=&#34;#mysql%e8%b4%a6%e6%88%b7%e7%ae%a1%e7%90%86&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;mysql将账户存储在mysq数据库的user表中。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;CREATE USER&lt;/code&gt;用于创建性的mysql用户；账户首次创建没有特权，需要使用&lt;code&gt;GRANT&lt;/code&gt;分配特权。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#如果不指定主机，默认就是&amp;#39;%&amp;#39;（所有ip都能访问）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;CREATE USER &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;jeffrey&amp;#39;&lt;/span&gt;@&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;localhost&amp;#39;&lt;/span&gt; IDENTIFIED BY &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;password&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#删除用户。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;DROP USER &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;jeffrey&amp;#39;&lt;/span&gt;@&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;localhost&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#重命名现有的账户,可以用来解决账号只能在本地访问的问题。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;RENAME USER &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;jeffrey&amp;#39;&lt;/span&gt;@&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;localhost&amp;#39;&lt;/span&gt; TO &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;jeff&amp;#39;&lt;/span&gt;@&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;%&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;ALTER USER&lt;/code&gt;修改账户的信息（如修改密码）。不推荐使用&lt;code&gt;SET PASSWORD&lt;/code&gt;来修改密码。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#修改自己的密码，USER()会返回当前登录用户的用户名和主机名&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ALTER USER USER&lt;span style=&#34;color:#f92672&#34;&gt;()&lt;/span&gt; IDENTIFIED BY &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;password&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#锁定账户&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ALTER USER &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;jeffrey&amp;#39;&lt;/span&gt;@&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;localhost&amp;#39;&lt;/span&gt; ACCOUNT LOCK;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ALTER USER &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;jeffrey&amp;#39;&lt;/span&gt;@&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;localhost&amp;#39;&lt;/span&gt; ACCOUNT UNLOCK;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;GRANT&lt;/code&gt;用来对账户进行授权，&lt;code&gt;REVOKE&lt;/code&gt;用来撤销账户特权。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#授予除GRANT和PROXY外的所有特权&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#还可以授予ALTER、CREATE、DELETE、DROP、SELECT、UPDATE、GRANT OPTION&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;GRANT ALL ON db1.* TO &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;jeffrey&amp;#39;&lt;/span&gt;@&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;localhost&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;REVOKE INSERT ON *.* FROM &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;jeffrey&amp;#39;&lt;/span&gt;@&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;localhost&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;REVOKE ALL &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;PRIVILEGES&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;, GRANT OPTION FROM &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;jeffrey&amp;#39;&lt;/span&gt;@&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;localhost&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;mysql系统变量&#34;&gt;
+  mysql系统变量
+  &lt;a class=&#34;anchor&#34; href=&#34;#mysql%e7%b3%bb%e7%bb%9f%e5%8f%98%e9%87%8f&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;mysql有很多的系统变量，能够影响程序的行为，很多命令都能在运行过程中修改。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#获取某个变量的信息&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;show &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;global | session&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; variables like &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;xxx&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#获取默认存储引擎&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;show variables like &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;default_storage_engine&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#获取默认的最大连接数&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;show variables like &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;max_connections&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;通过命令行设置系统变量&#34;&gt;
+  通过命令行设置系统变量
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e9%80%9a%e8%bf%87%e5%91%bd%e4%bb%a4%e8%a1%8c%e8%ae%be%e7%bd%ae%e7%b3%bb%e7%bb%9f%e5%8f%98%e9%87%8f&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysqld --max_connections&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;通过配置文件设置系统变量&#34;&gt;
+  通过配置文件设置系统变量
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e9%80%9a%e8%bf%87%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6%e8%ae%be%e7%bd%ae%e7%b3%bb%e7%bb%9f%e5%8f%98%e9%87%8f&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-properties&#34; data-lang=&#34;properties&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;[server]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;max_connections&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;10&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;运行过程中修改系统变量&#34;&gt;
+  运行过程中修改系统变量
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e8%bf%90%e8%a1%8c%e8%bf%87%e7%a8%8b%e4%b8%ad%e4%bf%ae%e6%94%b9%e7%b3%bb%e7%bb%9f%e5%8f%98%e9%87%8f&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;许多系统变量分为全局范围（global）和会话范围（session）。&lt;/li&gt;
+&lt;li&gt;并不是所有的变量都有全局范围和会话范围，如max_connections只有全局范围。&lt;/li&gt;
+&lt;li&gt;服务器在启动时会给所有的全局变量一个默认值，当有连接的客户端时，服务器为每个连接的客户端维护一组会话变量，并以全局变量的值初始化。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#全局设置存储引擎&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;set global default_sotrage_engine&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;MyISAM
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#本次会话期间设置存储引擎&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;set &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;session&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; default_storage_engine&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;MyISAM
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#获取会话范围的变量内容&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;show SESSION VARIABLES LIKE &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;default_sotrage_engine&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#不写修饰符默认是session范围，如果一个变量没有session范围则显示global范围的值&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;show VARIABLES LIKE &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;max_connections&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;状态变量&#34;&gt;
+  状态变量
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e7%8a%b6%e6%80%81%e5%8f%98%e9%87%8f&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;状态变量有关服务器的运行情况。&lt;/li&gt;
+&lt;li&gt;状态变量不能人为设置。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;show &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;global | session&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; status like &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;like &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;xxx&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#查看当前有多少客户端与服务器建立了连接。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;show status like &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;threads_connected&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;补充&#34;&gt;
+  补充
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e8%a1%a5%e5%85%85&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;很多变量不可修改，如&lt;code&gt;version&lt;/code&gt;。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;大部分系统变量都可以当启动选项传入。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;mysql字符集&#34;&gt;
+  mysql字符集
+  &lt;a class=&#34;anchor&#34; href=&#34;#mysql%e5%ad%97%e7%ac%a6%e9%9b%86&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;常见字符集&#34;&gt;
+  常见字符集
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%b8%b8%e8%a7%81%e5%ad%97%e7%ac%a6%e9%9b%86&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;ASCII：共128个字符，用一个字节编码。&lt;/li&gt;
+&lt;li&gt;ISO 8859-1：共收录256个字符，在ASCII的基础上扩充了128个西欧常用字符。这个字符集也有一个别名Latin 1。&lt;/li&gt;
+&lt;li&gt;GB2312：收录了6763个汉字以及部分其他编码，兼容ASCII字符集，如果该字符集在ASCII字符集中，则采用一字节编码，否则采用两字节编码。&lt;/li&gt;
+&lt;li&gt;GBK：在GB2312的基础上进行了扩充，兼容GB2312。&lt;/li&gt;
+&lt;li&gt;UTF-8：几乎收录了当前世界上各个国家和地区使用的字符，而且还在不断扩充，采用变长编码的方式，编码一个字符需要1~4个字节。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;mysql的字符集和比较规则&#34;&gt;
+  mysql的字符集和比较规则
+  &lt;a class=&#34;anchor&#34; href=&#34;#mysql%e7%9a%84%e5%ad%97%e7%ac%a6%e9%9b%86%e5%92%8c%e6%af%94%e8%be%83%e8%a7%84%e5%88%99&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;h4 id=&#34;utf8和utf8mb4&#34;&gt;
+  utf8和utf8mb4
+  &lt;a class=&#34;anchor&#34; href=&#34;#utf8%e5%92%8cutf8mb4&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;utf8mb3：阉割过的utf-8，只使用1~3个字节表示字符。mysql中的utf8就是utf8-mb3的别名。&lt;/li&gt;
+&lt;li&gt;utf8mb4：正宗utf-8，使用1~4表示字符。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;字符集查看&#34;&gt;
+  字符集查看
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%ad%97%e7%ac%a6%e9%9b%86%e6%9f%a5%e7%9c%8b&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;SHOW CHARSET &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;LIKE &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;utf8%&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#结果中的maxlen表示此字符集最多需要几个字节表示一个字符。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;比较规则&#34;&gt;
+  比较规则
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%af%94%e8%be%83%e8%a7%84%e5%88%99&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;SHOW COLLATION &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;LIKE &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;utf8%&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;比较规则都以与其关联的字符集的名称开头，后面紧跟着该比较规则所应用的语言，如&lt;code&gt;utf8_polish_ci&lt;/code&gt;表示波兰语的比较规则，&lt;code&gt;utf8_general_ci&lt;/code&gt;是一种通用的比较规则。名称后缀介绍如下：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;后缀&lt;/th&gt;
+&lt;th&gt;英文&lt;/th&gt;
+&lt;th&gt;描述&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;_ai&lt;/td&gt;
+&lt;td&gt;accent insensitive&lt;/td&gt;
+&lt;td&gt;不区分重音&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;_as&lt;/td&gt;
+&lt;td&gt;accent sensitive&lt;/td&gt;
+&lt;td&gt;区分重音&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;_ci&lt;/td&gt;
+&lt;td&gt;case insensitive&lt;/td&gt;
+&lt;td&gt;不区分大小写&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;_cs&lt;/td&gt;
+&lt;td&gt;case sensitive&lt;/td&gt;
+&lt;td&gt;区分大小写&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;_bin&lt;/td&gt;
+&lt;td&gt;binary&lt;/td&gt;
+&lt;td&gt;以二进制的方式比较&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;ul&gt;
+&lt;li&gt;每种字符集都有一个默认的比较规则，是在执行SHOW COLLATION语句返回的结果中Default为YES的比较规则。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;各级别的字符集和比较规则&#34;&gt;
+  各级别的字符集和比较规则
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%90%84%e7%ba%a7%e5%88%ab%e7%9a%84%e5%ad%97%e7%ac%a6%e9%9b%86%e5%92%8c%e6%af%94%e8%be%83%e8%a7%84%e5%88%99&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;mysql有4个界别的字符集和比较规则&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;服务器级别&#34;&gt;
+  服务器级别
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%9c%8d%e5%8a%a1%e5%99%a8%e7%ba%a7%e5%88%ab&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;mysql提过了两个系统变量来表示服务器级别的字符集和比较规则：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#服务器级别的字符集
+SHOW VARIABLES LIKE &amp;#39;character_set_server&amp;#39;
+#服务器级别的比较规则
+SHOW VARIABLES LIKE &amp;#39;collation_server&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;通过修改配置文件来修改这两个值&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;[server]
+charset_set_server=utf8
+collation_server=utf8_general_ci
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;数据库级别&#34;&gt;
+  数据库级别
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%95%b0%e6%8d%ae%e5%ba%93%e7%ba%a7%e5%88%ab&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;有两个变量可以看数据库级别的字符集和编码：&lt;code&gt;character_set_database&lt;/code&gt;和&lt;code&gt;collation_database&lt;/code&gt;，使用方式和上面类似。不能使用这两个变量修改当前数据库的字符集和比较规则。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;创建数据库和修改数据库时指定&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;CREATE DATABASE database1
+	[[DEFAULT] CHARACTER SET utf8]
+	[[DEFAULT] COLLATE utf8_general_ci]
+
+ALTER DATABASE database1
+	[[DEFAULT] CHARACTER SET utf8]
+	[[DEFAULT] COLLATE utf8_general_ci]
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;表级别&#34;&gt;
+  表级别
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e8%a1%a8%e7%ba%a7%e5%88%ab&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;可以在创建和修改表的时候指定表的字符集和比较规则。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;CREATE TABLE table1
+	...
+	...
+	[[DEFALUT] CHARACTER SET utf8]
+	[COLLATE UTF8_general_ci]
+	
+ALTER TABLE table1
+	[[DEFALUT] CHARACTER SET utf8]
+	[COLLATE UTF8_general_ci]
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;列级别&#34;&gt;
+  列级别
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%88%97%e7%ba%a7%e5%88%ab&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;创建和修改列的时候可以设置列的字符集和比较规则。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;CREATE TABLE table1(
+	column1 varchar(255) [CHARACTER SET utf8] [COLLATE utf8_general_ci]
+);
+
+ALTER TABLE table1 MODIFY column1 varchar(255) [CHARACTER SET utf8] [COLLATE utf8_general_ci];
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;补充-1&#34;&gt;
+  补充
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e8%a1%a5%e5%85%85-1&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;只修改字符集，则比较规则将修改为修改后的字符集的默认的比较规则。&lt;/li&gt;
+&lt;li&gt;只修改比较规则，则字符集将变为修改后的比较规则对应的字符集。&lt;/li&gt;
+&lt;li&gt;创建或修改列时未显示的指定字符集和比较规则，则该列使用表的字符集和比较规则，如果创建表时未显示的指定字符集和比较规则，则该表默认使用数据库的字符集和比较规则，如果创建数据库时未显示指定字符集和比较规则，则使用mysql服务器的字符集和比较规则。&lt;/li&gt;
+&lt;li&gt;mysql5.7及以前的版本，mysql服务器默认的字符集为latin1，mysql8.0后默认字符集为utfmb4。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;mysqldump&#34;&gt;
+  mysqldump
+  &lt;a class=&#34;anchor&#34; href=&#34;#mysqldump&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;mysqldump可以备份数据库。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysqldump &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;options&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; db_name &amp;gt; file_name
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysqldump &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;options&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; --databases db_name ...
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;默认输出到控制台，可通过&lt;code&gt;&amp;gt;&lt;/code&gt;输出到文件。&lt;/li&gt;
+&lt;li&gt;可以直接在后面跟一个数据库名，这样就备份了数据库的表的结构和数据。但不包括建库的语句。&lt;/li&gt;
+&lt;li&gt;可选的option
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;--databases&lt;/code&gt;：备份指定几个数据库。在备份数据库时会加上&lt;code&gt;CREATE DATBASE...&lt;/code&gt;和&lt;code&gt;use xxx&lt;/code&gt;的语句，&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--all-databases&lt;/code&gt;：备份数据库的所有表，和&lt;code&gt;--databases&lt;/code&gt;类似。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--add-drop-database&lt;/code&gt;：在&lt;code&gt;CREATE DATABASE&lt;/code&gt;之前加上&lt;code&gt;DROP DATABASE&lt;/code&gt;语句，这个参数与&amp;ndash;databases和&amp;ndash;all-databases同时使用。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--add-drop-table&lt;/code&gt;：建表语句之前加上删表语句。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--ignore-table&lt;/code&gt;：不备份指定的表。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--tables&lt;/code&gt;: 会覆盖&amp;ndash;databases属性&lt;code&gt;mysqldump database1 --tables table1 -u root -p &lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--no-data&lt;/code&gt;：不备份数据。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--force&lt;/code&gt;：-f即使在备份期间发生sql异常也继续。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--host&lt;/code&gt;：-h主机。&amp;ndash;user：-u用户。&amp;ndash;password：-p密码。&amp;ndash;port：-P端口。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--xml&lt;/code&gt;：输出xml文件。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--set-charset&lt;/code&gt;：默认启用的参数。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;一个例子&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysqldump -u root -p --databases test --add-drop-database &amp;gt; test.sql
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;导入sql文件&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;连接上mysql server后使用&lt;code&gt;source&lt;/code&gt;命令导入。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysql&amp;gt;source dump.sql
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;从外部导入（sql文件中指定了数据库的情况）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;shell&amp;gt;mysql&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;-u root -p&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &amp;lt;dump.sql
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;外部导入（sql文件中未指定数据库）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;shell&amp;gt; mysqladmin create db1 &lt;span style=&#34;color:#75715e&#34;&gt;#如果有该数据库就不用建了&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;shell&amp;gt; mysql &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;-u root -p&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; db1 &amp;lt; dump.sql &lt;span style=&#34;color:#75715e&#34;&gt;#指定数据库&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;参考链接：
+  &lt;a href=&#34;https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_databases&#34;&gt;MySQL :: MySQL 5.7 Reference Manual :: 4.5.4 mysqldump — A Database Backup Program&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;mysqladmin&#34;&gt;
+  mysqladmin
+  &lt;a class=&#34;anchor&#34; href=&#34;#mysqladmin&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;mysqladmin可以用来检测服务的配置、创建数据库、关闭mysql服务等。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mysqladmin &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;options&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; command &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;command-arg&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;command &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;command-arg&lt;span style=&#34;color:#f92672&#34;&gt;]]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;option&#34;&gt;
+  option
+  &lt;a class=&#34;anchor&#34; href=&#34;#option&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&amp;ndash;host：指定主机。&lt;/li&gt;
+&lt;li&gt;&amp;ndash;port（-P）：指定端口。&lt;/li&gt;
+&lt;li&gt;&amp;ndash;user：指定连接用户。&lt;/li&gt;
+&lt;li&gt;&amp;ndash;version：显示版本信息并退出。&lt;/li&gt;
+&lt;li&gt;&amp;ndash;wait：如果连接失败，等待并重试。&lt;/li&gt;
+&lt;li&gt;&amp;ndash;connect-timeout：连接超时的时间。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;command&#34;&gt;
+  command
+  &lt;a class=&#34;anchor&#34; href=&#34;#command&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;create/drop db_name：创建/删除数据库。&lt;/li&gt;
+&lt;li&gt;password &amp;ldquo;new_password&amp;rdquo;：修改密码，在windows上确保使用双引号&amp;quot;，使用单引号&amp;rsquo;的话单引号会被识别为密码的一部分。&lt;/li&gt;
+&lt;li&gt;shutdown：关闭服务。&lt;/li&gt;
+&lt;li&gt;status：显示一个简短的服务状态消息。显示的结果如下：
+&lt;ul&gt;
+&lt;li&gt;Uptime：mysql运行了多少秒。&lt;/li&gt;
+&lt;li&gt;Threads：客户端连接的线程数（active）。&lt;/li&gt;
+&lt;li&gt;Questions：从服务启动开始客户端查询的数量。&lt;/li&gt;
+&lt;li&gt;Slow queries：查询超过&lt;code&gt;long_query_time&lt;/code&gt;秒的数量。&lt;/li&gt;
+&lt;li&gt;Opens：服务已经打开了多少张表。&lt;/li&gt;
+&lt;li&gt;Flush tables：&lt;code&gt;flush-*,refresh,reload&lt;/code&gt;这些指令服务执行的次数。&lt;/li&gt;
+&lt;li&gt;Open tables：当前打开了多少张表。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;version：显示服务的版本信息。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;参考链接（官方）：&lt;/strong&gt;
+  &lt;a href=&#34;https://dev.mysql.com/doc/refman/5.7/en/mysqladmin.html&#34;&gt; mysqladmin — A MySQL Server Administration Program&lt;/a&gt;
+&lt;strong&gt;参考链接（汉化）：&lt;/strong&gt;
+  &lt;a href=&#34;https://www.docs4dev.com/docs/zh/mysql/5.7/reference/mysqladmin.html&#34;&gt;mysqladmin-MySQL 服务器管理程序 | Docs4dev&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;sql&#34;&gt;
+  sql
+  &lt;a class=&#34;anchor&#34; href=&#34;#sql&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;数据类型&#34;&gt;
+  数据类型
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%95%b0%e6%8d%ae%e7%b1%bb%e5%9e%8b&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;整数数据类型 tinyint（1字节）、smallint（2字节）、mediumint（3字节）、int（4字节）、bigint（8字节）。&lt;/li&gt;
+&lt;li&gt;定点数据类型 &lt;code&gt;decimal(5,2)&lt;/code&gt;，其中5是精度，表示有效位数；2表示小数点后几位。&lt;/li&gt;
+&lt;li&gt;浮点类型 float（4字节）、double（8字节）。&lt;/li&gt;
+&lt;li&gt;日期和时间类型 DATE（YYYY-MM-DD）、DATETIME（YYYY-MM-DD hh:mm:ss）、TIMESTAMP（范围是UTC1970-01-01 00:00:01-UTC2038-01-19 03:14:07)、TIME（范围-838:59:59-838:59:59）、YEAR（范围是1901-2155）&lt;/li&gt;
+&lt;li&gt;字符串类型 CHAR（长度为声明时的长度，范围0-255）、VARCHAR（可变长度，范围时0-65535）、4种TEXT。&lt;/li&gt;
+&lt;li&gt;字节串类型 BINARY、VARCHAR、四种BLOB。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;可以把BLOB看作VARBINARY，把TEXT看作VARCHAR，但它们有一点点不同：①对于BLOB和TEXT列上的索引，必须要指定缩影前缀长度，对应VARBINARY和VARCHAR，这是可选的；②BLOB和TEXT所在的列不能有默认值。&lt;strong&gt;参考链接：&lt;/strong&gt;
+  &lt;a href=&#34;https://dev.mysql.com/doc/refman/5.7/en/blob.html&#34;&gt;MySQL :: MySQL 5.7 Reference Manual :: 11.3.4 The BLOB and TEXT Types&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;database&#34;&gt;
+  DATABASE
+  &lt;a class=&#34;anchor&#34; href=&#34;#database&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;创建数据库&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-mysql&#34; data-lang=&#34;mysql&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;CRATE &lt;span style=&#34;color:#66d9ef&#34;&gt;DATABASE&lt;/span&gt; db_name [[&lt;span style=&#34;color:#66d9ef&#34;&gt;DEFAULT&lt;/span&gt;] &lt;span style=&#34;color:#66d9ef&#34;&gt;CHARACTER&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;SET&lt;/span&gt; [&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;] utf8];
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;table&#34;&gt;
+  TABLE
+  &lt;a class=&#34;anchor&#34; href=&#34;#table&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;克隆和复制。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#从origin_tb1克隆一个新表（只有结构，没有数据）。
+CREATE TABLE new_tb1 LIKE origin_tb1;
+#复制origin_tb1表，（结构和数据都复制了）。
+CREATE TABLE new_tb1 AS SELECT * FROM origin_tb1;
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;alter&#34;&gt;
+  ALTER
+  &lt;a class=&#34;anchor&#34; href=&#34;#alter&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#单个alter table可以跟多个修改语句，用逗号隔开
+#删除
+ALTER TABLE t2 DROP COLUMN c, DROP COLUMN d;
+&lt;/code&gt;&lt;/pre&gt;&lt;h5 id=&#34;changemodifyalter&#34;&gt;
+  change、modify、alter
+  &lt;a class=&#34;anchor&#34; href=&#34;#changemodifyalter&#34;&gt;#&lt;/a&gt;
+&lt;/h5&gt;
+&lt;ul&gt;
+&lt;li&gt;change可以重命名列、修改列的定义。配合FIRST或AFTER，可以指定列的位置。&lt;/li&gt;
+&lt;li&gt;MODIFY可以修改列的定义，但无法修改它的名字。配合FIRST或AFTER能指定列的名字。&lt;/li&gt;
+&lt;li&gt;ALTER只能修改列的默认值。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#将a的名字改为b，修改定义
+ALTER TABLE t1 CHANGE a b BIGINT NOT NULL;
+#不修改a的名字，只修改定义
+ALTER TABLE t1 CHANGE a a BIGINT NOT NULL;
+#修改b的定义
+ALTER TABLE t1 MODIFY b INT NOT NULL;
+#如果只想要修改b的名字而不去修改它的定义，就需要将定义再写一遍
+ALTER TABLE t1 CHANGE b a INT NOT NULL;
+#除了如PRIMARY KEY或UNIQUE属性，其他的如DEFAULT COMMENT等需要在修改时带上，否则修改后的列是没有这些属性。
+#使用CHANGE或MODIFY，myslq会尝试将列中数据转化未新的类型。
+#当使用CHANGE修改列名后，使用了该列的VIEW需要修改。
+#ALTER TABLE xxx ALTER ...SET DEFAULT xxx或ALTER ... DROP DEFAULT。如果旧的默认值被删除而列不可以为NULL，mysql将为其分配默认值（数字类型默认为0，如果指定了AUTO_INCREMENT，默认值是序列中的下一个值，对于EMUM，默认值为第一个枚举值，对于其他字符串类型，默认值为空字符串）。
+
+ALTER TABLE `service`.`email_relation` RENAME TO  `service`.`relation` ;
+ALTER TABLE `service`.`relation` CHANGE COLUMN `email` `mail` VARCHAR(64) NULL DEFAULT NULL ;
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;
+  &lt;a href=&#34;https://dev.mysql.com/doc/refman/5.7/en/alter-table.html&#34;&gt;MySQL :: MySQL 5.7 Reference Manual :: 13.1.8 ALTER TABLE Statement&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;show&#34;&gt;
+  SHOW
+  &lt;a class=&#34;anchor&#34; href=&#34;#show&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#显示属性
+SHOW COLUMNS FROM MYSQL.USER;
+#显示建库语句，例：
+SHOW CREATE DATABASE MYSQL;
+#显示建表语句，例：
+SHOW CREATE TABLE MYSQL.USER;
+#显示创建该用户的语句
+SHOW CREATE USER root;
+#显示分配个某用户的特权
+SHOW GRANTS [FOR user];
+show grants for &amp;#39;joe&amp;#39;@&amp;#39;home.example.com&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>其他 on 小象的blog</title>
+    <link>/tags/%E5%85%B6%E4%BB%96/</link>
+    <description>Recent content in 其他 on 小象的blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Wed, 14 Jun 2023 16:55:52 +0800</lastBuildDate><atom:link href="/tags/%E5%85%B6%E4%BB%96/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Vscode</title>
+      <link>/posts/%E5%85%B6%E4%BB%96/vscode/</link>
+      <pubDate>Wed, 14 Jun 2023 16:55:52 +0800</pubDate>
+      
+      <guid>/posts/%E5%85%B6%E4%BB%96/vscode/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;vscode c语言中数组和指针关系紧密，DEBUG一个c程序后，在WATCH那一栏添加下面这行即可看到数组的数据&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;*(char(*)[4096])bitmap
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
+      <title>虚拟机</title>
+      <link>/posts/%E5%85%B6%E4%BB%96/%E8%99%9A%E6%8B%9F%E6%9C%BA/</link>
+      <pubDate>Wed, 03 Aug 2022 22:36:06 +0800</pubDate>
+      
+      <guid>/posts/%E5%85%B6%E4%BB%96/%E8%99%9A%E6%8B%9F%E6%9C%BA/</guid>
+      <description>&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#virtualbox后台启动
+C:\programs\VirtualBox\VBoxManage.exe startvm &amp;#34;centos7&amp;#34; --type headless
+#vmware后台启动
+C:\programs\vmware-workstation\vmrun.exe -T ws start &amp;#34;D:\programs-data\vmware-vm\centos7\centos7.vmx&amp;#34; nogui
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
+      <title>Hugo模板</title>
+      <link>/posts/%E5%85%B6%E4%BB%96/hugo%E6%A8%A1%E6%9D%BF/</link>
+      <pubDate>Mon, 03 Jan 2022 17:09:17 +0800</pubDate>
+      
+      <guid>/posts/%E5%85%B6%E4%BB%96/hugo%E6%A8%A1%E6%9D%BF/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;hugo使用go的&amp;quot;html/template&amp;quot;和&amp;quot;text/template&amp;quot;库作为模板的基础。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;go模板是添加了变量和函数的html文件。他们都被包裹在&lt;code&gt;{{}}&lt;/code&gt;中。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;一个预定义的变量可以是已存在在当前的作用域中或者是一个自定义的变量。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;多个函数的参数可以使用空格分开，类似与&lt;code&gt;{{ add 1 2 }}&lt;/code&gt;（add函数接收1和2这两个参数）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;方法和函数可以通过&lt;code&gt;.&lt;/code&gt;来访问访问。如获取在文章front matter中定义的bar&lt;code&gt;{{ .Params.bar }}&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;圆括号可以用来将items组合在一起&lt;code&gt;{{ if or (isset .Params &amp;quot;alt&amp;quot;) (isset .Params &amp;quot;caption&amp;quot;) }} Caption {{ end }}&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;原始字符可以包含换行。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;变量&#34;&gt;
+  变量
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%8f%98%e9%87%8f&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;在hugo中，每个模板都有一个Page对象，.Title是Page的一个元素之一。当Page是模板的默认作用域时，title可以通过&lt;code&gt;.&lt;/code&gt;直接来带哦用&lt;code&gt;{{.Title }}&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;自定义变量需要有&lt;code&gt;$&lt;/code&gt;前缀。&lt;/li&gt;
+&lt;li&gt;变量可以存储在自定义变量中并在稍后被引用。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{{ &lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;address&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;123 Main St.&amp;#34;&lt;/span&gt;}}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{{ &lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;address&lt;/span&gt; }}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;变量可以使用&lt;code&gt;=&lt;/code&gt;来重新定义。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{{ &lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Hugo Page&amp;#34;&lt;/span&gt; }}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{{ &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; .&lt;span style=&#34;color:#a6e22e&#34;&gt;IsHome&lt;/span&gt; }}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    {{ &lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;var&lt;/span&gt; = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Hogo Home&amp;#34;&lt;/span&gt; }}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{{ &lt;span style=&#34;color:#a6e22e&#34;&gt;end&lt;/span&gt; }}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;Var&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;is&lt;/span&gt; {{ &lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;var&lt;/span&gt; }}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;函数&#34;&gt;
+  函数
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%87%bd%e6%95%b0&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;go模板只提供了一些基本的函数，但也提供了扩展原始集的机制。&lt;/li&gt;
+&lt;li&gt;调用函数使用他们的名字跟上需要的参数，参数需要用空格隔开。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{{ &lt;span style=&#34;color:#a6e22e&#34;&gt;add&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; }}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;!&lt;span style=&#34;color:#f92672&#34;&gt;--&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;数字求和，输出&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;--&lt;/span&gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{{ &lt;span style=&#34;color:#a6e22e&#34;&gt;lt&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; }}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;!&lt;span style=&#34;color:#f92672&#34;&gt;--&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;比较大小，输出&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;true&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;--&lt;/span&gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;includes&#34;&gt;
+  includes
+  &lt;a class=&#34;anchor&#34; href=&#34;#includes&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;一个模板中包含另一个模板。&lt;/li&gt;
+&lt;li&gt;hugo中的模板位置都是在&lt;code&gt;layouts/&lt;/code&gt;目录开始。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;partial&lt;/code&gt;函数用来包含部分模板&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;!&lt;span style=&#34;color:#f92672&#34;&gt;--&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;包含&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;layouts&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;partials&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;header&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;html&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;--&lt;/span&gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{{ &lt;span style=&#34;color:#a6e22e&#34;&gt;partial&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;header.html&amp;#34;&lt;/span&gt; . }}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;template&lt;/code&gt;函数用来在老版本的hugo中包含模板和用来调用内部模板。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{{ &lt;span style=&#34;color:#a6e22e&#34;&gt;template&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;_indernal/opengraph.html&amp;#34;&lt;/span&gt; . }}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;logic&#34;&gt;
+  logic
+  &lt;a class=&#34;anchor&#34; href=&#34;#logic&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;使用&lt;code&gt;range&lt;/code&gt;来进行迭代。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{{ &lt;span style=&#34;color:#66d9ef&#34;&gt;range&lt;/span&gt; &lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;array&lt;/span&gt; }}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &amp;lt;!&lt;span style=&#34;color:#f92672&#34;&gt;--&lt;/span&gt;.&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;代表$&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;aray&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;的一个元素&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;--&lt;/span&gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    {{ . }}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{{ &lt;span style=&#34;color:#a6e22e&#34;&gt;end&lt;/span&gt; }}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;!&lt;span style=&#34;color:#f92672&#34;&gt;--&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;将数组的元素的值赋值给变量&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;--&lt;/span&gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{{ &lt;span style=&#34;color:#66d9ef&#34;&gt;range&lt;/span&gt; &lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;elem_val&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;array&lt;/span&gt; }}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    {{ &lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;elem_val&lt;/span&gt; }}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{{ &lt;span style=&#34;color:#a6e22e&#34;&gt;end&lt;/span&gt; }}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;!&lt;span style=&#34;color:#f92672&#34;&gt;--&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;将数组的元素的下标和值都复制给变量&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;--&lt;/span&gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{{ &lt;span style=&#34;color:#66d9ef&#34;&gt;range&lt;/span&gt; &lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;elem_index&lt;/span&gt;, &lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;elem_val&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;array&lt;/span&gt; }}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   {{ &lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;elem_index&lt;/span&gt; }} &lt;span style=&#34;color:#f92672&#34;&gt;--&lt;/span&gt; {{ &lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;elem_val&lt;/span&gt; }}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{{ &lt;span style=&#34;color:#a6e22e&#34;&gt;end&lt;/span&gt; }}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+    </item>
+    
+    <item>
+      <title>编码</title>
+      <link>/posts/%E5%85%B6%E4%BB%96/%E7%BC%96%E7%A0%81/</link>
+      <pubDate>Thu, 12 Mar 2020 13:45:21 +0000</pubDate>
+      
+      <guid>/posts/%E5%85%B6%E4%BB%96/%E7%BC%96%E7%A0%81/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;Unicode是一个符号集，只规定了符号的二进制代码，如&lt;code&gt;U+0041&lt;/code&gt;表示英语大写字母&lt;code&gt;A&lt;/code&gt;，&lt;code&gt;U+4E25&lt;/code&gt;表示汉字&lt;code&gt;严&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;Unicode没有规定二进制代码如何去存储。如&lt;code&gt;严&lt;/code&gt;的Unicode是16进制&lt;code&gt;4E25&lt;/code&gt;，转化为二进制就是&lt;code&gt;101 1110 0010 0101&lt;/code&gt;（共15位），如果存储的话这个符号至少需要两个字节；而&lt;code&gt;A&lt;/code&gt;的Unicode是16进制&lt;code&gt;0041&lt;/code&gt;，转化成二进制是&lt;code&gt;100 0001&lt;/code&gt;（7位），如果存储的话这个符号至少需要一个字节。&lt;/li&gt;
+&lt;li&gt;计算机不知道到底是两个字节表示一个符号还是一个字节表示一个符号。如果统一用2个字节存储，会导致浪费，因为英文字母前面就会有一个字节的0。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;UTF-8规定了二进制代码的存储方式，它可以使用1~4个字节表示一个字符：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Unicode(HEX)&lt;/th&gt;
+&lt;th&gt;UTF-8(BIN)&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;0000~007F&lt;/td&gt;
+&lt;td&gt;0XXXXXXX&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;0080~07FF&lt;/td&gt;
+&lt;td&gt;110XXXXX 10XXXXXX&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;0800~FFFF&lt;/td&gt;
+&lt;td&gt;1110XXXX 10XXXXXX 10XXXXXX&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;10000~10FFFF&lt;/td&gt;
+&lt;td&gt;11110XXX 10XXXXXX 10XXXXXX 10XXXXXX&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Unicode二进制位数在0~7位之间，UTF-8用一个字节表示，字节的第一位设为0；然后把Unicode的二进制从后向前填入到UTF-8的&lt;code&gt;X&lt;/code&gt;里边去（填到UTF-8中也是按照从后向前的顺序，如果填完了发现还有X，就补零）。如&lt;code&gt;A&lt;/code&gt;的Unicode是&lt;code&gt;0041&lt;/code&gt;，用UTF-8表示就是&lt;code&gt;0100 0001&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Unicode二进制位数在8~11位之间，UTF-8用两个字节表示，第一个字节的前三位设为110；第二个字节前两位设置为10，然后把Unicode的二进制从后向前填入到UTF-8的&lt;code&gt;X&lt;/code&gt;里边去（填到UTF-8中也是按照从后向前的顺序，如果填完了发现还有X，就补零）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;12位及以上也是这个逻辑。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;UTF-8编码中如果一个字节是以0开头，就表示接下来的一个字节表示一个字符；&lt;/li&gt;
+&lt;li&gt;如果一个字节是以110开头，表示接下来的两个字节表示一个字符；&lt;/li&gt;
+&lt;li&gt;如果一个字节是以1110开头，就表示接下来的三个字节表示一个字符；&lt;/li&gt;
+&lt;li&gt;如果一个字节是以11110开头，就表示接下来的四个字节表示一个字符；&lt;/li&gt;
+&lt;li&gt;如果一个字符是以10开头，说明你看错了，你得往前找一个或几个字节。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;参考链接：
+  &lt;a href=&#34;http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html&#34;&gt;阮一峰的网络日志&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

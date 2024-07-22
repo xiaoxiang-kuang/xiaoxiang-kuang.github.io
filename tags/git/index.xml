@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>git on 小象的blog</title>
+    <link>/tags/git/</link>
+    <description>Recent content in git on 小象的blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Thu, 28 Jan 2021 13:49:03 +0000</lastBuildDate><atom:link href="/tags/git/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>git起步</title>
+      <link>/posts/git/git%E8%B5%B7%E6%AD%A5/</link>
+      <pubDate>Thu, 28 Jan 2021 13:49:03 +0000</pubDate>
+      
+      <guid>/posts/git/git%E8%B5%B7%E6%AD%A5/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;git：每一次的clone操作，实际上都是对一次代码仓库的完整备份。&lt;/li&gt;
+&lt;li&gt;git中文件的三种状态：已修改（modified）和已暂存（staged），已提交（committed）：
+&lt;ul&gt;
+&lt;li&gt;已修改&lt;sup&gt;&lt;a id=&#34;modified&#34; herf=&#34;javascript:;&#34;&gt;tag1&lt;/a&gt;&lt;/sup&gt;表示已修改了某个文件，但还没有提交保存（git add之前）；&lt;/li&gt;
+&lt;li&gt;已暂存表示把已修改的文件放在下次提交的清单中（git add 之后）;&lt;/li&gt;
+&lt;li&gt;已提交表示该文件已经被安全保存在本地数据库中（git commit之后）；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;每个项目都有一个git目录（.git），git工作流程如下：
+&lt;ol&gt;
+&lt;li&gt;在工作目录（.git的兄弟目录）中修改某些文件；&lt;/li&gt;
+&lt;li&gt;对修改后的文件保存到暂存区域；&lt;/li&gt;
+&lt;li&gt;提交跟新，将暂存区域的文件快照转储到git目录中。&lt;/li&gt;
+&lt;li&gt;提交到远程仓库。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;开始&#34;&gt;
+  开始
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%bc%80%e5%a7%8b&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;安装git，配置个人用户名称和电子邮件地址。
+&lt;code&gt;git config --global user.name &amp;quot;xiaoxiang&amp;quot;&lt;/code&gt;
+&lt;code&gt;git config --global user.email &amp;quot;xiaoxiang@xxxx.com&amp;quot;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;可以使用&lt;code&gt;git config --list&lt;/code&gt;查看已有的配置信息。&lt;/li&gt;
+&lt;li&gt;从现有的git仓库克隆&lt;code&gt;git clone [远程仓库]&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;工作目录下的文件分为两种状态：已跟踪和未跟踪：
+&lt;ul&gt;
+&lt;li&gt;已跟踪是本地仓库中有的文件，初次克隆某个仓库时，工作目录的所有文件都是已跟踪的文件。&lt;/li&gt;
+&lt;li&gt;未跟踪是新创建的文件，即对该文件从来没有执行git add命令。&lt;/li&gt;
+&lt;li&gt;当编辑过某些文件后，git将这些文件标记为已修改，这就跟
+  &lt;a href=&#34;/#modified&#34;&gt;tag1&lt;/a&gt;对于上了。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;使用&lt;code&gt;git add&lt;/code&gt;开始跟踪一个新文件，&lt;code&gt;git add .&lt;/code&gt;暂存当前路径下的所有的已修改的文件。
+&lt;ul&gt;
+&lt;li&gt;通过&lt;code&gt;git status&lt;/code&gt;可以查看文件的状态。&lt;/li&gt;
+&lt;li&gt;取消已暂存的状态&lt;code&gt;git reset [--mixed] HEAD  &amp;quot;文件名&amp;quot;&lt;/code&gt;，该方式会清除暂存区的数据，保留工作目录的数据。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;使用&lt;code&gt;git commit -m &amp;quot;提交说明&amp;quot;&lt;/code&gt;来提交暂存区的数据到&lt;strong&gt;本地仓库&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;使用&lt;code&gt;git push origin master&lt;/code&gt; 将修改提交到远程仓库。（使用&lt;code&gt;ssh-keygen&lt;/code&gt;生成密钥，并将公钥放到git上去，以后提交就不用输账号和密码了）。
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;git push [remote-name] [branch-name]&lt;/code&gt;，这是完整命令。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;gitignore&#34;&gt;
+  .gitignore
+  &lt;a class=&#34;anchor&#34; href=&#34;#gitignore&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;可以创建一个.gitignore文件，来指明哪些文件不需要被提交到仓库。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;.gitignore&lt;/code&gt;文件的格式规范如下：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;所有空行或者以&lt;code&gt;#&lt;/code&gt;开头的行都会被Git忽略。&lt;/li&gt;
+&lt;li&gt;忽略指定的模式以外的文件或者目录，可以在模式前加上&lt;code&gt;!&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;匹配模式以&lt;code&gt;/&lt;/code&gt;开头防止递归。&lt;/li&gt;
+&lt;li&gt;匹配模式以&lt;code&gt;/&lt;/code&gt;结尾防止递归。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;*&lt;/code&gt;匹配零个或多个任意字符，&lt;code&gt;[a-c]&lt;/code&gt;匹配任意一个列在方括号中的字符，&lt;code&gt;?&lt;/code&gt;只匹配任何一个字符，&lt;code&gt;**&lt;/code&gt;表示匹配任意中间目录。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#忽略所有的.a文件&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;*.a
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#跟踪所有的lib.a，即使在前面忽略了.a文件&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;!lib.a
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#只忽略当前目录下的TODO文件，而不忽略subdir/TODO文件&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/TODO
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#忽略任何目录下名为build的文件夹&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;build/
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#忽略doc/notes.txt，但不忽略doc/server/arch.txt&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;doc/*.txt
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#忽略doc/目录及其所有子目录下的.pdf文件&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;doc/**/*.pdf
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;git-stash&#34;&gt;
+  git stash
+  &lt;a class=&#34;anchor&#34; href=&#34;#git-stash&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;git stash push [-m &amp;quot;暂存的备注&amp;quot;]&lt;/code&gt; 暂存当前的更改，并将本地恢复到HEAD。-m是可选的，该参数会给此次暂存加个备注。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git stash list&lt;/code&gt; 列出当前所有的暂存，最新的是&lt;code&gt;stash@{0}&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git stash pop&lt;/code&gt;  应用stash@{0}，并删除stash@{0}。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git stash drop stash@{0}&lt;/code&gt; 从stash列表中删除stash@{0}。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git stash apply stash@{0}&lt;/code&gt; 应用stash@{0}，但不删除stash@{0}&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;查看文件修改了什么地方，可以使用&lt;code&gt;git diff&lt;/code&gt;指令。&lt;/li&gt;
+&lt;li&gt;查看提交历史&lt;code&gt;git log&lt;/code&gt;，后跟&lt;code&gt;-2&lt;/code&gt;只会显示最近两次的跟新。&lt;/li&gt;
+&lt;li&gt;切换到其他分支&lt;code&gt;git checkout master&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git tag&lt;/code&gt;可以给某一时间点的版本打标签。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git update-index --assume-unchanged 文件名&lt;/code&gt;：取消本地跟踪&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git update-index --no-assume-unchanged 文件名&lt;/code&gt;：恢复本地跟踪&lt;/li&gt;
+&lt;li&gt;协议：
+&lt;ul&gt;
+&lt;li&gt;ssh协议：唯一一个同时支持读写操作的网络协议，但无法实现对仓库的匿名访问。&lt;/li&gt;
+&lt;li&gt;git协议：该协议通常用来克隆，&lt;strong&gt;通常&lt;/strong&gt;不能用来推送（因为没有授权机制，如果允许推送操作，每一个知道该URL的人都有推送权限），比http协议高效。&lt;/li&gt;
+&lt;li&gt;http/s协议：容易搭建，通常用来克隆。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;git-remote&#34;&gt;
+  git remote
+  &lt;a class=&#34;anchor&#34; href=&#34;#git-remote&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#列出指定的每一个远程服务器的简写&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git remote
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#显示远程仓库的简写与对应的URL&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git remote -v
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#查看某个远程仓库的更多信息，会列出远程仓库的URL和跟踪分支的信息。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git remote show origin
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#添加一个远程仓库，并指定一个简写&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git remote add origin https://xxx.xxx/xxx/xxx
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#修改仓库的远程地址&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git remote set-url origin 仓库地址
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#远程仓库的重命名&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git remote rename origin paul
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#移除一个远程仓库&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git remote remove paul
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#git fetch只会将数据下载到本地仓库，并不会合并。需要手动合并&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git fetch origin
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#自动抓取远程分支并合并到本地分支&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git pull
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;git-branch&#34;&gt;
+  git branch
+  &lt;a class=&#34;anchor&#34; href=&#34;#git-branch&#34;&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;只有在本地修改或者产生了文件才会创建主分支master，这个时候才能创建新分支。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git branch&lt;/code&gt;查看所有的分支，&lt;code&gt;*&lt;/code&gt;表示当前分支。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git checkout -b testing&lt;/code&gt;相当于&lt;code&gt;git branch testing (创建一个分支)和 git checkout testing（切到该分支）&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;删除分支&lt;code&gt;git branch -d testing&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;分支的合并：在当前分支下（如master），执行&lt;code&gt;git merge testing&lt;/code&gt;，会创建新的commit对象，master也会指向他。该commit对象有两个父指针。&lt;/li&gt;
+&lt;li&gt;分支的合并会用两个分支的末端以及他们的共同祖先进行一次的三方合并，当两个分支在同一个commit链上时，旧一点的那个分支发起合并，则将其直接指向了新一点的那个分支。&lt;/li&gt;
+&lt;li&gt;有时候分支合并会失败，比如两个分支同时修改了相同的文件。这个时候&lt;code&gt;git merge testing&lt;/code&gt;仍然做了合并，但是没有提交，可以使用&lt;code&gt;git status&lt;/code&gt;查看，此时就需要手动合并了。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git branch --merged&lt;/code&gt;查看那些分支已被并入当前分支。&lt;code&gt;git branch --no-merged&lt;/code&gt;查看尚未合并的分支。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;参考链接：&lt;/strong&gt;
+  &lt;a href=&#34;http://git.oschina.net/progit/&#34;&gt;Pro Git&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;参考链接：&lt;/strong&gt;
+  &lt;a href=&#34;https://git-scm.com/book/zh/v2/Git-%e5%9f%ba%e7%a1%80-%e8%ae%b0%e5%bd%95%e6%af%8f%e6%ac%a1%e6%9b%b4%e6%96%b0%e5%88%b0%e4%bb%93%e5%ba%93&#34;&gt;Git - 记录每次更新到仓库 (git-scm.com)&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;参考链接：&lt;/strong&gt;&lt;a href=&#34;https://gitee.com/opensource-guide/git_tutorial/Git 命令详解/常用 Git 命令/#git-命令手册&#34;&gt;开源指北&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

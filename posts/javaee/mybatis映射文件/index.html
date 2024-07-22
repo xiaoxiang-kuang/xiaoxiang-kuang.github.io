@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>mybatis映射文件 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#resultmap">resultMap</a>
+          <ul>
+            <li><a href="#属性">属性</a></li>
+            <li><a href="#元素">元素</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>mybatis映射文件</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#resultmap">resultMap</a>
+          <ul>
+            <li><a href="#属性">属性</a></li>
+            <li><a href="#元素">元素</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/javaee/mybatis%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6/">mybatis映射文件</a>
+  </h1>
+  
+  <h5>2021-10-31</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">java</a>
+  </div>
+  
+
+
+
+<h2 id="resultmap">
+  resultMap
+  <a class="anchor" href="#resultmap">#</a>
+</h2>
+<ul>
+<li>当返回结果时（未显示指定resultmap），mybatis会创建一个ResultMap，将属性名映射到实体类的属性上，如果列名和属性名不能匹配时，可以在select语句中设置别名来完成匹配，如<code>user_id as &quot;id&quot;</code>。</li>
+</ul>
+<h3 id="属性">
+  属性
+  <a class="anchor" href="#%e5%b1%9e%e6%80%a7">#</a>
+</h3>
+<ul>
+<li>id 唯一标识，别的地方引用</li>
+<li>type 类的完全限定命名，或者类型别名。</li>
+<li>autoMapping 如果设置这个属性，mybatis将会为本结果映射开启或关闭自动映射。这个属性会覆盖全局的autoMappingBehavior。</li>
+</ul>
+<h3 id="元素">
+  元素
+  <a class="anchor" href="#%e5%85%83%e7%b4%a0">#</a>
+</h3>
+<ul>
+<li>
+<p><code>constructor</code> 用于在实例化类时，注入结果到构造方法中</p>
+<ul>
+<li><code>idArg</code> ID参数；标记出作为ID的结果可以帮助提高整体性能</li>
+<li><code>arg</code> 将被注入到构造方法的一个普通结果</li>
+</ul>
+</li>
+<li>
+<p><code>id</code> 标记作为ID的结果可以帮助提高整体性能</p>
+</li>
+<li>
+<p><code>result</code> 注入到实体类的普通结果</p>
+</li>
+<li>
+<p><code>association</code> 关联一个复杂的类型，即数据库的一对一。</p>
+</li>
+<li>
+<p><code>collection</code> 数据库的一对多</p>
+</li>
+<li>
+<p><code>discriminator</code> 使用结果值来决定使用哪个resultMap</p>
+<ul>
+<li>case 基于某些值的结果映射</li>
+</ul>
+</li>
+<li>
+<p>id和result唯一的不同是，id元素对应的属性会被标记为对象的标识符，在比较对象实例时使用，能提高整体的性能。</p>
+</li>
+</ul>
+<h4 id="idresult">
+  id&amp;result
+  <a class="anchor" href="#idresult">#</a>
+</h4>
+<ul>
+<li><code>property</code> 映射到列的属性，如果实体类有这个名字的property，会先使用该属性。</li>
+<li><code>column</code> 数据库中的列名，或者是列的别名。</li>
+<li><code>javaType</code> 一个Java类的全限定命名，或者一个类型别名。如果映射到实体类，mybatis通常可以推断类型。如果映射到HashMap，则应该明确指定javaType来保证类型一致。</li>
+<li><code>jdbcType</code> JDBC类型，只有可为空的列上能指定JDBC类型。</li>
+<li><code>typeHandler</code> 指定类型处理器，需要是全限定命名或者类型别名。</li>
+</ul>
+<h4 id="association">
+  association
+  <a class="anchor" href="#association">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#f92672">&lt;resultMap</span> <span style="color:#a6e22e">id=</span><span style="color:#e6db74">&#34;blogResult&#34;</span> <span style="color:#a6e22e">type=</span><span style="color:#e6db74">&#34;Blog&#34;</span><span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;id</span> <span style="color:#a6e22e">property=</span><span style="color:#e6db74">&#34;id&#34;</span> <span style="color:#a6e22e">column=</span><span style="color:#e6db74">&#34;blog_id&#34;</span> <span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;result</span> <span style="color:#a6e22e">property=</span><span style="color:#e6db74">&#34;title&#34;</span> <span style="color:#a6e22e">column=</span><span style="color:#e6db74">&#34;blog_title&#34;</span><span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">&lt;!-- 这里的author指的是Blog中的属性 --&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;association</span> <span style="color:#a6e22e">property=</span><span style="color:#e6db74">&#34;author&#34;</span> <span style="color:#a6e22e">column=</span><span style="color:#e6db74">&#34;blog_author_id&#34;</span> <span style="color:#a6e22e">javaType=</span><span style="color:#e6db74">&#34;Author&#34;</span> <span style="color:#a6e22e">resultMap=</span><span style="color:#e6db74">&#34;authorResult&#34;</span><span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/resultMap&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;resultMap</span> <span style="color:#a6e22e">id=</span><span style="color:#e6db74">&#34;authorResult&#34;</span> <span style="color:#a6e22e">type=</span><span style="color:#e6db74">&#34;Author&#34;</span><span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;id</span> <span style="color:#a6e22e">property=</span><span style="color:#e6db74">&#34;id&#34;</span> <span style="color:#a6e22e">column=</span><span style="color:#e6db74">&#34;author_id&#34;</span><span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;result</span> <span style="color:#a6e22e">property=</span><span style="color:#e6db74">&#34;username&#34;</span> <span style="color:#a6e22e">column=</span><span style="color:#e6db74">&#34;author_username&#34;</span><span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;result</span> <span style="color:#a6e22e">property=</span><span style="color:#e6db74">&#34;password&#34;</span> <span style="color:#a6e22e">column=</span><span style="color:#e6db74">&#34;author_password&#34;</span><span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/resultMap&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">&lt;!-- 或者使用下面的形式--&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;resultMap</span> <span style="color:#a6e22e">id=</span><span style="color:#e6db74">&#34;blogResult&#34;</span> <span style="color:#a6e22e">type=</span><span style="color:#e6db74">&#34;Blog&#34;</span><span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;id</span> <span style="color:#a6e22e">property=</span><span style="color:#e6db74">&#34;id&#34;</span> <span style="color:#a6e22e">column=</span><span style="color:#e6db74">&#34;blog_id&#34;</span> <span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;result</span> <span style="color:#a6e22e">property=</span><span style="color:#e6db74">&#34;title&#34;</span> <span style="color:#a6e22e">column=</span><span style="color:#e6db74">&#34;blog_title&#34;</span><span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;association</span> <span style="color:#a6e22e">property=</span><span style="color:#e6db74">&#34;author&#34;</span> <span style="color:#a6e22e">javaType=</span><span style="color:#e6db74">&#34;Author&#34;</span><span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;id</span> <span style="color:#a6e22e">property=</span><span style="color:#e6db74">&#34;id&#34;</span> <span style="color:#a6e22e">column=</span><span style="color:#e6db74">&#34;author_id&#34;</span><span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;result</span> <span style="color:#a6e22e">property=</span><span style="color:#e6db74">&#34;username&#34;</span> <span style="color:#a6e22e">column=</span><span style="color:#e6db74">&#34;author_username&#34;</span><span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;result</span> <span style="color:#a6e22e">property=</span><span style="color:#e6db74">&#34;password&#34;</span> <span style="color:#a6e22e">column=</span><span style="color:#e6db74">&#34;author_password&#34;</span><span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;/association&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/resultMap&gt;</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#f92672">&lt;</span><span style="color:#66d9ef">select</span> id<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;selectBlog&#34;</span> resultMap<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;blogResult&#34;</span><span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">select</span>
+</span></span><span style="display:flex;"><span>    B.id            <span style="color:#66d9ef">as</span> blog_id,
+</span></span><span style="display:flex;"><span>    B.title         <span style="color:#66d9ef">as</span> blog_title,
+</span></span><span style="display:flex;"><span>    B.author_id     <span style="color:#66d9ef">as</span> blog_author_id,
+</span></span><span style="display:flex;"><span>    A.id            <span style="color:#66d9ef">as</span> author_id,
+</span></span><span style="display:flex;"><span>    A.username      <span style="color:#66d9ef">as</span> author_username,
+</span></span><span style="display:flex;"><span>    A.password      <span style="color:#66d9ef">as</span> author_password,
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">from</span> Blog B <span style="color:#66d9ef">left</span> <span style="color:#66d9ef">outer</span> <span style="color:#66d9ef">join</span> Author A <span style="color:#66d9ef">on</span> B.author_id <span style="color:#f92672">=</span> A.id
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">where</span> B.id <span style="color:#f92672">=</span> <span style="color:#f92672">#</span><span style="color:#960050;background-color:#1e0010">{</span>id,javaType<span style="color:#960050;background-color:#1e0010">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/</span><span style="color:#66d9ef">select</span><span style="color:#f92672">&gt;</span>
+</span></span></code></pre></div><h4 id="collection">
+  collection
+  <a class="anchor" href="#collection">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#f92672">&lt;resultMap</span> <span style="color:#a6e22e">id=</span><span style="color:#e6db74">&#34;blogResult&#34;</span> <span style="color:#a6e22e">type=</span><span style="color:#e6db74">&#34;Blog&#34;</span><span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;id</span> <span style="color:#a6e22e">property=</span><span style="color:#e6db74">&#34;id&#34;</span> <span style="color:#a6e22e">column=</span><span style="color:#e6db74">&#34;blog_id&#34;</span> <span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;result</span> <span style="color:#a6e22e">property=</span><span style="color:#e6db74">&#34;title&#34;</span> <span style="color:#a6e22e">column=</span><span style="color:#e6db74">&#34;blog_title&#34;</span><span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;collection</span> <span style="color:#a6e22e">property=</span><span style="color:#e6db74">&#34;posts&#34;</span> <span style="color:#a6e22e">ofType=</span><span style="color:#e6db74">&#34;Post&#34;</span> <span style="color:#a6e22e">resultMap=</span><span style="color:#e6db74">&#34;blogPostResult&#34;</span> <span style="color:#a6e22e">columnPrefix=</span><span style="color:#e6db74">&#34;post_&#34;</span><span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/resultMap&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;resultMap</span> <span style="color:#a6e22e">id=</span><span style="color:#e6db74">&#34;blogPostResult&#34;</span> <span style="color:#a6e22e">type=</span><span style="color:#e6db74">&#34;Post&#34;</span><span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;id</span> <span style="color:#a6e22e">property=</span><span style="color:#e6db74">&#34;id&#34;</span> <span style="color:#a6e22e">column=</span><span style="color:#e6db74">&#34;id&#34;</span><span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;result</span> <span style="color:#a6e22e">property=</span><span style="color:#e6db74">&#34;subject&#34;</span> <span style="color:#a6e22e">column=</span><span style="color:#e6db74">&#34;subject&#34;</span><span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;result</span> <span style="color:#a6e22e">property=</span><span style="color:#e6db74">&#34;body&#34;</span> <span style="color:#a6e22e">column=</span><span style="color:#e6db74">&#34;body&#34;</span><span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/resultMap&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">&lt;!-- 或者使用下面这种形式 --&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;resultMap</span> <span style="color:#a6e22e">id=</span><span style="color:#e6db74">&#34;blogResult&#34;</span> <span style="color:#a6e22e">type=</span><span style="color:#e6db74">&#34;Blog&#34;</span><span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;id</span> <span style="color:#a6e22e">property=</span><span style="color:#e6db74">&#34;id&#34;</span> <span style="color:#a6e22e">column=</span><span style="color:#e6db74">&#34;blog_id&#34;</span> <span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;result</span> <span style="color:#a6e22e">property=</span><span style="color:#e6db74">&#34;title&#34;</span> <span style="color:#a6e22e">column=</span><span style="color:#e6db74">&#34;blog_title&#34;</span><span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;collection</span> <span style="color:#a6e22e">property=</span><span style="color:#e6db74">&#34;posts&#34;</span> <span style="color:#a6e22e">ofType=</span><span style="color:#e6db74">&#34;Post&#34;</span><span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;id</span> <span style="color:#a6e22e">property=</span><span style="color:#e6db74">&#34;id&#34;</span> <span style="color:#a6e22e">column=</span><span style="color:#e6db74">&#34;post_id&#34;</span><span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;result</span> <span style="color:#a6e22e">property=</span><span style="color:#e6db74">&#34;subject&#34;</span> <span style="color:#a6e22e">column=</span><span style="color:#e6db74">&#34;post_subject&#34;</span><span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;result</span> <span style="color:#a6e22e">property=</span><span style="color:#e6db74">&#34;body&#34;</span> <span style="color:#a6e22e">column=</span><span style="color:#e6db74">&#34;post_body&#34;</span><span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;/collection&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/resultMap&gt;</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#f92672">&lt;</span><span style="color:#66d9ef">select</span> id<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;selectBlog&#34;</span> resultMap<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;blogResult&#34;</span><span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">select</span>
+</span></span><span style="display:flex;"><span>  B.id <span style="color:#66d9ef">as</span> blog_id,
+</span></span><span style="display:flex;"><span>  B.title <span style="color:#66d9ef">as</span> blog_title,
+</span></span><span style="display:flex;"><span>  B.author_id <span style="color:#66d9ef">as</span> blog_author_id,
+</span></span><span style="display:flex;"><span>  P.id <span style="color:#66d9ef">as</span> post_id,
+</span></span><span style="display:flex;"><span>  P.subject <span style="color:#66d9ef">as</span> post_subject,
+</span></span><span style="display:flex;"><span>  P.body <span style="color:#66d9ef">as</span> post_body,
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">from</span> Blog B
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">left</span> <span style="color:#66d9ef">outer</span> <span style="color:#66d9ef">join</span> Post P <span style="color:#66d9ef">on</span> B.id <span style="color:#f92672">=</span> P.blog_id
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">where</span> B.id <span style="color:#f92672">=</span> <span style="color:#f92672">#</span><span style="color:#960050;background-color:#1e0010">{</span>id<span style="color:#960050;background-color:#1e0010">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/</span><span style="color:#66d9ef">select</span><span style="color:#f92672">&gt;</span>
+</span></span></code></pre></div></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

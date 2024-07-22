@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>python模块 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#datetime">datetime</a></li>
+        <li><a href="#collections">collections</a></li>
+        <li><a href="#base64">base64</a></li>
+        <li><a href="#hashlib">hashlib</a></li>
+        <li><a href="#itertools">itertools</a></li>
+        <li><a href="#contextlib">contextlib</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>python模块</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#datetime">datetime</a></li>
+        <li><a href="#collections">collections</a></li>
+        <li><a href="#base64">base64</a></li>
+        <li><a href="#hashlib">hashlib</a></li>
+        <li><a href="#itertools">itertools</a></li>
+        <li><a href="#contextlib">contextlib</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/python/python%E6%A8%A1%E5%9D%97/">python模块</a>
+  </h1>
+  
+  <h5>2021-03-15</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/python/">python</a>
+  </div>
+  
+
+
+
+<h2 id="datetime">
+  datetime
+  <a class="anchor" href="#datetime">#</a>
+</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> datetime <span style="color:#f92672">import</span> datetime,timedelta
+</span></span></code></pre></div><ul>
+<li>获取当前时间<code>datetime.now()</code></li>
+<li>指定的某个日期和时间<code>datetime(2021,3,15,19,48)</code></li>
+<li>将datetime类型转化为timestamp，（timestamp是一个浮点数，整数位表示秒） <code>datetime(2021,3,15,19,49).timestamp()</code></li>
+<li>timestamp转化为datetime <code>datetime.fromtimestamp(1615809156.889315)</code></li>
+<li>str转换为datetime <code>datetime.strptime('2021-3-15 19:55:59','%Y-%m-%d %H:%M:%S')</code></li>
+<li>datetime转str <code>datetime.now().strftime('%a,%b %d %H:%M')</code></li>
+<li>datetime加减 <code>datetime.now() + timedelta(days = 1, hours = 10)</code></li>
+<li>时区转换</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>utc_dt <span style="color:#f92672">=</span> datetime<span style="color:#f92672">.</span>utcnow()
+</span></span><span style="display:flex;"><span>utc_dt<span style="color:#f92672">.</span>astimezone(timezone(timedelta(hours<span style="color:#f92672">=</span><span style="color:#ae81ff">8</span>)))
+</span></span></code></pre></div><h2 id="collections">
+  collections
+  <a class="anchor" href="#collections">#</a>
+</h2>
+<ul>
+<li>namedtuple：是一个函数，可以用来创建一个自定义的tuple对象，同时规定了tuple元素的个数，并可以用属性而不是索引来引用tuple的某个元素。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> collections <span style="color:#f92672">import</span> namedtuple
+</span></span><span style="display:flex;"><span>Point <span style="color:#f92672">=</span> nametuple(<span style="color:#e6db74">&#39;Point&#39;</span>,[<span style="color:#e6db74">&#39;x&#39;</span>, <span style="color:#e6db74">&#39;y&#39;</span>])
+</span></span><span style="display:flex;"><span>p <span style="color:#f92672">=</span> Point(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>)
+</span></span></code></pre></div><ul>
+<li>deque：双向列表，方法有<code>append()、pop()、appendleft()、popleft()</code></li>
+<li>defaultdict：和dict类似，但是在key不存在的时候返回一个默认值。</li>
+<li>OrderedDict：key会按照插入的顺序排序</li>
+<li>ChainMap：可以把一组dict串起来组成一个逻辑上的dict，本身也是一个dict，但在查找的时候，会按照顺序在内部的dict依次查找。</li>
+<li>Counter是一个计数器，可以统计字符出现的个数，实际上也是dict的子类</li>
+</ul>
+<h2 id="base64">
+  base64
+  <a class="anchor" href="#base64">#</a>
+</h2>
+<ul>
+<li>base64是一种用64个字符表示任意二进制数据的方法，64个字符指的是<code>A-Z, a-z, 0-9, +, /</code>。实现方法是将3个字节(3x8bit)的二进制数据编码为4字节(4x6bit，6bit的数据刚好能用上面这64个字符表示)的数据。6bit的数据刚好能用这64个字符表示。</li>
+<li>编码<code>base64.b64encode(b'binary')</code>；解码<code>base64.b64decode(b'binary')</code></li>
+</ul>
+<h2 id="hashlib">
+  hashlib
+  <a class="anchor" href="#hashlib">#</a>
+</h2>
+<ul>
+<li>摘要算法又称为哈希算法，散列算法，它通过一个函数，把任意长度的数据转化为一个固定长度的数据串。它是一个单向函数，对原始数据做一点点的修改都会导致计算出的摘要完全不同。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> hashlib
+</span></span><span style="display:flex;"><span>md5 <span style="color:#f92672">=</span> hashlib<span style="color:#f92672">.</span>md5()
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#也可以将串分开，多次调用update方法</span>
+</span></span><span style="display:flex;"><span>md5<span style="color:#f92672">.</span>update(<span style="color:#e6db74">&#34;xiaoxiang.space&#34;</span><span style="color:#f92672">.</span>encode(<span style="color:#e6db74">&#34;utf-8&#34;</span>))
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#md5结果是128bit，通常用32位的16进制表示</span>
+</span></span><span style="display:flex;"><span>print(md5<span style="color:#f92672">.</span>hexdigest())
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sha1 <span style="color:#f92672">=</span> hashlib<span style="color:#f92672">.</span>sha1()
+</span></span><span style="display:flex;"><span>sha1<span style="color:#f92672">.</span>update(<span style="color:#e6db74">&#34;xiaoxiang.space&#34;</span><span style="color:#f92672">.</span>encode(<span style="color:#e6db74">&#34;utf-8&#34;</span>))
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#sha1的结果是160bit，通常用一个40位的16进制字符串表示</span>
+</span></span><span style="display:flex;"><span>print(sha1<span style="color:#f92672">.</span>hexdigest())
+</span></span></code></pre></div><h2 id="itertools">
+  itertools
+  <a class="anchor" href="#itertools">#</a>
+</h2>
+<ul>
+<li>无限迭代器<code>itertools.count()</code></li>
+<li>cycle()会把传入的一个序列无限重复下去<code>itertools.cycle('ABC')</code></li>
+<li>repeat()可以把一个元素无限重复下去，提供了第二个参数可以限定重复次数<code>itertools.repeat('A', 3)</code></li>
+<li>可通过takewhile()根据函数条件来截取一个有限的序列。</li>
+<li>chain()可以把一组迭代对象串联起来，形成一个更大的迭代器。<code>itertools.chain('ABC', 'XYZ')</code></li>
+<li>groupby()可以把迭代器中相邻的重复元素挑出来放在一起。挑选规则是通过函数完成的，只要作用于函数的两个元素返回的值相等，这两个元素就被认为是一组的，函数的返回值作为组的key。</li>
+</ul>
+<h2 id="contextlib">
+  contextlib
+  <a class="anchor" href="#contextlib">#</a>
+</h2>
+<ul>
+<li>任何对象，只要正确实现了上下文管理，就可以用于with语句。实现上下文管理是通过<code>__enter__</code>和<code>__exit__</code>这两个方法实现的。可以通过contextlib标准库中的<code>@contextmanager</code>来实现上下文管理（更简单）</li>
+<li>有时候，我们希望在某段代码执行前后自动执行特定代码，也可以通过@contextmanager实现</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> contextlib
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@contextlib.contextmanager</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">tag</span>(name):
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#34;&lt;</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&gt;&#34;</span><span style="color:#f92672">%</span>name)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">yield</span>
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#34;&lt;/</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&gt;&#34;</span><span style="color:#f92672">%</span>name)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">with</span> tag(<span style="color:#e6db74">&#34;h1&#34;</span>):
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#34;hello&#34;</span>)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#34;world&#34;</span>)
+</span></span></code></pre></div><ul>
+<li>如果一个对象没有实现上下文，就不能把他用于with语句，可以用closing()来将该对象变成上下文。</li>
+</ul></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

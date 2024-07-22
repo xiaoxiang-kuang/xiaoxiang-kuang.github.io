@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>ubuntu | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents"></nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>ubuntu</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents"></nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/linux/ubuntu/">ubuntu</a>
+  </h1>
+  
+  <h5>2021-09-25</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/linux/">linux</a>
+  </div>
+  
+
+
+
+<p><strong>记录使用ubuntu的一些发现</strong></p>
+<ul>
+<li>
+<p><del>提升体验的一个软件<code>apt install gnome-shell-extension-dash-to-panel;apt remove gnome-shell-extension-ubuntu-dock</code>重启之后在gnome-tweaks中打开该扩展即可。它类似于windows的状态栏，比之前ubuntu自带的收藏栏和状态栏分开的情况好多了，而且可定制的程度高</del>。 此种方式下载的已经过时，在ubuntu20上会有bug，最新版本可以通过
+  <a href="https://extensions.gnome.org/">GNOME Shell Extensions</a>下载，该网站需要安装浏览器扩展插件、本地主机安装chrome-gnome-shell，安装完后和直接在该网站下载Dash to Panel即可。<strong>参考链接：</strong>
+  <a href="https://github.com/home-sweet-gnome/dash-to-panel/wiki/Installation#ubuntu">Installation · home-sweet-gnome/dash-to-panel Wiki · GitHub</a></p>
+</li>
+<li>
+<p><code>neofetch</code> 命令行显示系统信息、logo。</p>
+</li>
+<li>
+<p><code>ctrl + d</code> 文件夹添加到左边栏</p>
+</li>
+<li>
+<p><code>gnome-screenshot --interactive --area</code> 截图</p>
+</li>
+<li>
+<p><code>sudo apt install papirus-icon-theme</code> 好看的图标</p>
+</li>
+<li>
+<p>创建一个桌面应用图标：</p>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e">#/usr/share/applications目录下</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>Desktop Entry<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>Name<span style="color:#f92672">=</span>Typora
+</span></span><span style="display:flex;"><span>Exec<span style="color:#f92672">=</span>/opt/Typora-linux-x64/Typora %f
+</span></span><span style="display:flex;"><span>Icon<span style="color:#f92672">=</span>/opt/Typora-linux-x64/resources/assets/icon/icon_256x256.png
+</span></span><span style="display:flex;"><span>Type<span style="color:#f92672">=</span>Application
+</span></span></code></pre></div><p>
+  <a href="https://specifications.freedesktop.org/desktop-entry-spec/1.1/ar01s06.html">The Exec key</a></p></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

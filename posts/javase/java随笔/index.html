@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>java随笔 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#异常">异常</a></li>
+            <li><a href="#线程">线程</a></li>
+            <li><a href="#cas">cas</a></li>
+            <li><a href="#class文件">class文件</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>java随笔</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#异常">异常</a></li>
+            <li><a href="#线程">线程</a></li>
+            <li><a href="#cas">cas</a></li>
+            <li><a href="#class文件">class文件</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/javase/java%E9%9A%8F%E7%AC%94/">java随笔</a>
+  </h1>
+  
+  <h5>2021-01-27</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">java</a>
+  </div>
+  
+
+
+
+<h3 id="异常">
+  异常
+  <a class="anchor" href="#%e5%bc%82%e5%b8%b8">#</a>
+</h3>
+<ul>
+<li>所有的异常都继承自Throwable；</li>
+<li>Throwable有两个子类：Error，Exception。</li>
+<li>Error描述了java运行时系统的内部错误和资源耗尽错误；</li>
+<li>Exception有有两个分支，一个分支派生于RuntimeException，另一个分支包含其他异常。</li>
+<li>由程序错误导致的异常属于RuntimeException，例如：数组下标越界，错误的类型转换，空指针异常；
+其他异常包括IOException,SQLException等。</li>
+</ul>
+<h3 id="线程">
+  线程
+  <a class="anchor" href="#%e7%ba%bf%e7%a8%8b">#</a>
+</h3>
+<ul>
+<li>对于sun jdk来说，它的windows版和linux版都是使用一对一的线程模型实现的，一条java线程就映射到一条轻量级进程中，因为windows和linux系统提供的线程模型就是一对一的。</li>
+</ul>
+<h3 id="cas">
+  cas
+  <a class="anchor" href="#cas">#</a>
+</h3>
+<ul>
+<li>cas指令需要有3个操作数，</li>
+<li>分别是变量的内存地址（V），旧的预期值（A）和新值（B）。</li>
+<li>当cas指令执行时，当且仅当V符合旧预期值A时，处理器用新值B更新V的值，否则他就不执行更新。
+（但是无论是否更新了V的值，都会返回V的旧值。）</li>
+<li>上述的操作是一个原子操作。</li>
+</ul>
+<h3 id="class文件">
+  class文件
+  <a class="anchor" href="#class%e6%96%87%e4%bb%b6">#</a>
+</h3>
+<ul>
+<li>将一个局部变量加载到操作数栈Tload</li>
+<li>将一个数值从操作数栈存储到局部变量表Tstore</li>
+<li>将一个常量加载到操作数栈:bipush\sipush\ldc\Tconst_</li>
+</ul></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

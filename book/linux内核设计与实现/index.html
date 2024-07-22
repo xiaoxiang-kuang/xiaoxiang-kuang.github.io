@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>Linux内核设计与实现 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li><a href="#第12章-内存管理">第12章 内存管理</a>
+      <ul>
+        <li><a href="#121-页">12.1 页</a></li>
+        <li><a href="#122-区">12.2 区</a></li>
+        <li><a href="#123-获得页">12.3 获得页</a></li>
+      </ul>
+    </li>
+    <li><a href="#第14章-块io层">第14章 块I/O层</a>
+      <ul>
+        <li><a href="#141-刨析一个块设备">14.1 刨析一个块设备</a></li>
+        <li><a href="#142-缓冲区和缓冲区头">14.2 缓冲区和缓冲区头</a></li>
+        <li><a href="#143-bio结构体">14.3 bio结构体</a>
+          <ul>
+            <li><a href="#1431-io向量">14.3.1 I/O向量</a></li>
+          </ul>
+        </li>
+        <li><a href="#144-请求队列">14.4 请求队列</a></li>
+        <li><a href="#145-io调度程序">14.5 I/O调度程序</a>
+          <ul>
+            <li><a href="#1451-io调度程序的工作">14.5.1 I/O调度程序的工作</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#第15章-进程地址空间">第15章 进程地址空间</a></li>
+    <li><a href="#第16章-页高速缓存和页回写">第16章 页高速缓存和页回写</a>
+      <ul>
+        <li><a href="#161-缓存手段">16.1 缓存手段</a>
+          <ul>
+            <li><a href="#1611-写缓存">16.1.1 写缓存</a></li>
+          </ul>
+        </li>
+        <li><a href="#162-linux页高速缓存">16.2 Linux页高速缓存</a>
+          <ul>
+            <li><a href="#1621-address_space对象">16.2.1 address_space对象</a></li>
+            <li><a href="#1622-address_space操作">16.2.2 address_space操作</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>Linux内核设计与实现</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li><a href="#第12章-内存管理">第12章 内存管理</a>
+      <ul>
+        <li><a href="#121-页">12.1 页</a></li>
+        <li><a href="#122-区">12.2 区</a></li>
+        <li><a href="#123-获得页">12.3 获得页</a></li>
+      </ul>
+    </li>
+    <li><a href="#第14章-块io层">第14章 块I/O层</a>
+      <ul>
+        <li><a href="#141-刨析一个块设备">14.1 刨析一个块设备</a></li>
+        <li><a href="#142-缓冲区和缓冲区头">14.2 缓冲区和缓冲区头</a></li>
+        <li><a href="#143-bio结构体">14.3 bio结构体</a>
+          <ul>
+            <li><a href="#1431-io向量">14.3.1 I/O向量</a></li>
+          </ul>
+        </li>
+        <li><a href="#144-请求队列">14.4 请求队列</a></li>
+        <li><a href="#145-io调度程序">14.5 I/O调度程序</a>
+          <ul>
+            <li><a href="#1451-io调度程序的工作">14.5.1 I/O调度程序的工作</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#第15章-进程地址空间">第15章 进程地址空间</a></li>
+    <li><a href="#第16章-页高速缓存和页回写">第16章 页高速缓存和页回写</a>
+      <ul>
+        <li><a href="#161-缓存手段">16.1 缓存手段</a>
+          <ul>
+            <li><a href="#1611-写缓存">16.1.1 写缓存</a></li>
+          </ul>
+        </li>
+        <li><a href="#162-linux页高速缓存">16.2 Linux页高速缓存</a>
+          <ul>
+            <li><a href="#1621-address_space对象">16.2.1 address_space对象</a></li>
+            <li><a href="#1622-address_space操作">16.2.2 address_space操作</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+  <article class="markdown"><h1 id="第12章-内存管理">
+  第12章 内存管理
+  <a class="anchor" href="#%e7%ac%ac12%e7%ab%a0-%e5%86%85%e5%ad%98%e7%ae%a1%e7%90%86">#</a>
+</h1>
+<h2 id="121-页">
+  12.1 页
+  <a class="anchor" href="#121-%e9%a1%b5">#</a>
+</h2>
+<ul>
+<li>内核将物理页作为内存管理的基本单元，内存管理单元MMU以页为单位来处理。</li>
+<li>内核用struct page结构表示系统中的每个物理页。</li>
+<li>
+  <img src="/img/book/linux_kernel/2.jpg" alt="" /></li>
+<li>flag用来存放页的状态，保持页是不是脏的等。</li>
+<li>_count存放页的引用计数，当计数值变为-1时，表示当前内核并没有引用这一页，于是在新的分配中就可以使用它。</li>
+<li>virtual是页的虚拟地址。</li>
+<li>内核用这种结构来管理系统中所有的页。系统中的每个物理页都要分配这样一个结构体。</li>
+</ul>
+<h2 id="122-区">
+  12.2 区
+  <a class="anchor" href="#122-%e5%8c%ba">#</a>
+</h2>
+<ul>
+<li>
+<p>内核并不能对所有的页一视同仁，会存在下面这种情况：一些硬件只能用某些特定的内存地址来执行DMA等等等。所以内核将页划分成不同的区域。</p>
+</li>
+<li>
+<p>Linux主要使用了四种区：</p>
+<ul>
+<li>ZONE_DMA 这个区域的页只能用来执行DMA操作。</li>
+<li>ZONE_DMA32 该区包含的页面只能用来执行DMA，且只能被32位设备访问。</li>
+<li>ZONE_NORMAL 能正常映射的页。</li>
+<li>ZONE_HIGHEM 这个区包含高端内存，其中的页并不能永久地映射到内核地址空间。</li>
+</ul>
+</li>
+<li>
+<p>X64-64体系结构可以映射和处理64位的内存空间，所以X86_64没有ZONE_HIGHMEM区，所有的物理内存都存储与ZONE_DMA和ZONE_NORMAL区。、</p>
+</li>
+</ul>
+<h2 id="123-获得页">
+  12.3 获得页
+  <a class="anchor" href="#123-%e8%8e%b7%e5%be%97%e9%a1%b5">#</a>
+</h2>
+<ul>
+<li></li>
+</ul>
+<h1 id="第14章-块io层">
+  第14章 块I/O层
+  <a class="anchor" href="#%e7%ac%ac14%e7%ab%a0-%e5%9d%97io%e5%b1%82">#</a>
+</h1>
+<ul>
+<li>块设备：系统中能够随机访问固定大小的数据片的设备，如硬盘。</li>
+<li>字符设备：字符设备按照字符流的方式被有序的访问，如串口和键盘。</li>
+</ul>
+<h2 id="141-刨析一个块设备">
+  14.1 刨析一个块设备
+  <a class="anchor" href="#141-%e5%88%a8%e6%9e%90%e4%b8%80%e4%b8%aa%e5%9d%97%e8%ae%be%e5%a4%87">#</a>
+</h2>
+<ul>
+<li>块设备中最小的可寻址单元是扇区。</li>
+<li>内核执行的所有磁盘是按照块来进行的，块必须是扇区的整数倍大小。</li>
+<li>内核要求块的大小不能超过一个页的长度。</li>
+</ul>
+<h2 id="142-缓冲区和缓冲区头">
+  14.2 缓冲区和缓冲区头
+  <a class="anchor" href="#142-%e7%bc%93%e5%86%b2%e5%8c%ba%e5%92%8c%e7%bc%93%e5%86%b2%e5%8c%ba%e5%a4%b4">#</a>
+</h2>
+<ul>
+<li>当一个块调入内存时，它要存储在一个缓冲区中，每个缓冲区和一个块对应，它相当于是磁盘块在内存中的对应。</li>
+<li>由于内核在处理数据时需要一些控制信息（如块属于哪个设备，块对应的缓冲区等），所以每一个缓冲区都有一个对应的描述符。该描述符用buffer_head结构体标识。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> buffer_head {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">long</span> b_state;		<span style="color:#75715e">/* 缓冲区状态，如下表 */</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">struct</span> buffer_head <span style="color:#f92672">*</span>b_this_page;<span style="color:#75715e">/* circular list of page&#39;s buffers */</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">struct</span> page <span style="color:#f92672">*</span>b_page;		<span style="color:#75715e">/* the page this bh is mapped to */</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">sector_t</span> b_blocknr;		<span style="color:#75715e">/* start block number */</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">size_t</span> b_size;			<span style="color:#75715e">/* size of mapping */</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>b_data;			<span style="color:#75715e">/* pointer to data within the page */</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">struct</span> block_device <span style="color:#f92672">*</span>b_bdev;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">bh_end_io_t</span> <span style="color:#f92672">*</span>b_end_io;		<span style="color:#75715e">/* I/O completion */</span>
+</span></span><span style="display:flex;"><span> 	<span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>b_private;		<span style="color:#75715e">/* reserved for b_end_io */</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">struct</span> list_head b_assoc_buffers; <span style="color:#75715e">/* 相关的映射链表 */</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">struct</span> address_space <span style="color:#f92672">*</span>b_assoc_map;	<span style="color:#75715e">/* 相关的地址空间 */</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">atomic_t</span> b_count;		<span style="color:#75715e">/* 缓冲区地址计数 */</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">spinlock_t</span> b_uptodate_lock;
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// b_state标识缓冲区的状态，可以是如下的多种标志的组合
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">enum</span> bh_state_bits {
+</span></span><span style="display:flex;"><span>	BH_Uptodate,	<span style="color:#75715e">/* 该缓冲区包含可用数据 */</span>
+</span></span><span style="display:flex;"><span>	BH_Dirty,	<span style="color:#75715e">/* 该缓冲区是脏的 */</span>
+</span></span><span style="display:flex;"><span>	BH_Lock,	<span style="color:#75715e">/* Is locked */</span>
+</span></span><span style="display:flex;"><span>	BH_Req,		<span style="color:#75715e">/* Has been submitted for I/O */</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	BH_Mapped,	<span style="color:#75715e">/* Has a disk mapping */</span>
+</span></span><span style="display:flex;"><span>	BH_New,		<span style="color:#75715e">/* Disk mapping was newly created by get_block */</span>
+</span></span><span style="display:flex;"><span>	BH_Async_Read,	<span style="color:#75715e">/* Is under end_buffer_async_read I/O */</span>
+</span></span><span style="display:flex;"><span>	BH_Async_Write,	<span style="color:#75715e">/* Is under end_buffer_async_write I/O */</span>
+</span></span><span style="display:flex;"><span>	BH_Delay,	<span style="color:#75715e">/* Buffer is not yet allocated on disk */</span>
+</span></span><span style="display:flex;"><span>	BH_Boundary,	<span style="color:#75715e">/* Block is followed by a discontiguity */</span>
+</span></span><span style="display:flex;"><span>	BH_Write_EIO,	<span style="color:#75715e">/* I/O error on write */</span>
+</span></span><span style="display:flex;"><span>	BH_Unwritten,	<span style="color:#75715e">/* Buffer is allocated on disk but not written */</span>
+</span></span><span style="display:flex;"><span>	BH_Quiet,	<span style="color:#75715e">/* Buffer Error Prinks to be quiet */</span>
+</span></span><span style="display:flex;"><span>	BH_Meta,	<span style="color:#75715e">/* Buffer contains metadata */</span>
+</span></span><span style="display:flex;"><span>	BH_Prio,	<span style="color:#75715e">/* Buffer should be submitted with REQ_PRIO */</span>
+</span></span><span style="display:flex;"><span>	BH_Defer_Completion, <span style="color:#75715e">/* Defer AIO completion to workqueue */</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	BH_PrivateStart,<span style="color:#75715e">/* not a state bit, but the first bit available
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">			 * for private allocation by other entities
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">			 */</span>
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><ul>
+<li>在操作缓冲区头之前，应该先使用get_bh函数增加缓冲区头的引用计数，当完成缓冲区操作时，需要使用put_bh()函数减少引用计数。</li>
+<li>b_data指向相应的块，块的大小由b_size域标识，所以块在内存中的起始位置在b_data处，结束位置在b_data + b_size处。</li>
+<li>buffer_head描述磁盘块和物理内存缓冲区之间的映射关系，扮演了一个描述符角色。</li>
+</ul>
+<h2 id="143-bio结构体">
+  14.3 bio结构体
+  <a class="anchor" href="#143-bio%e7%bb%93%e6%9e%84%e4%bd%93">#</a>
+</h2>
+<ul>
+<li>块I/O操作的基本容器由bio结构体表示。该结构体表示正在活动的以segment链表形式组织的块I/O操作。</li>
+<li><strong>一个segment（片段）是一小块连续的内存缓冲区</strong>，这意味着不需要保证缓冲区一定要连续，既是一个缓冲区分散在内存的多个位置，bio结构体也能对内核保证I/O操作的执行。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * main unit of I/O for the block layer and lower layers (ie drivers and
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * stacking drivers)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> bio {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">struct</span> bio		<span style="color:#f92672">*</span>bi_next;	<span style="color:#75715e">/* request queue link */</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">struct</span> block_device	<span style="color:#f92672">*</span>bi_bdev;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span>		bi_opf;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">short</span>		bi_flags;	<span style="color:#75715e">/* BIO_* below */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//省略若干行......
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">short</span>		bi_vcnt;	<span style="color:#75715e">/* how many bio_vec&#39;s */</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">short</span>		bi_max_vecs;	<span style="color:#75715e">/* max bvl_vecs we can hold */</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">atomic_t</span>		__bi_cnt;	<span style="color:#75715e">/* pin count */</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">struct</span> bio_vec		<span style="color:#f92672">*</span>bi_io_vec;	<span style="color:#75715e">/* the actual vec list */</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">struct</span> bio_set		<span style="color:#f92672">*</span>bi_pool;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">struct</span> bio_vec		bi_inline_vecs[];
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><h3 id="1431-io向量">
+  14.3.1 I/O向量
+  <a class="anchor" href="#1431-io%e5%90%91%e9%87%8f">#</a>
+</h3>
+<ul>
+<li>bi_io_vec指向一个bio_vec结构体数组。该结构体数组的总数为bio_vent。</li>
+<li>
+  <img src="/img/book/linux_kernel/1.jpg" alt="" /></li>
+<li>每一个块I/O请求都通过一个bio结构体表示，每个请求包含一个或多个块，这些块存储在bio_vec结构体数组中。这些结构体描述每个片段在物理页中的实际位置。</li>
+<li>这些结构体描述了每个片段在物理页中的实际位置，并像向量一样被组织在一起。</li>
+<li>I/O操作的第一个片段由b_io_vec结构体所指向，其他的片段在其后依次放置，共有bi_vcnt个片段。当块I/O层开始执行请求、需要使用各个片段时，bi_idx会不断更新，从而总指向当前片段。</li>
+<li>bi_cnt记录bio结构体的使用计数，如果该值减为0，就该撤销该bio结构体。</li>
+</ul>
+<h2 id="144-请求队列">
+  14.4 请求队列
+  <a class="anchor" href="#144-%e8%af%b7%e6%b1%82%e9%98%9f%e5%88%97">#</a>
+</h2>
+<ul>
+<li>块I/O请求被保存在请求队列中，该队列由reques_queue结构体表示。</li>
+<li>请求队列只要不为空，队列对应的块设备驱动程序就会从队列头获取请求，然后送到对应的块设备上去。队列中的每一项都是一个单独的请求，由request结构体表示。</li>
+</ul>
+<h2 id="145-io调度程序">
+  14.5 I/O调度程序
+  <a class="anchor" href="#145-io%e8%b0%83%e5%ba%a6%e7%a8%8b%e5%ba%8f">#</a>
+</h2>
+<ul>
+<li>内核会在提交I/O操作前，执行合并和排序，负责提交I/O请求的子系统称为I/O调度程序。</li>
+</ul>
+<h3 id="1451-io调度程序的工作">
+  14.5.1 I/O调度程序的工作
+  <a class="anchor" href="#1451-io%e8%b0%83%e5%ba%a6%e7%a8%8b%e5%ba%8f%e7%9a%84%e5%b7%a5%e4%bd%9c">#</a>
+</h3>
+<ul>
+<li>I/O调度程序的工作是管理块设备的请求队列，它决定队列中的请求排列顺序以及在什么时刻发请求到块设备，这样有利于减少磁盘寻址时间，提高全局吞吐量。</li>
+<li>I/O调度程序通过合并和排序来减少磁盘寻址时间，合并是指将两个或多个请求合并成一个新请求。</li>
+</ul>
+<h1 id="第15章-进程地址空间">
+  第15章 进程地址空间
+  <a class="anchor" href="#%e7%ac%ac15%e7%ab%a0-%e8%bf%9b%e7%a8%8b%e5%9c%b0%e5%9d%80%e7%a9%ba%e9%97%b4">#</a>
+</h1>
+<h1 id="第16章-页高速缓存和页回写">
+  第16章 页高速缓存和页回写
+  <a class="anchor" href="#%e7%ac%ac16%e7%ab%a0-%e9%a1%b5%e9%ab%98%e9%80%9f%e7%bc%93%e5%ad%98%e5%92%8c%e9%a1%b5%e5%9b%9e%e5%86%99">#</a>
+</h1>
+<ul>
+<li>页高速缓存是把磁盘中的数据缓存到物理内存中，把对磁盘的访问变为对物理内存的访问。</li>
+</ul>
+<h2 id="161-缓存手段">
+  16.1 缓存手段
+  <a class="anchor" href="#161-%e7%bc%93%e5%ad%98%e6%89%8b%e6%ae%b5">#</a>
+</h2>
+<ul>
+<li>页高速缓存由内存中的物理页面组成，内容对应于磁盘上的物理块。</li>
+<li>当内核开始一个读操作，首先会检查需要的数据是否在页高速缓存中，如果在，则直接从内存中读取，这个行为称为缓存命中。如果数据没有在缓存中，称为缓存未命中，那么内核调度块I/O操作从磁盘读取数据。之后内核将读来的数据放入到页缓存中。</li>
+</ul>
+<h3 id="1611-写缓存">
+  16.1.1 写缓存
+  <a class="anchor" href="#1611-%e5%86%99%e7%bc%93%e5%ad%98">#</a>
+</h3>
+<ul>
+<li>在执行write()系统调用时，Linux会采用如下策略（回写）：
+<ol>
+<li>程序执行写操作直接写到缓存中，并将页高速缓存中被写入的页面标记为脏。</li>
+<li>将页加入到脏页链表中。之后由一个进程（回写进程）周期性将脏页链表中的页写回磁盘。</li>
+<li>清理脏页标识。</li>
+</ol>
+</li>
+</ul>
+<h2 id="162-linux页高速缓存">
+  16.2 Linux页高速缓存
+  <a class="anchor" href="#162-linux%e9%a1%b5%e9%ab%98%e9%80%9f%e7%bc%93%e5%ad%98">#</a>
+</h2>
+<ul>
+<li>页高速缓存缓存的是内存页面。缓存中的页来自对普通文件、块设备文件和内存映射文件的读写。如此一来，页高速缓存就包含了最近被访问过的文件的数据块。</li>
+</ul>
+<h3 id="1621-address_space对象">
+  16.2.1 address_space对象
+  <a class="anchor" href="#1621-address_space%e5%af%b9%e8%b1%a1">#</a>
+</h3>
+<ul>
+<li>Linux页高速缓存使用address_space对象管理缓存项和页I/O操作。</li>
+<li>一个被缓存的文件只能和一个address_space结构体关联，但可以有多个vm_area_struct结构体。即物理页到虚拟页是一个一对多的映射。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * struct address_space - Contents of a cacheable, mappable object.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * @host: Owner, either the inode or the block_device.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * @i_pages: Cached pages.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * @invalidate_lock: Guards coherency between page cache contents and
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> *   file offset-&gt;disk block mappings in the filesystem during invalidates.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> *   It is also used to block modification of page cache contents through
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> *   memory mappings.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * @gfp_mask: Memory allocation flags to use for allocating pages.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * @i_mmap_writable: Number of VM_SHARED mappings.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * @nr_thps: Number of THPs in the pagecache (non-shmem only).
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * @i_mmap: Tree of private and shared mappings.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * @i_mmap_rwsem: Protects @i_mmap and @i_mmap_writable.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * @nrpages: Number of page entries, protected by the i_pages lock.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * @writeback_index: Writeback starts here.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * @a_ops: Methods.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * @flags: Error bits and flags (AS_*).
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * @wb_err: The most recent error which has occurred.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * @private_lock: For use by the owner of the address_space.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * @private_list: For use by the owner of the address_space.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * @private_data: For use by the owner of the address_space.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> address_space {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">struct</span> inode		<span style="color:#f92672">*</span>host;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">struct</span> xarray		i_pages;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">struct</span> rw_semaphore	invalidate_lock;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">gfp_t</span>			gfp_mask;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">atomic_t</span>		i_mmap_writable;
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#ifdef CONFIG_READ_ONLY_THP_FOR_FS
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">/* number of thp, only for non-shmem files */</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">atomic_t</span>		nr_thps;
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#endif
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">struct</span> rb_root_cached	i_mmap;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">struct</span> rw_semaphore	i_mmap_rwsem;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">long</span>		nrpages;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">pgoff_t</span>			writeback_index;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">struct</span> address_space_operations <span style="color:#f92672">*</span>a_ops;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">long</span>		flags;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">errseq_t</span>		wb_err;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">spinlock_t</span>		private_lock;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">struct</span> list_head	private_list;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">void</span>			<span style="color:#f92672">*</span>private_data;
+</span></span><span style="display:flex;"><span>} <span style="color:#a6e22e">__attribute__</span>((<span style="color:#a6e22e">aligned</span>(<span style="color:#66d9ef">sizeof</span>(<span style="color:#66d9ef">long</span>)))) __randomize_layout;
+</span></span></code></pre></div><h3 id="1622-address_space操作">
+  16.2.2 address_space操作
+  <a class="anchor" href="#1622-address_space%e6%93%8d%e4%bd%9c">#</a>
+</h3>
+<ul>
+<li>操作函数表为address_space_operations。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> address_space_operations {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span> (<span style="color:#f92672">*</span>writepage)(<span style="color:#66d9ef">struct</span> page <span style="color:#f92672">*</span>page, <span style="color:#66d9ef">struct</span> writeback_control <span style="color:#f92672">*</span>wbc);
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span> (<span style="color:#f92672">*</span>read_folio)(<span style="color:#66d9ef">struct</span> file <span style="color:#f92672">*</span>, <span style="color:#66d9ef">struct</span> folio <span style="color:#f92672">*</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">/* Write back some dirty pages from this mapping. */</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span> (<span style="color:#f92672">*</span>writepages)(<span style="color:#66d9ef">struct</span> address_space <span style="color:#f92672">*</span>, <span style="color:#66d9ef">struct</span> writeback_control <span style="color:#f92672">*</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">/* Mark a folio dirty.  Return true if this dirtied it */</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">bool</span> (<span style="color:#f92672">*</span>dirty_folio)(<span style="color:#66d9ef">struct</span> address_space <span style="color:#f92672">*</span>, <span style="color:#66d9ef">struct</span> folio <span style="color:#f92672">*</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">void</span> (<span style="color:#f92672">*</span>readahead)(<span style="color:#66d9ef">struct</span> readahead_control <span style="color:#f92672">*</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span> (<span style="color:#f92672">*</span>write_begin)(<span style="color:#66d9ef">struct</span> file <span style="color:#f92672">*</span>, <span style="color:#66d9ef">struct</span> address_space <span style="color:#f92672">*</span>mapping,
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">loff_t</span> pos, <span style="color:#66d9ef">unsigned</span> len,
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">struct</span> page <span style="color:#f92672">**</span>pagep, <span style="color:#66d9ef">void</span> <span style="color:#f92672">**</span>fsdata);
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span> (<span style="color:#f92672">*</span>write_end)(<span style="color:#66d9ef">struct</span> file <span style="color:#f92672">*</span>, <span style="color:#66d9ef">struct</span> address_space <span style="color:#f92672">*</span>mapping,
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">loff_t</span> pos, <span style="color:#66d9ef">unsigned</span> len, <span style="color:#66d9ef">unsigned</span> copied,
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">struct</span> page <span style="color:#f92672">*</span>page, <span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>fsdata);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">/* Unfortunately this kludge is needed for FIBMAP. Don&#39;t use it */</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">sector_t</span> (<span style="color:#f92672">*</span>bmap)(<span style="color:#66d9ef">struct</span> address_space <span style="color:#f92672">*</span>, <span style="color:#66d9ef">sector_t</span>);
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">void</span> (<span style="color:#f92672">*</span>invalidate_folio) (<span style="color:#66d9ef">struct</span> folio <span style="color:#f92672">*</span>, <span style="color:#66d9ef">size_t</span> offset, <span style="color:#66d9ef">size_t</span> len);
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">bool</span> (<span style="color:#f92672">*</span>release_folio)(<span style="color:#66d9ef">struct</span> folio <span style="color:#f92672">*</span>, <span style="color:#66d9ef">gfp_t</span>);
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">void</span> (<span style="color:#f92672">*</span>free_folio)(<span style="color:#66d9ef">struct</span> folio <span style="color:#f92672">*</span>folio);
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">ssize_t</span> (<span style="color:#f92672">*</span>direct_IO)(<span style="color:#66d9ef">struct</span> kiocb <span style="color:#f92672">*</span>, <span style="color:#66d9ef">struct</span> iov_iter <span style="color:#f92672">*</span>iter);
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	 * migrate the contents of a page to the specified target. If
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	 * migrate_mode is MIGRATE_ASYNC, it must not block.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	 */</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span> (<span style="color:#f92672">*</span>migratepage) (<span style="color:#66d9ef">struct</span> address_space <span style="color:#f92672">*</span>,
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">struct</span> page <span style="color:#f92672">*</span>, <span style="color:#66d9ef">struct</span> page <span style="color:#f92672">*</span>, <span style="color:#66d9ef">enum</span> migrate_mode);
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">bool</span> (<span style="color:#f92672">*</span>isolate_page)(<span style="color:#66d9ef">struct</span> page <span style="color:#f92672">*</span>, <span style="color:#66d9ef">isolate_mode_t</span>);
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">void</span> (<span style="color:#f92672">*</span>putback_page)(<span style="color:#66d9ef">struct</span> page <span style="color:#f92672">*</span>);
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span> (<span style="color:#f92672">*</span>launder_folio)(<span style="color:#66d9ef">struct</span> folio <span style="color:#f92672">*</span>);
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">bool</span> (<span style="color:#f92672">*</span>is_partially_uptodate) (<span style="color:#66d9ef">struct</span> folio <span style="color:#f92672">*</span>, <span style="color:#66d9ef">size_t</span> from,
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">size_t</span> count);
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">void</span> (<span style="color:#f92672">*</span>is_dirty_writeback) (<span style="color:#66d9ef">struct</span> folio <span style="color:#f92672">*</span>, <span style="color:#66d9ef">bool</span> <span style="color:#f92672">*</span>dirty, <span style="color:#66d9ef">bool</span> <span style="color:#f92672">*</span>wb);
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span> (<span style="color:#f92672">*</span>error_remove_page)(<span style="color:#66d9ef">struct</span> address_space <span style="color:#f92672">*</span>, <span style="color:#66d9ef">struct</span> page <span style="color:#f92672">*</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">/* swapfile support */</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span> (<span style="color:#f92672">*</span>swap_activate)(<span style="color:#66d9ef">struct</span> swap_info_struct <span style="color:#f92672">*</span>sis, <span style="color:#66d9ef">struct</span> file <span style="color:#f92672">*</span>file,
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">sector_t</span> <span style="color:#f92672">*</span>span);
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">void</span> (<span style="color:#f92672">*</span>swap_deactivate)(<span style="color:#66d9ef">struct</span> file <span style="color:#f92672">*</span>file);
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span> (<span style="color:#f92672">*</span>swap_rw)(<span style="color:#66d9ef">struct</span> kiocb <span style="color:#f92672">*</span>iocb, <span style="color:#66d9ef">struct</span> iov_iter <span style="color:#f92672">*</span>iter);
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><ul>
+<li>文件系统通过自己的address_space_operation描述自己如何与页高速缓存交互。</li>
+</ul>
+</article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+<a href="https://beian.miit.gov.cn" target="_blank" style="color:gray;">备案号：陕ICP备2022008774号</a>
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
