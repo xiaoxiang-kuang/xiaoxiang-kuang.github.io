@@ -5,7 +5,107 @@
     <link>/tags/bios/</link>
     <description>Recent content in bios on 小象的blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Fri, 12 Jan 2024 20:04:24 +0800</lastBuildDate><atom:link href="/tags/bios/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 16 May 2024 16:18:24 +0800</lastBuildDate><atom:link href="/tags/bios/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>PCIe错误上报</title>
+      <link>/posts/bios/PCIe%E9%94%99%E8%AF%AF%E4%B8%8A%E6%8A%A5/</link>
+      <pubDate>Thu, 16 May 2024 16:18:24 +0800</pubDate>
+      
+      <guid>/posts/bios/PCIe%E9%94%99%E8%AF%AF%E4%B8%8A%E6%8A%A5/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;PCIe定义了两种错误报告机制，baseline error reporting capabilities 和advanced error reporting capability（AER）。所有的PCIe设备都要支持baseline error reporting，AER是可选的。&lt;/li&gt;
+&lt;li&gt;PCIe定义了两种错误，UCE和CE，其中UCE可以进一步分为Fatal UCE和Non-Fatal UCE。&lt;/li&gt;
+&lt;li&gt;
+  &lt;img src=&#34;/img/bios/pcie/error_classification.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;错误检测机制&#34;&gt;
+  错误检测机制
+  &lt;a class=&#34;anchor&#34; href=&#34;#%e9%94%99%e8%af%af%e6%a3%80%e6%b5%8b%e6%9c%ba%e5%88%b6&#34;&gt;#&lt;/a&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;包含三种错误检测机制&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Completion Status（用来向requester上报错误）&lt;/li&gt;
+&lt;li&gt;Error Messages（用来向HOST上报错误）&lt;/li&gt;
+&lt;li&gt;Error Forwarding（data poisoning）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;其中BIOS侧用的比较多的是Error Messages，可以用来向主机报告错误。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;EP上的Error Messages会被发送到相应的Root Ports。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Error Message包括ERR_COR(CE)、ERR_NONFATAL(NON-FATAL UCE)、ERR_FATAL(FATAL UCE)&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;error-messages&#34;&gt;
+  Error Messages
+  &lt;a class=&#34;anchor&#34; href=&#34;#error-messages&#34;&gt;#&lt;/a&gt;
+&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;EP上的Error Messages会被发送到相应的Root Ports。&lt;/li&gt;
+&lt;li&gt;Error Message包括ERR_COR(CE)、ERR_NONFATAL(NON-FATAL UCE)、ERR_FATAL(FATAL UCE)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Root Port是一个PCI-PCI Bridge结构，是从PCIe Root Complex出来的PCIe Link。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+  &lt;img src=&#34;/img/bios/pcie/root_port.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;PCIe配置空间为0~0xFFF，其中0~0xFF为PCI兼容配置空间(PCI-compatible region)，0x40~0xFF会存放Capability结构，PCI Express Capability就位于0x40~0xFF的位置。0x100~0xFFF是PCIe扩展配置空间（PCI Express Extended Configuration Space）。PCI兼容配置空间可以通过传统的IO寄存器和ECAM访问，PCIe扩展配置空间只能通过ECAM访问（PCI Express Enhanced Configuration Access Mechanism）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+  &lt;img src=&#34;/img/bios/pcie/configuration_space_layout.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;PCI Express Capability的结构如下图所示，所有的PCIe设备都需要支持该Capability，&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+  &lt;img src=&#34;/img/bios/pcie/pcie_cap.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;PCI Express Extended Capability寄存器位于PCI配置空间的0xFF之后，在0x100~0xFFF这段空间。AER寄存器就位于这段空间。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+  &lt;img src=&#34;/img/bios/pcie/aer_cap.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;往AER的CE MASK寄存器对应BIT写1，可以屏蔽对应CE上报。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;error messages生成的流程&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+  &lt;img src=&#34;/img/bios/pcie/flowchart_err_msg.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;error messages上报流程&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;
+  &lt;img src=&#34;/img/bios/pcie/error_msg_control.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;某些情况下，NON-FATAL 的错误可能是不需要执行任何的恢复动作的，比如软件尝试从一个不存在的设置执行一个读取操作，Completion中的UR Status将会报告一个错误，此时如果软件为Completer额外产生一个ERR_NONFATAL Message，就可能会导致系统运行异常。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Advisory Non-Fatal Error cases可以让在产生NON_FATAL ERROR时发送ERR_COR Message。如果需要让Advisory Non-Fatal Error cases处理NON_FATAL ERROR为更严重的情况，可以将该ERR的严重级别设置为FATAL，这种情况下Agent将会以ERR_FATAL发出该错误。
+下图描述了ERROR MESSAGES的生成流程。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
     <item>
       <title>HEST上报开发小结</title>
       <link>/posts/bios/HEST%E4%B8%8A%E6%8A%A5%E5%BC%80%E5%8F%91%E5%B0%8F%E7%BB%93/</link>
