@@ -1,1 +1,1 @@
-* 通过<a href="https://xiaoxiang.space">xiaoxiang.space</a>访问
+这个一个网站，<a href="https://xiaoxiang.space" target="_blank">点此访问</a>
