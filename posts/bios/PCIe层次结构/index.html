@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>PCIe层次结构 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#事务层">事务层</a>
+          <ul>
+            <li><a href="#tlp通用header">TLP通用Header</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>PCIe层次结构</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#事务层">事务层</a>
+          <ul>
+            <li><a href="#tlp通用header">TLP通用Header</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/bios/PCIe%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84/">PCIe层次结构</a>
+  </h1>
+  
+  <h5>2024-10-08</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/bios/">bios</a>
+  </div>
+  
+
+
+
+<table>
+<thead>
+<tr>
+<th>缩写</th>
+<th>全称</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TLP</td>
+<td>Transaction Layer Packet</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>PCIe包括事务层、数据链路层和物理层</li>
+<li>
+  <img src="/img/bios/pcie/layer.jpg" alt="" /></li>
+</ul>
+<h2 id="事务层">
+  事务层
+  <a class="anchor" href="#%e4%ba%8b%e5%8a%a1%e5%b1%82">#</a>
+</h2>
+<ul>
+<li>
+<p>定义了四种事务类型</p>
+<table>
+<thead>
+<tr>
+<th>地址空间</th>
+<th>事务类型</th>
+<th>介绍</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Memory</td>
+<td>READ/WRITE</td>
+<td>从MMIO读取/写入数据</td>
+</tr>
+<tr>
+<td>I/O</td>
+<td>READ/WRITE</td>
+<td>从I/O空间读取/写入数据</td>
+</tr>
+<tr>
+<td>Configuration</td>
+<td>READ/WRITE</td>
+<td>设备Function配置空间</td>
+</tr>
+<tr>
+<td>Message</td>
+<td>Baseline</td>
+<td>用于支持设备之间的事件交流</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>当访问PCIe设备时，传输的保温会先通过事务层封装成一个或多个TLP。一个TLP包含多个可选TLP Prefixes、一个TLP header、一个数据载荷和一个可选的TLP Digest。数据载荷的最大长度为4096。TLP结构如下：</p>
+</li>
+<li>
+<p>
+  <img src="/img/bios/pcie/tlp.jpg" alt="" /></p>
+</li>
+<li>
+<p>事务包括Requests和Completions。</p>
+</li>
+</ul>
+<h3 id="tlp通用header">
+  TLP通用Header
+  <a class="anchor" href="#tlp%e9%80%9a%e7%94%a8header">#</a>
+</h3>
+<ul>
+<li>
+  <img src="/img/bios/pcie/tlp_common_header.jpg" alt="" /></li>
+<li>TLP Header都有如下通用的结构，且头部总共为3DW/4DW。</li>
+<li>
+  <img src="/img/bios/pcie/tlp_header.jpg" alt="" /></li>
+<li>Fmt和Type</li>
+<li>Fmt支持如下的值</li>
+<li>
+  <img src="/img/bios/pcie/tlp_fmt.jpg" alt="" /></li>
+<li>Fmt和Type支持如下组合：</li>
+<li>
+  <img src="/img/bios/pcie/tlp_fmt_type_1.jpg" alt="" /></li>
+<li>
+  <img src="/img/bios/pcie/tlp_fmt_type_2.jpg" alt="" /></li>
+<li>
+  <img src="/img/bios/pcie/tlp_fmt_type_3.jpg" alt="" /></li>
+</ul></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

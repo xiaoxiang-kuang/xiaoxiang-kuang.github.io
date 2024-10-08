@@ -110,7 +110,7 @@ https://github.com/alex-shpak/hugo-book
 		  <li>
 			<a href="/tags/bios/"  class="flex justify-between">
 			  <span>bios</span>
-			  <span>10</span>
+			  <span>11</span>
 			</a>
 		  </li>
 		
@@ -327,7 +327,7 @@ https://github.com/alex-shpak/hugo-book
 		  <li>
 			<a href="/tags/bios/"  class="flex justify-between">
 			  <span>bios</span>
-			  <span>10</span>
+			  <span>11</span>
 			</a>
 		  </li>
 		
@@ -455,6 +455,76 @@ https://github.com/alex-shpak/hugo-book
  
         </header>
         
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/linux/ext4%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">Ext4文件系统</a>
+    </h2>
+    
+  <h5>2023-05-12</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/linux/">linux</a>
+  </div>
+  
+
+
+
+
+    <p><ul>
+<li>一个ext4文件系统被分割为多个block groups，block groups的大小在<code>sb.s_blocks_per_group</code>块中指定。</li>
+<li>默认情况下一个块的大小是4KiB，此时每个block group会包含32768个块，即一个group的大小为128MiB。</li>
+<li>ext4中块是最小的分配单位。</li>
+<li>ext4文件系统采用小端模式，数值的低字节存储在低地址处，高字节存储在高地址处。比如数“12 34 56 78”，小端存放的形式如下“78 56 34 12”。大端存放的形式为“12 34 56 78”。</li>
+<li>一个标准的block group布局如下（并非所有的块都是此布局）：</li>
+<li>
+  <img src="/img/linux/ext4/1.jpg" alt="" /></li>
+<li>centos7下使用dumpe2fs获取到的ext4文件系统的信息</li>
+<li>
+  <img src="/img/linux/ext4/1.2.jpg" alt="" /></li>
+<li>
+  <img src="/img/linux/ext4/1.1.jpg" alt="" /></li>
+<li>ext4会保留一些inode作为特殊用途，如下：</li>
+<li>
+  <img src="/img/linux/ext4/2.jpg" alt="" /></li>
+</ul>
+<h2 id="ext4文件系统">
+  ext4文件系统
+  <a class="anchor" href="#ext4%e6%96%87%e4%bb%b6%e7%b3%bb%e7%bb%9f">#</a>
+</h2>
+<h3 id="目录">
+  目录
+  <a class="anchor" href="#%e7%9b%ae%e5%bd%95">#</a>
+</h3>
+<ul>
+<li>目录也是文件，目录有对应的inode和data blocks，目录的data block中存放多个ext4_dir_entry_2，结构如下：</li>
+<li>
+  <img src="/img/linux/ext4/3.jpg" alt="" /></li>
+<li>文件类型可以取的值如下：</li>
+<li>
+  <img src="/img/linux/ext4/4.jpg" alt="" /></li>
+<li>案例
+<ul>
+<li><code>0D000000</code> <code>1000</code> <code>05</code> <code>01</code>  <code>6673746162</code>  <code>000000</code></li>
+<li>第一块表示inode号</li>
+<li>第二块表示此结构体长度为0x0010，即16，因为ext4采用小端存放，所以高位在高地址，低位在低地址。</li>
+<li>第三块表示文件名为5字节</li>
+<li>第四块表示文件类型为普通文件</li>
+<li>第五块是文件名，对应fstab，f的ascii是0x66，s的是0x73，t是0x75。</li>
+<li>最后一块是填充位，结构体大小必须是最大对其数的整数倍。</li>
+</ul>
+</li>
+</ul>
+        <a href="/posts/linux/ext4%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">查看更多</a>
+      
+    </p>
+  </article>
   
   <article class="markdown book-post">
     <h2>
@@ -1534,35 +1604,6 @@ https://github.com/alex-shpak/hugo-book
 <li>网络编程练习程序</li>
 </ul>
         <a href="/posts/c%E8%AF%AD%E8%A8%80/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B2/">查看更多</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/c%E8%AF%AD%E8%A8%80/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B1/">网络编程1</a>
-    </h2>
-    
-  <h5>2022-12-07</h5>
-
-
-
-  
-
-  
-  <div>
-    
-      <a href="/tags/c%E8%AF%AD%E8%A8%80/">c语言</a>
-  </div>
-  
-
-
-
-
-    <p><ul>
-<li>网络编程学习程序</li>
-</ul>
-        <a href="/posts/c%E8%AF%AD%E8%A8%80/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B1/">查看更多</a>
       
     </p>
   </article>

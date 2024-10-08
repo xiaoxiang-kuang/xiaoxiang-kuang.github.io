@@ -110,7 +110,7 @@ https://github.com/alex-shpak/hugo-book
 		  <li>
 			<a href="/tags/bios/"  class="flex justify-between">
 			  <span>bios</span>
-			  <span>10</span>
+			  <span>11</span>
 			</a>
 		  </li>
 		
@@ -327,7 +327,7 @@ https://github.com/alex-shpak/hugo-book
 		  <li>
 			<a href="/tags/bios/"  class="flex justify-between">
 			  <span>bios</span>
-			  <span>10</span>
+			  <span>11</span>
 			</a>
 		  </li>
 		
@@ -455,6 +455,328 @@ https://github.com/alex-shpak/hugo-book
  
         </header>
         
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E5%BA%94%E7%94%A8%E5%B1%82/">应用层</a>
+    </h2>
+    
+  <h5>2022-05-05</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>, 
+      <a href="/tags/c%E8%AF%AD%E8%A8%80/">c语言</a>
+  </div>
+  
+
+
+
+
+    <p><h2 id="http">
+  HTTP
+  <a class="anchor" href="#http">#</a>
+</h2>
+<ul>
+<li>网页包含多个对象，如HTML文件、JPEG图片、视频文件、动态脚本等，基本HTML文件包含对其他对象引用的链接。通过URL可以进行对象的寻址。</li>
+<li>HTTP协议流程：
+<ol>
+<li>服务器在80端口等待客户的请求</li>
+<li>浏览器发起到服务器的TCP连接（创建套接字Socket）</li>
+<li>浏览器与Web服务器交换HTTP消息</li>
+<li>关闭TCP连接</li>
+</ol>
+</li>
+<li>HTTP是无状态的协议，即服务器不维护任何有关客户端过去所发请求的信息。</li>
+</ul>
+<h3 id="http连接">
+  HTTP连接
+  <a class="anchor" href="#http%e8%bf%9e%e6%8e%a5">#</a>
+</h3>
+<ul>
+<li>HTTP包含非持久性连接和持久性连接
+<ul>
+<li>非持久性连接指的是每个TCP连接最多允许传输一个对象，HTTP1.0使用非持久性连接。</li>
+<li>持久性连接指每个TCP连接可以传输多个对象，HTTP1.1默认使用持久性连接。</li>
+</ul>
+</li>
+</ul>
+<h3 id="http消息格式">
+  HTTP消息格式
+  <a class="anchor" href="#http%e6%b6%88%e6%81%af%e6%a0%bc%e5%bc%8f">#</a>
+</h3>
+<ul>
+<li>HTTP有两类消息，请求消息（request）和响应消息（response）。</li>
+<li>HTTP请求消息的格式如下：</li>
+<li>
+  <img src="/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e5%ba%94%e7%94%a8%e5%b1%82/1.png" alt="HTTP请求格式" /></li>
+<li>HTTP响应消息的格式如下：</li>
+<li>
+  <img src="/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e5%ba%94%e7%94%a8%e5%b1%82/2.png" alt="HTTP请求格式" /></li>
+</ul>
+<h3 id="web缓存">
+  Web缓存
+  <a class="anchor" href="#web%e7%bc%93%e5%ad%98">#</a>
+</h3>
+<ul>
+<li>如果浏览器缓存过数据，当下次发送相同请求时，浏览器向服务器发送HTTP请求，并带上<code>If-modified-since: &lt;date&gt;</code>。</li>
+<li>如果对象未改变，则返回<code>304 Not Modified</code>，不反会对象，表示对象未被修改。</li>
+<li>如果对象发生改变，服务器会返回对象。</li>
+</ul>
+<h2 id="dns">
+  DNS
+  <a class="anchor" href="#dns">#</a>
+</h2>
+<ul>
+<li>DNS的是分布式数据库。提供了域名向IP地址的翻译、主机别名等功能。</li>
+<li>一般来说是本地域名解析服务器代替进行域名解析的，当主机进行DNS查询时，查询会被发送到本地域名服务器，当本地域名服务器无法解析域名时，就会访问根域名服务器。全球共13个根域名服务器。</li>
+<li>顶级域名服务器（TLD，top-level domain），负责com、org、net等顶级域名和国家顶级域名，如cn、uk等。</li>
+<li>权威域名服务器是组织的域名解析服务器，提供组织内部服务器的解析服务。</li>
+<li>当<code>cis.poly.edu</code>想获取<code>gaia.cs.umass.edu</code>的IP地址时，迭代查询流程如下</li>
+<li>
+  <img src="/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e5%ba%94%e7%94%a8%e5%b1%82/3.png" alt="迭代查询流程" /></li>
+<li>递归查询的流程如下（将域名解析的任务交给所联系的服务器）</li>
+<li>
+  <img src="/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e5%ba%94%e7%94%a8%e5%b1%82/4.png" alt="递归查询流程" /></li>
+<li>只要域名解析服务器获得域名时，就会缓存这一映射，一段时间后缓存条目才会失效。</li>
+</ul>
+<h3 id="dns记录">
+  DNS记录
+  <a class="anchor" href="#dns%e8%ae%b0%e5%bd%95">#</a>
+</h3>
+<ul>
+<li>资源记录格式为(name, value, type, ttl)，类型如下</li>
+<li>type=A，Name为主机域名，Value为IP地址</li>
+<li>type=NS，Name为域（如edu.cn），value为该域权威域名解析服务器的主机域名。</li>
+<li>type=CNAME，name为某一真实域名的别名，value为真实域名</li>
+<li>type=MX，value是与name对应的邮件服务器。</li>
+</ul>
+<h3 id="dns协议消息格式">
+  DNS协议消息格式
+  <a class="anchor" href="#dns%e5%8d%8f%e8%ae%ae%e6%b6%88%e6%81%af%e6%a0%bc%e5%bc%8f">#</a>
+</h3>
+<ul>
+<li>DNS查询（query）和回复（reply消息）的格式相同。</li>
+<li>消息头部
+<ul>
+<li>Identification：16为查询编号，回复使用相同的编号。</li>
+<li>flags表示查询或回复、期望递归、递归可用、权威回答。</li>
+</ul>
+</li>
+<li>
+  <img src="/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e5%ba%94%e7%94%a8%e5%b1%82/5.png" alt="DNS查询流程" /></li>
+</ul>
+<h2 id="socket">
+  socket
+  <a class="anchor" href="#socket">#</a>
+</h2>
+<ul>
+<li>对外通过IP地址+端口号表示通信端点。</li>
+<li>操作系统通过套接字描述符（socket descriptor）来管理套接字。</li>
+<li>socket类似于文件，当应用进程创建套接字时，操作系统分配一个数据结构存储该套接字相关信息。</li>
+<li>
+  <img src="/img/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c/%e5%ba%94%e7%94%a8%e5%b1%82/6.png" alt="socket描述符表" /></li>
+</ul>
+<h3 id="地址结构">
+  地址结构
+  <a class="anchor" href="#%e5%9c%b0%e5%9d%80%e7%bb%93%e6%9e%84">#</a>
+</h3>
+<ul>
+<li>使用TCP/IP协议簇的网络应用程序声明端点地址变量时，使用结构socketaddr_in</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> sockaddr_in
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  u_char sin_len; <span style="color:#75715e">/*地址长度 */</span>
+</span></span><span style="display:flex;"><span>  u_char sin_family; <span style="color:#75715e">/*地址族(TCP/IP：AF_INET) */</span>
+</span></span><span style="display:flex;"><span>  u_short sin_port; <span style="color:#75715e">/*端口号 */</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">struct</span> in_addr sin_addr; <span style="color:#75715e">/*IP地址 */</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">char</span> sin_zero[<span style="color:#ae81ff">8</span>]; <span style="color:#75715e">/*未用(置0) */</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="socket-api函数">
+  socket api函数
+  <a class="anchor" href="#socket-api%e5%87%bd%e6%95%b0">#</a>
+</h3>
+<h4 id="socket函数">
+  socket函数
+  <a class="anchor" href="#socket%e5%87%bd%e6%95%b0">#</a>
+</h4>
+<ul>
+<li><code>sd = socket(protofamily,type,proto);</code> 创建套接字并返回套接字描述符。</li>
+<li>第一个参数指定协议族：protofamily=PF_INET(TCP/IP)</li>
+<li>第二个参数指定套接字类型：SOCK_STREAM（TCP）, SOCK_DGRAM（UDP）, SOCK_RAW（面向网络层）</li>
+<li>第三个参数指定协议号：0为默认</li>
+<li>例</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> protoent <span style="color:#f92672">*</span>p;
+</span></span><span style="display:flex;"><span>p<span style="color:#f92672">=</span><span style="color:#a6e22e">getprotobyname</span>(<span style="color:#e6db74">&#34;tcp&#34;</span>);
+</span></span><span style="display:flex;"><span>SOCKET sd<span style="color:#f92672">=</span><span style="color:#a6e22e">socket</span>(PF_INET,SOCKET_STREAM,p<span style="color:#f92672">-&gt;</span>p_proto);
+</span></span></code></pre></div><h4 id="close">
+  close
+  <a class="anchor" href="#close">#</a>
+</h4>
+<ul>
+<li><code>int close(SOCKET sd)</code> 关闭一个描述符为sd的套接字</li>
+<li>如果多个进程共享一个套接字，调用close将套接字引用计数减1，减至0才关闭。</li>
+<li>一个进程中的多线程对一个套接字的使用无计数。</li>
+<li>返回值 0：成功，SOCKET_ERROR：失败。</li>
+</ul>
+<h4 id="bind">
+  bind
+  <a class="anchor" href="#bind">#</a>
+</h4>
+<ul>
+<li><code>int bind(sd,localaddr,addrlen);</code> 绑定套接字的本地端点地址</li>
+<li>客户端一般不必调用bind函数，一般由服务端调用。</li>
+<li>一台机器可能由多个网卡，可用使用地址通配符INADDR_ANY来绑定。</li>
+</ul>
+<h4 id="listen">
+  listen
+  <a class="anchor" href="#listen">#</a>
+</h4>
+<ul>
+<li><code>int listen(sd,queuesize);</code>置服务器端的流套接字处理处于监听状态。</li>
+<li>仅服务端调用，仅用于面向连接的流套接字。</li>
+<li>queuesize表示连接请求的队列大小。</li>
+<li>返回值 0：成功，SOCKET_ERROR：失败。</li>
+</ul>
+<h4 id="connect">
+  connect
+  <a class="anchor" href="#connect">#</a>
+</h4>
+<ul>
+<li><code>connect(sd,saddr,saddrlen)</code> 客户端调用connect函数来使客户端套接字（sd）与特定计算机的特定端口（saddr）的套接字服务进行连接。</li>
+<li>仅用于客户端，可用于TCP客户端也可以用于UDP客户端。</li>
+</ul>
+<h4 id="accept">
+  accept
+  <a class="anchor" href="#accept">#</a>
+</h4>
+<ul>
+<li><code>newsock = accept(sd,caddr,caddrlen);</code>服务程序调用accept函数从处于监听状态的流套接字sd的客户端连接请求队列中取出排在最前的一个客户请求，并且创建一个新的套接字来与客户套接字创建连接通道。</li>
+<li>仅用于TCP套接字，仅用于服务器。</li>
+<li>服务器会利用新创建的套接字（newsock）与客户端通信。</li>
+</ul>
+<h4 id="send">
+  send
+  <a class="anchor" href="#send">#</a>
+</h4>
+<ul>
+<li><code>send(sd,*buf,len,flags);</code></li>
+<li><code>sendto(sd,*buf,len,flags,destaddr,addrlen);</code></li>
+<li>send：发送数据（用于TCP套接字或连接模式（调用了connect函数）的客户端UDP套接字）</li>
+<li>sendto函数用于UDP服务器端套接字与未调用connect函数的UDP客户端套接字发送数据</li>
+</ul>
+<h4 id="recv">
+  recv
+  <a class="anchor" href="#recv">#</a>
+</h4>
+<ul>
+<li><code>recv(sd,buffer,len,flags);</code></li>
+<li><code>recvfrom(sd,buf,len,flags,senderaddr,saddrlen);</code></li>
+<li>recv函数从TCP连接的另一端接收数据，或者从调用了connect函数的UDP客户端套接接收服务器发来的数据</li>
+<li>recvfrom函数用于从UDP服务器端套接字与未调用connect函数的UDP客户端套接字接收对端数据</li>
+</ul>
+<h4 id="setsockoptgetsockopt">
+  setsockopt,getsockopt
+  <a class="anchor" href="#setsockoptgetsockopt">#</a>
+</h4>
+<ul>
+<li><code>int setsockopt(int sd, int level, int optname, *optval, int optlen);</code></li>
+<li><code>int setsockopt(int sd, int level, int optname, *optval, int optlen);</code></li>
+<li>setsockopt()函数用来设置套接字sd的选项参数</li>
+<li>getsockopt()函数用于获取任意类型、任意状态套接口的选项当前值，并把结果存入optval</li>
+</ul>
+<h4 id="网络字节序">
+  网络字节序
+  <a class="anchor" href="#%e7%bd%91%e7%bb%9c%e5%ad%97%e8%8a%82%e5%ba%8f">#</a>
+</h4>
+<ul>
+<li>网络字节序采用大端排序方式（低位低地址，高位高地址）</li>
+<li>某些Socket API函数的参数需要存储为网络字节顺序（如IP地址、端口号等）</li>
+<li>转换函数
+<ul>
+<li>htons: 本地字节顺序→网络字节顺序(16bits)</li>
+<li>ntohs: 网络字节顺序→本地字节顺序(16bits)</li>
+<li>htonl: 本地字节顺序→网络字节顺序(32bits)</li>
+<li>ntohl: 网络字节顺序→本地字节顺序(32bits)</li>
+</ul>
+</li>
+</ul>
+<h4 id="解析服务器ip地址">
+  解析服务器IP地址
+  <a class="anchor" href="#%e8%a7%a3%e6%9e%90%e6%9c%8d%e5%8a%a1%e5%99%a8ip%e5%9c%b0%e5%9d%80">#</a>
+</h4>
+<ul>
+<li>客户端可能使用域名或IP地址标识服务器，IP协议需要使用32为二进制IP地址，需要将函数名或IP地址转换为32为IP地址。</li>
+<li>inet_addr可用实现点分十进制IP地址到32位IP地址转换。</li>
+<li>gethostbyname实现域名到32位IP地址转换。会返回一个指向结构hostent的指针。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> hostent {
+</span></span><span style="display:flex;"><span> <span style="color:#66d9ef">char</span> FAR<span style="color:#f92672">*</span> h_name; <span style="color:#75715e">/*official host name */</span>
+</span></span><span style="display:flex;"><span> <span style="color:#66d9ef">char</span> FAR<span style="color:#f92672">*</span> FAR<span style="color:#f92672">*</span> h_aliases; <span style="color:#75715e">/*other aliases */</span>
+</span></span><span style="display:flex;"><span> <span style="color:#66d9ef">short</span> h_addrtype; <span style="color:#75715e">/*address type */</span>
+</span></span><span style="display:flex;"><span> <span style="color:#66d9ef">short</span> h_lengty; <span style="color:#75715e">/*address length */</span>
+</span></span><span style="display:flex;"><span> <span style="color:#66d9ef">char</span> FAR<span style="color:#f92672">*</span> FAR<span style="color:#f92672">*</span> h_addr_list; <span style="color:#75715e">/*list of address */</span>
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#define h_addr h_addr_list[0] 
+</span></span></span></code></pre></div><h4 id="解析服务器端口号">
+  解析服务器端口号
+  <a class="anchor" href="#%e8%a7%a3%e6%9e%90%e6%9c%8d%e5%8a%a1%e5%99%a8%e7%ab%af%e5%8f%a3%e5%8f%b7">#</a>
+</h4>
+<ul>
+<li>客户端可能使用服务名（如HTTP）标识服务器端口，需要将服务名转换为熟知端口号</li>
+<li>getservbyname会返回一个指向结构servent的指针。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> servent {
+</span></span><span style="display:flex;"><span> <span style="color:#66d9ef">char</span> FAR<span style="color:#f92672">*</span> s_name; <span style="color:#75715e">/*official service name */</span>
+</span></span><span style="display:flex;"><span> <span style="color:#66d9ef">char</span> FAR<span style="color:#f92672">*</span> FAR<span style="color:#f92672">*</span> s_aliases; <span style="color:#75715e">/*other aliases */</span>
+</span></span><span style="display:flex;"><span> <span style="color:#66d9ef">short</span> s_port; <span style="color:#75715e">/*port for this service */</span>
+</span></span><span style="display:flex;"><span> <span style="color:#66d9ef">char</span> FAR<span style="color:#f92672">*</span> s_proto; <span style="color:#75715e">/*protocol to use */</span>
+</span></span><span style="display:flex;"><span>}; 
+</span></span></code></pre></div><h4 id="解析协议号">
+  解析协议号
+  <a class="anchor" href="#%e8%a7%a3%e6%9e%90%e5%8d%8f%e8%ae%ae%e5%8f%b7">#</a>
+</h4>
+<ul>
+<li>客户端可能使用协议名来指定协议，需要将协议名转换为协议号</li>
+<li>函数getprotobyname实现协议名到协议号的转换。会返回一个protoent的指针。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> protoent {
+</span></span><span style="display:flex;"><span> <span style="color:#66d9ef">char</span> FAR<span style="color:#f92672">*</span> p_name; <span style="color:#75715e">/*official protocol name */</span>
+</span></span><span style="display:flex;"><span> <span style="color:#66d9ef">char</span> FAR<span style="color:#f92672">*</span> FAR<span style="color:#f92672">*</span> p_aliases; <span style="color:#75715e">/*list of aliases allowed */</span>
+</span></span><span style="display:flex;"><span> <span style="color:#66d9ef">short</span> p_proto; <span style="color:#75715e">/*official protocol number*/</span>
+</span></span><span style="display:flex;"><span> }; 
+</span></span></code></pre></div><h3 id="tcp客户端软件流程">
+  TCP客户端软件流程
+  <a class="anchor" href="#tcp%e5%ae%a2%e6%88%b7%e7%ab%af%e8%bd%af%e4%bb%b6%e6%b5%81%e7%a8%8b">#</a>
+</h3>
+<ol>
+<li>确定服务器IP地址和端口号</li>
+<li>创建套接字</li>
+<li>分配本地端点地址（可选）</li>
+<li>连接服务器（套接字）</li>
+<li>遵循应用层协议进行通信</li>
+<li>关闭/释放连接</li>
+</ol>
+<h3 id="udp客户端软件流程">
+  UDP客户端软件流程
+  <a class="anchor" href="#udp%e5%ae%a2%e6%88%b7%e7%ab%af%e8%bd%af%e4%bb%b6%e6%b5%81%e7%a8%8b">#</a>
+</h3>
+<ol>
+<li>确定服务器IP地址与端口号</li>
+<li>创建套接字</li>
+<li>分配本地端点地址（IP地址+端口号）</li>
+<li>指定服务器端点地址，构造UDP数据报</li>
+<li>遵循应用层协议进行通信</li>
+<li>关闭/释放套接字</li>
+</ol>
+    </p>
+  </article>
   
   <article class="markdown book-post">
     <h2>
@@ -2071,231 +2393,6 @@ PUT test/_mapping
 <li>在classpath路径下找log4j2.xml文件。</li>
 <li>如果没有找到配置文件，则会使用默认配置，将日志输出到控制台。</li>
 </ol>
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/javaee/syslog/">Syslog</a>
-    </h2>
-    
-  <h5>2022-01-07</h5>
-
-
-
-  
-
-  
-  <div>
-    
-      <a href="/tags/java/">java</a>
-  </div>
-  
-
-
-
-
-    <p><h2 id="rfc5424">
-  rfc5424
-  <a class="anchor" href="#rfc5424">#</a>
-</h2>
-<h3 id="介绍">
-  介绍
-  <a class="anchor" href="#%e4%bb%8b%e7%bb%8d">#</a>
-</h3>
-<p>格式：<code>PRI VERSION TIMESTAMP HOSTNAME APP-NAME PROCID MSGID STRUCTURED-DATA MSG</code></p>
-<ul>
-<li>消息头
-<ul>
-<li>PRI 优先级</li>
-<li>VERSION 版本</li>
-<li>TIMESTAMP 时间</li>
-<li>HOSTNAME 主机名</li>
-<li>APP-NAME APP名称</li>
-<li>PROCID 进程的ID</li>
-<li>MSGID 消息ID</li>
-</ul>
-</li>
-<li>STRUCTURED-DATA</li>
-<li>消息体</li>
-</ul>
-<h4 id="pri">
-  PRI
-  <a class="anchor" href="#pri">#</a>
-</h4>
-<ul>
-<li>PRI（priority）代表两个值（Facility）和日志级别（serverity）。PRI必须是类似<code>&lt;14&gt;</code>的格式。中间的值的计算公式为<code>priority = facility x 8 + serverity</code>。</li>
-<li>Facility的值是<code>[0,23]</code>。各个值的含义如下：</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>数字</th>
-<th>介绍</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0</td>
-<td>内核消息</td>
-</tr>
-<tr>
-<td>1</td>
-<td>用户级别消息</td>
-</tr>
-<tr>
-<td>2</td>
-<td>邮件系统</td>
-</tr>
-<tr>
-<td>3</td>
-<td>系统守护进程</td>
-</tr>
-<tr>
-<td>4</td>
-<td>安全/认证消息</td>
-</tr>
-<tr>
-<td>5</td>
-<td>syslogd内部生成的消息</td>
-</tr>
-<tr>
-<td>6</td>
-<td>line printer subsystem</td>
-</tr>
-<tr>
-<td>7</td>
-<td>network news subsystem</td>
-</tr>
-<tr>
-<td>8</td>
-<td>UUCP subsystem</td>
-</tr>
-<tr>
-<td>9</td>
-<td>时钟守护程序</td>
-</tr>
-<tr>
-<td>10</td>
-<td>安全/认证消息</td>
-</tr>
-<tr>
-<td>11</td>
-<td>FTP守护程序</td>
-</tr>
-<tr>
-<td>12</td>
-<td>NTF子系统</td>
-</tr>
-<tr>
-<td>13</td>
-<td>log audit</td>
-</tr>
-<tr>
-<td>14</td>
-<td>log alert</td>
-</tr>
-<tr>
-<td>15</td>
-<td>clock daemon (note 2)</td>
-</tr>
-<tr>
-<td>16</td>
-<td>本地用户0（LOCAL0）</td>
-</tr>
-<tr>
-<td>17</td>
-<td>本地用户1（LOCAL1）</td>
-</tr>
-<tr>
-<td>18</td>
-<td>本地用户2（LOCAL2）</td>
-</tr>
-<tr>
-<td>19</td>
-<td>本地用户3（LOCAL3）</td>
-</tr>
-<tr>
-<td>20</td>
-<td>本地用户4（LOCAL4）</td>
-</tr>
-<tr>
-<td>21</td>
-<td>本地用户5（LOCAL5）</td>
-</tr>
-<tr>
-<td>22</td>
-<td>本地用户6（LOCAL6）</td>
-</tr>
-<tr>
-<td>23</td>
-<td>本地用户7（LOCAL7）</td>
-</tr>
-</tbody>
-</table>
-<h4 id="serverity">
-  Serverity
-  <a class="anchor" href="#serverity">#</a>
-</h4>
-<table>
-<thead>
-<tr>
-<th>数字</th>
-<th>介绍</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0</td>
-<td>emergency紧急，系统无法使用</td>
-</tr>
-<tr>
-<td>1</td>
-<td>alert警告，必须立即采取措施</td>
-</tr>
-<tr>
-<td>2</td>
-<td>critical</td>
-</tr>
-<tr>
-<td>3</td>
-<td>error</td>
-</tr>
-<tr>
-<td>4</td>
-<td>warning</td>
-</tr>
-<tr>
-<td>5</td>
-<td>notice；正常但是重要的情况</td>
-</tr>
-<tr>
-<td>6</td>
-<td>informational；普通信息</td>
-</tr>
-<tr>
-<td>7</td>
-<td>debug；</td>
-</tr>
-</tbody>
-</table>
-<h3 id="例子">
-  例子
-  <a class="anchor" href="#%e4%be%8b%e5%ad%90">#</a>
-</h3>
-<pre tabindex="0"><code>&lt;165&gt;1 2003-08-24T05:14:15.000003-07:00 192.0.2.1 myproc 8710 - - %% It&#39;s time to make the do-nuts
-&lt;165&gt;1 2003-10-11T22:14:15.003Z mymachine.example.com evntslog - ID47 [exampleSDID@32473 iut=&#34;3&#34; eventSource=&#34;Application&#34; eventID=&#34;1011&#34;] BOMAn
-&lt;165&gt;1 2003-10-11T22:14:15.003Z mymachine.example.com evntslog - ID47 [exampleSDID@32473 iut=&#34;3&#34; eventSource=&#34;Application&#34; eventID=&#34;1011&#34;][examplePriority@32473 class=&#34;high&#34;]
-</code></pre><h3 id="log4j2配置">
-  log4j2配置
-  <a class="anchor" href="#log4j2%e9%85%8d%e7%bd%ae">#</a>
-</h3>
-<pre tabindex="0"><code>&lt;Syslog name=&#34;RFC5424&#34; format=&#34;RFC5424&#34; host=&#34;10.2.4.31&#34; port=&#34;5140&#34; protocol=&#34;UDP&#34; 
-appName=&#34;auditSyslogDemo&#34; facility=&#34;LOCAL0&#34; newLine=&#34;true&#34; messageId=&#34;Audit&#34; id=&#34;App&#34;/&gt;
-</code></pre><p>参考链接：
-  <a href="https://www.rfc-editor.org/rfc/rfc5424.html">RFC 5424: The Syslog Protocol (rfc-editor.org)</a></p>
-<p>参考链接：
-  <a href="https://logging.apache.org/log4j/2.x/manual/appenders.html#SyslogAppender">Log4j – Log4j 2 Appenders (apache.org)</a></p>
     </p>
   </article>
   
