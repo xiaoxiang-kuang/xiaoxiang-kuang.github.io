@@ -90,7 +90,8 @@
 &lt;li&gt;TLP Header都有如下通用的结构，且头部总共为3DW/4DW。&lt;/li&gt;
 &lt;li&gt;
   &lt;img src=&#34;/img/bios/pcie/tlp_header.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
-&lt;li&gt;Fmt和Type&lt;/li&gt;
+&lt;li&gt;Fmt和Type表示事务类型。&lt;/li&gt;
+&lt;li&gt;&lt;/li&gt;
 &lt;li&gt;Fmt支持如下的值&lt;/li&gt;
 &lt;li&gt;
   &lt;img src=&#34;/img/bios/pcie/tlp_fmt.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
