@@ -2,13 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>/tags/bios/</loc>
-    <lastmod>2024-10-08T09:48:37+08:00</lastmod>
+    <loc>/posts/bios/acpi%E8%B0%83%E8%AF%95/</loc>
+    <lastmod>2024-12-23T11:11:33+08:00</lastmod>
   </url><url>
-    <loc>/posts/bios/PCIe%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84/</loc>
-    <lastmod>2024-10-08T09:48:37+08:00</lastmod>
+    <loc>/tags/bios/</loc>
+    <lastmod>2024-12-23T11:11:33+08:00</lastmod>
   </url><url>
     <loc>/tags/</loc>
+    <lastmod>2024-12-23T11:11:33+08:00</lastmod>
+  </url><url>
+    <loc>/posts/bios/PCIe%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84/</loc>
     <lastmod>2024-10-08T09:48:37+08:00</lastmod>
   </url><url>
     <loc>/posts/bios/PCIe%E9%94%99%E8%AF%AF%E4%B8%8A%E6%8A%A5/</loc>

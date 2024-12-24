@@ -110,7 +110,7 @@ https://github.com/alex-shpak/hugo-book
 		  <li>
 			<a href="/tags/bios/"  class="flex justify-between">
 			  <span>bios</span>
-			  <span>11</span>
+			  <span>12</span>
 			</a>
 		  </li>
 		
@@ -327,7 +327,7 @@ https://github.com/alex-shpak/hugo-book
 		  <li>
 			<a href="/tags/bios/"  class="flex justify-between">
 			  <span>bios</span>
-			  <span>11</span>
+			  <span>12</span>
 			</a>
 		  </li>
 		
@@ -455,6 +455,133 @@ https://github.com/alex-shpak/hugo-book
  
         </header>
         
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/javaee/redis%E8%B5%B7%E6%AD%A5/">redis起步</a>
+    </h2>
+    
+  <h5>2021-08-13</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">java</a>
+  </div>
+  
+
+
+
+
+    <p><ul>
+<li>支持string、list、set、有序set、hash等数据类型</li>
+<li>通过<code>./redis-server [redis.conf] </code>启动服务。</li>
+<li>通过<code>./redis-cli [-h hostname] [-p port] </code>连接redis，登录后通过<code>AUTH password</code>来输入密码。</li>
+</ul>
+<h2 id="命令">
+  命令
+  <a class="anchor" href="#%e5%91%bd%e4%bb%a4">#</a>
+</h2>
+<ul>
+<li><code>keys *</code> 查看当前库中的所有key。</li>
+<li><code>exists key</code> 判断某个key是否存在</li>
+<li><code>rename key newkey</code>键重命名</li>
+<li>type key 查看key是什么类型</li>
+<li><code>del key</code> 删除指定的key数据</li>
+<li><code>expire key 10</code>  给key设定10秒的过期时间</li>
+<li><code>ttl key</code> 查看还有多少秒过期，-1表示永不过期，-2表示已过期</li>
+<li>select index 切换数据库，默认有16个库</li>
+<li>dbsize 查看当前库key的数量</li>
+<li><code>set key value</code> 设置字符串类型的键值对</li>
+<li><code>get key</code> 获取值</li>
+</ul>
+<h2 id="数据类型">
+  数据类型
+  <a class="anchor" href="#%e6%95%b0%e6%8d%ae%e7%b1%bb%e5%9e%8b">#</a>
+</h2>
+<h3 id="string">
+  string
+  <a class="anchor" href="#string">#</a>
+</h3>
+<ul>
+<li><code>set key value</code> 设置值</li>
+<li><code>get key</code> 获取key对应的值</li>
+<li><code>strlen key</code> 获取值的长度。</li>
+<li>mset key1 value1 key2 value2 同时设置多个键值对。</li>
+<li>mget key1 key2 同时获取多个键值对。</li>
+<li>append key value 将给定的value追加到原值的末尾。</li>
+<li>setnx key value 只有当key不存在的时候才设置key的值。</li>
+<li>incr key key的值加一。</li>
+<li>decr key key的值减一。</li>
+<li>incrby key 步长 key的值加步长。</li>
+<li>decrby key 步长 key的值减步长。</li>
+<li>msetnx key1 value1 key2 value2 同时设置多个键值对，当有一个key存在的时候，所有的设置都会失败。</li>
+<li><code>setex key seconds value</code> 设置键值对的同时设置过期时间，单位是秒。</li>
+<li>String内部采用类似arraylist的机制，字符串实际分配的空间一般高于字符串的长度，当字符串长度小于1M时，扩容都是加倍的，超过1M时，每次扩容都是只增加1M。最大为512M。</li>
+</ul>
+<h3 id="链表">
+  链表
+  <a class="anchor" href="#%e9%93%be%e8%a1%a8">#</a>
+</h3>
+<h4 id="节点的结构">
+  节点的结构
+  <a class="anchor" href="#%e8%8a%82%e7%82%b9%e7%9a%84%e7%bb%93%e6%9e%84">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">//adlist.h/listNode
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//结构
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">struct</span> listNode {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//前置节点
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">struct</span> listNode <span style="color:#f92672">*</span>prev;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//后置节点
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">struct</span> listNode <span style="color:#f92672">*</span>next;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//节点的值
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>value;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ul>
+<li>双端链表，获取节点的前置节点和后置节点的复杂度都是O(1)。</li>
+<li>无环链表，表头指针的prev和表尾指针的next都是指向NULL。</li>
+<li>list结构的head指针和tail指针能快速获取表头结点和表尾节点，复杂度是O(1)。</li>
+<li>可以通过list结构的len属性来获取链表中节点的数量，复杂度是O(1)。</li>
+</ul>
+<h4 id="命令-1">
+  命令
+  <a class="anchor" href="#%e5%91%bd%e4%bb%a4-1">#</a>
+</h4>
+<ul>
+<li><code>lpush/rpush k1 v1 v2 v3</code> 从左/右边插入</li>
+<li><code>lpop/rpop k1</code> 从左/又边吐出一个值</li>
+<li><code>lindex key index</code>按照索引下标获取元素</li>
+<li><code>len key</code>获得列表的长度</li>
+<li><code>lset key index value</code> 将key的下标为index设置为value</li>
+<li><code>lrange key start stop</code> 按照下标索引获得元素，0表示左边第一个，-1表示右边第一个。</li>
+<li><code>lrem key n value</code> 删除n个value</li>
+</ul>
+<h3 id="hash">
+  hash
+  <a class="anchor" href="#hash">#</a>
+</h3>
+<h4 id="命令-2">
+  命令
+  <a class="anchor" href="#%e5%91%bd%e4%bb%a4-2">#</a>
+</h4>
+<ul>
+<li><code>hset key field value</code>设置值</li>
+<li><code>hget key field</code>获取值</li>
+<li><code>hdel key  field[field...]</code>删除一个或多个键值对</li>
+<li><code>hlen key</code>计算field的个数</li>
+<li><code>hmget key field [field...]</code> 批量获取</li>
+<li><code>hmset key field value [field value ...]</code>批量设置</li>
+<li><code>hexists key field</code>判断field是否存在</li>
+<li><code>hkeys key</code>获取所有field</li>
+<li><code>hvals key</code>获取所有value</li>
+<li><code>hstrlen key field</code>获取value字符串长度</li>
+</ul>
+    </p>
+  </article>
   
   <article class="markdown book-post">
     <h2>
@@ -1196,87 +1323,6 @@ https://github.com/alex-shpak/hugo-book
 </ul>
 </li>
 <li>Znode是用来存储少量的状态和配置信息，每个节点的数据最大不能超过1MB</li>
-</ul>
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/clickhouse%E7%B1%BB%E5%9E%8B%E5%8F%8A%E5%87%BD%E6%95%B0/">clickhouse类型及函数</a>
-    </h2>
-    
-  <h5>2021-03-25</h5>
-
-
-
-  
-
-  
-  <div>
-    
-      <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
-  </div>
-  
-
-
-
-
-    <p><h2 id="类型">
-  类型
-  <a class="anchor" href="#%e7%b1%bb%e5%9e%8b">#</a>
-</h2>
-<h3 id="decimalps-decimal32s-decimal64s-decimal128s">
-  Decimal(P,S), Decimal32(S), Decimal64(S), Decimal128(S)
-  <a class="anchor" href="#decimalps-decimal32s-decimal64s-decimal128s">#</a>
-</h3>
-<ul>
-<li>有符号的<strong>定点数</strong>，可在加减乘中保持精度，除法的最低有效数字会被丢弃（不舍入）</li>
-</ul>
-<h4 id="参数">
-  参数
-  <a class="anchor" href="#%e5%8f%82%e6%95%b0">#</a>
-</h4>
-<ul>
-<li>P表示精度，有效范围是[1:38]，决定可以有多少个十进制的数字</li>
-<li>S表示规模，有效范围是[0:P]，决定数字的小数部分中包含的小数位数</li>
-<li>P[1:9]对应Decimal32(S)</li>
-<li>P[10:18]对应Decimal64(S)</li>
-<li>P[19:38]对应Decimal128(S)</li>
-<li>
-  <a href="https://clickhouse.tech/docs/zh/single/#decimalp-s-decimal32s-decimal64s-decimal128s">精度</a></li>
-</ul>
-<h2 id="函数">
-  函数
-  <a class="anchor" href="#%e5%87%bd%e6%95%b0">#</a>
-</h2>
-<h3 id="parsedatetimebestefforttime_string-time_zone">
-  parseDateTimeBestEffort(time_string[, time_zone])
-  <a class="anchor" href="#parsedatetimebestefforttime_string-time_zone">#</a>
-</h3>
-<ul>
-<li>把其他类型的时间日期转换为DateTime数据类型。</li>
-<li>支持的格式：<code>timestamp</code> <code>YYYYMMDDHHMMSS </code> <code>DD/MM/YYYY hh:mm:ss </code> <code>YYYY-MM-DD hh:mm:ss</code>等</li>
-</ul>
-<h3 id="show-create-table">
-  SHOW CREATE TABLE
-  <a class="anchor" href="#show-create-table">#</a>
-</h3>
-<ul>
-<li>返回创建该表的语句</li>
-</ul>
-<h3 id="类型转换">
-  类型转换
-  <a class="anchor" href="#%e7%b1%bb%e5%9e%8b%e8%bd%ac%e6%8d%a2">#</a>
-</h3>
-<ul>
-<li>clickhouse是强类型，他不会在类型之间进行隐式转换。</li>
-</ul>
-<h3 id="totypenamex">
-  toTypeName(x)
-  <a class="anchor" href="#totypenamex">#</a>
-</h3>
-<ul>
-<li>返回该参数的类型</li>
 </ul>
     </p>
   </article>

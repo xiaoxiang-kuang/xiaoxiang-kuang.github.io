@@ -110,7 +110,7 @@ https://github.com/alex-shpak/hugo-book
 		  <li>
 			<a href="/tags/bios/"  class="flex justify-between">
 			  <span>bios</span>
-			  <span>11</span>
+			  <span>12</span>
 			</a>
 		  </li>
 		
@@ -327,7 +327,7 @@ https://github.com/alex-shpak/hugo-book
 		  <li>
 			<a href="/tags/bios/"  class="flex justify-between">
 			  <span>bios</span>
-			  <span>11</span>
+			  <span>12</span>
 			</a>
 		  </li>
 		
@@ -455,6 +455,195 @@ https://github.com/alex-shpak/hugo-book
  
         </header>
         
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/javaee/logback/">logback</a>
+    </h2>
+    
+  <h5>2021-08-23</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">java</a>
+  </div>
+  
+
+
+
+
+    <p><h3 id="例">
+  例：
+  <a class="anchor" href="#%e4%be%8b">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#f92672">&lt;configuration&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;appender</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;STDOUT&#34;</span> <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;ch.qos.logback.core.ConsoleAppender&#34;</span><span style="color:#f92672">&gt;</span> 
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;encoder&gt;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&lt;pattern&gt;</span>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n<span style="color:#f92672">&lt;/pattern&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;/encoder&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;/appender&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;appender</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;FILE&#34;</span> <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;ch.qos.logback.core.FileAppender&#34;</span><span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;file&gt;</span>testFile.log<span style="color:#f92672">&lt;/file&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">&lt;!--         将 immediateFlush 设置为 false 可以获得更高的日志吞吐量 --&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;immediateFlush&gt;</span>false<span style="color:#f92672">&lt;/immediateFlush&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">&lt;!--         默认为 ch.qos.logback.classic.encoder.PatternLayoutEncoder --&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;encoder&gt;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&lt;pattern&gt;</span>%-4relative [%thread] %-5level %logger{35} - %msg%n<span style="color:#f92672">&lt;/pattern&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;/encoder&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;/appender&gt;</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;appender</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;SYSLOG&#34;</span> <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;ch.qos.logback.classic.net.SyslogAppender&#34;</span><span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;syslogHost&gt;</span>remote_home<span style="color:#f92672">&lt;/syslogHost&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;port&gt;</span>5140<span style="color:#f92672">&lt;/port&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;facility&gt;</span>AUTH<span style="color:#f92672">&lt;/facility&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;suffixPattern&gt;</span>[%thread] %logger %msg<span style="color:#f92672">&lt;/suffixPattern&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;/appender&gt;</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;root</span> <span style="color:#a6e22e">level=</span><span style="color:#e6db74">&#34;INFO&#34;</span><span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;appender-ref</span> <span style="color:#a6e22e">ref=</span><span style="color:#e6db74">&#34;STDOUT&#34;</span> <span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;/root&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;logger</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;space.xiaoxiang&#34;</span> <span style="color:#a6e22e">level=</span><span style="color:#e6db74">&#34;debug&#34;</span> <span style="color:#a6e22e">additivity=</span><span style="color:#e6db74">&#34;true&#34;</span><span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/configuration&gt;</span>
+</span></span></code></pre></div><h2 id="appender">
+  appender
+  <a class="anchor" href="#appender">#</a>
+</h2>
+<h3 id="appenderbase">
+  AppenderBase
+  <a class="anchor" href="#appenderbase">#</a>
+</h3>
+<ul>
+<li>是一个抽象类，实现了Appender接口，提供了基本方法供appender使用。</li>
+</ul>
+<h3 id="outputstreamappender">
+  OutputStreamAppender
+  <a class="anchor" href="#outputstreamappender">#</a>
+</h3>
+<ul>
+<li>是ConsoleAppender、FileAppender以及 RollingFileAppender的父类。</li>
+</ul>
+<h3 id="consoleappender">
+  ConsoleAppender
+  <a class="anchor" href="#consoleappender">#</a>
+</h3>
+<ul>
+<li>将日志输出到控制台，ConsoleAppender通过用户指定的encoder格式化日志事件。</li>
+</ul>
+<h3 id="fileappender">
+  FileAppender
+  <a class="anchor" href="#fileappender">#</a>
+</h3>
+<ul>
+<li>将日志输出到文件中，通过<code>file</code>来指定目标文件。</li>
+</ul>
+<h3 id="rollingfileappender">
+  RollingFileAppender
+  <a class="anchor" href="#rollingfileappender">#</a>
+</h3>
+<ul>
+<li>具有轮转日志文件的功能。比如在满足特定的条件后，将日志输出到另一个文件。</li>
+</ul>
+<h3 id="socketappender-和-sslsocketappender">
+  SocketAppender 和 SSLSocketAppender
+  <a class="anchor" href="#socketappender-%e5%92%8c-sslsocketappender">#</a>
+</h3>
+<ul>
+<li>可以将日志传输到远端机器。</li>
+</ul>
+<h3 id="smtpappender">
+  SMTPAppender
+  <a class="anchor" href="#smtpappender">#</a>
+</h3>
+<ul>
+<li>收集日志到缓冲区中，当用户指定的事件发生时，将从缓冲区中取出适当的内容进行发送。</li>
+</ul>
+<h3 id="dbappender">
+  DBAppender
+  <a class="anchor" href="#dbappender">#</a>
+</h3>
+<ul>
+<li>将日志插到三张数据库表中，三张表分别是logging_event, logging_event_property 与 logging_event_exception。</li>
+</ul>
+<h3 id="syslogappender">
+  SyslogAppender
+  <a class="anchor" href="#syslogappender">#</a>
+</h3>
+<ul>
+<li>可以将日志发送给远程的syslog守护线程。</li>
+<li>日志事件的严重程度是根据日志事件的级别转换来的，DEBUG被转换为7，INFO被转换为6，WARN为4，ERROR为3。</li>
+</ul>
+<h3 id="siftingappender">
+  SiftingAppender
+  <a class="anchor" href="#siftingappender">#</a>
+</h3>
+<ul>
+<li>根据给定的运行时属性分离或者过滤日志。</li>
+</ul>
+<h3 id="asyncappender">
+  AsyncAppender
+  <a class="anchor" href="#asyncappender">#</a>
+</h3>
+<ul>
+<li>作为一个事件调度器存在，必须调用其他appender来完成操作。</li>
+</ul>
+<h2 id="encoder">
+  encoder
+  <a class="anchor" href="#encoder">#</a>
+</h2>
+<ul>
+<li>encoder将日志事件转换为字节数组，同时将字节数组写入到一个OutputStream中。</li>
+<li>PatternLayoutEncoder是目前唯一真正有用的encoder，它仅包裹了一个PatternLayout就完成了大部分的工作。</li>
+</ul>
+<h2 id="layout">
+  layout
+  <a class="anchor" href="#layout">#</a>
+</h2>
+<ul>
+<li>layout负责将日志事件转化为字符串。</li>
+</ul>
+<h3 id="patternlayout">
+  PatternLayout
+  <a class="anchor" href="#patternlayout">#</a>
+</h3>
+<ul>
+<li>
+<p>可以通过调整PatternLayout的转换模式来进行定制，PatternLayout的转换模式由字面量和转换说明符组成，每一个转换说明符由一个百分号开始<code>%</code>，后面跟随格式修改器，以及可用大括号括起来的转换字符和可选的参数。格式修改器可以对字段进行对齐，修改最大最小宽度等。</p>
+</li>
+<li>
+<p>括号用于对转换模式进行分组，<code>(</code>和<code>)</code>都有特殊的含义。</p>
+</li>
+<li>
+<p>名为<code>com.foo</code>的logger是名为<code>com.foo.bar</code>的logger的父级。（命名层次结构）</p>
+</li>
+<li>
+<p>root logger的默认层级为DEBUG。</p>
+</li>
+<li>
+<p>层级的排序：TRACE &lt; DEBUG &lt; INFO &lt; WARN &lt; ERROR。</p>
+</li>
+<li>
+<p>appender具有叠加性：logger L的日志输出会遍历L和它父级中所有的appender，如果L的某个上级P，P设置了additivity=false，那么L的日志输出会遍历从L到P（不包括P）的所有appender。additivity默认为true。</p>
+</li>
+</ul>
+<h3 id="logback初始化步骤">
+  logback初始化步骤
+  <a class="anchor" href="#logback%e5%88%9d%e5%a7%8b%e5%8c%96%e6%ad%a5%e9%aa%a4">#</a>
+</h3>
+<ol>
+<li>在类路径下寻找名为logback-test.xml。</li>
+<li>如果没找到，找名为logback.groovy的文件。</li>
+<li>如果没找到，找名为logback.xml的文件。</li>
+<li>如果没找到，会用ServiceLoader工具去解析<code>META-INF\services\ch.qos.logback.classic.spi.Configutator</code>路径下实现了Configurator接口的类</li>
+<li>如果还没找到，logback会通过BasicConfigurator为自己进行配置，日志将会全部打印在控制台。</li>
+</ol>
+    </p>
+  </article>
   
   <article class="markdown book-post">
     <h2>
@@ -990,133 +1179,6 @@ https://github.com/alex-shpak/hugo-book
 </ul>
 <p><strong>参考链接：</strong>
   <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status">HTTP 响应代码 - HTTP | MDN (mozilla.org)</a></p>
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/javaee/redis%E8%B5%B7%E6%AD%A5/">redis起步</a>
-    </h2>
-    
-  <h5>2021-08-13</h5>
-
-
-
-  
-
-  
-  <div>
-    
-      <a href="/tags/java/">java</a>
-  </div>
-  
-
-
-
-
-    <p><ul>
-<li>支持string、list、set、有序set、hash等数据类型</li>
-<li>通过<code>./redis-server [redis.conf] </code>启动服务。</li>
-<li>通过<code>./redis-cli [-h hostname] [-p port] </code>连接redis，登录后通过<code>AUTH password</code>来输入密码。</li>
-</ul>
-<h2 id="命令">
-  命令
-  <a class="anchor" href="#%e5%91%bd%e4%bb%a4">#</a>
-</h2>
-<ul>
-<li><code>keys *</code> 查看当前库中的所有key。</li>
-<li><code>exists key</code> 判断某个key是否存在</li>
-<li><code>rename key newkey</code>键重命名</li>
-<li>type key 查看key是什么类型</li>
-<li><code>del key</code> 删除指定的key数据</li>
-<li><code>expire key 10</code>  给key设定10秒的过期时间</li>
-<li><code>ttl key</code> 查看还有多少秒过期，-1表示永不过期，-2表示已过期</li>
-<li>select index 切换数据库，默认有16个库</li>
-<li>dbsize 查看当前库key的数量</li>
-<li><code>set key value</code> 设置字符串类型的键值对</li>
-<li><code>get key</code> 获取值</li>
-</ul>
-<h2 id="数据类型">
-  数据类型
-  <a class="anchor" href="#%e6%95%b0%e6%8d%ae%e7%b1%bb%e5%9e%8b">#</a>
-</h2>
-<h3 id="string">
-  string
-  <a class="anchor" href="#string">#</a>
-</h3>
-<ul>
-<li><code>set key value</code> 设置值</li>
-<li><code>get key</code> 获取key对应的值</li>
-<li><code>strlen key</code> 获取值的长度。</li>
-<li>mset key1 value1 key2 value2 同时设置多个键值对。</li>
-<li>mget key1 key2 同时获取多个键值对。</li>
-<li>append key value 将给定的value追加到原值的末尾。</li>
-<li>setnx key value 只有当key不存在的时候才设置key的值。</li>
-<li>incr key key的值加一。</li>
-<li>decr key key的值减一。</li>
-<li>incrby key 步长 key的值加步长。</li>
-<li>decrby key 步长 key的值减步长。</li>
-<li>msetnx key1 value1 key2 value2 同时设置多个键值对，当有一个key存在的时候，所有的设置都会失败。</li>
-<li><code>setex key seconds value</code> 设置键值对的同时设置过期时间，单位是秒。</li>
-<li>String内部采用类似arraylist的机制，字符串实际分配的空间一般高于字符串的长度，当字符串长度小于1M时，扩容都是加倍的，超过1M时，每次扩容都是只增加1M。最大为512M。</li>
-</ul>
-<h3 id="链表">
-  链表
-  <a class="anchor" href="#%e9%93%be%e8%a1%a8">#</a>
-</h3>
-<h4 id="节点的结构">
-  节点的结构
-  <a class="anchor" href="#%e8%8a%82%e7%82%b9%e7%9a%84%e7%bb%93%e6%9e%84">#</a>
-</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">//adlist.h/listNode
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//结构
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">struct</span> listNode {
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//前置节点
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">struct</span> listNode <span style="color:#f92672">*</span>prev;
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//后置节点
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">struct</span> listNode <span style="color:#f92672">*</span>next;
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//节点的值
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>value;
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><ul>
-<li>双端链表，获取节点的前置节点和后置节点的复杂度都是O(1)。</li>
-<li>无环链表，表头指针的prev和表尾指针的next都是指向NULL。</li>
-<li>list结构的head指针和tail指针能快速获取表头结点和表尾节点，复杂度是O(1)。</li>
-<li>可以通过list结构的len属性来获取链表中节点的数量，复杂度是O(1)。</li>
-</ul>
-<h4 id="命令-1">
-  命令
-  <a class="anchor" href="#%e5%91%bd%e4%bb%a4-1">#</a>
-</h4>
-<ul>
-<li><code>lpush/rpush k1 v1 v2 v3</code> 从左/右边插入</li>
-<li><code>lpop/rpop k1</code> 从左/又边吐出一个值</li>
-<li><code>lindex key index</code>按照索引下标获取元素</li>
-<li><code>len key</code>获得列表的长度</li>
-<li><code>lset key index value</code> 将key的下标为index设置为value</li>
-<li><code>lrange key start stop</code> 按照下标索引获得元素，0表示左边第一个，-1表示右边第一个。</li>
-<li><code>lrem key n value</code> 删除n个value</li>
-</ul>
-<h3 id="hash">
-  hash
-  <a class="anchor" href="#hash">#</a>
-</h3>
-<h4 id="命令-2">
-  命令
-  <a class="anchor" href="#%e5%91%bd%e4%bb%a4-2">#</a>
-</h4>
-<ul>
-<li><code>hset key field value</code>设置值</li>
-<li><code>hget key field</code>获取值</li>
-<li><code>hdel key  field[field...]</code>删除一个或多个键值对</li>
-<li><code>hlen key</code>计算field的个数</li>
-<li><code>hmget key field [field...]</code> 批量获取</li>
-<li><code>hmset key field value [field value ...]</code>批量设置</li>
-<li><code>hexists key field</code>判断field是否存在</li>
-<li><code>hkeys key</code>获取所有field</li>
-<li><code>hvals key</code>获取所有value</li>
-<li><code>hstrlen key field</code>获取value字符串长度</li>
-</ul>
     </p>
   </article>
   

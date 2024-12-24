@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+<title>ACPI调试 | 小象的blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e24d94cf619e7e6705439036ee43e77f243d24ac89100b59375379bc4d659d87.css" >
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.png" alt="Logo" /><span>小象的blog</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+  <div class="split-line"></div>
+  
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#环境配置">环境配置</a></li>
+        <li><a href="#acpi-debug">ACPI Debug</a></li>
+        <li><a href="#其他">其他</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <div>
+	      <header class="book-header">
+          
+  <div class="flex align-center justify-between">
+   <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+  
+  <strong>ACPI调试</strong>
+</div>
+
+
+  
+    <aside class="hidden clearfix">
+      <nav>
+        
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/">
+        主页
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/linux%E5%91%BD%E4%BB%A4/">
+        linux命令总结
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/linux/shell%E8%84%9A%E6%9C%AC/">
+        shell脚本
+      </a>
+  </li>
+  
+  <li>
+    <a href="/categories/book/">
+        书籍笔记
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/">
+        关于
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+      </nav>
+      <div class="split-line"></div>
+      
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#环境配置">环境配置</a></li>
+        <li><a href="#acpi-debug">ACPI Debug</a></li>
+        <li><a href="#其他">其他</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+    </aside>
+  
+ 
+        </header>
+        
+<article class="markdown">
+  <h1>
+    <a href="/posts/bios/acpi%E8%B0%83%E8%AF%95/">ACPI调试</a>
+  </h1>
+  
+  <h5>2024-12-23</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/bios/">bios</a>
+  </div>
+  
+
+
+
+<ul>
+<li>参考 
+  <a href="https://ubuntu.com/blog/acpi-aml-runtime-debugger-in-ubuntu-18-04-x64">ACPI AML Runtime Debugger in Ubuntu 18.04 (x64)</a></li>
+<li>之前一直以为ACPI是无法加打印的，但是在写ASL的过程中遇到了一些难于解决的问题，经过搜索后有了下面这篇文章。</li>
+<li>要启用AML的打印，需要在编译内核时指定<code>CONFIG_ACPI_DEBUGGER=y</code>这个参数，否则是无法打印的，不过ubuntu在Ubuntu 18.04 (x64)之后就默认设置了这个参数，所以可以我们可以使用ubuntu系统来做AML的调试。下面所有的代码调试都是在ubuntu server 22.04.5上实现。</li>
+</ul>
+<h2 id="环境配置">
+  环境配置
+  <a class="anchor" href="#%e7%8e%af%e5%a2%83%e9%85%8d%e7%bd%ae">#</a>
+</h2>
+<ul>
+<li>要进行ACPI调试前需要安装acpidbg工具，改工具需要联网下载，但是我的调试服务器没办法联网，所以现在本地搭建了一个一样的虚拟机，通过虚拟机下载相应的deb包，随后拷到服务器上安装。</li>
+<li>安装虚拟机过程略过，下面说一下虚拟机的网络配置，virtualbox默认会启动NAT网络地址转换，NAT能让虚拟机连上外网，但是无法通过SSH连上虚拟机；我们需要启用一个仅主机网络（相当于再物理机上创建了一个virtualbox专用的虚拟网卡），通过此虚拟网卡连接到虚拟机中。此虚拟网卡可以在virtualbox中配置IP地址。</li>
+<li>
+  <img src="/img/bios/acpi_dbg/virtualbox_network_cfg1.jpg" alt="NAT" /></li>
+<li>
+  <img src="/img/bios/acpi_dbg/virtualbox_network_cfg2.jpg" alt="仅主机" /></li>
+<li>随后进入到虚拟机的/etc/netplan中，创建文件<code>99_config.yaml</code>，填充如下内容（详细可参考
+  <a href="https://ubuntu.com/server/docs/configuring-networks">Configuring networks|Ubuntu</a>）</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">network</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">version</span>: <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">renderer</span>: <span style="color:#ae81ff">networkd</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ethernets</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">enp0s8</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">#IP配置取决于当前virtualbox总配置的IP地址</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">addresses</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#e6db74">&#34;192.168.168.168/24&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">enp0s3</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">#virtualbox nat，下面这些信息直接填照抄即可。</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">addresses</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#e6db74">&#34;10.0.2.15/24&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">nameservers</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">addresses</span>: [<span style="color:#ae81ff">8.8.8.8</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">routes</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#f92672">to</span>: <span style="color:#ae81ff">default</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">via</span>: <span style="color:#ae81ff">10.0.2.2</span>
+</span></span></code></pre></div><ul>
+<li>随后执行<code>netplan apply</code>让网络配置生效，此时就可以通过ssh连接到虚拟机内部了。</li>
+<li>通过ssh连接后，通过如下命令下载相应的deb包，执行完后，deb包会被下载到<code>/var/cache/apt/archives</code>目录下，将改目录下的deb包打包传递到服务器上安装即可。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>apt install linux-tools-<span style="color:#e6db74">`</span>uname -r<span style="color:#e6db74">`</span> linux-tools-generic --download-only
+</span></span></code></pre></div><h2 id="acpi-debug">
+  ACPI Debug
+  <a class="anchor" href="#acpi-debug">#</a>
+</h2>
+<ul>
+<li>按照如下Printf的格式加入打印信息到ASL中，%o会被替换成后面相应的变量。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#a6e22e">Method</span> (_SUN, <span style="color:#ae81ff">0</span>, NotSerialized)  <span style="color:#75715e">// _SUN: Slot User Number
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;VendorId = %o, DeviceId = %o, Slot = %o&#34;</span>, VEND, DEVI, SLTN)
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Return</span> (SLTN)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ul>
+<li>随后编译烧入BIOS后，进入服务器的OS中，执行<code>acpidbg</code>，就可以进行调试了。<code>acpidbg</code>常用的命令如<code>namespace</code>、<code>paths</code>、<code>execute</code>。</li>
+<li><code>namespace</code>会打印出ACPI的层级关系，如下图所示</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>root@server:~# acpidbg
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>- namespace
+</span></span><span style="display:flex;"><span>ACPI Namespace <span style="color:#f92672">(</span>from Namespace Root<span style="color:#f92672">)</span>:
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">0</span>  _GPE Scope        0000000008fab98e <span style="color:#ae81ff">000</span> 
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">0</span>  _PR_ Scope        000000005953797b <span style="color:#ae81ff">000</span> 
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">1</span>    C000 Processor    00000000a1ac5d21 01A ID <span style="color:#ae81ff">00</span> Len <span style="color:#ae81ff">06</span> Addr <span style="color:#ae81ff">0000000000000810</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">2</span>      _PCT Package      00000000a7326f94 01B Elements <span style="color:#ae81ff">02</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">2</span>      _PSS Package      0000000046ef281e 01B Elements <span style="color:#ae81ff">03</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">2</span>      XPSS Package      000000005f13ae73 01B Elements <span style="color:#ae81ff">03</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">2</span>      _PSD Package      000000009366b23a 01B Elements <span style="color:#ae81ff">01</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">2</span>      PPCV Integer      000000009ee3a624 01B <span style="color:#f92672">=</span> <span style="color:#ae81ff">0000000000000000</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">2</span>      _PPC Method       000000007965a545 01B Args <span style="color:#ae81ff">0</span> Len <span style="color:#ae81ff">0005</span> Aml 00000000be65bdfb
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">1</span>    C001 Processor    000000005eb2da62 01A ID <span style="color:#ae81ff">01</span> Len <span style="color:#ae81ff">06</span> Addr <span style="color:#ae81ff">0000000000000810</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">2</span>      _PCT Package      00000000ee112324 01B Elements <span style="color:#ae81ff">02</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">2</span>      _PSS Package      0000000091ffd188 01B Elements <span style="color:#ae81ff">03</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">2</span>      XPSS Package      00000000fb1c13d0 01B Elements <span style="color:#ae81ff">03</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">2</span>      _PSD Package      0000000039eb741a 01B Elements <span style="color:#ae81ff">01</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">2</span>      PPCV Integer      00000000df6eb317 01B <span style="color:#f92672">=</span> <span style="color:#ae81ff">0000000000000000</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">2</span>      _PPC Method       000000000665d99d 01B Args <span style="color:#ae81ff">0</span> Len <span style="color:#ae81ff">0005</span> Aml 00000000fdc3368c
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">1</span>    C002 Processor    00000000bfa4f34a 01A ID <span style="color:#ae81ff">02</span> Len <span style="color:#ae81ff">06</span> Addr <span style="color:#ae81ff">0000000000000810</span>
+</span></span></code></pre></div><ul>
+<li><code>paths</code>会打印出namespace objects的全路径名</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e">#从左到右依次是层级、Object类型以及全路径名</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">3</span>   Device           _SB.S0D2.D2C0
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">4</span>    Integer         _SB.S0D2.D2C0._ADR
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">4</span>    Method          _SB.S0D2.D2C0._PRW
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">4</span>    Method          _SB.S0D2.D2C0._PRT
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">4</span>    Region          _SB.S0D2.D2C0.K1PC
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">4</span>    RegionField     _SB.S0D2.D2C0.K1SL
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">4</span>    Device          _SB.S0D2.D2C0.BRG1
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">5</span>     Integer        _SB.S0D2.D2C0.BRG1._ADR
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">5</span>     Device         _SB.S0D2.D2C0.BRG1.BRG2
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">6</span>      Integer       _SB.S0D2.D2C0.BRG1.BRG2._ADR
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">6</span>      Device        _SB.S0D2.D2C0.BRG1.BRG2.BRG3
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">7</span>       Integer      _SB.S0D2.D2C0.BRG1.BRG2.BRG3._ADR
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">7</span>       Region       _SB.S0D2.D2C0.BRG1.BRG2.BRG3.PP8C
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">7</span>       RegionField  _SB.S0D2.D2C0.BRG1.BRG2.BRG3.VEND
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">7</span>       RegionField  _SB.S0D2.D2C0.BRG1.BRG2.BRG3.DEVI
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">7</span>       Method       _SB.S0D2.D2C0.BRG1.BRG2.BRG3._SUN
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">3</span>   Device           _SB.S0D2.D2C1
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">4</span>    Integer         _SB.S0D2.D2C1._ADR
+</span></span></code></pre></div><ul>
+<li>如果我们需要查看一个Field、Integer或者Method的执行结果，可以使用<code>execute</code>命令。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e">#查看_ADR的值</span>
+</span></span><span style="display:flex;"><span>- execute _SB.S0D2.D2C0._ADR
+</span></span><span style="display:flex;"><span>Evaluating <span style="color:#ae81ff">\_</span>SB.S0D2.D2C0._ADR
+</span></span><span style="display:flex;"><span>Evaluation of <span style="color:#ae81ff">\_</span>SB.S0D2.D2C0._ADR returned object 000000003e779e35, external buffer length <span style="color:#ae81ff">18</span>
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">[</span>Integer<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0000000000030001</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#查看_SUN method的执行结果</span>
+</span></span><span style="display:flex;"><span>- execute _SB.S0D2.D2C0.BRG1.BRG2.BRG3._SUN
+</span></span><span style="display:flex;"><span>Evaluating <span style="color:#ae81ff">\_</span>SB.S0D2.D2C0.BRG1.BRG2.BRG3._SUN
+</span></span><span style="display:flex;"><span>ACPI Debug:  <span style="color:#e6db74">&#34;VendorId = 0000000000001D94, DeviceId = 0000000000006210, Slot = 0000000000000002&#34;</span>
+</span></span><span style="display:flex;"><span>Evaluation of <span style="color:#ae81ff">\_</span>SB.S0D2.D2C0.BRG1.BRG2.BRG3._SUN returned object 000000003e779e35, external buffer length <span style="color:#ae81ff">18</span>
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">[</span>Integer<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0000000000000002</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#查看RegionField的值</span>
+</span></span><span style="display:flex;"><span>- execute _SB.S0D2.D2C0.BRG1.BRG2.BRG3.VEND
+</span></span><span style="display:flex;"><span>Evaluating <span style="color:#ae81ff">\_</span>SB.S0D2.D2C0.BRG1.BRG2.BRG3.VEND
+</span></span><span style="display:flex;"><span>Evaluation of <span style="color:#ae81ff">\_</span>SB.S0D2.D2C0.BRG1.BRG2.BRG3.VEND returned object 0000000066540b46, external buffer length <span style="color:#ae81ff">18</span>
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">[</span>Integer<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> 0000000000001D94
+</span></span></code></pre></div><h2 id="其他">
+  其他
+  <a class="anchor" href="#%e5%85%b6%e4%bb%96">#</a>
+</h2>
+<ul>
+<li>如果需要在dmesg中查看ASL中增加的打印，可以修改<code>/etc/default/grub</code>文件，加入如下配置信息（具体含义可以参考
+  <a href="https://www.kernel.org/doc/html/v5.2/firmware-guide/acpi/debug.html">ACPI Debug Output</a>），并执行<code>update-grub</code>让其生效，随后重启就能在dmesg中看到ASL中的打印信息了。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>GRUB_CMDLINE_LINUX_DEFAULT<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;acpi.debug_layer=0xFFFFFFFF acpi.debug_level=0x2&#34;</span>
+</span></span></code></pre></div><ul>
+<li>
+  <img src="/img/bios/acpi_dbg/dmesg_acpi_dbg.jpg" alt="" /></li>
+</ul></article>
+ 
+	    </div>
+
+      <footer class="page-footer">
+        
+  
+
+
+ 
+      </footer>
+    </div>
+
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

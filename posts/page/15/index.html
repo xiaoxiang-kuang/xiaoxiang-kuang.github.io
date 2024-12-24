@@ -110,7 +110,7 @@ https://github.com/alex-shpak/hugo-book
 		  <li>
 			<a href="/tags/bios/"  class="flex justify-between">
 			  <span>bios</span>
-			  <span>11</span>
+			  <span>12</span>
 			</a>
 		  </li>
 		
@@ -327,7 +327,7 @@ https://github.com/alex-shpak/hugo-book
 		  <li>
 			<a href="/tags/bios/"  class="flex justify-between">
 			  <span>bios</span>
-			  <span>11</span>
+			  <span>12</span>
 			</a>
 		  </li>
 		
@@ -455,6 +455,117 @@ https://github.com/alex-shpak/hugo-book
  
         </header>
         
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/javase/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/">垃圾回收相关概念</a>
+    </h2>
+    
+  <h5>2020-09-29</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">java</a>
+  </div>
+  
+
+
+
+
+    <p><h3 id="systemgc的理解">
+  System.gc()的理解
+  <a class="anchor" href="#systemgc%e7%9a%84%e7%90%86%e8%a7%a3">#</a>
+</h3>
+<ul>
+<li>在默认情况下，通过System.gc()或者Runtime.getRuntime().gc()的调用会显示触发Full GC，但是该方法可能不是立刻就执行。</li>
+</ul>
+<h3 id="内存溢出">
+  内存溢出
+  <a class="anchor" href="#%e5%86%85%e5%ad%98%e6%ba%a2%e5%87%ba">#</a>
+</h3>
+<ul>
+<li>产生原因：没有空闲内存，并且垃圾收集器也无法提供更多内存。</li>
+</ul>
+<h3 id="内存泄漏">
+  内存泄漏
+  <a class="anchor" href="#%e5%86%85%e5%ad%98%e6%b3%84%e6%bc%8f">#</a>
+</h3>
+<ul>
+<li>严格定义：对象不再被程序使用了，但是GC又不能回收他们的情况（仍然存在引用链）。</li>
+<li>宽泛定义：一些不太好的实践会导致对象的生命周期变得很长，甚至导致OOM，也叫宽泛意义上的内存泄漏。</li>
+</ul>
+<h3 id="安全点">
+  安全点
+  <a class="anchor" href="#%e5%ae%89%e5%85%a8%e7%82%b9">#</a>
+</h3>
+<ul>
+<li>程序执行时并非在所有的地方都能停下来开始GC，只有在特定的位置才能停顿下来开始GC，这些位置称为“安全点”（safepoint）。</li>
+<li>如何在GC发生时，检测所有的程序都跑到最近的安全点停顿下来了呢 &ndash;&gt; 主动式中断：设置一个中断标志，各个线程运行到safe point的时候主动轮询这个标志，如果中断标志为真，则将自己进行中断挂起。</li>
+</ul>
+<h3 id="安全区域">
+  安全区域
+  <a class="anchor" href="#%e5%ae%89%e5%85%a8%e5%8c%ba%e5%9f%9f">#</a>
+</h3>
+<ul>
+<li>指在一段代码片段中，对象的引用关系不会发生变化，在这个区域中的任何位置开始GC都是安全的。</li>
+<li>可以应对处于sleep或者blocked状态的线程，这时候线程无法响应jvm的中断请求，“走”到安全点去中断挂起。</li>
+<li>当程序运行到safe region的代码时，首先标识已经进入了safe region，如果这段时间发生了gc，jvm会忽略标识为safe region状态的线程。</li>
+<li>当线程即将离开safe region时，会检测jvm是否已经完成了gc，如果完成了，则继续运行，否则线程必须等待直到收到可以安全离开safe region的信号为止。</li>
+</ul>
+<h3 id="引用">
+  引用
+  <a class="anchor" href="#%e5%bc%95%e7%94%a8">#</a>
+</h3>
+<ul>
+<li>
+<p><strong>强引用</strong>：类似“Object object=new Object()”这类的引用，只要强引用还存在，就永不回收。</p>
+</li>
+<li>
+<p><strong>软引用</strong>：内存不足才回收。</p>
+</li>
+<li>
+<p><strong>弱引用</strong>：发现即回收。</p>
+</li>
+<li>
+<p><strong>虚引用</strong>：对象回收跟踪。</p>
+<ul>
+<li>如果一个对象仅持有虚引用，那么它和没有引用几乎是一样的，随时都可能被垃圾回收器回收。</li>
+<li>它不能单独使用，也无法通过虚引用来获取被引用的对象。当试图通过虚引用的get方法来获取对象时，总是null。</li>
+<li>为一个对象设置虚引用关联的唯一目的就是能够在这个对象被收集器回收时收到一个系统通知。</li>
+<li>虚引用必须和引用队列一起使用。虚引用在创建时必须提供一个引用队列作为参数。当垃圾回收器准备回收一个对象时，如果发现它还有虚引用，就会在回收对象后，将这个虚引用加入引用队列，以通知引用程序对象的回收情况。</li>
+<li>由于虚引用可以跟踪对象的回收时间，因此，也可以将一些资源释放操作放置在虚引用中执行和记录。</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">//声明强引用
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>Object obj<span style="color:#f92672">=</span><span style="color:#66d9ef">new</span> Object<span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//声明软引用
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>SoftReference<span style="color:#f92672">&lt;</span>Object<span style="color:#f92672">&gt;</span> sf<span style="color:#f92672">=</span><span style="color:#66d9ef">new</span> SoftReference<span style="color:#f92672">&lt;</span>Object<span style="color:#f92672">&gt;(</span><span style="color:#66d9ef">new</span> Object<span style="color:#f92672">());</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//声明弱引用
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>WeakReference<span style="color:#f92672">&lt;</span>Object<span style="color:#f92672">&gt;</span> wr<span style="color:#f92672">=</span><span style="color:#66d9ef">new</span> WeakReference<span style="color:#f92672">&lt;</span>Object<span style="color:#f92672">&gt;(</span><span style="color:#66d9ef">new</span> Object<span style="color:#f92672">());</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//虚引用
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>Object obj<span style="color:#f92672">=</span><span style="color:#66d9ef">new</span> Object<span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>ReferenceQueue<span style="color:#f92672">&lt;</span>Object<span style="color:#f92672">&gt;</span> rq<span style="color:#f92672">=</span><span style="color:#66d9ef">new</span> ReferenceQueue<span style="color:#f92672">&lt;&gt;();</span>
+</span></span><span style="display:flex;"><span>PhantomReference<span style="color:#f92672">&lt;</span>Object<span style="color:#f92672">&gt;</span> pr<span style="color:#f92672">=</span><span style="color:#66d9ef">new</span> PhantomReference<span style="color:#f92672">&lt;&gt;(</span>obj<span style="color:#f92672">,</span>rq<span style="color:#f92672">);</span>
+</span></span></code></pre></div><h3 id="评估性能指标">
+  评估性能指标
+  <a class="anchor" href="#%e8%af%84%e4%bc%b0%e6%80%a7%e8%83%bd%e6%8c%87%e6%a0%87">#</a>
+</h3>
+<ul>
+<li><strong>吞吐量</strong>：运行用户代码时间占总运行时间的比例。</li>
+<li>垃圾收集开销：吞吐量的补数，垃圾收集所用时间与总运行时间的比例。</li>
+<li><strong>暂停时间</strong>：执行垃圾收集时，程序的工作线程被暂停的时间。</li>
+<li>收集频率：相对于应用程序的执行，收集操作发生的频率。</li>
+<li>内存占用：Java堆区所占的内存大小。</li>
+<li>快速：一个对象从诞生到被回收所经历的时间。</li>
+</ul>
+    </p>
+  </article>
   
   <article class="markdown book-post">
     <h2>
@@ -1095,79 +1206,6 @@ https://github.com/alex-shpak/hugo-book
 </span></span><span style="display:flex;"><span>        System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;I am FileOutputStream&#34;</span><span style="color:#f92672">);</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">super</span><span style="color:#f92672">.</span><span style="color:#a6e22e">print</span><span style="color:#f92672">();</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
-</span></span></code></pre></div>
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/">策略模式</a>
-    </h2>
-    
-  <h5>2020-09-21</h5>
-
-
-
-  
-
-  
-  <div>
-    
-      <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
-  </div>
-  
-
-
-
-
-    <p><ul>
-<li>定义：定义一系列算法，把他们一个个封装起来，并且使它们可以互相替换（变化），该模式使得算法可独立于使用他的客户程序而变化。</li>
-<li>在软件构建过程中，某些对象使用的算法可能多种多样，策略模式做到了运行时根据需要透明的更改对象的算法，将对象与自身解耦。</li>
-<li>比如税率，如果要求一个程序支持多国税率，可以使用if-else语句。</li>
-</ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Sale</span><span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">double</span> <span style="color:#a6e22e">buySomething</span><span style="color:#f92672">(){</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">double</span> d<span style="color:#f92672">=</span>xxx<span style="color:#f92672">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">//...
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>tax<span style="color:#f92672">==</span>ChineseTax<span style="color:#f92672">){</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#75715e">//...
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#f92672">}</span><span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>tax<span style="color:#f92672">==</span>AmericeTax<span style="color:#f92672">){</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#75715e">//...
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#f92672">}</span>elseif<span style="color:#f92672">(</span>tax<span style="color:#f92672">==</span>JapanTax<span style="color:#f92672">){</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#75715e">//...
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">//...
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
-</span></span></code></pre></div><ul>
-<li>但是如果后期需要加上其他国家的税率，就要修改程序，违背了开闭原则。此时可以使用策略模式。实现如下：</li>
-</ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">Tax</span><span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">double</span> <span style="color:#a6e22e">calculate</span><span style="color:#f92672">(</span><span style="color:#66d9ef">double</span> money<span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ChineseTax</span> <span style="color:#66d9ef">implements</span> Tax<span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">double</span> <span style="color:#a6e22e">calculate</span><span style="color:#f92672">(</span><span style="color:#66d9ef">double</span> money<span style="color:#f92672">){</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">//...
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">AmericaTax</span> <span style="color:#66d9ef">implements</span> Tax<span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">double</span> <span style="color:#a6e22e">calculate</span><span style="color:#f92672">(</span><span style="color:#66d9ef">double</span> money<span style="color:#f92672">){</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">//...
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
-</span></span></code></pre></div><hr>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Sale</span><span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> Tax tax<span style="color:#f92672">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">Sale</span><span style="color:#f92672">(</span>Tax tax<span style="color:#f92672">){</span><span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">tax</span><span style="color:#f92672">=</span>tax<span style="color:#f92672">;}</span>
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">double</span> <span style="color:#a6e22e">buySomething</span><span style="color:#f92672">(){</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">double</span> d<span style="color:#f92672">=</span>xxx<span style="color:#f92672">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">//...
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        tax<span style="color:#f92672">.</span><span style="color:#a6e22e">calculate</span><span style="color:#f92672">(</span>d<span style="color:#f92672">);</span><span style="color:#75715e">//替换掉先前的if-else
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#75715e">//...
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">}</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
 </span></span></code></pre></div>
     </p>

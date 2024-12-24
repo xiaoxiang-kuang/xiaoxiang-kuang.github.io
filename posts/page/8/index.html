@@ -110,7 +110,7 @@ https://github.com/alex-shpak/hugo-book
 		  <li>
 			<a href="/tags/bios/"  class="flex justify-between">
 			  <span>bios</span>
-			  <span>11</span>
+			  <span>12</span>
 			</a>
 		  </li>
 		
@@ -327,7 +327,7 @@ https://github.com/alex-shpak/hugo-book
 		  <li>
 			<a href="/tags/bios/"  class="flex justify-between">
 			  <span>bios</span>
-			  <span>11</span>
+			  <span>12</span>
 			</a>
 		  </li>
 		
@@ -455,6 +455,119 @@ https://github.com/alex-shpak/hugo-book
  
         </header>
         
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/javaee/jmeter/">jmeter</a>
+    </h2>
+    
+  <h5>2021-09-06</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">java</a>
+  </div>
+  
+
+
+
+
+    <p><ul>
+<li>默认情况下JMeter的堆大小为1GB，可以调整堆的大小。可以在启动脚本时指定这些参数，也可以在bin路径下创建setenv.bat（windows）或setenv.sh（linux），格式如下：</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">#windows</span>
+</span></span><span style="display:flex;"><span>set HEAP<span style="color:#f92672">=</span>-Xms2g -Xmx2g -XX:MaxMetaspaceSize<span style="color:#f92672">=</span>256m
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#linux</span>
+</span></span><span style="display:flex;"><span>export HEAP<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;-Xms1024m -Xmx1024m&#34;</span>
+</span></span></code></pre></div><ul>
+<li>解决cookie跨域<code>CookieManager.check.cookies=false</code></li>
+</ul>
+<!--
+
+#### 创建web测试
+
+##### 1. 添加Users 
+
+![](/img/javaee/jmeter/1.png)
+
+![](/img/javaee/jmeter/2.png)
+
+* Number of Threads：启动的线程数。
+* Ramp-Up Period：每秒启动的用户=user/seconds，0表示立即启动所有的用户。
+* Loop Count：每个线程执行每个HTTP请求的次数。
+
+##### 2. 添加默认HTTP请求属性
+
+* HTTP Request Defaults 只是定义了一些默认值，不发送HTTP请求，发送请求的是HTTP Request。
+
+![](/img/javaee/jmeter/3.png)
+
+![](/img/javaee/jmeter/4.png)
+
+##### 3. 添加cookie
+
+* 添加cookie管理后不需要做配置，除非需要在多个请求间共享cookie。添加了cookie管理后cookie会为每个请求管理cookie。
+
+![](/img/javaee/jmeter/5.png)
+
+![](/img/javaee/jmeter/6.png)
+
+##### 4. 添加HTTP请求
+
+* 这里创建两个HTTP请求，HTTP发送请求的顺序是从上到下。
+
+![](/img/javaee/jmeter/7.png)
+
+* HTTP请求1，因为在Request Defaults中指定了域名，所以这里可以不写，这里还修改了Name，方便和其他的HTTP请求区分。
+
+![](/img/javaee/jmeter/8.png)
+
+* HTTP请求2
+
+![](/img/javaee/jmeter/9.png)
+
+##### 5. 添加监听器来查看存储的测试结果
+
+* 查看HTTP结果，响应数据。
+
+![](/img/javaee/jmeter/10.png)
+
+* 查看总结
+
+![](/img/javaee/jmeter/11.png)
+
+##### 点击绿色三角执行测试，点击靠右边的扫帚清除之前的测试数据。
+
+* 官方不建议在GUI模式下加载测试，GUI模式下用来创建测试案例和调试bug，测试需要在CLI模式下执行（命令行模式）。
+
+**参考链接：**[Apache JMeter - User's Manual: Building a Web Test Plan](https://jmeter.apache.org/usermanual/build-web-test-plan.html)
+
+-->
+<h4 id="命令行模式cli-mode">
+  命令行模式（CLI Mode）
+  <a class="anchor" href="#%e5%91%bd%e4%bb%a4%e8%a1%8c%e6%a8%a1%e5%bc%8fcli-mode">#</a>
+</h4>
+<ul>
+<li>-n指定JMeter运行在cli模式。</li>
+<li>-t指定JMX文件。</li>
+<li>-l 指定jtl文件的名称，该文件是用来记录结果。</li>
+<li>-e加载完测试后生成报告。</li>
+<li>-o生成报告的文件夹的位置，必须为空或者不存在。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>jmeter -n -t  test.jmx -l sso.jtl -e -o test
+</span></span></code></pre></div><p><strong>参考链接：</strong>
+  <a href="http://jmeter.apache.org/usermanual/get-started.html#non_gui">Apache JMeter - User&rsquo;s Manual: Getting Started</a></p>
+<ul>
+<li>类似于JDBC的jar包需要放在JMETER_HOME/lib路径下；开发的jmeter工具应放在JMETER_HOME/lib/ext路径下。</li>
+</ul>
+    </p>
+  </article>
   
   <article class="markdown book-post">
     <h2>
@@ -1218,195 +1331,6 @@ https://github.com/alex-shpak/hugo-book
 <li>很难通过暴力破解，因为它的密钥总数是26x25x24&hellip;x2x1。</li>
 <li>通过频率分析，就能破解。其利用明文中的字母出现的频率和密文中的字母出现的频率一致的特性。</li>
 </ul>
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/javaee/logback/">logback</a>
-    </h2>
-    
-  <h5>2021-08-23</h5>
-
-
-
-  
-
-  
-  <div>
-    
-      <a href="/tags/java/">java</a>
-  </div>
-  
-
-
-
-
-    <p><h3 id="例">
-  例：
-  <a class="anchor" href="#%e4%be%8b">#</a>
-</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#f92672">&lt;configuration&gt;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;appender</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;STDOUT&#34;</span> <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;ch.qos.logback.core.ConsoleAppender&#34;</span><span style="color:#f92672">&gt;</span> 
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;encoder&gt;</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&lt;pattern&gt;</span>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n<span style="color:#f92672">&lt;/pattern&gt;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;/encoder&gt;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;/appender&gt;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;appender</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;FILE&#34;</span> <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;ch.qos.logback.core.FileAppender&#34;</span><span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;file&gt;</span>testFile.log<span style="color:#f92672">&lt;/file&gt;</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">&lt;!--         将 immediateFlush 设置为 false 可以获得更高的日志吞吐量 --&gt;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;immediateFlush&gt;</span>false<span style="color:#f92672">&lt;/immediateFlush&gt;</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">&lt;!--         默认为 ch.qos.logback.classic.encoder.PatternLayoutEncoder --&gt;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;encoder&gt;</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&lt;pattern&gt;</span>%-4relative [%thread] %-5level %logger{35} - %msg%n<span style="color:#f92672">&lt;/pattern&gt;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;/encoder&gt;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;/appender&gt;</span>
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;appender</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;SYSLOG&#34;</span> <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;ch.qos.logback.classic.net.SyslogAppender&#34;</span><span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;syslogHost&gt;</span>remote_home<span style="color:#f92672">&lt;/syslogHost&gt;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;port&gt;</span>5140<span style="color:#f92672">&lt;/port&gt;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;facility&gt;</span>AUTH<span style="color:#f92672">&lt;/facility&gt;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;suffixPattern&gt;</span>[%thread] %logger %msg<span style="color:#f92672">&lt;/suffixPattern&gt;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;/appender&gt;</span>
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;root</span> <span style="color:#a6e22e">level=</span><span style="color:#e6db74">&#34;INFO&#34;</span><span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;appender-ref</span> <span style="color:#a6e22e">ref=</span><span style="color:#e6db74">&#34;STDOUT&#34;</span> <span style="color:#f92672">/&gt;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;/root&gt;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;logger</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;space.xiaoxiang&#34;</span> <span style="color:#a6e22e">level=</span><span style="color:#e6db74">&#34;debug&#34;</span> <span style="color:#a6e22e">additivity=</span><span style="color:#e6db74">&#34;true&#34;</span><span style="color:#f92672">/&gt;</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/configuration&gt;</span>
-</span></span></code></pre></div><h2 id="appender">
-  appender
-  <a class="anchor" href="#appender">#</a>
-</h2>
-<h3 id="appenderbase">
-  AppenderBase
-  <a class="anchor" href="#appenderbase">#</a>
-</h3>
-<ul>
-<li>是一个抽象类，实现了Appender接口，提供了基本方法供appender使用。</li>
-</ul>
-<h3 id="outputstreamappender">
-  OutputStreamAppender
-  <a class="anchor" href="#outputstreamappender">#</a>
-</h3>
-<ul>
-<li>是ConsoleAppender、FileAppender以及 RollingFileAppender的父类。</li>
-</ul>
-<h3 id="consoleappender">
-  ConsoleAppender
-  <a class="anchor" href="#consoleappender">#</a>
-</h3>
-<ul>
-<li>将日志输出到控制台，ConsoleAppender通过用户指定的encoder格式化日志事件。</li>
-</ul>
-<h3 id="fileappender">
-  FileAppender
-  <a class="anchor" href="#fileappender">#</a>
-</h3>
-<ul>
-<li>将日志输出到文件中，通过<code>file</code>来指定目标文件。</li>
-</ul>
-<h3 id="rollingfileappender">
-  RollingFileAppender
-  <a class="anchor" href="#rollingfileappender">#</a>
-</h3>
-<ul>
-<li>具有轮转日志文件的功能。比如在满足特定的条件后，将日志输出到另一个文件。</li>
-</ul>
-<h3 id="socketappender-和-sslsocketappender">
-  SocketAppender 和 SSLSocketAppender
-  <a class="anchor" href="#socketappender-%e5%92%8c-sslsocketappender">#</a>
-</h3>
-<ul>
-<li>可以将日志传输到远端机器。</li>
-</ul>
-<h3 id="smtpappender">
-  SMTPAppender
-  <a class="anchor" href="#smtpappender">#</a>
-</h3>
-<ul>
-<li>收集日志到缓冲区中，当用户指定的事件发生时，将从缓冲区中取出适当的内容进行发送。</li>
-</ul>
-<h3 id="dbappender">
-  DBAppender
-  <a class="anchor" href="#dbappender">#</a>
-</h3>
-<ul>
-<li>将日志插到三张数据库表中，三张表分别是logging_event, logging_event_property 与 logging_event_exception。</li>
-</ul>
-<h3 id="syslogappender">
-  SyslogAppender
-  <a class="anchor" href="#syslogappender">#</a>
-</h3>
-<ul>
-<li>可以将日志发送给远程的syslog守护线程。</li>
-<li>日志事件的严重程度是根据日志事件的级别转换来的，DEBUG被转换为7，INFO被转换为6，WARN为4，ERROR为3。</li>
-</ul>
-<h3 id="siftingappender">
-  SiftingAppender
-  <a class="anchor" href="#siftingappender">#</a>
-</h3>
-<ul>
-<li>根据给定的运行时属性分离或者过滤日志。</li>
-</ul>
-<h3 id="asyncappender">
-  AsyncAppender
-  <a class="anchor" href="#asyncappender">#</a>
-</h3>
-<ul>
-<li>作为一个事件调度器存在，必须调用其他appender来完成操作。</li>
-</ul>
-<h2 id="encoder">
-  encoder
-  <a class="anchor" href="#encoder">#</a>
-</h2>
-<ul>
-<li>encoder将日志事件转换为字节数组，同时将字节数组写入到一个OutputStream中。</li>
-<li>PatternLayoutEncoder是目前唯一真正有用的encoder，它仅包裹了一个PatternLayout就完成了大部分的工作。</li>
-</ul>
-<h2 id="layout">
-  layout
-  <a class="anchor" href="#layout">#</a>
-</h2>
-<ul>
-<li>layout负责将日志事件转化为字符串。</li>
-</ul>
-<h3 id="patternlayout">
-  PatternLayout
-  <a class="anchor" href="#patternlayout">#</a>
-</h3>
-<ul>
-<li>
-<p>可以通过调整PatternLayout的转换模式来进行定制，PatternLayout的转换模式由字面量和转换说明符组成，每一个转换说明符由一个百分号开始<code>%</code>，后面跟随格式修改器，以及可用大括号括起来的转换字符和可选的参数。格式修改器可以对字段进行对齐，修改最大最小宽度等。</p>
-</li>
-<li>
-<p>括号用于对转换模式进行分组，<code>(</code>和<code>)</code>都有特殊的含义。</p>
-</li>
-<li>
-<p>名为<code>com.foo</code>的logger是名为<code>com.foo.bar</code>的logger的父级。（命名层次结构）</p>
-</li>
-<li>
-<p>root logger的默认层级为DEBUG。</p>
-</li>
-<li>
-<p>层级的排序：TRACE &lt; DEBUG &lt; INFO &lt; WARN &lt; ERROR。</p>
-</li>
-<li>
-<p>appender具有叠加性：logger L的日志输出会遍历L和它父级中所有的appender，如果L的某个上级P，P设置了additivity=false，那么L的日志输出会遍历从L到P（不包括P）的所有appender。additivity默认为true。</p>
-</li>
-</ul>
-<h3 id="logback初始化步骤">
-  logback初始化步骤
-  <a class="anchor" href="#logback%e5%88%9d%e5%a7%8b%e5%8c%96%e6%ad%a5%e9%aa%a4">#</a>
-</h3>
-<ol>
-<li>在类路径下寻找名为logback-test.xml。</li>
-<li>如果没找到，找名为logback.groovy的文件。</li>
-<li>如果没找到，找名为logback.xml的文件。</li>
-<li>如果没找到，会用ServiceLoader工具去解析<code>META-INF\services\ch.qos.logback.classic.spi.Configutator</code>路径下实现了Configurator接口的类</li>
-<li>如果还没找到，logback会通过BasicConfigurator为自己进行配置，日志将会全部打印在控制台。</li>
-</ol>
     </p>
   </article>
   

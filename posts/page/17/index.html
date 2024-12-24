@@ -110,7 +110,7 @@ https://github.com/alex-shpak/hugo-book
 		  <li>
 			<a href="/tags/bios/"  class="flex justify-between">
 			  <span>bios</span>
-			  <span>11</span>
+			  <span>12</span>
 			</a>
 		  </li>
 		
@@ -327,7 +327,7 @@ https://github.com/alex-shpak/hugo-book
 		  <li>
 			<a href="/tags/bios/"  class="flex justify-between">
 			  <span>bios</span>
-			  <span>11</span>
+			  <span>12</span>
 			</a>
 		  </li>
 		
@@ -455,6 +455,50 @@ https://github.com/alex-shpak/hugo-book
  
         </header>
         
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/javase/collection%E5%92%8Cmap/">collection和map</a>
+    </h2>
+    
+  <h5>2020-07-29</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">java</a>
+  </div>
+  
+
+
+
+
+    <p><h2 id="collection">
+  Collection
+  <a class="anchor" href="#collection">#</a>
+</h2>
+<h2 id="map">
+  Map
+  <a class="anchor" href="#map">#</a>
+</h2>
+<h3 id="hashmap">
+  HashMap
+  <a class="anchor" href="#hashmap">#</a>
+</h3>
+<ul>
+<li><code>DEFAULT_INITIAL_CAPACITY = 1 &lt;&lt; 4</code>：默认初始容量为16，该容量必须为2的倍数</li>
+<li><code>DEFAULT_LOAD_FACTOR = 0.75f</code>：默认的加载因子，可以大于1</li>
+<li><code>MAXIMUM_CAPACITY = 1 &lt;&lt;30</code>：最大容量</li>
+<li><code>TREEIFY_THRESHOLD = 8</code>：由链表转换成树的阈值</li>
+<li><code>UNTREEIFY_THRESHOLD = 6</code>：由树转换成链表的阈值</li>
+<li><code>MIN_TREEIFY_CAPACITY = 64</code></li>
+</ul>
+    </p>
+  </article>
   
   <article class="markdown book-post">
     <h2>
@@ -1030,62 +1074,6 @@ https://github.com/alex-shpak/hugo-book
 </h2>
 <p>建立堆的时间复杂度：O(n)</p>
 <p>堆排序的时间复杂度：O(nlogn)</p>
-<p>空间复杂度：O(1)</p>
-<p>不稳定的排序算法</p>
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E5%B8%8C%E5%B0%94%E6%8E%92%E5%BA%8F/">希尔排序</a>
-    </h2>
-    
-  <h5>2020-06-21</h5>
-
-
-
-  
-
-  
-  <div>
-    
-      <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
-  </div>
-  
-
-
-
-
-    <p><h2 id="思想">
-  思想
-  <a class="anchor" href="#%e6%80%9d%e6%83%b3">#</a>
-</h2>
-<ol>
-<li>先将整个待排序列中的记录按照指定的下标进行分组，并对每个组内的记录采用直接插入法排序</li>
-<li>然后依次减少下标量，即使每组包含的记录增多，再继续对每组组内的记录采用直接插入法排序</li>
-<li>依此类推，当下标增量减少到1时，整个待排序记录序列已成为一组，但由于此前所做的直接插入排序工作，整个待排序记录序列已经基本有序，最终完成了排序</li>
-</ol>
-<h2 id="代码实现">
-  代码实现
-  <a class="anchor" href="#%e4%bb%a3%e7%a0%81%e5%ae%9e%e7%8e%b0">#</a>
-</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">for</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> dk<span style="color:#f92672">=</span>n<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">/</span><span style="color:#ae81ff">2</span><span style="color:#f92672">;</span>dk<span style="color:#f92672">&gt;=</span><span style="color:#ae81ff">1</span><span style="color:#f92672">;</span>dk<span style="color:#f92672">=</span>dk<span style="color:#f92672">/</span><span style="color:#ae81ff">2</span><span style="color:#f92672">){</span>   <span style="color:#75715e">//增量因子
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">for</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i<span style="color:#f92672">=</span>dk<span style="color:#f92672">;</span>i<span style="color:#f92672">&lt;</span>n<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">;</span>i<span style="color:#f92672">++){</span>   <span style="color:#75715e">//下面的代码类似插入排序
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>n<span style="color:#f92672">[</span>i<span style="color:#f92672">]&lt;</span>n<span style="color:#f92672">[</span>i<span style="color:#f92672">-</span>dk<span style="color:#f92672">]){</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">int</span> temp<span style="color:#f92672">=</span>n<span style="color:#f92672">[</span>i<span style="color:#f92672">];</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">int</span> j<span style="color:#f92672">;</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#75715e">//比temp大的往后挪，直到遇到比temp更小的
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>            <span style="color:#66d9ef">for</span><span style="color:#f92672">(</span>j<span style="color:#f92672">=</span>i<span style="color:#f92672">-</span>dk<span style="color:#f92672">;</span>j<span style="color:#f92672">&gt;=</span><span style="color:#ae81ff">0</span><span style="color:#f92672">&amp;&amp;</span>temp<span style="color:#f92672">&lt;</span>n<span style="color:#f92672">[</span>j<span style="color:#f92672">];</span>j<span style="color:#f92672">=</span>j<span style="color:#f92672">-</span>dk<span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>                n<span style="color:#f92672">[</span>j<span style="color:#f92672">+</span>dk<span style="color:#f92672">]=</span>n<span style="color:#f92672">[</span>j<span style="color:#f92672">];</span>
-</span></span><span style="display:flex;"><span>            n<span style="color:#f92672">[</span>j<span style="color:#f92672">+</span>dk<span style="color:#f92672">]=</span>temp<span style="color:#f92672">;</span><span style="color:#75715e">//将temp放在停的位置上
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
-</span></span></code></pre></div><h2 id="复杂度">
-  复杂度
-  <a class="anchor" href="#%e5%a4%8d%e6%9d%82%e5%ba%a6">#</a>
-</h2>
-<p>时间复杂度：O(n²)</p>
 <p>空间复杂度：O(1)</p>
 <p>不稳定的排序算法</p>
     </p>
