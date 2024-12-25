@@ -24,7 +24,7 @@
 &lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;要进行ACPI调试前需要安装acpidbg工具，该工具需要联网下载，但是我的调试服务器没办法联网，所以现在本地搭建了一个一样的虚拟机，通过虚拟机下载相应的deb包，随后拷到服务器上安装。&lt;/li&gt;
-&lt;li&gt;安装虚拟机过程略过，下面说一下虚拟机的网络配置，virtualbox默认会启动NAT网络地址转换，NAT能让虚拟机连上外网，但是无法通过SSH连上虚拟机；我们需要启用一个仅主机网络（相当于再物理机上创建了一个virtualbox专用的虚拟网卡），通过此虚拟网卡连接到虚拟机中。此虚拟网卡可以在virtualbox中配置IP地址。&lt;/li&gt;
+&lt;li&gt;安装虚拟机过程略过，下面说一下虚拟机的网络配置，virtualbox默认会启动NAT网络地址转换，NAT能让虚拟机连上外网，但是无法通过SSH连上虚拟机；我们需要启用一个仅主机网络（相当于在物理机上创建了一个virtualbox专用的虚拟网卡），通过此虚拟网卡连接到虚拟机中。此虚拟网卡可以在virtualbox中配置IP地址。&lt;/li&gt;
 &lt;li&gt;
   &lt;img src=&#34;/img/bios/acpi_dbg/virtualbox_network_cfg1.jpg&#34; alt=&#34;NAT&#34; /&gt;&lt;/li&gt;
 &lt;li&gt;
