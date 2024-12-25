@@ -22,7 +22,7 @@
   &lt;a class=&#34;anchor&#34; href=&#34;#%e7%8e%af%e5%a2%83%e9%85%8d%e7%bd%ae&#34;&gt;#&lt;/a&gt;
 &lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;要进行ACPI调试前需要安装acpidbg工具，改工具需要联网下载，但是我的调试服务器没办法联网，所以现在本地搭建了一个一样的虚拟机，通过虚拟机下载相应的deb包，随后拷到服务器上安装。&lt;/li&gt;
+&lt;li&gt;要进行ACPI调试前需要安装acpidbg工具，该工具需要联网下载，但是我的调试服务器没办法联网，所以现在本地搭建了一个一样的虚拟机，通过虚拟机下载相应的deb包，随后拷到服务器上安装。&lt;/li&gt;
 &lt;li&gt;安装虚拟机过程略过，下面说一下虚拟机的网络配置，virtualbox默认会启动NAT网络地址转换，NAT能让虚拟机连上外网，但是无法通过SSH连上虚拟机；我们需要启用一个仅主机网络（相当于再物理机上创建了一个virtualbox专用的虚拟网卡），通过此虚拟网卡连接到虚拟机中。此虚拟网卡可以在virtualbox中配置IP地址。&lt;/li&gt;
 &lt;li&gt;
   &lt;img src=&#34;/img/bios/acpi_dbg/virtualbox_network_cfg1.jpg&#34; alt=&#34;NAT&#34; /&gt;&lt;/li&gt;
@@ -50,7 +50,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          &lt;span style=&#34;color:#f92672&#34;&gt;via&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;10.0.2.2&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
 &lt;li&gt;随后执行&lt;code&gt;netplan apply&lt;/code&gt;让网络配置生效，此时就可以通过ssh连接到虚拟机内部了。&lt;/li&gt;
-&lt;li&gt;通过ssh连接后，通过如下命令下载相应的deb包，执行完后，deb包会被下载到&lt;code&gt;/var/cache/apt/archives&lt;/code&gt;目录下，将改目录下的deb包打包传递到服务器上安装即可。&lt;/li&gt;
+&lt;li&gt;通过ssh连接后，通过如下命令下载相应的deb包，执行完后，deb包会被下载到&lt;code&gt;/var/cache/apt/archives&lt;/code&gt;目录下，将该目录下的deb包打包传递到服务器上安装即可。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;apt install linux-tools-&lt;span style=&#34;color:#e6db74&#34;&gt;`&lt;/span&gt;uname -r&lt;span style=&#34;color:#e6db74&#34;&gt;`&lt;/span&gt; linux-tools-generic --download-only
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;acpi-debug&#34;&gt;
