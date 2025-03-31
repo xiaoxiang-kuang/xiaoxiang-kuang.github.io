@@ -110,7 +110,7 @@ https://github.com/alex-shpak/hugo-book
 		  <li>
 			<a href="/tags/bios/"  class="flex justify-between">
 			  <span>bios</span>
-			  <span>12</span>
+			  <span>10</span>
 			</a>
 		  </li>
 		
@@ -327,7 +327,7 @@ https://github.com/alex-shpak/hugo-book
 		  <li>
 			<a href="/tags/bios/"  class="flex justify-between">
 			  <span>bios</span>
-			  <span>12</span>
+			  <span>10</span>
 			</a>
 		  </li>
 		
@@ -455,208 +455,6 @@ https://github.com/alex-shpak/hugo-book
  
         </header>
         
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/clickhouse%E7%B1%BB%E5%9E%8B%E5%8F%8A%E5%87%BD%E6%95%B0/">clickhouse类型及函数</a>
-    </h2>
-    
-  <h5>2021-03-25</h5>
-
-
-
-  
-
-  
-  <div>
-    
-      <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
-  </div>
-  
-
-
-
-
-    <p><h2 id="类型">
-  类型
-  <a class="anchor" href="#%e7%b1%bb%e5%9e%8b">#</a>
-</h2>
-<h3 id="decimalps-decimal32s-decimal64s-decimal128s">
-  Decimal(P,S), Decimal32(S), Decimal64(S), Decimal128(S)
-  <a class="anchor" href="#decimalps-decimal32s-decimal64s-decimal128s">#</a>
-</h3>
-<ul>
-<li>有符号的<strong>定点数</strong>，可在加减乘中保持精度，除法的最低有效数字会被丢弃（不舍入）</li>
-</ul>
-<h4 id="参数">
-  参数
-  <a class="anchor" href="#%e5%8f%82%e6%95%b0">#</a>
-</h4>
-<ul>
-<li>P表示精度，有效范围是[1:38]，决定可以有多少个十进制的数字</li>
-<li>S表示规模，有效范围是[0:P]，决定数字的小数部分中包含的小数位数</li>
-<li>P[1:9]对应Decimal32(S)</li>
-<li>P[10:18]对应Decimal64(S)</li>
-<li>P[19:38]对应Decimal128(S)</li>
-<li>
-  <a href="https://clickhouse.tech/docs/zh/single/#decimalp-s-decimal32s-decimal64s-decimal128s">精度</a></li>
-</ul>
-<h2 id="函数">
-  函数
-  <a class="anchor" href="#%e5%87%bd%e6%95%b0">#</a>
-</h2>
-<h3 id="parsedatetimebestefforttime_string-time_zone">
-  parseDateTimeBestEffort(time_string[, time_zone])
-  <a class="anchor" href="#parsedatetimebestefforttime_string-time_zone">#</a>
-</h3>
-<ul>
-<li>把其他类型的时间日期转换为DateTime数据类型。</li>
-<li>支持的格式：<code>timestamp</code> <code>YYYYMMDDHHMMSS </code> <code>DD/MM/YYYY hh:mm:ss </code> <code>YYYY-MM-DD hh:mm:ss</code>等</li>
-</ul>
-<h3 id="show-create-table">
-  SHOW CREATE TABLE
-  <a class="anchor" href="#show-create-table">#</a>
-</h3>
-<ul>
-<li>返回创建该表的语句</li>
-</ul>
-<h3 id="类型转换">
-  类型转换
-  <a class="anchor" href="#%e7%b1%bb%e5%9e%8b%e8%bd%ac%e6%8d%a2">#</a>
-</h3>
-<ul>
-<li>clickhouse是强类型，他不会在类型之间进行隐式转换。</li>
-</ul>
-<h3 id="totypenamex">
-  toTypeName(x)
-  <a class="anchor" href="#totypenamex">#</a>
-</h3>
-<ul>
-<li>返回该参数的类型</li>
-</ul>
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/http/cors/">CORS</a>
-    </h2>
-    
-  <h5>2021-03-24</h5>
-
-
-
-  
-
-  
-  <div>
-    
-      <a href="/tags/http/">http</a>
-  </div>
-  
-
-
-
-
-    <p><ul>
-<li>
-<p>跨源资源共享（Cross-Origin Resource Sharing），CORS是一种基于HTTP头的机制，该机制通过允许服务器标识除了它自己以外的其他origin（源是协议、主机名和端口号的组合），这样其他origin就可以加载这些资源。</p>
-</li>
-<li>
-<p>XMLHttpRequest和Fetch API遵循同源策略。</p>
-</li>
-<li>
-<p><code>Access-Control-Allow-Origin: *</code>：允许所有origin访问该资源。</p>
-</li>
-</ul>
-<h2 id="同源策略">
-  同源策略
-  <a class="anchor" href="#%e5%90%8c%e6%ba%90%e7%ad%96%e7%95%a5">#</a>
-</h2>
-<ul>
-<li>同源是指协议相同、主机名相同、端口相同。</li>
-<li>非同源会限制Cookie和Ajax。</li>
-</ul>
-<h2 id="访问控制场景">
-  访问控制场景
-  <a class="anchor" href="#%e8%ae%bf%e9%97%ae%e6%8e%a7%e5%88%b6%e5%9c%ba%e6%99%af">#</a>
-</h2>
-<ul>
-<li>浏览器将CORS请求分为两类，简单请求和非简单请求。</li>
-</ul>
-<h3 id="简单请求">
-  简单请求
-  <a class="anchor" href="#%e7%ae%80%e5%8d%95%e8%af%b7%e6%b1%82">#</a>
-</h3>
-<ul>
-<li>如果请求的HTTP方法是GET、HEAD、POST，并且HTTP头部除了被用户代理自动设置的首部字段外，只有Accept-Language、Content-Language、Content-Type ；并且Content-Type 的值仅限于下列三者之一： text/plain、multipart/form-data、application/x-www-form-urlencoded。那么Web浏览器发出的是简单请求。发出简单请求时，该请求将像一般请求一样发送到服务器。</li>
-<li>简单请求不会触发CORS 预检请求。</li>
-</ul>
-<h3 id="预检请求">
-  预检请求
-  <a class="anchor" href="#%e9%a2%84%e6%a3%80%e8%af%b7%e6%b1%82">#</a>
-</h3>
-<ul>
-<li>预检请求会先使用<code>OPTION</code>方法发起一个预检请求到服务器，以获知服务器是否允许该实际请求。预检请求的使用可以避免跨域请求对服务器的用户数据产生未预期的影响。当预检不通过，实际的请求将不会发送。</li>
-</ul>
-<h2 id="http响应首部">
-  HTTP响应首部
-  <a class="anchor" href="#http%e5%93%8d%e5%ba%94%e9%a6%96%e9%83%a8">#</a>
-</h2>
-<h3 id="access-control-allow-origin">
-  Access-Control-Allow-Origin
-  <a class="anchor" href="#access-control-allow-origin">#</a>
-</h3>
-<pre tabindex="0"><code>Access-Control-Allow-Origin: &lt;origin&gt; | *
-</code></pre><ul>
-<li>origin参数的值指定了允许访问该资源的外域URL，对不需要携带身份凭证的请求，服务器可以指定该字段的值为通配符，表示允许来自所有域的请求。</li>
-<li>如果服务器指定了具体的域名而非&quot;*&quot;，那么响应首部中的Vary字段的值必须包含Origin。这将告诉客户端，服务器对不同的源站返回不同的内容。</li>
-</ul>
-<h3 id="accsess-control-expose-headers">
-  Accsess-Control-Expose-Headers
-  <a class="anchor" href="#accsess-control-expose-headers">#</a>
-</h3>
-<ul>
-<li>在跨源访问时，XMLHttpRequest对象的getResponseHeaders方法只能拿到Cache-Control、Content-Language、Content-Type、Expires、Last-Modified、Pragma，如果要访问其他头，需要服务器设置响应头。</li>
-<li>Accsess-Control-Expose-Headers头让服务器把允许浏览器访问的头放入白名单。</li>
-</ul>
-<pre tabindex="0"><code>Access-Control-Expose-Headers: X-My-Custom-Header, X-Another-Custom-Header
-</code></pre><h3 id="access-control-max-age">
-  Access-Control-Max-Age
-  <a class="anchor" href="#access-control-max-age">#</a>
-</h3>
-<ul>
-<li>指定了预检的请求的结果能被缓存多久，单位是秒。</li>
-</ul>
-<pre tabindex="0"><code>Access-Control-Max-Age: 3600
-</code></pre><h3 id="access-control-allow-credentials">
-  Access-Control-Allow-Credentials
-  <a class="anchor" href="#access-control-allow-credentials">#</a>
-</h3>
-<ul>
-<li>Access-Control-Allow-Credentials 头指定了当浏览器的 credentials 设置为 true 时是否允许浏览器读取 response 的内容。当用在 预检测请求的响应中时，它指定了实际的请求是否可以使用 credentials。简单 GET 请求不会被预检。</li>
-</ul>
-<h3 id="access-control-allow-methods">
-  Access-Control-Allow-Methods
-  <a class="anchor" href="#access-control-allow-methods">#</a>
-</h3>
-<ul>
-<li>Access-Control-Allow-Methods 首部字段用于预检请求的响应。其指明了实际请求所允许使用的 HTTP 方法。</li>
-</ul>
-<pre tabindex="0"><code>Access-Control-Allow-Methods: &lt;method&gt;[, &lt;method&gt;]*
-</code></pre><h3 id="access-control-allow-headers">
-  Access-Control-Allow-Headers
-  <a class="anchor" href="#access-control-allow-headers">#</a>
-</h3>
-<ul>
-<li>Access-Control-Allow-Headers 首部字段用于预检请求的响应。其指明了实际请求中允许携带的首部字段。</li>
-</ul>
-<p>参考链接：
-  <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/CORS">跨资源共享（CORS）</a></p>
-<p>参考链接：
-  <a href="https://www.ruanyifeng.com/blog/2016/04/cors.html">跨域资源共享 - 阮一峰的网络日志 (ruanyifeng.com)</a></p>
-    </p>
-  </article>
   
   <article class="markdown book-post">
     <h2>
@@ -1318,6 +1116,356 @@ https://github.com/alex-shpak/hugo-book
 <li>可以把类看作是metaclass（元类）创建出来的实例。</li>
 <li>metaclass后面用到了再来看吧，链接在这-&gt;
   <a href="https://www.liaoxuefeng.com/wiki/1016959663602400/1017592449371072">metaclass</a></li>
+</ul>
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/clickhouse-statement/">clickhouse-statement</a>
+    </h2>
+    
+  <h5>2021-03-11</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
+  </div>
+  
+
+
+
+
+    <p><ul>
+<li>可以在system.data_type_families中检查某个数据类型的名称是否大小写敏感，case_insensitive=1表示大小写不敏感。看完后我建议数据类型的命名首字母大写，并采用驼峰命名法。</li>
+<li>除了标准sql的关键字和许多其他数据库实现的一些关键字，clickhouse其他的关键字都是大小写敏感的！所以如果你发现语句看上去没错，执行就是有问题，看看是不是大小写出问题了。</li>
+<li>关键字不是保留的，它们仅在相应的上下文中才会被处理。</li>
+<li>变量名可以使用反引号包含起来。</li>
+<li>别名在查询和子查询中是全局可见的。</li>
+</ul>
+<h3 id="select">
+  select
+  <a class="anchor" href="#select">#</a>
+</h3>
+<ul>
+<li>
+<p>select子句是在 from、where、group by等所有操作完成后计算的，如果select子句中包含聚集函数，<strong>clickhouse会在执行group by期间处理这些聚集函数</strong>。</p>
+</li>
+<li>
+<p>如果要用re2正则表达式匹配列，可以使用COLUMNS（‘xxx’），这样可以一次匹配多个列（对于是否常用我持否定态度）。</p>
+</li>
+<li>
+<p>当FROM被省略时，数据从system.one表中读取</p>
+</li>
+<li>
+<p>ARRAY JOIN</p>
+<ul>
+<li>对于包含数组列的表来说是一种常见的操作，用于生成一个新表（新表有一列将包含数组中的每一个元素，其他列可能会出现元素重复）。</li>
+</ul>
+</li>
+<li>
+<p>DISTINCT</p>
+<ul>
+<li>不支持select包含有数组的列</li>
+<li>当ORDER BY 被省略且LIMIT被定义时，在读取所需数量的不同行后立即停止运行。</li>
+<li>DISTINCT在ORDER BY之前执行</li>
+</ul>
+</li>
+</ul>
+<h3 id="alter">
+  alter
+  <a class="anchor" href="#alter">#</a>
+</h3>
+<ul>
+<li>仅支持MergeTree家族，Merge以及Distributed等引擎表。</li>
+<li>alter操作会阻塞对表的所有读写操作。</li>
+</ul>
+<h4 id="列操作">
+  列操作
+  <a class="anchor" href="#%e5%88%97%e6%93%8d%e4%bd%9c">#</a>
+</h4>
+<ul>
+<li>增加列
+<ul>
+<li><code>ADD COLUMN [IF NOT EXISTS] name [type]  [default_expr] [codec] [AFTER name_after]</code></li>
+<li>使用指定的name、type、codec以及default_expr往表中增加新的列。</li>
+<li>如果sql中包含IF NOT EXISTS，执行语句如果已存在，则clickhouse不会报错，不能将新的列添加到表的开始位置，当指定了AFTER name_after，则会将新的列添加到指定列的后面。</li>
+<li>添加列仅仅是改变原有表的结构，不会对已有数据产生影响。</li>
+</ul>
+</li>
+<li>删除列
+<ul>
+<li><code>DROP COLUMN [IF EXISTS] name</code></li>
+</ul>
+</li>
+<li>清空列
+<ul>
+<li><code>CLEAR COLUMN [IF EXISTS] name IN PARTITION partition_name</code></li>
+<li>重置指定分区中的值。</li>
+</ul>
+</li>
+<li>增加注释
+<ul>
+<li><code>COMMENT COLUMN [IF EXISTS] name 'comment'</code></li>
+<li>每个列都可以包含注释，注释信息在DESCRIBE table中查看</li>
+</ul>
+</li>
+<li>改变列的值类型，默认表达式，TTL
+<ul>
+<li><code>MODIFY COLUMN [IF EXISTS] name [type] [default_expr] [TTL] </code></li>
+<li>当改变列的类型时，列的值也被转换了，如同对列使用toType函数一样，执行起来要花费很长时间。</li>
+</ul>
+</li>
+</ul>
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/clickhouse%E8%B5%B7%E6%AD%A5/">clickhouse起步</a>
+    </h2>
+    
+  <h5>2021-03-11</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
+  </div>
+  
+
+
+
+
+    <p><ul>
+<li>online analytical processing of queries（OLAP）：联机分析</li>
+<li>clickhouse是一个用于OLAP的列式数据库管理系统（来自同一列的数据被存储在一起）。</li>
+<li><code>sudo service clickhouse-server start</code>启动clickhouse.</li>
+<li>clickhouse不要求主键唯一</li>
+</ul>
+<h3 id="clickhouse连接客户端">
+  clickhouse连接客户端
+  <a class="anchor" href="#clickhouse%e8%bf%9e%e6%8e%a5%e5%ae%a2%e6%88%b7%e7%ab%af">#</a>
+</h3>
+<h4 id="clickhouse-client">
+  clickhouse-client
+  <a class="anchor" href="#clickhouse-client">#</a>
+</h4>
+<ul>
+<li>
+  <a href="https://clickhouse.tech/docs/zh/interfaces/cli/#command-line-options">clickhouse-client命令行参数</a></li>
+<li><code>clickhouse-client</code>配置文件地址（使用以下第一个配置文件）
+<ul>
+<li>通过<code>--config-file</code>参数指定</li>
+<li><code>./clickhouse-client.xml</code></li>
+<li><code>~/.clickhouse-client/config.xml</code></li>
+<li><code>/etc/clickhouse-server/config.xml</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="mysql">
+  mysql
+  <a class="anchor" href="#mysql">#</a>
+</h4>
+<ul>
+<li>可以通过mysql命令工具连接，需要在配置文件中配置mysql_port：<code>&lt;mysql_port&gt;9004&lt;/mysql_port&gt;</code></li>
+<li>使用命令行工具mysql进行连接：<code>mysql --protocol tcp -u default -P 9004</code></li>
+</ul>
+<h3 id="数据库引擎">
+  数据库引擎
+  <a class="anchor" href="#%e6%95%b0%e6%8d%ae%e5%ba%93%e5%bc%95%e6%93%8e">#</a>
+</h3>
+<h4 id="mysql引擎">
+  mysql引擎
+  <a class="anchor" href="#mysql%e5%bc%95%e6%93%8e">#</a>
+</h4>
+<ul>
+<li>
+<p>用于将远程的mysql服务器中的表映射到clickhouse中，并允许对表进行insert和select查询等，但无法执行rename、create table、alter操作。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">DATABASE</span> [<span style="color:#66d9ef">IF</span> <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">EXISTS</span>] db_name [<span style="color:#66d9ef">ON</span> <span style="color:#66d9ef">CLUSTER</span> <span style="color:#66d9ef">cluster</span>] ENGINE <span style="color:#f92672">=</span> MYSQL(<span style="color:#e6db74">&#39;host:port&#39;</span>,[<span style="color:#e6db74">&#39;database&#39;</span><span style="color:#f92672">|</span> <span style="color:#66d9ef">database</span>],<span style="color:#e6db74">&#39;user&#39;</span>,<span style="color:#e6db74">&#39;password&#39;</span>)
+</span></span></code></pre></div></li>
+<li>
+<p>
+  <a href="https://clickhouse.tech/docs/en/engines/database-engines/mysql/#data_types-support">类型的对应</a>，其他的mysql数据类型全部转化为字符串</p>
+</li>
+</ul>
+<h3 id="表引擎">
+  表引擎
+  <a class="anchor" href="#%e8%a1%a8%e5%bc%95%e6%93%8e">#</a>
+</h3>
+<h4 id="merge-tree">
+  merge tree
+  <a class="anchor" href="#merge-tree">#</a>
+</h4>
+<ul>
+<li>
+<p>MergeTree：设计用于插入大量数据当一张表当中。数据可以以数据片段的形式一个接一个的快速写入，数据片段在后台按照一定的规则进行合并。</p>
+</li>
+<li>
+<p>SummingMergeTree：合并SummingMergeTree表的数据片断时，clickhouse会把所有具有<strong>相同主键的行合并为一行</strong>，该行包含了被合并的行中具有数值数据类型的列的汇总值。如果主键的组合方式使得单个键值对应于大量的行，则可以显著的减少存储空间并加快数据查询的速度。</p>
+</li>
+<li>
+<p>ReplacingMergeTree：该引擎会<strong>删除排序键值相同</strong>的重复项。适用于在后台清除重复的数据以节省空间，但不保证没有重复数据出现。在数据合并的时候，如果制定了Replcaing的参数，当参数未指定，则保留最后一条数据，当参数已指定，则保留ver值最大的版本。数据的去重只会在数据的合并期间进行，所以常常今天数据重复了，明天看数据还没有被去重。</p>
+</li>
+<li>
+<p>AggregateMergeTree：改变了数据片段的合并逻辑。clickhouse会将一个数据片段内所有具有相同主键的行替换为一行，这一行会存储一系列聚合函数的状态。可以使用AggregatingMergeTree表来做增量数据的聚合统计，包括物化视图的数据聚合。</p>
+</li>
+<li>
+<p>CollapsingMergeTree：会异步的删除掉所有字段的值都相等（除了列Sign，该列一个为1，一个为-1）的成对的行，下面这两行就会被删除。</p>
+<ul>
+<li>
+<table>
+<thead>
+<tr>
+<th>UserId</th>
+<th>PageViews</th>
+<th>Duration</th>
+<th>Sign</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>123</td>
+<td>5</td>
+<td>146</td>
+<td>1</td>
+</tr>
+<tr>
+<td>123</td>
+<td>5</td>
+<td>146</td>
+<td>-1</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>1是状态行，-1是状态取消行</p>
+</li>
+</ul>
+</li>
+<li>
+<p>VersionedCollapsingMergeTree：用于相同目的的折叠树但使用了不同的折叠算法，允许以多个线程的任何顺序插入数据。Version列有助于正确折叠行，即使他们以错误的顺序插入。而CollapsingMergeTree只允许严格的连续插入。</p>
+</li>
+</ul>
+<h5 id="mergetree">
+  MergeTree
+  <a class="anchor" href="#mergetree">#</a>
+</h5>
+<ul>
+<li>
+<p>数据可以以数据片段的形式一个接一个的快速写入，数据片段在后台按照一定的规则进行合并。</p>
+</li>
+<li>
+<p>存储的数据按主键排序；支持数据分区（如果指定分区键的话）；支持数据副本；支持数据采样。</p>
+</li>
+<li>
+<p>建表（
+  <a href="https://clickhouse.tech/docs/zh/engines/table-engines/mergetree-family/mergetree/#table_engine-mergetree-creating-a-table">更多介绍看这里</a>）</p>
+<ul>
+<li>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> [<span style="color:#66d9ef">IF</span> <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">EXISTS</span>] [db.]<span style="color:#66d9ef">table_name</span> [<span style="color:#66d9ef">ON</span> <span style="color:#66d9ef">CLUSTER</span> <span style="color:#66d9ef">cluster</span>]
+</span></span><span style="display:flex;"><span>(
+</span></span><span style="display:flex;"><span>	name [type1] [<span style="color:#66d9ef">DEFAULT</span><span style="color:#f92672">|</span>MATERIALIZED<span style="color:#f92672">|</span><span style="color:#66d9ef">ALIAS</span> expr1] [TTL expr1],
+</span></span><span style="display:flex;"><span>    name [type2] [<span style="color:#66d9ef">DEFAULT</span><span style="color:#f92672">|</span>MATERIALIZED<span style="color:#f92672">|</span><span style="color:#66d9ef">ALIAS</span> expr2] [TTL expr2]
+</span></span><span style="display:flex;"><span>    ...
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">INDEX</span> index_name1 expr1 <span style="color:#66d9ef">TYPE</span> type1(...) GRANULARITY value1,
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">INDEX</span> index_name2 expr2 <span style="color:#66d9ef">TYPE</span> type2(...) GRANULARITY value2
+</span></span><span style="display:flex;"><span>) ENGINE <span style="color:#f92672">=</span> MergeTree()
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">ORDER</span> <span style="color:#66d9ef">BY</span> expr
+</span></span><span style="display:flex;"><span>[PARTITION <span style="color:#66d9ef">BY</span> expr]
+</span></span><span style="display:flex;"><span>[<span style="color:#66d9ef">PRIMARY</span> <span style="color:#66d9ef">KEY</span> expr]
+</span></span><span style="display:flex;"><span>[SAMPLE <span style="color:#66d9ef">BY</span> expr]
+</span></span><span style="display:flex;"><span>[TTL expr [<span style="color:#66d9ef">DELETE</span><span style="color:#f92672">|</span><span style="color:#66d9ef">TO</span> DISK <span style="color:#e6db74">&#39;xxx&#39;</span><span style="color:#f92672">|</span><span style="color:#66d9ef">to</span> volume <span style="color:#e6db74">&#39;xxx&#39;</span>],...]
+</span></span><span style="display:flex;"><span>[SETTINGS name<span style="color:#f92672">=</span>value,..]
+</span></span></code></pre></div></li>
+<li>
+<p>ENGINE：引擎名和参数</p>
+</li>
+<li>
+<p>ORDER BY：排序键，可以是一组列的元组或任意的表达式。<strong>如果没有用PRIMARY KEY显式指定主键，clickhouse会使用排序键作为主键</strong>，如果不需要排序，可以使用ORDER BY tuple()</p>
+</li>
+<li>
+<p>PARTITION BY：分区键，要按月分区，可以使用表达式toYYYYMM(date_column)，这里date_column是一个Date类型的列，分区的格式会是YYYYMM</p>
+</li>
+<li>
+<p>PRIMARY KEY：主键，如果要选择与排序键不同的主键，可选。大部分时间不需要再专门指定一个primary key</p>
+</li>
+<li>
+<p>SIMPLE BY：用于抽样表达式，如果要用抽样表达式，主键中必须包含这个表达式。如<code>SAMPLE BY intHash32(UserID) ORDER BY (CounterID, EventDate, intHash32(UserID))</code></p>
+</li>
+<li>
+<p>TTL：可以为表设置，也可以为每个列单独设置</p>
+<ul>
+<li>表TTL：表可以设置一个用于移除过期行的表达式，当表中的行过期时，clickhouse会删除所有对应的行。clickhouse在数据片段合并的时候会删除掉过期的数据，如果在合并的过程中执行SELECT查询，则可能得到过期的数据。</li>
+</ul>
+</li>
+<li>
+<p>SETTINGS：控制MergeTree行为的额外参数</p>
+<ul>
+<li>index_granularity：索引力度</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>数据存储</p>
+<ul>
+<li>表由按主键排序的数据片段组成。</li>
+<li>当数据被插入到表中时，会创建多个数据片段并按主键的字典排序。</li>
+<li>不同分区的数据会被分成不同的片段，clickhouse在后台合并数据片段以便更高效存储。合并机制不保证具有相同主键的行全部合并到同一个数据片中。</li>
+<li>数据片段以wide或compact格式存储。wide格式下，每一列都会在文件系统中存储为单独的文件，compact模式下所有列都存储在同一个文件下。</li>
+<li>每个数据片段被逻辑分割成颗粒。颗粒是进行数据查询时最小的不可分割数据集。每个颗粒都包含整数个行。</li>
+</ul>
+</li>
+<li>
+<p>可以使用ORDER BY tuple()创建没有主键的表，这种情况下，clickhouse会根据数据插入的顺序存储。</p>
+</li>
+<li>
+<p>对于select查询，如果where子句中有下面这些表达式，就可以使用索引</p>
+<ul>
+<li>包含一个与主键/分区键中的部分字段或全部字段相等或不等的表达式。</li>
+<li>主键/分区键 in (xxx,xxx,xxx) 或者 主键/分区键 like &lsquo;xxx&rsquo;。</li>
+<li>基于主键/分区键的字段上的某些函数。</li>
+<li>基于主键/分区键的表达式的逻辑表达式。</li>
+</ul>
+</li>
+<li>
+<p>TTL</p>
+<ul>
+<li>TTL表达式的计算结果必须是日期或日期时间类型的字段</li>
+</ul>
+</li>
+</ul>
+<p>
+  <a href="https://clickhouse.tech/docs/zh/engines/table-engines/mergetree-family/mergetree/">MergeTree</a>这一块越看越迷惑，之后再来接着看吧。</p>
+<h4 id="日志引擎">
+  日志引擎
+  <a class="anchor" href="#%e6%97%a5%e5%bf%97%e5%bc%95%e6%93%8e">#</a>
+</h4>
+<ul>
+<li>是为了需要写入许多小数据量（少于一百万行）的表的场景而开发的。</li>
+</ul>
+<h5 id="该引擎的共同属性">
+  该引擎的共同属性
+  <a class="anchor" href="#%e8%af%a5%e5%bc%95%e6%93%8e%e7%9a%84%e5%85%b1%e5%90%8c%e5%b1%9e%e6%80%a7">#</a>
+</h5>
+<ol>
+<li>写入时将数据追加到文件末尾。</li>
+<li>不支持索引。</li>
+<li>非原子地写入数据。</li>
+</ol>
+<ul>
+<li>Log和StripeLog支持并行读取数据，Log引擎将表中的每一列使用不同的文件；StripeLog将所有的数据存储到一个文件中</li>
 </ul>
     </p>
   </article>

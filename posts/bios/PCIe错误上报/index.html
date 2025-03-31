@@ -315,11 +315,7 @@ https://github.com/alex-shpak/hugo-book
   <img src="/img/bios/pcie/error_msg_control.jpg" alt="" /></p>
 </li>
 <li>
-<p>某些情况下，NON-FATAL 的错误可能是不需要执行任何的恢复动作的，比如软件尝试从一个不存在的设置执行一个读取操作，Completion中的UR Status将会报告一个错误，此时如果软件为Completer额外产生一个ERR_NONFATAL Message，就可能会导致系统运行异常。</p>
-</li>
-<li>
-<p>Advisory Non-Fatal Error cases可以让在产生NON_FATAL ERROR时发送ERR_COR Message。如果需要让Advisory Non-Fatal Error cases处理NON_FATAL ERROR为更严重的情况，可以将该ERR的严重级别设置为FATAL，这种情况下Agent将会以ERR_FATAL发出该错误。
-下图描述了ERROR MESSAGES的生成流程。</p>
+<p>NON-FATAL 的错误可能是不需要执行任何的恢复动作的，比如软件尝试从一个不存在的设置执行一个读取操作，Completion中的UR Status将会报告一个错误，此时如果软件为Completer额外产生一个ERR_NONFATAL Message，就可能会导致系统运行异常；Advisory Non-Fatal Error cases可以让在产生NON_FATAL ERROR时发送ERR_COR Message。如果将ERR的严重级别设置为FATAL，ERR将会以ERR_FATAL发出该错误。</p>
 </li>
 </ul></article>
  

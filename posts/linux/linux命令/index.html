@@ -1540,6 +1540,7 @@ destination：表示此规则是针对哪个目标进行限制
 <li>-A：&ndash;after-context，输出查找字符串后面n行。</li>
 <li>-B：&ndash;before-context，输出查找字符串前面多少行</li>
 <li>-r：递归查找当前路径下的包含指定内容的文件，同时输出包含此内容的行，-l只输出文件名。如查找指定路径下包含auth的文件：<code>grep -rl auth</code>。</li>
+<li>-F: 将搜索模式当作纯文本字符串处理，禁用正则表达式的特殊字符解析，可以很方便的搜索字符串中有空格的情况<code>grep -Fi &quot;BIOS LOG&quot; file.txt</code>。</li>
 </ul>
 </li>
 </ul>

@@ -151,106 +151,6 @@
     </item>
     
     <item>
-      <title>PCIe层次结构</title>
-      <link>/posts/bios/PCIe%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84/</link>
-      <pubDate>Tue, 08 Oct 2024 09:48:37 +0800</pubDate>
-      
-      <guid>/posts/bios/PCIe%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84/</guid>
-      <description>&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;缩写&lt;/th&gt;
-&lt;th&gt;全称&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;TLP&lt;/td&gt;
-&lt;td&gt;Transaction Layer Packet&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;ul&gt;
-&lt;li&gt;PCIe包括事务层、数据链路层和物理层&lt;/li&gt;
-&lt;li&gt;
-  &lt;img src=&#34;/img/bios/pcie/layer.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;事务层&#34;&gt;
-  事务层
-  &lt;a class=&#34;anchor&#34; href=&#34;#%e4%ba%8b%e5%8a%a1%e5%b1%82&#34;&gt;#&lt;/a&gt;
-&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;定义了四种事务类型&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;地址空间&lt;/th&gt;
-&lt;th&gt;事务类型&lt;/th&gt;
-&lt;th&gt;介绍&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;Memory&lt;/td&gt;
-&lt;td&gt;READ/WRITE&lt;/td&gt;
-&lt;td&gt;从MMIO读取/写入数据&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;I/O&lt;/td&gt;
-&lt;td&gt;READ/WRITE&lt;/td&gt;
-&lt;td&gt;从I/O空间读取/写入数据&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Configuration&lt;/td&gt;
-&lt;td&gt;READ/WRITE&lt;/td&gt;
-&lt;td&gt;设备Function配置空间&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Message&lt;/td&gt;
-&lt;td&gt;Baseline&lt;/td&gt;
-&lt;td&gt;用于支持设备之间的事件交流&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;当访问PCIe设备时，传输的保温会先通过事务层封装成一个或多个TLP。一个TLP包含多个可选TLP Prefixes、一个TLP header、一个数据载荷和一个可选的TLP Digest。数据载荷的最大长度为4096。TLP结构如下：&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;
-  &lt;img src=&#34;/img/bios/pcie/tlp.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;事务包括Requests和Completions。&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;tlp通用header&#34;&gt;
-  TLP通用Header
-  &lt;a class=&#34;anchor&#34; href=&#34;#tlp%e9%80%9a%e7%94%a8header&#34;&gt;#&lt;/a&gt;
-&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;
-  &lt;img src=&#34;/img/bios/pcie/tlp_common_header.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
-&lt;li&gt;TLP Header都有如下通用的结构，且头部总共为3DW/4DW。&lt;/li&gt;
-&lt;li&gt;
-  &lt;img src=&#34;/img/bios/pcie/tlp_header.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
-&lt;li&gt;Fmt和Type表示事务类型。&lt;/li&gt;
-&lt;li&gt;&lt;/li&gt;
-&lt;li&gt;Fmt支持如下的值&lt;/li&gt;
-&lt;li&gt;
-  &lt;img src=&#34;/img/bios/pcie/tlp_fmt.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
-&lt;li&gt;Fmt和Type支持如下组合：&lt;/li&gt;
-&lt;li&gt;
-  &lt;img src=&#34;/img/bios/pcie/tlp_fmt_type_1.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
-&lt;li&gt;
-  &lt;img src=&#34;/img/bios/pcie/tlp_fmt_type_2.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
-&lt;li&gt;
-  &lt;img src=&#34;/img/bios/pcie/tlp_fmt_type_3.jpg&#34; alt=&#34;&#34; /&gt;&lt;/li&gt;
-&lt;/ul&gt;</description>
-    </item>
-    
-    <item>
       <title>PCIe错误上报</title>
       <link>/posts/bios/PCIe%E9%94%99%E8%AF%AF%E4%B8%8A%E6%8A%A5/</link>
       <pubDate>Thu, 16 May 2024 16:18:24 +0800</pubDate>
@@ -341,11 +241,7 @@
   &lt;img src=&#34;/img/bios/pcie/error_msg_control.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;某些情况下，NON-FATAL 的错误可能是不需要执行任何的恢复动作的，比如软件尝试从一个不存在的设置执行一个读取操作，Completion中的UR Status将会报告一个错误，此时如果软件为Completer额外产生一个ERR_NONFATAL Message，就可能会导致系统运行异常。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Advisory Non-Fatal Error cases可以让在产生NON_FATAL ERROR时发送ERR_COR Message。如果需要让Advisory Non-Fatal Error cases处理NON_FATAL ERROR为更严重的情况，可以将该ERR的严重级别设置为FATAL，这种情况下Agent将会以ERR_FATAL发出该错误。
-下图描述了ERROR MESSAGES的生成流程。&lt;/p&gt;
+&lt;p&gt;NON-FATAL 的错误可能是不需要执行任何的恢复动作的，比如软件尝试从一个不存在的设置执行一个读取操作，Completion中的UR Status将会报告一个错误，此时如果软件为Completer额外产生一个ERR_NONFATAL Message，就可能会导致系统运行异常；Advisory Non-Fatal Error cases可以让在产生NON_FATAL ERROR时发送ERR_COR Message。如果将ERR的严重级别设置为FATAL，ERR将会以ERR_FATAL发出该错误。&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;</description>
     </item>
@@ -1108,93 +1004,6 @@ GRUB_SERIAL_COMMAND=&amp;#34;serial --speed=115200 --unit=0 --word=8 --parity=no
     </item>
     
     <item>
-      <title>PCIe总线概述</title>
-      <link>/posts/bios/PCIe%E6%80%BB%E7%BA%BF%E6%A6%82%E8%BF%B0/</link>
-      <pubDate>Thu, 04 May 2023 20:04:24 +0800</pubDate>
-      
-      <guid>/posts/bios/PCIe%E6%80%BB%E7%BA%BF%E6%A6%82%E8%BF%B0/</guid>
-      <description>&lt;ul&gt;
-&lt;li&gt;PCIe总线使用高速差分总线，采用端到端的连接方式，因此在每一条PCIe链路中只能连接两个设备，这两个设备互为数据发送端和数据接收端。&lt;/li&gt;
-&lt;li&gt;PCIe链路使用“端到端的数据传送方式“，发送端和接收端都存在TX(发送逻辑)和RX（接收逻辑）,结构如下：&lt;/li&gt;
-&lt;li&gt;
-  &lt;img src=&#34;/img/book/pcie/5.jpg&#34; alt=&#34;图4-1&#34; /&gt;&lt;/li&gt;
-&lt;li&gt;在PCIe总线的物理链路的一个数据通路（lane）中，有两组差分信号，共四根信号线。发送端的TX和接收端的RX使用一组差分信号连接。该链路被称为发送端的发送链路，也是接收端的接收链路。一个PCIe链路可以由多个Lane组成。&lt;/li&gt;
-&lt;li&gt;告诉差分信号电气规范要求发送端串接一个电容，以进行AC耦合，该电容也被称为AC耦合电容。&lt;/li&gt;
-&lt;li&gt;PCIe链路使用差分信号进行数据传输，一个差分型号由D+和D-两根信号线组成，信号接收端通过比较这两个信号的差值，判断发送端发送的是逻辑1还是逻辑0。&lt;/li&gt;
-&lt;li&gt;使用差分信号能有效抑制电磁干扰（EMI），差分信号使用两根信号传送一位数据。&lt;/li&gt;
-&lt;li&gt;PCIe链路可以由多条Lane组成，目前PCIe支持1、2、4、8、12、16和32个Lane，即x1、x2、x4、x8、x12、x16、x32宽度的PCIe链路。&lt;/li&gt;
-&lt;li&gt;在PCIe总线中，使用GT(gigatransfer)计算PCIe链路的峰值带宽，计算公式为总线频率x数据位宽x2。&lt;/li&gt;
-&lt;li&gt;PCIe链路使用串行方式进行数据传输，但在芯片内部，数据总线仍然是并行的，因此PCIe链路接口需要进行串并转换。&lt;/li&gt;
-&lt;li&gt;PCIe总线物理链路之间的数据传送使用基于时钟的同步传送机制，但物理链路并没有时钟线，PCIe总线的接收端含有时钟恢复模块CDR（Clock Data Recovery），CDR从接收报文提取接收时钟，从而进行同步数据传输。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;pcie总线使用的信号&#34;&gt;
-  PCIe总线使用的信号
-  &lt;a class=&#34;anchor&#34; href=&#34;#pcie%e6%80%bb%e7%ba%bf%e4%bd%bf%e7%94%a8%e7%9a%84%e4%bf%a1%e5%8f%b7&#34;&gt;#&lt;/a&gt;
-&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;PCIe设备使用两种电源信号供电，分为是V&lt;sub&gt;cc&lt;/sub&gt;和V&lt;sub&gt;aux&lt;/sub&gt;，其额定电压为3.3V。PCIe设备使用的主要逻辑模块使用V&lt;sub&gt;cc&lt;/sub&gt;供电，而一些与电源管理相关的逻辑使用V&lt;sub&gt;aux&lt;/sub&gt;供电。&lt;/li&gt;
-&lt;li&gt;在一个处理器系统中，一般最多提供x16的PCIe插槽，并使用PETp0~15、PETn0~15和PERp0~15、PERn0~15共64根信号线组成32对差分信号，其中16对PETXX信号用于发送链路。另外16对PERxx信号用于接收链路。除此之外，PCIe总线还使用了下列辅助信号。
-&lt;ol&gt;
-&lt;li&gt;PERST#信号：该信号为全局复位信号，由处理器系统提供。当该信号有效时，PCIe设备将进行复位操作。PCIe总线定义了多种复位方式，齐总cold reset和warm reset这两种复位方式的实现和该信号有关。&lt;/li&gt;
-&lt;li&gt;REFCLK+和REFCLK-信号：
-&lt;ul&gt;
-&lt;li&gt;在一个处理器系统中，可能含有很多PCIe设备，这些设备可以作为Add-In卡与PCIe插槽连接，也可以作为内置模块，与处理器提供的PCIe链路直接相连。PCIe设备与插槽都具有REFCLK+和REFCLK-信号。&lt;/li&gt;
-&lt;li&gt;PCIe插槽使用这组信号与处理器系统同步。&lt;/li&gt;
-&lt;li&gt;当PCIe设备作为Add-In卡连接在PCIe插槽时i，可以直接使用PCIe插槽提供的这组信号，也可以使用独立的参考时钟。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;WAKE#信号：当PCIe设备进入休眠状态，主电源已经停止供电时，PCIe设备使用该信号向处理器系统提交唤醒请求，使处理器系统重新为该PCIe设备提供主电源Vcc。WAKE#信号是可选的，产生该信号的硬件逻辑必须使用辅助电源Vaux供电。&lt;/li&gt;
-&lt;li&gt;SMCLK和SMDAT信号：这两个信号与x86的SMBus（System management bus）有关，SMBus由SMCLK和SMDAT信号组成。&lt;/li&gt;
-&lt;li&gt;JTAG信号：JTAG是一种国际标准测试协议，主要用于芯片的内部测试。正式产品中一般不暴力JTAG接口。&lt;/li&gt;
-&lt;li&gt;PRSNT1#和PRSNT2#信号：这两个信号和PCIe设备的热插拔有关。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;pcie总线的层次结构&#34;&gt;
-  PCIe总线的层次结构
-  &lt;a class=&#34;anchor&#34; href=&#34;#pcie%e6%80%bb%e7%ba%bf%e7%9a%84%e5%b1%82%e6%ac%a1%e7%bb%93%e6%9e%84&#34;&gt;#&lt;/a&gt;
-&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;PCIe总线使用了串行连接的方式，并使用数据包（Packet）进行数据传输。&lt;/li&gt;
-&lt;li&gt;PCIe总线的层次结构如下：&lt;/li&gt;
-&lt;li&gt;
-  &lt;img src=&#34;/img/book/pcie/6.jpg&#34; alt=&#34;图4-4&#34; /&gt;&lt;/li&gt;
-&lt;li&gt;PCIe总线各个层次都是使用硬件逻辑实现的，在PCIe体系结构中，数据报文首先在设备的核心层（Device Core）中产生，然后经过设备的事务层（Transaction Layer）、数据链路层（Data Link Layer）和物理层（Physical Layer），最终发送出去，接收端的数据也需要通过物理层、数据链路层和事务层，最终到达核心层。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;事务层&#34;&gt;
-  事务层
-  &lt;a class=&#34;anchor&#34; href=&#34;#%e4%ba%8b%e5%8a%a1%e5%b1%82&#34;&gt;#&lt;/a&gt;
-&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;事务层定义了PCIe总线使用总线事务，这些总线事务可以通过Switch等设备传送到其他PCIe设备或者RC。RC也可以使用这些总线事务访问PCIe设备。&lt;/li&gt;
-&lt;li&gt;事务层接收来自PCIe设备核心层的数据，并将其封装成TLP（transaction layer packet）后，发向数据链路层。事务层还从数据链路层接收数据报文，然后转发到PCIe设备的核心层。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;数量链路层&#34;&gt;
-  数量链路层
-  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%95%b0%e9%87%8f%e9%93%be%e8%b7%af%e5%b1%82&#34;&gt;#&lt;/a&gt;
-&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;数据链路层保证来自发送端事务层的报文可以可靠、完整地发送到接收端的数据链路层，来自事务层的报文再通过数据链路层时，被添加Sequence Number前缀和CRC后缀，数据链路层使用ACK/NAK协议保证报文的可靠传输。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;物理层&#34;&gt;
-  物理层
-  &lt;a class=&#34;anchor&#34; href=&#34;#%e7%89%a9%e7%90%86%e5%b1%82&#34;&gt;#&lt;/a&gt;
-&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;物理层是PCIe总线的最底层，将PCIe设备连在一起。PCIe总线的物理电气特性决定了PCIe链路只能采用端到端的连接方式。PCIe总线的物理层为PCIe设备间的数据通信提供了传送介质，为数据传送提供了可靠的物理环境。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;pcie链路的扩展&#34;&gt;
-  PCIe链路的扩展
-  &lt;a class=&#34;anchor&#34; href=&#34;#pcie%e9%93%be%e8%b7%af%e7%9a%84%e6%89%a9%e5%b1%95&#34;&gt;#&lt;/a&gt;
-&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;PCIe使用端到端的数据传送方式，如果要连接多个设备，PCIe链路必须使用Switch扩展PCIe链路。&lt;/li&gt;
-&lt;li&gt;Switch由1个上游端口和2~n个下游端口组成。在一个switch中和RC直接或间接相连的端口为上游端口。&lt;/li&gt;
-&lt;li&gt;在switch中，有两个与端口相关的概念，egress和ingress，egress指的是发送端口，即数据离开switch的使用的端口，ingress端口指数据进入switch的使用的端口。&lt;/li&gt;
-&lt;/ul&gt;</description>
-    </item>
-    
-    <item>
       <title>PCI桥和PCI设备</title>
       <link>/posts/bios/PCI%E6%A1%A5%E5%92%8CPCI%E8%AE%BE%E5%A4%87/</link>
       <pubDate>Thu, 04 May 2023 20:04:24 +0800</pubDate>
@@ -1789,7 +1598,7 @@ GRUB_SERIAL_COMMAND=&amp;#34;serial --speed=115200 --unit=0 --word=8 --parity=no
 &lt;li&gt;TSL阶段被称为临时系统，它存在的目的就是为操作系统加载器准备执行环境。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id=&#34;6-rt阶段run-time&#34;&gt;
-  6. RT阶段（Run Time)
+  6. RT阶段（Run Time）
   &lt;a class=&#34;anchor&#34; href=&#34;#6-rt%e9%98%b6%e6%ae%b5run-time&#34;&gt;#&lt;/a&gt;
 &lt;/h3&gt;
 &lt;ul&gt;

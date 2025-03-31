@@ -110,7 +110,7 @@ https://github.com/alex-shpak/hugo-book
 		  <li>
 			<a href="/tags/bios/"  class="flex justify-between">
 			  <span>bios</span>
-			  <span>12</span>
+			  <span>10</span>
 			</a>
 		  </li>
 		
@@ -327,7 +327,7 @@ https://github.com/alex-shpak/hugo-book
 		  <li>
 			<a href="/tags/bios/"  class="flex justify-between">
 			  <span>bios</span>
-			  <span>12</span>
+			  <span>10</span>
 			</a>
 		  </li>
 		
@@ -455,356 +455,6 @@ https://github.com/alex-shpak/hugo-book
  
         </header>
         
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/clickhouse-statement/">clickhouse-statement</a>
-    </h2>
-    
-  <h5>2021-03-11</h5>
-
-
-
-  
-
-  
-  <div>
-    
-      <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
-  </div>
-  
-
-
-
-
-    <p><ul>
-<li>可以在system.data_type_families中检查某个数据类型的名称是否大小写敏感，case_insensitive=1表示大小写不敏感。看完后我建议数据类型的命名首字母大写，并采用驼峰命名法。</li>
-<li>除了标准sql的关键字和许多其他数据库实现的一些关键字，clickhouse其他的关键字都是大小写敏感的！所以如果你发现语句看上去没错，执行就是有问题，看看是不是大小写出问题了。</li>
-<li>关键字不是保留的，它们仅在相应的上下文中才会被处理。</li>
-<li>变量名可以使用反引号包含起来。</li>
-<li>别名在查询和子查询中是全局可见的。</li>
-</ul>
-<h3 id="select">
-  select
-  <a class="anchor" href="#select">#</a>
-</h3>
-<ul>
-<li>
-<p>select子句是在 from、where、group by等所有操作完成后计算的，如果select子句中包含聚集函数，<strong>clickhouse会在执行group by期间处理这些聚集函数</strong>。</p>
-</li>
-<li>
-<p>如果要用re2正则表达式匹配列，可以使用COLUMNS（‘xxx’），这样可以一次匹配多个列（对于是否常用我持否定态度）。</p>
-</li>
-<li>
-<p>当FROM被省略时，数据从system.one表中读取</p>
-</li>
-<li>
-<p>ARRAY JOIN</p>
-<ul>
-<li>对于包含数组列的表来说是一种常见的操作，用于生成一个新表（新表有一列将包含数组中的每一个元素，其他列可能会出现元素重复）。</li>
-</ul>
-</li>
-<li>
-<p>DISTINCT</p>
-<ul>
-<li>不支持select包含有数组的列</li>
-<li>当ORDER BY 被省略且LIMIT被定义时，在读取所需数量的不同行后立即停止运行。</li>
-<li>DISTINCT在ORDER BY之前执行</li>
-</ul>
-</li>
-</ul>
-<h3 id="alter">
-  alter
-  <a class="anchor" href="#alter">#</a>
-</h3>
-<ul>
-<li>仅支持MergeTree家族，Merge以及Distributed等引擎表。</li>
-<li>alter操作会阻塞对表的所有读写操作。</li>
-</ul>
-<h4 id="列操作">
-  列操作
-  <a class="anchor" href="#%e5%88%97%e6%93%8d%e4%bd%9c">#</a>
-</h4>
-<ul>
-<li>增加列
-<ul>
-<li><code>ADD COLUMN [IF NOT EXISTS] name [type]  [default_expr] [codec] [AFTER name_after]</code></li>
-<li>使用指定的name、type、codec以及default_expr往表中增加新的列。</li>
-<li>如果sql中包含IF NOT EXISTS，执行语句如果已存在，则clickhouse不会报错，不能将新的列添加到表的开始位置，当指定了AFTER name_after，则会将新的列添加到指定列的后面。</li>
-<li>添加列仅仅是改变原有表的结构，不会对已有数据产生影响。</li>
-</ul>
-</li>
-<li>删除列
-<ul>
-<li><code>DROP COLUMN [IF EXISTS] name</code></li>
-</ul>
-</li>
-<li>清空列
-<ul>
-<li><code>CLEAR COLUMN [IF EXISTS] name IN PARTITION partition_name</code></li>
-<li>重置指定分区中的值。</li>
-</ul>
-</li>
-<li>增加注释
-<ul>
-<li><code>COMMENT COLUMN [IF EXISTS] name 'comment'</code></li>
-<li>每个列都可以包含注释，注释信息在DESCRIBE table中查看</li>
-</ul>
-</li>
-<li>改变列的值类型，默认表达式，TTL
-<ul>
-<li><code>MODIFY COLUMN [IF EXISTS] name [type] [default_expr] [TTL] </code></li>
-<li>当改变列的类型时，列的值也被转换了，如同对列使用toType函数一样，执行起来要花费很长时间。</li>
-</ul>
-</li>
-</ul>
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/clickhouse%E8%B5%B7%E6%AD%A5/">clickhouse起步</a>
-    </h2>
-    
-  <h5>2021-03-11</h5>
-
-
-
-  
-
-  
-  <div>
-    
-      <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
-  </div>
-  
-
-
-
-
-    <p><ul>
-<li>online analytical processing of queries（OLAP）：联机分析</li>
-<li>clickhouse是一个用于OLAP的列式数据库管理系统（来自同一列的数据被存储在一起）。</li>
-<li><code>sudo service clickhouse-server start</code>启动clickhouse.</li>
-<li>clickhouse不要求主键唯一</li>
-</ul>
-<h3 id="clickhouse连接客户端">
-  clickhouse连接客户端
-  <a class="anchor" href="#clickhouse%e8%bf%9e%e6%8e%a5%e5%ae%a2%e6%88%b7%e7%ab%af">#</a>
-</h3>
-<h4 id="clickhouse-client">
-  clickhouse-client
-  <a class="anchor" href="#clickhouse-client">#</a>
-</h4>
-<ul>
-<li>
-  <a href="https://clickhouse.tech/docs/zh/interfaces/cli/#command-line-options">clickhouse-client命令行参数</a></li>
-<li><code>clickhouse-client</code>配置文件地址（使用以下第一个配置文件）
-<ul>
-<li>通过<code>--config-file</code>参数指定</li>
-<li><code>./clickhouse-client.xml</code></li>
-<li><code>~/.clickhouse-client/config.xml</code></li>
-<li><code>/etc/clickhouse-server/config.xml</code></li>
-</ul>
-</li>
-</ul>
-<h4 id="mysql">
-  mysql
-  <a class="anchor" href="#mysql">#</a>
-</h4>
-<ul>
-<li>可以通过mysql命令工具连接，需要在配置文件中配置mysql_port：<code>&lt;mysql_port&gt;9004&lt;/mysql_port&gt;</code></li>
-<li>使用命令行工具mysql进行连接：<code>mysql --protocol tcp -u default -P 9004</code></li>
-</ul>
-<h3 id="数据库引擎">
-  数据库引擎
-  <a class="anchor" href="#%e6%95%b0%e6%8d%ae%e5%ba%93%e5%bc%95%e6%93%8e">#</a>
-</h3>
-<h4 id="mysql引擎">
-  mysql引擎
-  <a class="anchor" href="#mysql%e5%bc%95%e6%93%8e">#</a>
-</h4>
-<ul>
-<li>
-<p>用于将远程的mysql服务器中的表映射到clickhouse中，并允许对表进行insert和select查询等，但无法执行rename、create table、alter操作。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">DATABASE</span> [<span style="color:#66d9ef">IF</span> <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">EXISTS</span>] db_name [<span style="color:#66d9ef">ON</span> <span style="color:#66d9ef">CLUSTER</span> <span style="color:#66d9ef">cluster</span>] ENGINE <span style="color:#f92672">=</span> MYSQL(<span style="color:#e6db74">&#39;host:port&#39;</span>,[<span style="color:#e6db74">&#39;database&#39;</span><span style="color:#f92672">|</span> <span style="color:#66d9ef">database</span>],<span style="color:#e6db74">&#39;user&#39;</span>,<span style="color:#e6db74">&#39;password&#39;</span>)
-</span></span></code></pre></div></li>
-<li>
-<p>
-  <a href="https://clickhouse.tech/docs/en/engines/database-engines/mysql/#data_types-support">类型的对应</a>，其他的mysql数据类型全部转化为字符串</p>
-</li>
-</ul>
-<h3 id="表引擎">
-  表引擎
-  <a class="anchor" href="#%e8%a1%a8%e5%bc%95%e6%93%8e">#</a>
-</h3>
-<h4 id="merge-tree">
-  merge tree
-  <a class="anchor" href="#merge-tree">#</a>
-</h4>
-<ul>
-<li>
-<p>MergeTree：设计用于插入大量数据当一张表当中。数据可以以数据片段的形式一个接一个的快速写入，数据片段在后台按照一定的规则进行合并。</p>
-</li>
-<li>
-<p>SummingMergeTree：合并SummingMergeTree表的数据片断时，clickhouse会把所有具有<strong>相同主键的行合并为一行</strong>，该行包含了被合并的行中具有数值数据类型的列的汇总值。如果主键的组合方式使得单个键值对应于大量的行，则可以显著的减少存储空间并加快数据查询的速度。</p>
-</li>
-<li>
-<p>ReplacingMergeTree：该引擎会<strong>删除排序键值相同</strong>的重复项。适用于在后台清除重复的数据以节省空间，但不保证没有重复数据出现。在数据合并的时候，如果制定了Replcaing的参数，当参数未指定，则保留最后一条数据，当参数已指定，则保留ver值最大的版本。数据的去重只会在数据的合并期间进行，所以常常今天数据重复了，明天看数据还没有被去重。</p>
-</li>
-<li>
-<p>AggregateMergeTree：改变了数据片段的合并逻辑。clickhouse会将一个数据片段内所有具有相同主键的行替换为一行，这一行会存储一系列聚合函数的状态。可以使用AggregatingMergeTree表来做增量数据的聚合统计，包括物化视图的数据聚合。</p>
-</li>
-<li>
-<p>CollapsingMergeTree：会异步的删除掉所有字段的值都相等（除了列Sign，该列一个为1，一个为-1）的成对的行，下面这两行就会被删除。</p>
-<ul>
-<li>
-<table>
-<thead>
-<tr>
-<th>UserId</th>
-<th>PageViews</th>
-<th>Duration</th>
-<th>Sign</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>123</td>
-<td>5</td>
-<td>146</td>
-<td>1</td>
-</tr>
-<tr>
-<td>123</td>
-<td>5</td>
-<td>146</td>
-<td>-1</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li>
-<p>1是状态行，-1是状态取消行</p>
-</li>
-</ul>
-</li>
-<li>
-<p>VersionedCollapsingMergeTree：用于相同目的的折叠树但使用了不同的折叠算法，允许以多个线程的任何顺序插入数据。Version列有助于正确折叠行，即使他们以错误的顺序插入。而CollapsingMergeTree只允许严格的连续插入。</p>
-</li>
-</ul>
-<h5 id="mergetree">
-  MergeTree
-  <a class="anchor" href="#mergetree">#</a>
-</h5>
-<ul>
-<li>
-<p>数据可以以数据片段的形式一个接一个的快速写入，数据片段在后台按照一定的规则进行合并。</p>
-</li>
-<li>
-<p>存储的数据按主键排序；支持数据分区（如果指定分区键的话）；支持数据副本；支持数据采样。</p>
-</li>
-<li>
-<p>建表（
-  <a href="https://clickhouse.tech/docs/zh/engines/table-engines/mergetree-family/mergetree/#table_engine-mergetree-creating-a-table">更多介绍看这里</a>）</p>
-<ul>
-<li>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> [<span style="color:#66d9ef">IF</span> <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">EXISTS</span>] [db.]<span style="color:#66d9ef">table_name</span> [<span style="color:#66d9ef">ON</span> <span style="color:#66d9ef">CLUSTER</span> <span style="color:#66d9ef">cluster</span>]
-</span></span><span style="display:flex;"><span>(
-</span></span><span style="display:flex;"><span>	name [type1] [<span style="color:#66d9ef">DEFAULT</span><span style="color:#f92672">|</span>MATERIALIZED<span style="color:#f92672">|</span><span style="color:#66d9ef">ALIAS</span> expr1] [TTL expr1],
-</span></span><span style="display:flex;"><span>    name [type2] [<span style="color:#66d9ef">DEFAULT</span><span style="color:#f92672">|</span>MATERIALIZED<span style="color:#f92672">|</span><span style="color:#66d9ef">ALIAS</span> expr2] [TTL expr2]
-</span></span><span style="display:flex;"><span>    ...
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">INDEX</span> index_name1 expr1 <span style="color:#66d9ef">TYPE</span> type1(...) GRANULARITY value1,
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">INDEX</span> index_name2 expr2 <span style="color:#66d9ef">TYPE</span> type2(...) GRANULARITY value2
-</span></span><span style="display:flex;"><span>) ENGINE <span style="color:#f92672">=</span> MergeTree()
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">ORDER</span> <span style="color:#66d9ef">BY</span> expr
-</span></span><span style="display:flex;"><span>[PARTITION <span style="color:#66d9ef">BY</span> expr]
-</span></span><span style="display:flex;"><span>[<span style="color:#66d9ef">PRIMARY</span> <span style="color:#66d9ef">KEY</span> expr]
-</span></span><span style="display:flex;"><span>[SAMPLE <span style="color:#66d9ef">BY</span> expr]
-</span></span><span style="display:flex;"><span>[TTL expr [<span style="color:#66d9ef">DELETE</span><span style="color:#f92672">|</span><span style="color:#66d9ef">TO</span> DISK <span style="color:#e6db74">&#39;xxx&#39;</span><span style="color:#f92672">|</span><span style="color:#66d9ef">to</span> volume <span style="color:#e6db74">&#39;xxx&#39;</span>],...]
-</span></span><span style="display:flex;"><span>[SETTINGS name<span style="color:#f92672">=</span>value,..]
-</span></span></code></pre></div></li>
-<li>
-<p>ENGINE：引擎名和参数</p>
-</li>
-<li>
-<p>ORDER BY：排序键，可以是一组列的元组或任意的表达式。<strong>如果没有用PRIMARY KEY显式指定主键，clickhouse会使用排序键作为主键</strong>，如果不需要排序，可以使用ORDER BY tuple()</p>
-</li>
-<li>
-<p>PARTITION BY：分区键，要按月分区，可以使用表达式toYYYYMM(date_column)，这里date_column是一个Date类型的列，分区的格式会是YYYYMM</p>
-</li>
-<li>
-<p>PRIMARY KEY：主键，如果要选择与排序键不同的主键，可选。大部分时间不需要再专门指定一个primary key</p>
-</li>
-<li>
-<p>SIMPLE BY：用于抽样表达式，如果要用抽样表达式，主键中必须包含这个表达式。如<code>SAMPLE BY intHash32(UserID) ORDER BY (CounterID, EventDate, intHash32(UserID))</code></p>
-</li>
-<li>
-<p>TTL：可以为表设置，也可以为每个列单独设置</p>
-<ul>
-<li>表TTL：表可以设置一个用于移除过期行的表达式，当表中的行过期时，clickhouse会删除所有对应的行。clickhouse在数据片段合并的时候会删除掉过期的数据，如果在合并的过程中执行SELECT查询，则可能得到过期的数据。</li>
-</ul>
-</li>
-<li>
-<p>SETTINGS：控制MergeTree行为的额外参数</p>
-<ul>
-<li>index_granularity：索引力度</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<p>数据存储</p>
-<ul>
-<li>表由按主键排序的数据片段组成。</li>
-<li>当数据被插入到表中时，会创建多个数据片段并按主键的字典排序。</li>
-<li>不同分区的数据会被分成不同的片段，clickhouse在后台合并数据片段以便更高效存储。合并机制不保证具有相同主键的行全部合并到同一个数据片中。</li>
-<li>数据片段以wide或compact格式存储。wide格式下，每一列都会在文件系统中存储为单独的文件，compact模式下所有列都存储在同一个文件下。</li>
-<li>每个数据片段被逻辑分割成颗粒。颗粒是进行数据查询时最小的不可分割数据集。每个颗粒都包含整数个行。</li>
-</ul>
-</li>
-<li>
-<p>可以使用ORDER BY tuple()创建没有主键的表，这种情况下，clickhouse会根据数据插入的顺序存储。</p>
-</li>
-<li>
-<p>对于select查询，如果where子句中有下面这些表达式，就可以使用索引</p>
-<ul>
-<li>包含一个与主键/分区键中的部分字段或全部字段相等或不等的表达式。</li>
-<li>主键/分区键 in (xxx,xxx,xxx) 或者 主键/分区键 like &lsquo;xxx&rsquo;。</li>
-<li>基于主键/分区键的字段上的某些函数。</li>
-<li>基于主键/分区键的表达式的逻辑表达式。</li>
-</ul>
-</li>
-<li>
-<p>TTL</p>
-<ul>
-<li>TTL表达式的计算结果必须是日期或日期时间类型的字段</li>
-</ul>
-</li>
-</ul>
-<p>
-  <a href="https://clickhouse.tech/docs/zh/engines/table-engines/mergetree-family/mergetree/">MergeTree</a>这一块越看越迷惑，之后再来接着看吧。</p>
-<h4 id="日志引擎">
-  日志引擎
-  <a class="anchor" href="#%e6%97%a5%e5%bf%97%e5%bc%95%e6%93%8e">#</a>
-</h4>
-<ul>
-<li>是为了需要写入许多小数据量（少于一百万行）的表的场景而开发的。</li>
-</ul>
-<h5 id="该引擎的共同属性">
-  该引擎的共同属性
-  <a class="anchor" href="#%e8%af%a5%e5%bc%95%e6%93%8e%e7%9a%84%e5%85%b1%e5%90%8c%e5%b1%9e%e6%80%a7">#</a>
-</h5>
-<ol>
-<li>写入时将数据追加到文件末尾。</li>
-<li>不支持索引。</li>
-<li>非原子地写入数据。</li>
-</ol>
-<ul>
-<li>Log和StripeLog支持并行读取数据，Log引擎将表中的每一列使用不同的文件；StripeLog将所有的数据存储到一个文件中</li>
-</ul>
-    </p>
-  </article>
   
   <article class="markdown book-post">
     <h2>
@@ -2631,6 +2281,7 @@ destination：表示此规则是针对哪个目标进行限制
 <li>-A：&ndash;after-context，输出查找字符串后面n行。</li>
 <li>-B：&ndash;before-context，输出查找字符串前面多少行</li>
 <li>-r：递归查找当前路径下的包含指定内容的文件，同时输出包含此内容的行，-l只输出文件名。如查找指定路径下包含auth的文件：<code>grep -rl auth</code>。</li>
+<li>-F: 将搜索模式当作纯文本字符串处理，禁用正则表达式的特殊字符解析，可以很方便的搜索字符串中有空格的情况<code>grep -Fi &quot;BIOS LOG&quot; file.txt</code>。</li>
 </ul>
 </li>
 </ul>
@@ -3044,6 +2695,758 @@ destination：表示此规则是针对哪个目标进行限制
 </span></span><span style="display:flex;"><span><span style="color:#75715e">#切换到disable或者从disable切换到其他需要重启</span>
 </span></span><span style="display:flex;"><span>setenforce <span style="color:#f92672">[</span>0|1<span style="color:#f92672">]</span> <span style="color:#75715e">#0表示permissive，1表示Enforcing</span>
 </span></span></code></pre></div>
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql/">mysql</a>
+    </h2>
+    
+  <h5>2021-02-04</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
+  </div>
+  
+
+
+
+
+    <p><h2 id="mysql起步">
+  mysql起步
+  <a class="anchor" href="#mysql%e8%b5%b7%e6%ad%a5">#</a>
+</h2>
+<ul>
+<li>查询版本和当前时间<code>select version(),current_date;</code></li>
+<li>mysql执行结束后会显示返回了多少行和用了多长时间，受网络其他因素影响</li>
+<li>当输入多行，打算不执行这句sql语句，输入<code>\c</code></li>
+<li>自带的的mysql database描述了用户的访问权限。</li>
+<li>unix下数据库名是大小写相关的。建议在创建数据库的时候要么全大写，要么全小写，可以在刚安装的时候修改my.cnf文件。</li>
+<li>相邻的带引号的多个字符串会拼接成一个字符串。下面这两个等价：</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#e6db74">&#39;a string&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;a&#39;&#39;string&#39;</span>
+</span></span></code></pre></div><h3 id="linux上mysql布局">
+  linux上mysql布局
+  <a class="anchor" href="#linux%e4%b8%8amysql%e5%b8%83%e5%b1%80">#</a>
+</h3>
+<table>
+<thead>
+<tr>
+<th>文件资源</th>
+<th>位置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>客户端程序和脚本</td>
+<td>/usr/bin</td>
+</tr>
+<tr>
+<td>mysqld server</td>
+<td>/usr/sbin</td>
+</tr>
+<tr>
+<td>配置文件地址</td>
+<td>/etc/my.cnf</td>
+</tr>
+<tr>
+<td>数据存放目录</td>
+<td>/var/lib/mysql</td>
+</tr>
+<tr>
+<td>错误日志文件</td>
+<td>/var/log/mysqld.log</td>
+</tr>
+<tr>
+<td>secure_file_priv</td>
+<td>/var/lib/mysql-files</td>
+</tr>
+<tr>
+<td>System V init script</td>
+<td>/etc/init.d/mysqld</td>
+</tr>
+<tr>
+<td>Systemd服务</td>
+<td>mysqld</td>
+</tr>
+<tr>
+<td>Pid文件</td>
+<td>/var/run/mysql/mysqld.pid</td>
+</tr>
+<tr>
+<td>Socket</td>
+<td>/var/lib/mysql/mysql.sock</td>
+</tr>
+<tr>
+<td>使用手册</td>
+<td>/usr/share/man</td>
+</tr>
+<tr>
+<td>字符集文件等其他文件</td>
+<td>/usr/share/mysql</td>
+</tr>
+<tr>
+<td>库</td>
+<td>/usr/lib/mysql</td>
+</tr>
+<tr>
+<td><strong>参考链接：</strong></td>
+<td>
+  <a href="https://dev.mysql.com/doc/refman/8.0/en/linux-installation-rpm.html">MySQL :: MySQL 8.0 Reference Manual :: 2.5.4 Installing MySQL on Linux Using RPM Packages from Oracle</a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="mysql安装">
+  mysql安装
+  <a class="anchor" href="#mysql%e5%ae%89%e8%a3%85">#</a>
+</h3>
+<ul>
+<li><code>systemctl start mysqld</code>启动mysql。</li>
+<li>mysql安装后，会自动创建超级用户<code>'root'@'localhost'</code>，其密码在<code>/var/log/mysqld.log</code>，使用<code>grep 'temporary password' /var/log/mysqld.log</code>来寻找密码。</li>
+<li>修改密码<code>ALTER USER 'root'@'localhost' IDENTIFIED BY 'newPassword'</code>。</li>
+<li>mysql8修改成简单的密码会报错（试了下mysql5.7也会报错，解决方法一样）。解决流程如下：
+<ol>
+<li>mysql8增加了一组变量来控制密码的长度、强度等。通过<code>SHOW VARIABLES LIKE 'validate_password%'</code>来查看。</li>
+<li>validate_password.length用来要求密码的最小长度，这个参数不得小于<code>validate_password.number_count+validate_password.special_char_count+2*validate_password.mixed_case_count)</code>。</li>
+<li>validate_password.policy会影响validate_password的其他变量是否有效（除validate_password.check_user_name），它的值可以为0(LOW)，1(MEDIUM)，2(STRONG)。为0则只检查length这个变量。</li>
+<li>更改策略：<code>set global validate_password.policy=0;set global validate_password.number=4;</code></li>
+<li><strong>参考链接：</strong>
+  <a href="https://dev.mysql.com/doc/refman/8.0/en/validate-password-options-variables.html">MySQL :: MySQL 8.0 Reference Manual :: 6.4.3.2 Password Validation Options and Variables</a></li>
+</ol>
+</li>
+</ul>
+<h3 id="mysql配置">
+  mysql配置
+  <a class="anchor" href="#mysql%e9%85%8d%e7%bd%ae">#</a>
+</h3>
+<ul>
+<li>mysql配置文件被划分为多个组，每个组有一个组名，用[]括起来。</li>
+</ul>
+<pre tabindex="0"><code>[mysqld]
+default-storage-engine=InnoDB
+validate_password=OFF
+</code></pre><h2 id="mysql账户管理">
+  mysql账户管理
+  <a class="anchor" href="#mysql%e8%b4%a6%e6%88%b7%e7%ae%a1%e7%90%86">#</a>
+</h2>
+<ul>
+<li>mysql将账户存储在mysq数据库的user表中。</li>
+<li><code>CREATE USER</code>用于创建性的mysql用户；账户首次创建没有特权，需要使用<code>GRANT</code>分配特权。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e">#如果不指定主机，默认就是&#39;%&#39;（所有ip都能访问）</span>
+</span></span><span style="display:flex;"><span>CREATE USER <span style="color:#e6db74">&#39;jeffrey&#39;</span>@<span style="color:#e6db74">&#39;localhost&#39;</span> IDENTIFIED BY <span style="color:#e6db74">&#39;password&#39;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#删除用户。</span>
+</span></span><span style="display:flex;"><span>DROP USER <span style="color:#e6db74">&#39;jeffrey&#39;</span>@<span style="color:#e6db74">&#39;localhost&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#重命名现有的账户,可以用来解决账号只能在本地访问的问题。</span>
+</span></span><span style="display:flex;"><span>RENAME USER <span style="color:#e6db74">&#39;jeffrey&#39;</span>@<span style="color:#e6db74">&#39;localhost&#39;</span> TO <span style="color:#e6db74">&#39;jeff&#39;</span>@<span style="color:#e6db74">&#39;%&#39;</span>
+</span></span></code></pre></div><ul>
+<li><code>ALTER USER</code>修改账户的信息（如修改密码）。不推荐使用<code>SET PASSWORD</code>来修改密码。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e">#修改自己的密码，USER()会返回当前登录用户的用户名和主机名</span>
+</span></span><span style="display:flex;"><span>ALTER USER USER<span style="color:#f92672">()</span> IDENTIFIED BY <span style="color:#e6db74">&#39;password&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#锁定账户</span>
+</span></span><span style="display:flex;"><span>ALTER USER <span style="color:#e6db74">&#39;jeffrey&#39;</span>@<span style="color:#e6db74">&#39;localhost&#39;</span> ACCOUNT LOCK;
+</span></span><span style="display:flex;"><span>ALTER USER <span style="color:#e6db74">&#39;jeffrey&#39;</span>@<span style="color:#e6db74">&#39;localhost&#39;</span> ACCOUNT UNLOCK;
+</span></span></code></pre></div><ul>
+<li><code>GRANT</code>用来对账户进行授权，<code>REVOKE</code>用来撤销账户特权。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e">#授予除GRANT和PROXY外的所有特权</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#还可以授予ALTER、CREATE、DELETE、DROP、SELECT、UPDATE、GRANT OPTION</span>
+</span></span><span style="display:flex;"><span>GRANT ALL ON db1.* TO <span style="color:#e6db74">&#39;jeffrey&#39;</span>@<span style="color:#e6db74">&#39;localhost&#39;</span>;
+</span></span><span style="display:flex;"><span>REVOKE INSERT ON *.* FROM <span style="color:#e6db74">&#39;jeffrey&#39;</span>@<span style="color:#e6db74">&#39;localhost&#39;</span>;
+</span></span><span style="display:flex;"><span>REVOKE ALL <span style="color:#f92672">[</span>PRIVILEGES<span style="color:#f92672">]</span>, GRANT OPTION FROM <span style="color:#e6db74">&#39;jeffrey&#39;</span>@<span style="color:#e6db74">&#39;localhost&#39;</span>;
+</span></span></code></pre></div><h2 id="mysql系统变量">
+  mysql系统变量
+  <a class="anchor" href="#mysql%e7%b3%bb%e7%bb%9f%e5%8f%98%e9%87%8f">#</a>
+</h2>
+<ul>
+<li>mysql有很多的系统变量，能够影响程序的行为，很多命令都能在运行过程中修改。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e">#获取某个变量的信息</span>
+</span></span><span style="display:flex;"><span>show <span style="color:#f92672">[</span>global | session<span style="color:#f92672">]</span> variables like <span style="color:#e6db74">&#39;xxx&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#获取默认存储引擎</span>
+</span></span><span style="display:flex;"><span>show variables like <span style="color:#e6db74">&#39;default_storage_engine&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#获取默认的最大连接数</span>
+</span></span><span style="display:flex;"><span>show variables like <span style="color:#e6db74">&#39;max_connections&#39;</span>;
+</span></span></code></pre></div><h3 id="通过命令行设置系统变量">
+  通过命令行设置系统变量
+  <a class="anchor" href="#%e9%80%9a%e8%bf%87%e5%91%bd%e4%bb%a4%e8%a1%8c%e8%ae%be%e7%bd%ae%e7%b3%bb%e7%bb%9f%e5%8f%98%e9%87%8f">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>mysqld --max_connections<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>
+</span></span></code></pre></div><h3 id="通过配置文件设置系统变量">
+  通过配置文件设置系统变量
+  <a class="anchor" href="#%e9%80%9a%e8%bf%87%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6%e8%ae%be%e7%bd%ae%e7%b3%bb%e7%bb%9f%e5%8f%98%e9%87%8f">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-properties" data-lang="properties"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">[server]</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">max_connections</span><span style="color:#f92672">=</span><span style="color:#e6db74">10</span>
+</span></span></code></pre></div><h3 id="运行过程中修改系统变量">
+  运行过程中修改系统变量
+  <a class="anchor" href="#%e8%bf%90%e8%a1%8c%e8%bf%87%e7%a8%8b%e4%b8%ad%e4%bf%ae%e6%94%b9%e7%b3%bb%e7%bb%9f%e5%8f%98%e9%87%8f">#</a>
+</h3>
+<ul>
+<li>许多系统变量分为全局范围（global）和会话范围（session）。</li>
+<li>并不是所有的变量都有全局范围和会话范围，如max_connections只有全局范围。</li>
+<li>服务器在启动时会给所有的全局变量一个默认值，当有连接的客户端时，服务器为每个连接的客户端维护一组会话变量，并以全局变量的值初始化。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e">#全局设置存储引擎</span>
+</span></span><span style="display:flex;"><span>set global default_sotrage_engine<span style="color:#f92672">=</span>MyISAM
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#本次会话期间设置存储引擎</span>
+</span></span><span style="display:flex;"><span>set <span style="color:#f92672">[</span>session<span style="color:#f92672">]</span> default_storage_engine<span style="color:#f92672">=</span>MyISAM
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#获取会话范围的变量内容</span>
+</span></span><span style="display:flex;"><span>show SESSION VARIABLES LIKE <span style="color:#e6db74">&#39;default_sotrage_engine&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#不写修饰符默认是session范围，如果一个变量没有session范围则显示global范围的值</span>
+</span></span><span style="display:flex;"><span>show VARIABLES LIKE <span style="color:#e6db74">&#39;max_connections&#39;</span>
+</span></span></code></pre></div><h3 id="状态变量">
+  状态变量
+  <a class="anchor" href="#%e7%8a%b6%e6%80%81%e5%8f%98%e9%87%8f">#</a>
+</h3>
+<ul>
+<li>状态变量有关服务器的运行情况。</li>
+<li>状态变量不能人为设置。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>show <span style="color:#f92672">[</span>global | session<span style="color:#f92672">]</span> status like <span style="color:#f92672">[</span>like <span style="color:#e6db74">&#39;xxx&#39;</span><span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#查看当前有多少客户端与服务器建立了连接。</span>
+</span></span><span style="display:flex;"><span>show status like <span style="color:#e6db74">&#39;threads_connected&#39;</span>
+</span></span></code></pre></div><h3 id="补充">
+  补充
+  <a class="anchor" href="#%e8%a1%a5%e5%85%85">#</a>
+</h3>
+<ul>
+<li>
+<p>很多变量不可修改，如<code>version</code>。</p>
+</li>
+<li>
+<p>大部分系统变量都可以当启动选项传入。</p>
+</li>
+</ul>
+<h2 id="mysql字符集">
+  mysql字符集
+  <a class="anchor" href="#mysql%e5%ad%97%e7%ac%a6%e9%9b%86">#</a>
+</h2>
+<h3 id="常见字符集">
+  常见字符集
+  <a class="anchor" href="#%e5%b8%b8%e8%a7%81%e5%ad%97%e7%ac%a6%e9%9b%86">#</a>
+</h3>
+<ul>
+<li>ASCII：共128个字符，用一个字节编码。</li>
+<li>ISO 8859-1：共收录256个字符，在ASCII的基础上扩充了128个西欧常用字符。这个字符集也有一个别名Latin 1。</li>
+<li>GB2312：收录了6763个汉字以及部分其他编码，兼容ASCII字符集，如果该字符集在ASCII字符集中，则采用一字节编码，否则采用两字节编码。</li>
+<li>GBK：在GB2312的基础上进行了扩充，兼容GB2312。</li>
+<li>UTF-8：几乎收录了当前世界上各个国家和地区使用的字符，而且还在不断扩充，采用变长编码的方式，编码一个字符需要1~4个字节。</li>
+</ul>
+<h3 id="mysql的字符集和比较规则">
+  mysql的字符集和比较规则
+  <a class="anchor" href="#mysql%e7%9a%84%e5%ad%97%e7%ac%a6%e9%9b%86%e5%92%8c%e6%af%94%e8%be%83%e8%a7%84%e5%88%99">#</a>
+</h3>
+<h4 id="utf8和utf8mb4">
+  utf8和utf8mb4
+  <a class="anchor" href="#utf8%e5%92%8cutf8mb4">#</a>
+</h4>
+<ul>
+<li>utf8mb3：阉割过的utf-8，只使用1~3个字节表示字符。mysql中的utf8就是utf8-mb3的别名。</li>
+<li>utf8mb4：正宗utf-8，使用1~4表示字符。</li>
+</ul>
+<h4 id="字符集查看">
+  字符集查看
+  <a class="anchor" href="#%e5%ad%97%e7%ac%a6%e9%9b%86%e6%9f%a5%e7%9c%8b">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>SHOW CHARSET <span style="color:#f92672">[</span>LIKE <span style="color:#e6db74">&#39;utf8%&#39;</span><span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#结果中的maxlen表示此字符集最多需要几个字节表示一个字符。</span>
+</span></span></code></pre></div><h4 id="比较规则">
+  比较规则
+  <a class="anchor" href="#%e6%af%94%e8%be%83%e8%a7%84%e5%88%99">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>SHOW COLLATION <span style="color:#f92672">[</span>LIKE <span style="color:#e6db74">&#39;utf8%&#39;</span><span style="color:#f92672">]</span>
+</span></span></code></pre></div><ul>
+<li>比较规则都以与其关联的字符集的名称开头，后面紧跟着该比较规则所应用的语言，如<code>utf8_polish_ci</code>表示波兰语的比较规则，<code>utf8_general_ci</code>是一种通用的比较规则。名称后缀介绍如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>后缀</th>
+<th>英文</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_ai</td>
+<td>accent insensitive</td>
+<td>不区分重音</td>
+</tr>
+<tr>
+<td>_as</td>
+<td>accent sensitive</td>
+<td>区分重音</td>
+</tr>
+<tr>
+<td>_ci</td>
+<td>case insensitive</td>
+<td>不区分大小写</td>
+</tr>
+<tr>
+<td>_cs</td>
+<td>case sensitive</td>
+<td>区分大小写</td>
+</tr>
+<tr>
+<td>_bin</td>
+<td>binary</td>
+<td>以二进制的方式比较</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>每种字符集都有一个默认的比较规则，是在执行SHOW COLLATION语句返回的结果中Default为YES的比较规则。</li>
+</ul>
+<h3 id="各级别的字符集和比较规则">
+  各级别的字符集和比较规则
+  <a class="anchor" href="#%e5%90%84%e7%ba%a7%e5%88%ab%e7%9a%84%e5%ad%97%e7%ac%a6%e9%9b%86%e5%92%8c%e6%af%94%e8%be%83%e8%a7%84%e5%88%99">#</a>
+</h3>
+<ul>
+<li>mysql有4个界别的字符集和比较规则</li>
+</ul>
+<h4 id="服务器级别">
+  服务器级别
+  <a class="anchor" href="#%e6%9c%8d%e5%8a%a1%e5%99%a8%e7%ba%a7%e5%88%ab">#</a>
+</h4>
+<ul>
+<li>mysql提过了两个系统变量来表示服务器级别的字符集和比较规则：</li>
+</ul>
+<pre tabindex="0"><code>#服务器级别的字符集
+SHOW VARIABLES LIKE &#39;character_set_server&#39;
+#服务器级别的比较规则
+SHOW VARIABLES LIKE &#39;collation_server&#39;
+</code></pre><ul>
+<li>通过修改配置文件来修改这两个值</li>
+</ul>
+<pre tabindex="0"><code>[server]
+charset_set_server=utf8
+collation_server=utf8_general_ci
+</code></pre><h4 id="数据库级别">
+  数据库级别
+  <a class="anchor" href="#%e6%95%b0%e6%8d%ae%e5%ba%93%e7%ba%a7%e5%88%ab">#</a>
+</h4>
+<ul>
+<li>
+<p>有两个变量可以看数据库级别的字符集和编码：<code>character_set_database</code>和<code>collation_database</code>，使用方式和上面类似。不能使用这两个变量修改当前数据库的字符集和比较规则。</p>
+</li>
+<li>
+<p>创建数据库和修改数据库时指定</p>
+</li>
+</ul>
+<pre tabindex="0"><code>CREATE DATABASE database1
+	[[DEFAULT] CHARACTER SET utf8]
+	[[DEFAULT] COLLATE utf8_general_ci]
+
+ALTER DATABASE database1
+	[[DEFAULT] CHARACTER SET utf8]
+	[[DEFAULT] COLLATE utf8_general_ci]
+</code></pre><h4 id="表级别">
+  表级别
+  <a class="anchor" href="#%e8%a1%a8%e7%ba%a7%e5%88%ab">#</a>
+</h4>
+<ul>
+<li>可以在创建和修改表的时候指定表的字符集和比较规则。</li>
+</ul>
+<pre tabindex="0"><code>CREATE TABLE table1
+	...
+	...
+	[[DEFALUT] CHARACTER SET utf8]
+	[COLLATE UTF8_general_ci]
+	
+ALTER TABLE table1
+	[[DEFALUT] CHARACTER SET utf8]
+	[COLLATE UTF8_general_ci]
+</code></pre><h4 id="列级别">
+  列级别
+  <a class="anchor" href="#%e5%88%97%e7%ba%a7%e5%88%ab">#</a>
+</h4>
+<ul>
+<li>创建和修改列的时候可以设置列的字符集和比较规则。</li>
+</ul>
+<pre tabindex="0"><code>CREATE TABLE table1(
+	column1 varchar(255) [CHARACTER SET utf8] [COLLATE utf8_general_ci]
+);
+
+ALTER TABLE table1 MODIFY column1 varchar(255) [CHARACTER SET utf8] [COLLATE utf8_general_ci];
+</code></pre><h3 id="补充-1">
+  补充
+  <a class="anchor" href="#%e8%a1%a5%e5%85%85-1">#</a>
+</h3>
+<ul>
+<li>只修改字符集，则比较规则将修改为修改后的字符集的默认的比较规则。</li>
+<li>只修改比较规则，则字符集将变为修改后的比较规则对应的字符集。</li>
+<li>创建或修改列时未显示的指定字符集和比较规则，则该列使用表的字符集和比较规则，如果创建表时未显示的指定字符集和比较规则，则该表默认使用数据库的字符集和比较规则，如果创建数据库时未显示指定字符集和比较规则，则使用mysql服务器的字符集和比较规则。</li>
+<li>mysql5.7及以前的版本，mysql服务器默认的字符集为latin1，mysql8.0后默认字符集为utfmb4。</li>
+</ul>
+<h2 id="mysqldump">
+  mysqldump
+  <a class="anchor" href="#mysqldump">#</a>
+</h2>
+<p>mysqldump可以备份数据库。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>mysqldump <span style="color:#f92672">[</span>options<span style="color:#f92672">]</span> db_name &gt; file_name
+</span></span><span style="display:flex;"><span>mysqldump <span style="color:#f92672">[</span>options<span style="color:#f92672">]</span> --databases db_name ...
+</span></span></code></pre></div><ul>
+<li>默认输出到控制台，可通过<code>&gt;</code>输出到文件。</li>
+<li>可以直接在后面跟一个数据库名，这样就备份了数据库的表的结构和数据。但不包括建库的语句。</li>
+<li>可选的option
+<ul>
+<li><code>--databases</code>：备份指定几个数据库。在备份数据库时会加上<code>CREATE DATBASE...</code>和<code>use xxx</code>的语句，</li>
+<li><code>--all-databases</code>：备份数据库的所有表，和<code>--databases</code>类似。</li>
+<li><code>--add-drop-database</code>：在<code>CREATE DATABASE</code>之前加上<code>DROP DATABASE</code>语句，这个参数与&ndash;databases和&ndash;all-databases同时使用。</li>
+<li><code>--add-drop-table</code>：建表语句之前加上删表语句。</li>
+<li><code>--ignore-table</code>：不备份指定的表。</li>
+<li><code>--tables</code>: 会覆盖&ndash;databases属性<code>mysqldump database1 --tables table1 -u root -p </code>。</li>
+<li><code>--no-data</code>：不备份数据。</li>
+<li><code>--force</code>：-f即使在备份期间发生sql异常也继续。</li>
+<li><code>--host</code>：-h主机。&ndash;user：-u用户。&ndash;password：-p密码。&ndash;port：-P端口。</li>
+<li><code>--xml</code>：输出xml文件。</li>
+<li><code>--set-charset</code>：默认启用的参数。</li>
+</ul>
+</li>
+<li>一个例子</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>mysqldump -u root -p --databases test --add-drop-database &gt; test.sql
+</span></span></code></pre></div><ul>
+<li>
+<p>导入sql文件</p>
+<ul>
+<li>连接上mysql server后使用<code>source</code>命令导入。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>mysql&gt;source dump.sql
+</span></span></code></pre></div><ul>
+<li>从外部导入（sql文件中指定了数据库的情况）。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>shell&gt;mysql<span style="color:#f92672">[</span>-u root -p<span style="color:#f92672">]</span> &lt;dump.sql
+</span></span></code></pre></div><ul>
+<li>外部导入（sql文件中未指定数据库）</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>shell&gt; mysqladmin create db1 <span style="color:#75715e">#如果有该数据库就不用建了</span>
+</span></span><span style="display:flex;"><span>shell&gt; mysql <span style="color:#f92672">[</span>-u root -p<span style="color:#f92672">]</span> db1 &lt; dump.sql <span style="color:#75715e">#指定数据库</span>
+</span></span></code></pre></div></li>
+</ul>
+<p>参考链接：
+  <a href="https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_databases">MySQL :: MySQL 5.7 Reference Manual :: 4.5.4 mysqldump — A Database Backup Program</a></p>
+<h2 id="mysqladmin">
+  mysqladmin
+  <a class="anchor" href="#mysqladmin">#</a>
+</h2>
+<ul>
+<li>mysqladmin可以用来检测服务的配置、创建数据库、关闭mysql服务等。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>mysqladmin <span style="color:#f92672">[</span>options<span style="color:#f92672">]</span> command <span style="color:#f92672">[</span>command-arg<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>command <span style="color:#f92672">[</span>command-arg<span style="color:#f92672">]]</span>
+</span></span></code></pre></div><h3 id="option">
+  option
+  <a class="anchor" href="#option">#</a>
+</h3>
+<ul>
+<li>&ndash;host：指定主机。</li>
+<li>&ndash;port（-P）：指定端口。</li>
+<li>&ndash;user：指定连接用户。</li>
+<li>&ndash;version：显示版本信息并退出。</li>
+<li>&ndash;wait：如果连接失败，等待并重试。</li>
+<li>&ndash;connect-timeout：连接超时的时间。</li>
+</ul>
+<h3 id="command">
+  command
+  <a class="anchor" href="#command">#</a>
+</h3>
+<ul>
+<li>create/drop db_name：创建/删除数据库。</li>
+<li>password &ldquo;new_password&rdquo;：修改密码，在windows上确保使用双引号&quot;，使用单引号&rsquo;的话单引号会被识别为密码的一部分。</li>
+<li>shutdown：关闭服务。</li>
+<li>status：显示一个简短的服务状态消息。显示的结果如下：
+<ul>
+<li>Uptime：mysql运行了多少秒。</li>
+<li>Threads：客户端连接的线程数（active）。</li>
+<li>Questions：从服务启动开始客户端查询的数量。</li>
+<li>Slow queries：查询超过<code>long_query_time</code>秒的数量。</li>
+<li>Opens：服务已经打开了多少张表。</li>
+<li>Flush tables：<code>flush-*,refresh,reload</code>这些指令服务执行的次数。</li>
+<li>Open tables：当前打开了多少张表。</li>
+</ul>
+</li>
+<li>version：显示服务的版本信息。</li>
+</ul>
+<p><strong>参考链接（官方）：</strong>
+  <a href="https://dev.mysql.com/doc/refman/5.7/en/mysqladmin.html"> mysqladmin — A MySQL Server Administration Program</a>
+<strong>参考链接（汉化）：</strong>
+  <a href="https://www.docs4dev.com/docs/zh/mysql/5.7/reference/mysqladmin.html">mysqladmin-MySQL 服务器管理程序 | Docs4dev</a></p>
+<h2 id="sql">
+  sql
+  <a class="anchor" href="#sql">#</a>
+</h2>
+<h3 id="数据类型">
+  数据类型
+  <a class="anchor" href="#%e6%95%b0%e6%8d%ae%e7%b1%bb%e5%9e%8b">#</a>
+</h3>
+<ol>
+<li>整数数据类型 tinyint（1字节）、smallint（2字节）、mediumint（3字节）、int（4字节）、bigint（8字节）。</li>
+<li>定点数据类型 <code>decimal(5,2)</code>，其中5是精度，表示有效位数；2表示小数点后几位。</li>
+<li>浮点类型 float（4字节）、double（8字节）。</li>
+<li>日期和时间类型 DATE（YYYY-MM-DD）、DATETIME（YYYY-MM-DD hh:mm:ss）、TIMESTAMP（范围是UTC1970-01-01 00:00:01-UTC2038-01-19 03:14:07)、TIME（范围-838:59:59-838:59:59）、YEAR（范围是1901-2155）</li>
+<li>字符串类型 CHAR（长度为声明时的长度，范围0-255）、VARCHAR（可变长度，范围时0-65535）、4种TEXT。</li>
+<li>字节串类型 BINARY、VARCHAR、四种BLOB。</li>
+</ol>
+<ul>
+<li>可以把BLOB看作VARBINARY，把TEXT看作VARCHAR，但它们有一点点不同：①对于BLOB和TEXT列上的索引，必须要指定缩影前缀长度，对应VARBINARY和VARCHAR，这是可选的；②BLOB和TEXT所在的列不能有默认值。<strong>参考链接：</strong>
+  <a href="https://dev.mysql.com/doc/refman/5.7/en/blob.html">MySQL :: MySQL 5.7 Reference Manual :: 11.3.4 The BLOB and TEXT Types</a></li>
+</ul>
+<h3 id="database">
+  DATABASE
+  <a class="anchor" href="#database">#</a>
+</h3>
+<ul>
+<li>创建数据库</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-mysql" data-lang="mysql"><span style="display:flex;"><span>CRATE <span style="color:#66d9ef">DATABASE</span> db_name [[<span style="color:#66d9ef">DEFAULT</span>] <span style="color:#66d9ef">CHARACTER</span> <span style="color:#66d9ef">SET</span> [<span style="color:#f92672">=</span>] utf8];
+</span></span></code></pre></div><h3 id="table">
+  TABLE
+  <a class="anchor" href="#table">#</a>
+</h3>
+<ul>
+<li>克隆和复制。</li>
+</ul>
+<pre tabindex="0"><code>#从origin_tb1克隆一个新表（只有结构，没有数据）。
+CREATE TABLE new_tb1 LIKE origin_tb1;
+#复制origin_tb1表，（结构和数据都复制了）。
+CREATE TABLE new_tb1 AS SELECT * FROM origin_tb1;
+</code></pre><h4 id="alter">
+  ALTER
+  <a class="anchor" href="#alter">#</a>
+</h4>
+<pre tabindex="0"><code>#单个alter table可以跟多个修改语句，用逗号隔开
+#删除
+ALTER TABLE t2 DROP COLUMN c, DROP COLUMN d;
+</code></pre><h5 id="changemodifyalter">
+  change、modify、alter
+  <a class="anchor" href="#changemodifyalter">#</a>
+</h5>
+<ul>
+<li>change可以重命名列、修改列的定义。配合FIRST或AFTER，可以指定列的位置。</li>
+<li>MODIFY可以修改列的定义，但无法修改它的名字。配合FIRST或AFTER能指定列的名字。</li>
+<li>ALTER只能修改列的默认值。</li>
+</ul>
+<pre tabindex="0"><code>#将a的名字改为b，修改定义
+ALTER TABLE t1 CHANGE a b BIGINT NOT NULL;
+#不修改a的名字，只修改定义
+ALTER TABLE t1 CHANGE a a BIGINT NOT NULL;
+#修改b的定义
+ALTER TABLE t1 MODIFY b INT NOT NULL;
+#如果只想要修改b的名字而不去修改它的定义，就需要将定义再写一遍
+ALTER TABLE t1 CHANGE b a INT NOT NULL;
+#除了如PRIMARY KEY或UNIQUE属性，其他的如DEFAULT COMMENT等需要在修改时带上，否则修改后的列是没有这些属性。
+#使用CHANGE或MODIFY，myslq会尝试将列中数据转化未新的类型。
+#当使用CHANGE修改列名后，使用了该列的VIEW需要修改。
+#ALTER TABLE xxx ALTER ...SET DEFAULT xxx或ALTER ... DROP DEFAULT。如果旧的默认值被删除而列不可以为NULL，mysql将为其分配默认值（数字类型默认为0，如果指定了AUTO_INCREMENT，默认值是序列中的下一个值，对于EMUM，默认值为第一个枚举值，对于其他字符串类型，默认值为空字符串）。
+
+ALTER TABLE `service`.`email_relation` RENAME TO  `service`.`relation` ;
+ALTER TABLE `service`.`relation` CHANGE COLUMN `email` `mail` VARCHAR(64) NULL DEFAULT NULL ;
+</code></pre><ul>
+<li>
+  <a href="https://dev.mysql.com/doc/refman/5.7/en/alter-table.html">MySQL :: MySQL 5.7 Reference Manual :: 13.1.8 ALTER TABLE Statement</a></li>
+</ul>
+<h3 id="show">
+  SHOW
+  <a class="anchor" href="#show">#</a>
+</h3>
+<pre tabindex="0"><code>#显示属性
+SHOW COLUMNS FROM MYSQL.USER;
+#显示建库语句，例：
+SHOW CREATE DATABASE MYSQL;
+#显示建表语句，例：
+SHOW CREATE TABLE MYSQL.USER;
+#显示创建该用户的语句
+SHOW CREATE USER root;
+#显示分配个某用户的特权
+SHOW GRANTS [FOR user];
+show grants for &#39;joe&#39;@&#39;home.example.com&#39;
+</code></pre>
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/git/git%E8%B5%B7%E6%AD%A5/">git起步</a>
+    </h2>
+    
+  <h5>2021-01-28</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/git/">git</a>
+  </div>
+  
+
+
+
+
+    <p><ul>
+<li>git：每一次的clone操作，实际上都是对一次代码仓库的完整备份。</li>
+<li>git中文件的三种状态：已修改（modified）和已暂存（staged），已提交（committed）：
+<ul>
+<li>已修改<sup><a id="modified" herf="javascript:;">tag1</a></sup>表示已修改了某个文件，但还没有提交保存（git add之前）；</li>
+<li>已暂存表示把已修改的文件放在下次提交的清单中（git add 之后）;</li>
+<li>已提交表示该文件已经被安全保存在本地数据库中（git commit之后）；</li>
+</ul>
+</li>
+<li>每个项目都有一个git目录（.git），git工作流程如下：
+<ol>
+<li>在工作目录（.git的兄弟目录）中修改某些文件；</li>
+<li>对修改后的文件保存到暂存区域；</li>
+<li>提交跟新，将暂存区域的文件快照转储到git目录中。</li>
+<li>提交到远程仓库。</li>
+</ol>
+</li>
+</ul>
+<h2 id="开始">
+  开始
+  <a class="anchor" href="#%e5%bc%80%e5%a7%8b">#</a>
+</h2>
+<ol>
+<li>安装git，配置个人用户名称和电子邮件地址。
+<code>git config --global user.name &quot;xiaoxiang&quot;</code>
+<code>git config --global user.email &quot;xiaoxiang@xxxx.com&quot;</code></li>
+<li>可以使用<code>git config --list</code>查看已有的配置信息。</li>
+<li>从现有的git仓库克隆<code>git clone [远程仓库]</code>。</li>
+<li>工作目录下的文件分为两种状态：已跟踪和未跟踪：
+<ul>
+<li>已跟踪是本地仓库中有的文件，初次克隆某个仓库时，工作目录的所有文件都是已跟踪的文件。</li>
+<li>未跟踪是新创建的文件，即对该文件从来没有执行git add命令。</li>
+<li>当编辑过某些文件后，git将这些文件标记为已修改，这就跟
+  <a href="/#modified">tag1</a>对于上了。</li>
+</ul>
+</li>
+<li>使用<code>git add</code>开始跟踪一个新文件，<code>git add .</code>暂存当前路径下的所有的已修改的文件。
+<ul>
+<li>通过<code>git status</code>可以查看文件的状态。</li>
+<li>取消已暂存的状态<code>git reset [--mixed] HEAD  &quot;文件名&quot;</code>，该方式会清除暂存区的数据，保留工作目录的数据。</li>
+</ul>
+</li>
+<li>使用<code>git commit -m &quot;提交说明&quot;</code>来提交暂存区的数据到<strong>本地仓库</strong>。</li>
+<li>使用<code>git push origin master</code> 将修改提交到远程仓库。（使用<code>ssh-keygen</code>生成密钥，并将公钥放到git上去，以后提交就不用输账号和密码了）。
+<ul>
+<li><code>git push [remote-name] [branch-name]</code>，这是完整命令。</li>
+</ul>
+</li>
+</ol>
+<h2 id="gitignore">
+  .gitignore
+  <a class="anchor" href="#gitignore">#</a>
+</h2>
+<ul>
+<li>
+<p>可以创建一个.gitignore文件，来指明哪些文件不需要被提交到仓库。</p>
+</li>
+<li>
+<p><code>.gitignore</code>文件的格式规范如下：</p>
+<ul>
+<li>所有空行或者以<code>#</code>开头的行都会被Git忽略。</li>
+<li>忽略指定的模式以外的文件或者目录，可以在模式前加上<code>!</code>。</li>
+<li>匹配模式以<code>/</code>开头防止递归。</li>
+<li>匹配模式以<code>/</code>结尾防止递归。</li>
+<li><code>*</code>匹配零个或多个任意字符，<code>[a-c]</code>匹配任意一个列在方括号中的字符，<code>?</code>只匹配任何一个字符，<code>**</code>表示匹配任意中间目录。</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e">#忽略所有的.a文件</span>
+</span></span><span style="display:flex;"><span>*.a
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#跟踪所有的lib.a，即使在前面忽略了.a文件</span>
+</span></span><span style="display:flex;"><span>!lib.a
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#只忽略当前目录下的TODO文件，而不忽略subdir/TODO文件</span>
+</span></span><span style="display:flex;"><span>/TODO
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#忽略任何目录下名为build的文件夹</span>
+</span></span><span style="display:flex;"><span>build/
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#忽略doc/notes.txt，但不忽略doc/server/arch.txt</span>
+</span></span><span style="display:flex;"><span>doc/*.txt
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#忽略doc/目录及其所有子目录下的.pdf文件</span>
+</span></span><span style="display:flex;"><span>doc/**/*.pdf
+</span></span></code></pre></div><h2 id="git-stash">
+  git stash
+  <a class="anchor" href="#git-stash">#</a>
+</h2>
+<ul>
+<li><code>git stash push [-m &quot;暂存的备注&quot;]</code> 暂存当前的更改，并将本地恢复到HEAD。-m是可选的，该参数会给此次暂存加个备注。</li>
+<li><code>git stash list</code> 列出当前所有的暂存，最新的是<code>stash@{0}</code>。</li>
+<li><code>git stash pop</code>  应用stash@{0}，并删除stash@{0}。</li>
+<li><code>git stash drop stash@{0}</code> 从stash列表中删除stash@{0}。</li>
+<li><code>git stash apply stash@{0}</code> 应用stash@{0}，但不删除stash@{0}</li>
+</ul>
+<hr>
+<ul>
+<li>查看文件修改了什么地方，可以使用<code>git diff</code>指令。</li>
+<li>查看提交历史<code>git log</code>，后跟<code>-2</code>只会显示最近两次的跟新。</li>
+<li>切换到其他分支<code>git checkout master</code>。</li>
+<li><code>git tag</code>可以给某一时间点的版本打标签。</li>
+<li><code>git update-index --assume-unchanged 文件名</code>：取消本地跟踪</li>
+<li><code>git update-index --no-assume-unchanged 文件名</code>：恢复本地跟踪</li>
+<li>协议：
+<ul>
+<li>ssh协议：唯一一个同时支持读写操作的网络协议，但无法实现对仓库的匿名访问。</li>
+<li>git协议：该协议通常用来克隆，<strong>通常</strong>不能用来推送（因为没有授权机制，如果允许推送操作，每一个知道该URL的人都有推送权限），比http协议高效。</li>
+<li>http/s协议：容易搭建，通常用来克隆。</li>
+</ul>
+</li>
+</ul>
+<h2 id="git-remote">
+  git remote
+  <a class="anchor" href="#git-remote">#</a>
+</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e">#列出指定的每一个远程服务器的简写</span>
+</span></span><span style="display:flex;"><span>git remote
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#显示远程仓库的简写与对应的URL</span>
+</span></span><span style="display:flex;"><span>git remote -v
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#查看某个远程仓库的更多信息，会列出远程仓库的URL和跟踪分支的信息。</span>
+</span></span><span style="display:flex;"><span>git remote show origin
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#添加一个远程仓库，并指定一个简写</span>
+</span></span><span style="display:flex;"><span>git remote add origin https://xxx.xxx/xxx/xxx
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#修改仓库的远程地址</span>
+</span></span><span style="display:flex;"><span>git remote set-url origin 仓库地址
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#远程仓库的重命名</span>
+</span></span><span style="display:flex;"><span>git remote rename origin paul
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#移除一个远程仓库</span>
+</span></span><span style="display:flex;"><span>git remote remove paul
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#git fetch只会将数据下载到本地仓库，并不会合并。需要手动合并</span>
+</span></span><span style="display:flex;"><span>git fetch origin
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#自动抓取远程分支并合并到本地分支</span>
+</span></span><span style="display:flex;"><span>git pull
+</span></span></code></pre></div><h2 id="git-branch">
+  git branch
+  <a class="anchor" href="#git-branch">#</a>
+</h2>
+<ul>
+<li>只有在本地修改或者产生了文件才会创建主分支master，这个时候才能创建新分支。</li>
+<li><code>git branch</code>查看所有的分支，<code>*</code>表示当前分支。</li>
+<li><code>git checkout -b testing</code>相当于<code>git branch testing (创建一个分支)和 git checkout testing（切到该分支）</code></li>
+<li>删除分支<code>git branch -d testing</code></li>
+<li>分支的合并：在当前分支下（如master），执行<code>git merge testing</code>，会创建新的commit对象，master也会指向他。该commit对象有两个父指针。</li>
+<li>分支的合并会用两个分支的末端以及他们的共同祖先进行一次的三方合并，当两个分支在同一个commit链上时，旧一点的那个分支发起合并，则将其直接指向了新一点的那个分支。</li>
+<li>有时候分支合并会失败，比如两个分支同时修改了相同的文件。这个时候<code>git merge testing</code>仍然做了合并，但是没有提交，可以使用<code>git status</code>查看，此时就需要手动合并了。</li>
+<li><code>git branch --merged</code>查看那些分支已被并入当前分支。<code>git branch --no-merged</code>查看尚未合并的分支。</li>
+</ul>
+<p><strong>参考链接：</strong>
+  <a href="http://git.oschina.net/progit/">Pro Git</a></p>
+<p><strong>参考链接：</strong>
+  <a href="https://git-scm.com/book/zh/v2/Git-%e5%9f%ba%e7%a1%80-%e8%ae%b0%e5%bd%95%e6%af%8f%e6%ac%a1%e6%9b%b4%e6%96%b0%e5%88%b0%e4%bb%93%e5%ba%93">Git - 记录每次更新到仓库 (git-scm.com)</a></p>
+<p><strong>参考链接：</strong><a href="https://gitee.com/opensource-guide/git_tutorial/Git 命令详解/常用 Git 命令/#git-命令手册">开源指北</a></p>
     </p>
   </article>
   

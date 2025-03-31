@@ -110,7 +110,7 @@ https://github.com/alex-shpak/hugo-book
 		  <li>
 			<a href="/tags/bios/"  class="flex justify-between">
 			  <span>bios</span>
-			  <span>12</span>
+			  <span>10</span>
 			</a>
 		  </li>
 		
@@ -327,7 +327,7 @@ https://github.com/alex-shpak/hugo-book
 		  <li>
 			<a href="/tags/bios/"  class="flex justify-between">
 			  <span>bios</span>
-			  <span>12</span>
+			  <span>10</span>
 			</a>
 		  </li>
 		
@@ -618,122 +618,6 @@ https://github.com/alex-shpak/hugo-book
   
   <article class="markdown book-post">
     <h2>
-      <a href="/posts/bios/PCIe%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84/">PCIe层次结构</a>
-    </h2>
-    
-  <h5>2024-10-08</h5>
-
-
-
-  
-
-  
-  <div>
-    
-      <a href="/tags/bios/">bios</a>
-  </div>
-  
-
-
-
-
-    <p><table>
-<thead>
-<tr>
-<th>缩写</th>
-<th>全称</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>TLP</td>
-<td>Transaction Layer Packet</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>PCIe包括事务层、数据链路层和物理层</li>
-<li>
-  <img src="/img/bios/pcie/layer.jpg" alt="" /></li>
-</ul>
-<h2 id="事务层">
-  事务层
-  <a class="anchor" href="#%e4%ba%8b%e5%8a%a1%e5%b1%82">#</a>
-</h2>
-<ul>
-<li>
-<p>定义了四种事务类型</p>
-<table>
-<thead>
-<tr>
-<th>地址空间</th>
-<th>事务类型</th>
-<th>介绍</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Memory</td>
-<td>READ/WRITE</td>
-<td>从MMIO读取/写入数据</td>
-</tr>
-<tr>
-<td>I/O</td>
-<td>READ/WRITE</td>
-<td>从I/O空间读取/写入数据</td>
-</tr>
-<tr>
-<td>Configuration</td>
-<td>READ/WRITE</td>
-<td>设备Function配置空间</td>
-</tr>
-<tr>
-<td>Message</td>
-<td>Baseline</td>
-<td>用于支持设备之间的事件交流</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li>
-<p>当访问PCIe设备时，传输的保温会先通过事务层封装成一个或多个TLP。一个TLP包含多个可选TLP Prefixes、一个TLP header、一个数据载荷和一个可选的TLP Digest。数据载荷的最大长度为4096。TLP结构如下：</p>
-</li>
-<li>
-<p>
-  <img src="/img/bios/pcie/tlp.jpg" alt="" /></p>
-</li>
-<li>
-<p>事务包括Requests和Completions。</p>
-</li>
-</ul>
-<h3 id="tlp通用header">
-  TLP通用Header
-  <a class="anchor" href="#tlp%e9%80%9a%e7%94%a8header">#</a>
-</h3>
-<ul>
-<li>
-  <img src="/img/bios/pcie/tlp_common_header.jpg" alt="" /></li>
-<li>TLP Header都有如下通用的结构，且头部总共为3DW/4DW。</li>
-<li>
-  <img src="/img/bios/pcie/tlp_header.jpg" alt="" /></li>
-<li>Fmt和Type表示事务类型。</li>
-<li></li>
-<li>Fmt支持如下的值</li>
-<li>
-  <img src="/img/bios/pcie/tlp_fmt.jpg" alt="" /></li>
-<li>Fmt和Type支持如下组合：</li>
-<li>
-  <img src="/img/bios/pcie/tlp_fmt_type_1.jpg" alt="" /></li>
-<li>
-  <img src="/img/bios/pcie/tlp_fmt_type_2.jpg" alt="" /></li>
-<li>
-  <img src="/img/bios/pcie/tlp_fmt_type_3.jpg" alt="" /></li>
-</ul>
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
       <a href="/posts/bios/PCIe%E9%94%99%E8%AF%AF%E4%B8%8A%E6%8A%A5/">PCIe错误上报</a>
     </h2>
     
@@ -838,11 +722,7 @@ https://github.com/alex-shpak/hugo-book
   <img src="/img/bios/pcie/error_msg_control.jpg" alt="" /></p>
 </li>
 <li>
-<p>某些情况下，NON-FATAL 的错误可能是不需要执行任何的恢复动作的，比如软件尝试从一个不存在的设置执行一个读取操作，Completion中的UR Status将会报告一个错误，此时如果软件为Completer额外产生一个ERR_NONFATAL Message，就可能会导致系统运行异常。</p>
-</li>
-<li>
-<p>Advisory Non-Fatal Error cases可以让在产生NON_FATAL ERROR时发送ERR_COR Message。如果需要让Advisory Non-Fatal Error cases处理NON_FATAL ERROR为更严重的情况，可以将该ERR的严重级别设置为FATAL，这种情况下Agent将会以ERR_FATAL发出该错误。
-下图描述了ERROR MESSAGES的生成流程。</p>
+<p>NON-FATAL 的错误可能是不需要执行任何的恢复动作的，比如软件尝试从一个不存在的设置执行一个读取操作，Completion中的UR Status将会报告一个错误，此时如果软件为Completer额外产生一个ERR_NONFATAL Message，就可能会导致系统运行异常；Advisory Non-Fatal Error cases可以让在产生NON_FATAL ERROR时发送ERR_COR Message。如果将ERR的严重级别设置为FATAL，ERR将会以ERR_FATAL发出该错误。</p>
 </li>
 </ul>
     </p>
@@ -1695,6 +1575,35 @@ GRUB_SERIAL_COMMAND=&#34;serial --speed=115200 --unit=0 --word=8 --parity=no --s
 </ul>
 <pre tabindex="0"><code>*(char(*)[4096])bitmap
 </code></pre>
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/c%E8%AF%AD%E8%A8%80/c%E8%AF%AD%E8%A8%80%E7%BB%83%E4%B9%A0/">C语言练习</a>
+    </h2>
+    
+  <h5>2023-06-09</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/c%E8%AF%AD%E8%A8%80/">c语言</a>
+  </div>
+  
+
+
+
+
+    <p><ul>
+<li>练习程序。</li>
+</ul>
+        <a href="/posts/c%E8%AF%AD%E8%A8%80/c%E8%AF%AD%E8%A8%80%E7%BB%83%E4%B9%A0/">查看更多</a>
+      
     </p>
   </article>
   

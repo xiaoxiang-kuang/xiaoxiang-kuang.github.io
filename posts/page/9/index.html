@@ -110,7 +110,7 @@ https://github.com/alex-shpak/hugo-book
 		  <li>
 			<a href="/tags/bios/"  class="flex justify-between">
 			  <span>bios</span>
-			  <span>12</span>
+			  <span>10</span>
 			</a>
 		  </li>
 		
@@ -327,7 +327,7 @@ https://github.com/alex-shpak/hugo-book
 		  <li>
 			<a href="/tags/bios/"  class="flex justify-between">
 			  <span>bios</span>
-			  <span>12</span>
+			  <span>10</span>
 			</a>
 		  </li>
 		
@@ -455,268 +455,6 @@ https://github.com/alex-shpak/hugo-book
  
         </header>
         
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/javaee/logback/">logback</a>
-    </h2>
-    
-  <h5>2021-08-23</h5>
-
-
-
-  
-
-  
-  <div>
-    
-      <a href="/tags/java/">java</a>
-  </div>
-  
-
-
-
-
-    <p><h3 id="例">
-  例：
-  <a class="anchor" href="#%e4%be%8b">#</a>
-</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#f92672">&lt;configuration&gt;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;appender</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;STDOUT&#34;</span> <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;ch.qos.logback.core.ConsoleAppender&#34;</span><span style="color:#f92672">&gt;</span> 
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;encoder&gt;</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&lt;pattern&gt;</span>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n<span style="color:#f92672">&lt;/pattern&gt;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;/encoder&gt;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;/appender&gt;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;appender</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;FILE&#34;</span> <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;ch.qos.logback.core.FileAppender&#34;</span><span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;file&gt;</span>testFile.log<span style="color:#f92672">&lt;/file&gt;</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">&lt;!--         将 immediateFlush 设置为 false 可以获得更高的日志吞吐量 --&gt;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;immediateFlush&gt;</span>false<span style="color:#f92672">&lt;/immediateFlush&gt;</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">&lt;!--         默认为 ch.qos.logback.classic.encoder.PatternLayoutEncoder --&gt;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;encoder&gt;</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&lt;pattern&gt;</span>%-4relative [%thread] %-5level %logger{35} - %msg%n<span style="color:#f92672">&lt;/pattern&gt;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;/encoder&gt;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;/appender&gt;</span>
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;appender</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;SYSLOG&#34;</span> <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;ch.qos.logback.classic.net.SyslogAppender&#34;</span><span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;syslogHost&gt;</span>remote_home<span style="color:#f92672">&lt;/syslogHost&gt;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;port&gt;</span>5140<span style="color:#f92672">&lt;/port&gt;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;facility&gt;</span>AUTH<span style="color:#f92672">&lt;/facility&gt;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;suffixPattern&gt;</span>[%thread] %logger %msg<span style="color:#f92672">&lt;/suffixPattern&gt;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;/appender&gt;</span>
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;root</span> <span style="color:#a6e22e">level=</span><span style="color:#e6db74">&#34;INFO&#34;</span><span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;appender-ref</span> <span style="color:#a6e22e">ref=</span><span style="color:#e6db74">&#34;STDOUT&#34;</span> <span style="color:#f92672">/&gt;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;/root&gt;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;logger</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;space.xiaoxiang&#34;</span> <span style="color:#a6e22e">level=</span><span style="color:#e6db74">&#34;debug&#34;</span> <span style="color:#a6e22e">additivity=</span><span style="color:#e6db74">&#34;true&#34;</span><span style="color:#f92672">/&gt;</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/configuration&gt;</span>
-</span></span></code></pre></div><h2 id="appender">
-  appender
-  <a class="anchor" href="#appender">#</a>
-</h2>
-<h3 id="appenderbase">
-  AppenderBase
-  <a class="anchor" href="#appenderbase">#</a>
-</h3>
-<ul>
-<li>是一个抽象类，实现了Appender接口，提供了基本方法供appender使用。</li>
-</ul>
-<h3 id="outputstreamappender">
-  OutputStreamAppender
-  <a class="anchor" href="#outputstreamappender">#</a>
-</h3>
-<ul>
-<li>是ConsoleAppender、FileAppender以及 RollingFileAppender的父类。</li>
-</ul>
-<h3 id="consoleappender">
-  ConsoleAppender
-  <a class="anchor" href="#consoleappender">#</a>
-</h3>
-<ul>
-<li>将日志输出到控制台，ConsoleAppender通过用户指定的encoder格式化日志事件。</li>
-</ul>
-<h3 id="fileappender">
-  FileAppender
-  <a class="anchor" href="#fileappender">#</a>
-</h3>
-<ul>
-<li>将日志输出到文件中，通过<code>file</code>来指定目标文件。</li>
-</ul>
-<h3 id="rollingfileappender">
-  RollingFileAppender
-  <a class="anchor" href="#rollingfileappender">#</a>
-</h3>
-<ul>
-<li>具有轮转日志文件的功能。比如在满足特定的条件后，将日志输出到另一个文件。</li>
-</ul>
-<h3 id="socketappender-和-sslsocketappender">
-  SocketAppender 和 SSLSocketAppender
-  <a class="anchor" href="#socketappender-%e5%92%8c-sslsocketappender">#</a>
-</h3>
-<ul>
-<li>可以将日志传输到远端机器。</li>
-</ul>
-<h3 id="smtpappender">
-  SMTPAppender
-  <a class="anchor" href="#smtpappender">#</a>
-</h3>
-<ul>
-<li>收集日志到缓冲区中，当用户指定的事件发生时，将从缓冲区中取出适当的内容进行发送。</li>
-</ul>
-<h3 id="dbappender">
-  DBAppender
-  <a class="anchor" href="#dbappender">#</a>
-</h3>
-<ul>
-<li>将日志插到三张数据库表中，三张表分别是logging_event, logging_event_property 与 logging_event_exception。</li>
-</ul>
-<h3 id="syslogappender">
-  SyslogAppender
-  <a class="anchor" href="#syslogappender">#</a>
-</h3>
-<ul>
-<li>可以将日志发送给远程的syslog守护线程。</li>
-<li>日志事件的严重程度是根据日志事件的级别转换来的，DEBUG被转换为7，INFO被转换为6，WARN为4，ERROR为3。</li>
-</ul>
-<h3 id="siftingappender">
-  SiftingAppender
-  <a class="anchor" href="#siftingappender">#</a>
-</h3>
-<ul>
-<li>根据给定的运行时属性分离或者过滤日志。</li>
-</ul>
-<h3 id="asyncappender">
-  AsyncAppender
-  <a class="anchor" href="#asyncappender">#</a>
-</h3>
-<ul>
-<li>作为一个事件调度器存在，必须调用其他appender来完成操作。</li>
-</ul>
-<h2 id="encoder">
-  encoder
-  <a class="anchor" href="#encoder">#</a>
-</h2>
-<ul>
-<li>encoder将日志事件转换为字节数组，同时将字节数组写入到一个OutputStream中。</li>
-<li>PatternLayoutEncoder是目前唯一真正有用的encoder，它仅包裹了一个PatternLayout就完成了大部分的工作。</li>
-</ul>
-<h2 id="layout">
-  layout
-  <a class="anchor" href="#layout">#</a>
-</h2>
-<ul>
-<li>layout负责将日志事件转化为字符串。</li>
-</ul>
-<h3 id="patternlayout">
-  PatternLayout
-  <a class="anchor" href="#patternlayout">#</a>
-</h3>
-<ul>
-<li>
-<p>可以通过调整PatternLayout的转换模式来进行定制，PatternLayout的转换模式由字面量和转换说明符组成，每一个转换说明符由一个百分号开始<code>%</code>，后面跟随格式修改器，以及可用大括号括起来的转换字符和可选的参数。格式修改器可以对字段进行对齐，修改最大最小宽度等。</p>
-</li>
-<li>
-<p>括号用于对转换模式进行分组，<code>(</code>和<code>)</code>都有特殊的含义。</p>
-</li>
-<li>
-<p>名为<code>com.foo</code>的logger是名为<code>com.foo.bar</code>的logger的父级。（命名层次结构）</p>
-</li>
-<li>
-<p>root logger的默认层级为DEBUG。</p>
-</li>
-<li>
-<p>层级的排序：TRACE &lt; DEBUG &lt; INFO &lt; WARN &lt; ERROR。</p>
-</li>
-<li>
-<p>appender具有叠加性：logger L的日志输出会遍历L和它父级中所有的appender，如果L的某个上级P，P设置了additivity=false，那么L的日志输出会遍历从L到P（不包括P）的所有appender。additivity默认为true。</p>
-</li>
-</ul>
-<h3 id="logback初始化步骤">
-  logback初始化步骤
-  <a class="anchor" href="#logback%e5%88%9d%e5%a7%8b%e5%8c%96%e6%ad%a5%e9%aa%a4">#</a>
-</h3>
-<ol>
-<li>在类路径下寻找名为logback-test.xml。</li>
-<li>如果没找到，找名为logback.groovy的文件。</li>
-<li>如果没找到，找名为logback.xml的文件。</li>
-<li>如果没找到，会用ServiceLoader工具去解析<code>META-INF\services\ch.qos.logback.classic.spi.Configutator</code>路径下实现了Configurator接口的类</li>
-<li>如果还没找到，logback会通过BasicConfigurator为自己进行配置，日志将会全部打印在控制台。</li>
-</ol>
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/javaee/oAuth/">oAuth</a>
-    </h2>
-    
-  <h5>2021-08-20</h5>
-
-
-
-  
-
-  
-  <div>
-    
-      <a href="/tags/java/">java</a>
-  </div>
-  
-
-
-
-
-    <p><ul>
-<li>oAuth是一种授权机制，数据所有者告诉授权系统，允许第三方应用获取这些数据，授权系统从而产生一个短期的进入令牌（token），第三方应用通过令牌获取数据。</li>
-</ul>
-<h3 id="授权码方式">
-  授权码方式
-  <a class="anchor" href="#%e6%8e%88%e6%9d%83%e7%a0%81%e6%96%b9%e5%bc%8f">#</a>
-</h3>
-<p>第三方应用（记为a）访问CALLBACK_URL这个网站，会重定向到授权系统（记为b），url如1所示</p>
-<h4 id="1-请求授权码">
-  1. 请求授权码
-  <a class="anchor" href="#1-%e8%af%b7%e6%b1%82%e6%8e%88%e6%9d%83%e7%a0%81">#</a>
-</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>https:<span style="color:#f92672">//</span>b.com<span style="color:#f92672">/</span>oauth<span style="color:#f92672">/</span>authorize<span style="color:#f92672">?</span>
-</span></span><span style="display:flex;"><span>  response_type<span style="color:#f92672">=</span>code<span style="color:#f92672">&amp;</span> <span style="color:#f92672">#</span><span style="color:#960050;background-color:#1e0010">表示参数要求返回授权码</span>
-</span></span><span style="display:flex;"><span>  client_id<span style="color:#f92672">=</span>CLIENT_ID<span style="color:#f92672">&amp;</span> <span style="color:#f92672">#</span><span style="color:#960050;background-color:#1e0010">客户端</span>id<span style="color:#960050;background-color:#1e0010">，</span>b<span style="color:#960050;background-color:#1e0010">就知道是谁在请求</span>
-</span></span><span style="display:flex;"><span>  redirect_uri<span style="color:#f92672">=</span>CALLBACK_URL<span style="color:#f92672">&amp;</span> <span style="color:#f92672">#</span>b<span style="color:#960050;background-color:#1e0010">接收请求后跳转的网站</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">scope</span><span style="color:#f92672">=</span><span style="color:#66d9ef">read</span> <span style="color:#f92672">#</span><span style="color:#960050;background-color:#1e0010">授权范围</span>
-</span></span></code></pre></div><h4 id="2-返回授权码">
-  2. 返回授权码
-  <a class="anchor" href="#2-%e8%bf%94%e5%9b%9e%e6%8e%88%e6%9d%83%e7%a0%81">#</a>
-</h4>
-<p>在授权系统登录成功后，会重定向到<code>CALLBACK_URL?code=AUTHORIZATION_CODE</code>，code就是授权码。</p>
-<h4 id="3-请求令牌">
-  3. 请求令牌
-  <a class="anchor" href="#3-%e8%af%b7%e6%b1%82%e4%bb%a4%e7%89%8c">#</a>
-</h4>
-<p>CALLBACK_URL这个网站会重定向到授权系统，url如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>https:<span style="color:#f92672">//</span>b.com<span style="color:#f92672">/</span>oauth<span style="color:#f92672">/</span>token<span style="color:#f92672">?</span>
-</span></span><span style="display:flex;"><span> client_id<span style="color:#f92672">=</span>CLIENT_ID<span style="color:#f92672">&amp;</span> <span style="color:#f92672">#</span><span style="color:#960050;background-color:#1e0010">客户端</span>id<span style="color:#960050;background-color:#1e0010">，</span>b<span style="color:#960050;background-color:#1e0010">就知道是谁在请求</span>
-</span></span><span style="display:flex;"><span> client_secret<span style="color:#f92672">=</span>CLIENT_SECRET<span style="color:#f92672">&amp;</span> 
-</span></span><span style="display:flex;"><span> grant_type<span style="color:#f92672">=</span>authorization_code<span style="color:#f92672">&amp;</span> <span style="color:#f92672">#</span><span style="color:#960050;background-color:#1e0010">授权类型，表明是授权码</span>
-</span></span><span style="display:flex;"><span> code<span style="color:#f92672">=</span>AUTHORIZATION_CODE<span style="color:#f92672">&amp;</span> <span style="color:#f92672">#</span><span style="color:#960050;background-color:#1e0010">上一步拿到的授权码</span>
-</span></span><span style="display:flex;"><span> redirect_uri<span style="color:#f92672">=</span>CALLBACK_URL <span style="color:#f92672">#</span>b<span style="color:#960050;background-color:#1e0010">之后跳转的网站</span>
-</span></span></code></pre></div><h4 id="4-返回令牌">
-  4. 返回令牌
-  <a class="anchor" href="#4-%e8%bf%94%e5%9b%9e%e4%bb%a4%e7%89%8c">#</a>
-</h4>
-<p>授权系统会重定向到CALLBACK_URL，并发送一段JSON数据</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{  
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;access_token&#34;</span>:<span style="color:#e6db74">&#34;ACCESS_TOKEN（令牌）&#34;</span>,  
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;token_type&#34;</span>:<span style="color:#e6db74">&#34;bearer&#34;</span>,
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;expires_in&#34;</span>:<span style="color:#ae81ff">2592000</span>,
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;refresh_token&#34;</span>:<span style="color:#e6db74">&#34;REFRESH_TOKEN&#34;</span>,
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;scope&#34;</span>:<span style="color:#e6db74">&#34;read&#34;</span>,
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;uid&#34;</span>:<span style="color:#ae81ff">100101</span>,
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;info&#34;</span>:{<span style="color:#960050;background-color:#1e0010">...</span>}
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p><strong>参考链接：</strong>
-  <a href="https://www.ruanyifeng.com/blog/2019/04/oauth-grant-types.html">OAuth 2.0 的四种方式 - 阮一峰的网络日志 (ruanyifeng.com)</a></p>
-    </p>
-  </article>
   
   <article class="markdown book-post">
     <h2>
@@ -1179,6 +917,289 @@ https://github.com/alex-shpak/hugo-book
 </ul>
 <p><strong>参考链接：</strong>
   <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status">HTTP 响应代码 - HTTP | MDN (mozilla.org)</a></p>
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/javaee/redis%E8%B5%B7%E6%AD%A5/">redis起步</a>
+    </h2>
+    
+  <h5>2021-08-13</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">java</a>
+  </div>
+  
+
+
+
+
+    <p><ul>
+<li>支持string、list、set、有序set、hash等数据类型</li>
+<li>通过<code>./redis-server [redis.conf] </code>启动服务。</li>
+<li>通过<code>./redis-cli [-h hostname] [-p port] </code>连接redis，登录后通过<code>AUTH password</code>来输入密码。</li>
+</ul>
+<h2 id="命令">
+  命令
+  <a class="anchor" href="#%e5%91%bd%e4%bb%a4">#</a>
+</h2>
+<ul>
+<li><code>keys *</code> 查看当前库中的所有key。</li>
+<li><code>exists key</code> 判断某个key是否存在</li>
+<li><code>rename key newkey</code>键重命名</li>
+<li>type key 查看key是什么类型</li>
+<li><code>del key</code> 删除指定的key数据</li>
+<li><code>expire key 10</code>  给key设定10秒的过期时间</li>
+<li><code>ttl key</code> 查看还有多少秒过期，-1表示永不过期，-2表示已过期</li>
+<li>select index 切换数据库，默认有16个库</li>
+<li>dbsize 查看当前库key的数量</li>
+<li><code>set key value</code> 设置字符串类型的键值对</li>
+<li><code>get key</code> 获取值</li>
+</ul>
+<h2 id="数据类型">
+  数据类型
+  <a class="anchor" href="#%e6%95%b0%e6%8d%ae%e7%b1%bb%e5%9e%8b">#</a>
+</h2>
+<h3 id="string">
+  string
+  <a class="anchor" href="#string">#</a>
+</h3>
+<ul>
+<li><code>set key value</code> 设置值</li>
+<li><code>get key</code> 获取key对应的值</li>
+<li><code>strlen key</code> 获取值的长度。</li>
+<li>mset key1 value1 key2 value2 同时设置多个键值对。</li>
+<li>mget key1 key2 同时获取多个键值对。</li>
+<li>append key value 将给定的value追加到原值的末尾。</li>
+<li>setnx key value 只有当key不存在的时候才设置key的值。</li>
+<li>incr key key的值加一。</li>
+<li>decr key key的值减一。</li>
+<li>incrby key 步长 key的值加步长。</li>
+<li>decrby key 步长 key的值减步长。</li>
+<li>msetnx key1 value1 key2 value2 同时设置多个键值对，当有一个key存在的时候，所有的设置都会失败。</li>
+<li><code>setex key seconds value</code> 设置键值对的同时设置过期时间，单位是秒。</li>
+<li>String内部采用类似arraylist的机制，字符串实际分配的空间一般高于字符串的长度，当字符串长度小于1M时，扩容都是加倍的，超过1M时，每次扩容都是只增加1M。最大为512M。</li>
+</ul>
+<h3 id="链表">
+  链表
+  <a class="anchor" href="#%e9%93%be%e8%a1%a8">#</a>
+</h3>
+<h4 id="节点的结构">
+  节点的结构
+  <a class="anchor" href="#%e8%8a%82%e7%82%b9%e7%9a%84%e7%bb%93%e6%9e%84">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">//adlist.h/listNode
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//结构
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">struct</span> listNode {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//前置节点
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">struct</span> listNode <span style="color:#f92672">*</span>prev;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//后置节点
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">struct</span> listNode <span style="color:#f92672">*</span>next;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//节点的值
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>value;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ul>
+<li>双端链表，获取节点的前置节点和后置节点的复杂度都是O(1)。</li>
+<li>无环链表，表头指针的prev和表尾指针的next都是指向NULL。</li>
+<li>list结构的head指针和tail指针能快速获取表头结点和表尾节点，复杂度是O(1)。</li>
+<li>可以通过list结构的len属性来获取链表中节点的数量，复杂度是O(1)。</li>
+</ul>
+<h4 id="命令-1">
+  命令
+  <a class="anchor" href="#%e5%91%bd%e4%bb%a4-1">#</a>
+</h4>
+<ul>
+<li><code>lpush/rpush k1 v1 v2 v3</code> 从左/右边插入</li>
+<li><code>lpop/rpop k1</code> 从左/又边吐出一个值</li>
+<li><code>lindex key index</code>按照索引下标获取元素</li>
+<li><code>len key</code>获得列表的长度</li>
+<li><code>lset key index value</code> 将key的下标为index设置为value</li>
+<li><code>lrange key start stop</code> 按照下标索引获得元素，0表示左边第一个，-1表示右边第一个。</li>
+<li><code>lrem key n value</code> 删除n个value</li>
+</ul>
+<h3 id="hash">
+  hash
+  <a class="anchor" href="#hash">#</a>
+</h3>
+<h4 id="命令-2">
+  命令
+  <a class="anchor" href="#%e5%91%bd%e4%bb%a4-2">#</a>
+</h4>
+<ul>
+<li><code>hset key field value</code>设置值</li>
+<li><code>hget key field</code>获取值</li>
+<li><code>hdel key  field[field...]</code>删除一个或多个键值对</li>
+<li><code>hlen key</code>计算field的个数</li>
+<li><code>hmget key field [field...]</code> 批量获取</li>
+<li><code>hmset key field value [field value ...]</code>批量设置</li>
+<li><code>hexists key field</code>判断field是否存在</li>
+<li><code>hkeys key</code>获取所有field</li>
+<li><code>hvals key</code>获取所有value</li>
+<li><code>hstrlen key field</code>获取value字符串长度</li>
+</ul>
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/nginx/nginx/">nginx</a>
+    </h2>
+    
+  <h5>2021-08-12</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/nginx/">nginx</a>
+  </div>
+  
+
+
+
+
+    <p><ul>
+<li>
+<p>nginx默认的配置文件名是nginx.conf，位置在<code>/usr/local/nginx/conf</code>、<code>/etc/niginx</code>、或<code>/usr/local/etc/nginx</code>。通过<code>nginx -c xxx.conf</code>来指定配置文件。</p>
+</li>
+<li>
+<p>当nginx启动后，可以通过<code>nginx -s signal</code>来控制nginx，signal可以是：</p>
+<ul>
+<li>stop：快速关闭；quit：正常关闭；reload：重新加载配置文件；reopen：重新打开配置文件。</li>
+</ul>
+</li>
+<li>
+<p>配置文件可以包含多个<code>server</code>块，他们之间通过监听的端口和服务名来区分。一旦nginx决定使用哪个服server来处理请求，他就会根据server块内location的指令来匹配请求头中的url，①精确匹配优先级最高，遇到就返回结果；②普通匹配会选择location中前缀最长的那个，和顺序无关；③当location中有正则表达式时，会优先匹配正则表达式（正则级别比普通匹配优先级高，但比精确匹配优先级低），正则表达式的匹配顺序按照文件中的物理顺序匹配，只要匹配到一条正则，就会返回结果；如果没有匹配，就会取普通匹配中最匹配的那个。</p>
+</li>
+<li>
+<p>nginx的错误日志文件在<code>usr/local/nginx/logs</code>、<code>/var/log/nginx</code></p>
+</li>
+</ul>
+<h2 id="常用配置">
+  常用配置
+  <a class="anchor" href="#%e5%b8%b8%e7%94%a8%e9%85%8d%e7%bd%ae">#</a>
+</h2>
+<h3 id="proxy_pass">
+  proxy_pass
+  <a class="anchor" href="#proxy_pass">#</a>
+</h3>
+<ul>
+<li>使用<code>proxy_pass</code>来配置代理服务。代理服务的流程：server接收request-&gt;把request传给代理服务-&gt;获取代理服务的response-&gt;把response返回给客户端。</li>
+<li>proxy_pass有两个要注意的点
+<ul>
+<li>proxy_pass后面如果跟了一个完整的url，如<code>http://localhost:8080/xxx</code>，那么最后访问的时候就是location中匹配的那一部分替换成proxy_pass的url。</li>
+<li>proxy_pass后面如果跟的是如<code>http://localhost:8080</code>，那么最后访问的是proxy_pass的链接加上请求路径。</li>
+</ul>
+</li>
+</ul>
+<h3 id="例">
+  例：
+  <a class="anchor" href="#%e4%be%8b">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-nginx" data-lang="nginx"><span style="display:flex;"><span><span style="color:#66d9ef">server</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">listen</span> <span style="color:#ae81ff">80</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#最后的地址就是http://localhost:8080/journey/xxx
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">location</span> <span style="color:#e6db74">/journey</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">proxy_pass</span> <span style="color:#e6db74">http://localhost:8080</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#最后的地址就是http://localhost:8080/test/xxx，location对应的chat会被替换为url。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">location</span> <span style="color:#e6db74">/chat</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">proxy_pass</span> <span style="color:#e6db74">http://localhost:8080/test</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#将会映射到/html/tool这个路径下
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">location</span> <span style="color:#e6db74">/tool</span> {
+</span></span><span style="display:flex;"><span>    	<span style="color:#f92672">root</span> <span style="color:#e6db74">html</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#正则表达式以~开始，这里是匹配图片
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">location</span> ~ <span style="color:#e6db74">\.(gif|jpg|png)$</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">root</span> <span style="color:#e6db74">/data/images</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><strong>参考链接：</strong>
+  <a href="http://nginx.org/en/docs/beginners_guide.html">Beginner’s Guide (nginx.org)</a></p>
+<h2 id="nginx内嵌的变量">
+  nginx内嵌的变量
+  <a class="anchor" href="#nginx%e5%86%85%e5%b5%8c%e7%9a%84%e5%8f%98%e9%87%8f">#</a>
+</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-nginx" data-lang="nginx"><span style="display:flex;"><span><span style="color:#75715e">#等于在proxy_pass指令中指定的被代理服务的主机名和端口
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">$proxy_host</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#等于在proxy_pass中指定的服务的端口，或者是其服务的默认端口
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>$proxy_port
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#如果X-Forwarded-For属性未在请求头中，$proxy_add_x_forwarded_for的值就等于$remote_addr;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#如果X-Forwarded-For在请求头中，那$proxy_add_x_forwarded_for的值就等于上一个$proxy_add_x_forwarded_for加上&#34;,$remote_addr&#34;。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#例：proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>$proxy_add_x_forwarded_for
+</span></span></code></pre></div><h2 id="nginx指令">
+  nginx指令
+  <a class="anchor" href="#nginx%e6%8c%87%e4%bb%a4">#</a>
+</h2>
+<h3 id="rewrite">
+  rewrite
+  <a class="anchor" href="#rewrite">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>语法: rewrite regex replacement <span style="color:#f92672">[</span>flag<span style="color:#f92672">]</span>;
+</span></span><span style="display:flex;"><span>context: server,location,if
+</span></span><span style="display:flex;"><span>rewrite指令按照它出现的顺序来执行，可以通过flag来终止执行，如果replacement以<span style="color:#e6db74">&#34;http://,https://或者</span>$scheme<span style="color:#e6db74">&#34;</span>开始，就会直接返回客户端。
+</span></span><span style="display:flex;"><span>flag可以是last、break、redirect、permanent。
+</span></span><span style="display:flex;"><span>redirect是暂时重定向302，permanent是永久重定向301。
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>rewrite ^<span style="color:#f92672">(</span>.*<span style="color:#f92672">)</span>$ https://localhost$1 permanent;
+</span></span></code></pre></div><h3 id="if">
+  if
+  <a class="anchor" href="#if">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>语法: <span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>condition<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>...<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>context: server, localtion
+</span></span><span style="display:flex;"><span>condition包括：
+</span></span><span style="display:flex;"><span>  1. 变量名，当变量为空或者为<span style="color:#e6db74">&#34;0&#34;</span>时是false；
+</span></span><span style="display:flex;"><span>  2. 变量和字符串通过<span style="color:#e6db74">&#34;=&#34;</span>或者<span style="color:#e6db74">&#34;!=&#34;</span>来比较；
+</span></span><span style="display:flex;"><span>  3. 变量和正则表达式比较【比较符号： ~（大小写敏感）、~*（大小写）不敏感、!~、!~*】，可以通过<span style="color:#f92672">()</span>来捕获数据。
+</span></span><span style="display:flex;"><span>  4. 使用-f 或!-f检测文件书否存在；
+</span></span><span style="display:flex;"><span>  5. 使用-d 或!-d检测目录是否存在；
+</span></span><span style="display:flex;"><span>  6. 使用-e 或!-e 检测文件、目录、符号连接是否存在；
+</span></span><span style="display:flex;"><span>  7. 使用-x 或!-x 检测是否是可执行文件。
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>$http_user_agent ~ MSIE<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    rewrite ^<span style="color:#f92672">(</span>.*<span style="color:#f92672">)</span>$ /msie/$1 break;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>$http_cookie ~* <span style="color:#e6db74">&#34;id=([^;]+)(?:;|</span>$<span style="color:#e6db74">)&#34;</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    set $id $1;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>$request_method <span style="color:#f92672">=</span> POST<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> 405;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><h3 id="return">
+  return
+  <a class="anchor" href="#return">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>语法: <span style="color:#66d9ef">return</span> code <span style="color:#f92672">[</span>text<span style="color:#f92672">]</span>;
+</span></span><span style="display:flex;"><span>     <span style="color:#66d9ef">return</span> code URL;
+</span></span><span style="display:flex;"><span>     <span style="color:#66d9ef">return</span> URL;
+</span></span><span style="display:flex;"><span>context: server,location,if
+</span></span><span style="display:flex;"><span>返回特定的状态码，返回444会不发送响应头就关闭连接。
+</span></span><span style="display:flex;"><span>可以指定一个重定向的URL（301，302，303，307，308），或者响应体text（其他的code）。
+</span></span></code></pre></div><h3 id="set">
+  set
+  <a class="anchor" href="#set">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>语法: set $variable value;
+</span></span><span style="display:flex;"><span>context: server,location,if
+</span></span><span style="display:flex;"><span>给变量赋值，值可以是变量、字符串或者变量和字符串的组合。
+</span></span></code></pre></div>
     </p>
   </article>
   

@@ -110,7 +110,7 @@ https://github.com/alex-shpak/hugo-book
 		  <li>
 			<a href="/tags/bios/"  class="flex justify-between">
 			  <span>bios</span>
-			  <span>12</span>
+			  <span>10</span>
 			</a>
 		  </li>
 		
@@ -327,7 +327,7 @@ https://github.com/alex-shpak/hugo-book
 		  <li>
 			<a href="/tags/bios/"  class="flex justify-between">
 			  <span>bios</span>
-			  <span>12</span>
+			  <span>10</span>
 			</a>
 		  </li>
 		
@@ -455,127 +455,6 @@ https://github.com/alex-shpak/hugo-book
  
         </header>
         
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E5%B8%8C%E5%B0%94%E6%8E%92%E5%BA%8F/">希尔排序</a>
-    </h2>
-    
-  <h5>2020-06-21</h5>
-
-
-
-  
-
-  
-  <div>
-    
-      <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
-  </div>
-  
-
-
-
-
-    <p><h2 id="思想">
-  思想
-  <a class="anchor" href="#%e6%80%9d%e6%83%b3">#</a>
-</h2>
-<ol>
-<li>先将整个待排序列中的记录按照指定的下标进行分组，并对每个组内的记录采用直接插入法排序</li>
-<li>然后依次减少下标量，即使每组包含的记录增多，再继续对每组组内的记录采用直接插入法排序</li>
-<li>依此类推，当下标增量减少到1时，整个待排序记录序列已成为一组，但由于此前所做的直接插入排序工作，整个待排序记录序列已经基本有序，最终完成了排序</li>
-</ol>
-<h2 id="代码实现">
-  代码实现
-  <a class="anchor" href="#%e4%bb%a3%e7%a0%81%e5%ae%9e%e7%8e%b0">#</a>
-</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">for</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> dk<span style="color:#f92672">=</span>n<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">/</span><span style="color:#ae81ff">2</span><span style="color:#f92672">;</span>dk<span style="color:#f92672">&gt;=</span><span style="color:#ae81ff">1</span><span style="color:#f92672">;</span>dk<span style="color:#f92672">=</span>dk<span style="color:#f92672">/</span><span style="color:#ae81ff">2</span><span style="color:#f92672">){</span>   <span style="color:#75715e">//增量因子
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">for</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i<span style="color:#f92672">=</span>dk<span style="color:#f92672">;</span>i<span style="color:#f92672">&lt;</span>n<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">;</span>i<span style="color:#f92672">++){</span>   <span style="color:#75715e">//下面的代码类似插入排序
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>n<span style="color:#f92672">[</span>i<span style="color:#f92672">]&lt;</span>n<span style="color:#f92672">[</span>i<span style="color:#f92672">-</span>dk<span style="color:#f92672">]){</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">int</span> temp<span style="color:#f92672">=</span>n<span style="color:#f92672">[</span>i<span style="color:#f92672">];</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">int</span> j<span style="color:#f92672">;</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#75715e">//比temp大的往后挪，直到遇到比temp更小的
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>            <span style="color:#66d9ef">for</span><span style="color:#f92672">(</span>j<span style="color:#f92672">=</span>i<span style="color:#f92672">-</span>dk<span style="color:#f92672">;</span>j<span style="color:#f92672">&gt;=</span><span style="color:#ae81ff">0</span><span style="color:#f92672">&amp;&amp;</span>temp<span style="color:#f92672">&lt;</span>n<span style="color:#f92672">[</span>j<span style="color:#f92672">];</span>j<span style="color:#f92672">=</span>j<span style="color:#f92672">-</span>dk<span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>                n<span style="color:#f92672">[</span>j<span style="color:#f92672">+</span>dk<span style="color:#f92672">]=</span>n<span style="color:#f92672">[</span>j<span style="color:#f92672">];</span>
-</span></span><span style="display:flex;"><span>            n<span style="color:#f92672">[</span>j<span style="color:#f92672">+</span>dk<span style="color:#f92672">]=</span>temp<span style="color:#f92672">;</span><span style="color:#75715e">//将temp放在停的位置上
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
-</span></span></code></pre></div><h2 id="复杂度">
-  复杂度
-  <a class="anchor" href="#%e5%a4%8d%e6%9d%82%e5%ba%a6">#</a>
-</h2>
-<p>时间复杂度：O(n²)</p>
-<p>空间复杂度：O(1)</p>
-<p>不稳定的排序算法</p>
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%AD%BB%E9%94%81/">死锁</a>
-    </h2>
-    
-  <h5>2020-04-12</h5>
-
-
-
-  
-
-  
-  <div>
-    
-      <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
-  </div>
-  
-
-
-
-
-    <p><h3 id="系统资源">
-  系统资源
-  <a class="anchor" href="#%e7%b3%bb%e7%bb%9f%e8%b5%84%e6%ba%90">#</a>
-</h3>
-<ol>
-<li>可抢占资源：某进程获得该类资源后，该资源可以被系统或其他进程访问。比如CPU、内存。</li>
-<li>不可抢占资源：某进程获得该类资源后，该资源不能被其他进程抢占，只能在进程使用完毕后由该进程自己释放。<strong>讨论死锁所指的资源一般指不可抢占资源</strong>。</li>
-</ol>
-<h3 id="死锁产生的必要条件">
-  死锁产生的必要条件
-  <a class="anchor" href="#%e6%ad%bb%e9%94%81%e4%ba%a7%e7%94%9f%e7%9a%84%e5%bf%85%e8%a6%81%e6%9d%a1%e4%bb%b6">#</a>
-</h3>
-<ol>
-<li>互斥条件：任一时刻一个资源仅被一个进程占用。</li>
-<li>请求和保持条件：一个进程请求资源得不到满足而阻塞自己时，并不释放已经分配给它的资源。</li>
-<li>不剥夺条件：进程获得的资源在未使用完毕不可能被其他进程占有，只能由该进程自己释放。</li>
-<li>循环等待：若干进程形成一个循环等待链，链中每一个进程都在等待改链中下一个进程占有的资源。</li>
-</ol>
-<h3 id="死锁的预防">
-  死锁的预防
-  <a class="anchor" href="#%e6%ad%bb%e9%94%81%e7%9a%84%e9%a2%84%e9%98%b2">#</a>
-</h3>
-<ol>
-<li>破坏请求和保持条件：每个进程在运行之前一次性申请他所需要的全部资源，并在资源未满足时不运行。</li>
-<li>破坏不剥夺：当一个已经占有资源的进程又提出新的资源请求，而并没有得到满足时，则必须释放他所获取的所有资源而进入阻塞状态。</li>
-<li>破坏循环等待：采用资源有序分配策列，将系统中的资源进行编号，进程必须按照顺序去申请资源。</li>
-</ol>
-<h3 id="死锁的避免">
-  死锁的避免
-  <a class="anchor" href="#%e6%ad%bb%e9%94%81%e7%9a%84%e9%81%bf%e5%85%8d">#</a>
-</h3>
-<ul>
-<li><strong>安全状态</strong>是指在某一时刻，系统中存在一个包含所有进程的进程序列，按照该进程序列的顺序为所有进程分配资源，则所有进程的资源需求都可以得到满足。</li>
-</ul>
-<h4 id="银行家算法">
-  银行家算法
-  <a class="anchor" href="#%e9%93%b6%e8%a1%8c%e5%ae%b6%e7%ae%97%e6%b3%95">#</a>
-</h4>
-<ul>
-<li>在进程提出资源申请时，先判断此次分配是否会导致系统进入不安全状态。如果会进入不安全状态，就暂时不答应这次请求，让进程先阻塞。</li>
-</ul>
-    </p>
-  </article>
   
   <article class="markdown book-post">
     <h2>
@@ -830,6 +709,113 @@ https://github.com/alex-shpak/hugo-book
 <li>根据中断信号类型转入相应的中断处理程序。</li>
 <li>恢复原进程的cpu环境并退出中断，返回原程序并继续执行。</li>
 </ol>
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E7%AE%A1%E7%A8%8B/">管程</a>
+    </h2>
+    
+  <h5>2020-04-07</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+  </div>
+  
+
+
+
+
+    <p><h5 id="管程是一种特殊的软件模块由这些部分组成">
+  管程是一种特殊的软件模块，由这些部分组成：
+  <a class="anchor" href="#%e7%ae%a1%e7%a8%8b%e6%98%af%e4%b8%80%e7%a7%8d%e7%89%b9%e6%ae%8a%e7%9a%84%e8%bd%af%e4%bb%b6%e6%a8%a1%e5%9d%97%e7%94%b1%e8%bf%99%e4%ba%9b%e9%83%a8%e5%88%86%e7%bb%84%e6%88%90">#</a>
+</h5>
+<ol>
+<li>局部与管程的共享数据结构说明；</li>
+<li>对该数据结构进行操作的一组过程；</li>
+<li>对局部于管程的共享数据设置初始值的语句；</li>
+<li>管程有一个名字。</li>
+</ol>
+<h5 id="管程的基本特征">
+  管程的基本特征：
+  <a class="anchor" href="#%e7%ae%a1%e7%a8%8b%e7%9a%84%e5%9f%ba%e6%9c%ac%e7%89%b9%e5%be%81">#</a>
+</h5>
+<ol>
+<li>局部于管程的数据只能被局部于管程的过程访问；</li>
+<li>一个进程只有通过调用管程内的过程才能进入管程访问共享数据；</li>
+<li>每次仅允许一个进程在管程内执行某个内部过程。</li>
+</ol>
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/%E6%B5%AE%E7%82%B9%E6%95%B0/">浮点数</a>
+    </h2>
+    
+  <h5>2020-03-27</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">计算机组成原理</a>
+  </div>
+  
+
+
+
+
+    <p><h2 id="浮点数">
+  浮点数
+  <a class="anchor" href="#%e6%b5%ae%e7%82%b9%e6%95%b0">#</a>
+</h2>
+<ul>
+<li>浮点表示法：把一个数的有效数字和数的范围在计算机的一个存储单元中分别予以表示的方法。</li>
+</ul>
+<h3 id="32位浮点数">
+  32位浮点数
+  <a class="anchor" href="#32%e4%bd%8d%e6%b5%ae%e7%82%b9%e6%95%b0">#</a>
+</h3>
+<ul>
+<li>数的量级在1x2<sup>-126</sup>至1.11&hellip;x2<sup>127</sup>之间，大概就是1.19x10<sup>-38</sup>至3.40x10<sup>38</sup>之间，如果有一个数为10<sup>40</sup>，就不能使用float来存了。</li>
+</ul>
+<h4 id="0--100-0001-0--011-0110-0000-0000-0000-0000">
+  <code>0 | 100 0001 0 | 011 0110 0000 0000 0000 0000</code>
+  <a class="anchor" href="#0--100-0001-0--011-0110-0000-0000-0000-0000">#</a>
+</h4>
+<ul>
+<li>第一部分表示符号位，0为正数，1为负数</li>
+<li>第二部分共8位，表示阶码（指数），需要减去127</li>
+<li>第三部分（23位）表示尾数（小数点后面的数）。</li>
+<li>0表示为正数，100 0001 0减127为3，剩余23位放在1.的后面，即1.011011，所以结果为1.011011x2<sup>3</sup></li>
+</ul>
+<h3 id="64位浮点数">
+  64位浮点数
+  <a class="anchor" href="#64%e4%bd%8d%e6%b5%ae%e7%82%b9%e6%95%b0">#</a>
+</h3>
+<ul>
+<li>阶码宽度为11位，</li>
+<li>位数宽度为52位</li>
+<li>数的量级在1x2<sup>-1022</sup> 至 (2-2<sup>-52</sup>)x2<sup>1023</sup>之间，大概就是10<sup>-308</sup>至10<sup>308</sup></li>
+</ul>
+<h2 id="程序计数器">
+  程序计数器
+  <a class="anchor" href="#%e7%a8%8b%e5%ba%8f%e8%ae%a1%e6%95%b0%e5%99%a8">#</a>
+</h2>
+<ul>
+<li>PC总是存储将要执行的下一条指令的地址</li>
+</ul>
     </p>
   </article>
   

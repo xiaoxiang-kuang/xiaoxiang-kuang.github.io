@@ -110,7 +110,7 @@ https://github.com/alex-shpak/hugo-book
 		  <li>
 			<a href="/tags/bios/"  class="flex justify-between">
 			  <span>bios</span>
-			  <span>12</span>
+			  <span>10</span>
 			</a>
 		  </li>
 		
@@ -327,7 +327,7 @@ https://github.com/alex-shpak/hugo-book
 		  <li>
 			<a href="/tags/bios/"  class="flex justify-between">
 			  <span>bios</span>
-			  <span>12</span>
+			  <span>10</span>
 			</a>
 		  </li>
 		
@@ -455,108 +455,6 @@ https://github.com/alex-shpak/hugo-book
  
         </header>
         
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/">策略模式</a>
-    </h2>
-    
-  <h5>2020-09-21</h5>
-
-
-
-  
-
-  
-  <div>
-    
-      <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
-  </div>
-  
-
-
-
-
-    <p><ul>
-<li>定义：定义一系列算法，把他们一个个封装起来，并且使它们可以互相替换（变化），该模式使得算法可独立于使用他的客户程序而变化。</li>
-<li>在软件构建过程中，某些对象使用的算法可能多种多样，策略模式做到了运行时根据需要透明的更改对象的算法，将对象与自身解耦。</li>
-<li>比如税率，如果要求一个程序支持多国税率，可以使用if-else语句。</li>
-</ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Sale</span><span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">double</span> <span style="color:#a6e22e">buySomething</span><span style="color:#f92672">(){</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">double</span> d<span style="color:#f92672">=</span>xxx<span style="color:#f92672">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">//...
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>tax<span style="color:#f92672">==</span>ChineseTax<span style="color:#f92672">){</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#75715e">//...
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#f92672">}</span><span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>tax<span style="color:#f92672">==</span>AmericeTax<span style="color:#f92672">){</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#75715e">//...
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#f92672">}</span>elseif<span style="color:#f92672">(</span>tax<span style="color:#f92672">==</span>JapanTax<span style="color:#f92672">){</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#75715e">//...
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">//...
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
-</span></span></code></pre></div><ul>
-<li>但是如果后期需要加上其他国家的税率，就要修改程序，违背了开闭原则。此时可以使用策略模式。实现如下：</li>
-</ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">Tax</span><span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">double</span> <span style="color:#a6e22e">calculate</span><span style="color:#f92672">(</span><span style="color:#66d9ef">double</span> money<span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ChineseTax</span> <span style="color:#66d9ef">implements</span> Tax<span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">double</span> <span style="color:#a6e22e">calculate</span><span style="color:#f92672">(</span><span style="color:#66d9ef">double</span> money<span style="color:#f92672">){</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">//...
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">AmericaTax</span> <span style="color:#66d9ef">implements</span> Tax<span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">double</span> <span style="color:#a6e22e">calculate</span><span style="color:#f92672">(</span><span style="color:#66d9ef">double</span> money<span style="color:#f92672">){</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">//...
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
-</span></span></code></pre></div><hr>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Sale</span><span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> Tax tax<span style="color:#f92672">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">Sale</span><span style="color:#f92672">(</span>Tax tax<span style="color:#f92672">){</span><span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">tax</span><span style="color:#f92672">=</span>tax<span style="color:#f92672">;}</span>
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">double</span> <span style="color:#a6e22e">buySomething</span><span style="color:#f92672">(){</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">double</span> d<span style="color:#f92672">=</span>xxx<span style="color:#f92672">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">//...
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        tax<span style="color:#f92672">.</span><span style="color:#a6e22e">calculate</span><span style="color:#f92672">(</span>d<span style="color:#f92672">);</span><span style="color:#75715e">//替换掉先前的if-else
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#75715e">//...
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
-</span></span></code></pre></div>
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95/">模板方法</a>
-    </h2>
-    
-  <h5>2020-09-21</h5>
-
-
-
-  
-
-  
-  <div>
-    
-      <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
-  </div>
-  
-
-
-
-
-    <p><h3 id="定义">
-  定义
-  <a class="anchor" href="#%e5%ae%9a%e4%b9%89">#</a>
-</h3>
-<p>定义一个操作中的算法的骨架（稳定），而将一些步骤延迟（变化）到子类，template method使得子类可以不改变（复用）一个算法的结构即可重定义（override重写）该算法的某些特定步骤。</p>
-    </p>
-  </article>
   
   <article class="markdown book-post">
     <h2>
@@ -827,6 +725,154 @@ https://github.com/alex-shpak/hugo-book
 <li>局部变量表所需的内存空间在编译期间完成分配。</li>
 </ul>
 </li>
+</ul>
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/javase/collection%E5%92%8Cmap/">collection和map</a>
+    </h2>
+    
+  <h5>2020-07-29</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">java</a>
+  </div>
+  
+
+
+
+
+    <p><h2 id="collection">
+  Collection
+  <a class="anchor" href="#collection">#</a>
+</h2>
+<h2 id="map">
+  Map
+  <a class="anchor" href="#map">#</a>
+</h2>
+<h3 id="hashmap">
+  HashMap
+  <a class="anchor" href="#hashmap">#</a>
+</h3>
+<ul>
+<li><code>DEFAULT_INITIAL_CAPACITY = 1 &lt;&lt; 4</code>：默认初始容量为16，该容量必须为2的倍数</li>
+<li><code>DEFAULT_LOAD_FACTOR = 0.75f</code>：默认的加载因子，可以大于1</li>
+<li><code>MAXIMUM_CAPACITY = 1 &lt;&lt;30</code>：最大容量</li>
+<li><code>TREEIFY_THRESHOLD = 8</code>：由链表转换成树的阈值</li>
+<li><code>UNTREEIFY_THRESHOLD = 6</code>：由树转换成链表的阈值</li>
+<li><code>MIN_TREEIFY_CAPACITY = 64</code></li>
+</ul>
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/javase/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/">类加载机制</a>
+    </h2>
+    
+  <h5>2020-07-21</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">java</a>
+  </div>
+  
+
+
+
+
+    <p><h3 id="类加载的过程">
+  类加载的过程
+  <a class="anchor" href="#%e7%b1%bb%e5%8a%a0%e8%bd%bd%e7%9a%84%e8%bf%87%e7%a8%8b">#</a>
+</h3>
+<ul>
+<li><strong>加载</strong>
+<ul>
+<li>通过一个类的全限定名来获取定义此类的二进制字节流。</li>
+<li>将这个字节流所代表的静态存储结构转化为方法去的运行时数据结构。</li>
+<li>在内存中生成一个代表这个类的java.lang.Class对象，作为方法区这个类的各种数据的访问入口。</li>
+</ul>
+</li>
+<li><strong>验证</strong>
+<ul>
+<li>确保Class文件的字节流对象中包含的信息符合当前虚拟机的要求，并且不会危虚拟机自身的安全。</li>
+</ul>
+</li>
+<li><strong>准备</strong>
+<ul>
+<li>准备阶段是正式为类变量分配内存并设置类变量初始值（零值）的阶段，这些类变量使用的内存都将在方法区进行分配。</li>
+<li>如果类变量同时也被final修饰了，那它就是一个常量，准备阶段就会被初始化为代码中指定的值。</li>
+</ul>
+</li>
+<li><strong>解析</strong>
+<ul>
+<li>将常量池内的符号引用替换为直接引用的过程。</li>
+<li>符号引用：以一组符号来描述所引用的目标，符号可以是任何形式的字面量，只要使用时能无歧义地定位到目标即可。</li>
+<li>直接引用：可以是直接指向目标的指针、相对偏移量或是一个能间接定位到目标的句柄。</li>
+</ul>
+</li>
+<li><strong>初始化</strong>
+<ul>
+<li>初始化时执行类构造器clinit的方法的过程。</li>
+<li>clinit方法是由编译器自动收集类中的所有类变量的赋值动作和静态语句块static{}中的语句合并产生的，编译器收集的顺序是由语句在源文件中出现的顺序所决定的。</li>
+<li>定义在静态语句块之后的类变量，在该静态语句块中可以赋值，但不能访问。</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Main</span><span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">static</span><span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        i<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span><span style="color:#f92672">;</span>	<span style="color:#75715e">//正常编译通过
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>i<span style="color:#f92672">);</span>	<span style="color:#75715e">//这句编译器会提示非法向前引用
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">int</span> i<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span><span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><h3 id="类加载器">
+  类加载器
+  <a class="anchor" href="#%e7%b1%bb%e5%8a%a0%e8%bd%bd%e5%99%a8">#</a>
+</h3>
+<ul>
+<li>启动类加载器Bootstrap ClassLoader
+<ul>
+<li>用来加载Java的核心类库（JAVA_HOME\lib目录或者被-Xbootclasspath参数所指定的路径中）。</li>
+<li>没有父类加载器</li>
+<li>加载扩展类和应用程序类加载器，并指定为它们的父类加载器。</li>
+</ul>
+</li>
+<li>扩展类加载器Extension ClassLoader
+<ul>
+<li>派生于ClassLoader，父类为Bootstrap。</li>
+<li>从java.ext.dirs系统变量所指定的路径中加载所有类库。</li>
+</ul>
+</li>
+<li>应用程序类加载器Application ClassLoader
+<ul>
+<li>派生于ClassLoader，父类为扩展类加载器。</li>
+<li>负责加载classspath下的类库。</li>
+<li>程序中的默认类加载器。</li>
+</ul>
+</li>
+</ul>
+<h3 id="双亲委派机制">
+  双亲委派机制
+  <a class="anchor" href="#%e5%8f%8c%e4%ba%b2%e5%a7%94%e6%b4%be%e6%9c%ba%e5%88%b6">#</a>
+</h3>
+<ul>
+<li>如果一个类收到类加载请求，它首先不会自己去尝试加载这个类，而是把这个请求委派给父类加载器去完成。</li>
+<li>如果父类还有父类，则进一步向上委托，请求最终到达顶层的启动类加载器中。</li>
+<li>如果父类可以完成加载，就成功返回。否则，子类加载器才会尝试自己去加载。</li>
 </ul>
     </p>
   </article>

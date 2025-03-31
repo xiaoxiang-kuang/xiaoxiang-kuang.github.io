@@ -110,7 +110,7 @@ https://github.com/alex-shpak/hugo-book
 		  <li>
 			<a href="/tags/bios/"  class="flex justify-between">
 			  <span>bios</span>
-			  <span>12</span>
+			  <span>10</span>
 			</a>
 		  </li>
 		
@@ -327,7 +327,7 @@ https://github.com/alex-shpak/hugo-book
 		  <li>
 			<a href="/tags/bios/"  class="flex justify-between">
 			  <span>bios</span>
-			  <span>12</span>
+			  <span>10</span>
 			</a>
 		  </li>
 		
@@ -455,180 +455,6 @@ https://github.com/alex-shpak/hugo-book
  
         </header>
         
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/javase/join%E5%92%8Cpark/">join和park</a>
-    </h2>
-    
-  <h5>2020-11-19</h5>
-
-
-
-  
-
-  
-  <div>
-    
-      <a href="/tags/java/">java</a>
-  </div>
-  
-
-
-
-
-    <p><h3 id="join源码分析">
-  join源码分析
-  <a class="anchor" href="#join%e6%ba%90%e7%a0%81%e5%88%86%e6%9e%90">#</a>
-</h3>
-<ul>
-<li>join()是等待一个线程运行结束</li>
-</ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Thread</span> <span style="color:#66d9ef">implements</span> Runnable <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//底层是使用wait()实现
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">synchronized</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">join</span><span style="color:#f92672">(</span><span style="color:#66d9ef">long</span> millis<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> InterruptedException <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">long</span> base <span style="color:#f92672">=</span> System<span style="color:#f92672">.</span><span style="color:#a6e22e">currentTimeMillis</span><span style="color:#f92672">();</span><span style="color:#75715e">//开始时间
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">long</span> now <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">;</span><span style="color:#75715e">//已经等待的时间
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>millis <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IllegalArgumentException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;timeout value is negative&#34;</span><span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>millis <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span><span style="color:#75715e">//参数为0时会一直等待线程结束
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>            <span style="color:#66d9ef">while</span> <span style="color:#f92672">(</span>isAlive<span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>                wait<span style="color:#f92672">(</span><span style="color:#ae81ff">0</span><span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">while</span> <span style="color:#f92672">(</span>isAlive<span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#75715e">//防止虚假唤醒，因为wait会被notify和notifyAll唤醒
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>                <span style="color:#75715e">//唤醒后需要等待的时间是millis减去已经等待的时间
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>                <span style="color:#66d9ef">long</span> delay <span style="color:#f92672">=</span> millis <span style="color:#f92672">-</span> now<span style="color:#f92672">;</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>delay <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">break</span><span style="color:#f92672">;</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span>                wait<span style="color:#f92672">(</span>delay<span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>                now <span style="color:#f92672">=</span> System<span style="color:#f92672">.</span><span style="color:#a6e22e">currentTimeMillis</span><span style="color:#f92672">()</span> <span style="color:#f92672">-</span> base<span style="color:#f92672">;</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">join</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">throws</span> InterruptedException <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>        join<span style="color:#f92672">(</span><span style="color:#ae81ff">0</span><span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
-</span></span></code></pre></div><h3 id="park">
-  park
-  <a class="anchor" href="#park">#</a>
-</h3>
-<ul>
-<li>LockSupport.park();//暂停当前线程</li>
-<li>LockSupport.unpark(暂停线程对象);//恢复某个线程的运行</li>
-<li>对应的线程状态还是wait状态</li>
-<li>unpark可以在park之前执行，仍然可以恢复线程的执行</li>
-</ul>
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E6%A1%A5%E6%A8%A1%E5%BC%8F/">桥模式</a>
-    </h2>
-    
-  <h5>2020-10-20</h5>
-
-
-
-  
-
-  
-  <div>
-    
-      <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
-  </div>
-  
-
-
-
-
-    <p><ul>
-<li>模式定义：将抽象与实现分离，使它们都可以独立地变化。</li>
-<li>应用场景：两个非常强的变化维度。</li>
-</ul>
-<h3 id="案例">
-  案例
-  <a class="anchor" href="#%e6%a1%88%e4%be%8b">#</a>
-</h3>
-<p>
-  <img src="/img/%e6%a1%a5%e6%a8%a1%e5%bc%8f/1.jpg" alt="场景" /></p>
-<ol>
-<li>
-<p>分析一下，首先会创建1个电脑类，然后创建3个电脑的子类（即电脑的类型），再创建3x3个子类。假设有n种电脑类型，m种电脑品牌，那么产生的类的数量为<strong>1+n+n</strong>x<strong>m</strong>。</p>
-</li>
-<li>
-<p>如果再加一个电脑品牌acer，则需要再添加三个类，即acer台式机、acer笔记本、acer平板。显然这种方式产生的类的数量非常多。</p>
-</li>
-<li>
-<p>此外，这个实现违背了单一职责原则，类中出现了两个变化（电脑类型和品牌）。</p>
-</li>
-<li>
-<p>解决办法：将类型写成一个抽象类，将品牌写成一个抽象类。通过一个&quot;桥&quot;将他们联系起来。</p>
-</li>
-</ol>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">//品牌类
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">Brand</span><span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">info</span><span style="color:#f92672">();</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Lenovo</span> <span style="color:#66d9ef">implements</span> Brand<span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">info</span><span style="color:#f92672">(){</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">//...
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Apple</span> <span style="color:#66d9ef">implements</span> Brand<span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">info</span><span style="color:#f92672">(){</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">//...
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Dell</span> <span style="color:#66d9ef">implements</span> Brand<span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">info</span><span style="color:#f92672">(){</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">//...
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
-</span></span></code></pre></div><hr>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">//电脑类
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">abstract</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Computer</span><span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//通过类组合来替代类继承
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">protected</span> Brand brand<span style="color:#f92672">;</span>
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">Computer</span><span style="color:#f92672">(</span>Brand brand<span style="color:#f92672">){</span><span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">brand</span><span style="color:#f92672">=</span>brand<span style="color:#f92672">;}</span>
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">abstract</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">info</span><span style="color:#f92672">();</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Desktop</span> <span style="color:#66d9ef">extends</span> Computer<span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">Desktop</span><span style="color:#f92672">(</span>Brand brand<span style="color:#f92672">){</span><span style="color:#66d9ef">super</span><span style="color:#f92672">(</span>brand<span style="color:#f92672">);}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">info</span><span style="color:#f92672">(){</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">//...
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Laptop</span> <span style="color:#66d9ef">extends</span> Computer<span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">Laptop</span><span style="color:#f92672">(</span>Brand brand<span style="color:#f92672">){</span><span style="color:#66d9ef">super</span><span style="color:#f92672">(</span>brand<span style="color:#f92672">);}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">info</span><span style="color:#f92672">(){</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">//...
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Pad</span> <span style="color:#66d9ef">extends</span> Computer<span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">Pad</span><span style="color:#f92672">(</span>Brand brand<span style="color:#f92672">){</span><span style="color:#66d9ef">super</span><span style="color:#f92672">(</span>brand<span style="color:#f92672">);}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">info</span><span style="color:#f92672">(){</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">//...
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
-</span></span></code></pre></div><ol start="5">
-<li>通过上面的修改，类的数量变成了<strong>1+n+m</strong>。</li>
-<li>在这里我理解的抽象是Brand，实现指的是Computer和Computer的子类。</li>
-</ol>
-    </p>
-  </article>
   
   <article class="markdown book-post">
     <h2>
@@ -1232,6 +1058,253 @@ public class test {
 |     CMS      |    并发    |     老年代     |   标记-清除算法    | 响应速度优先 |        适用于互联网或B/S业务         |
 |      G1      | 并发、并行 | 新生代、老年代 | 标记压缩、复制算法 | 响应速度优先 |            面向服务端应用            |
 -->
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/javase/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/">垃圾回收相关概念</a>
+    </h2>
+    
+  <h5>2020-09-29</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">java</a>
+  </div>
+  
+
+
+
+
+    <p><h3 id="systemgc的理解">
+  System.gc()的理解
+  <a class="anchor" href="#systemgc%e7%9a%84%e7%90%86%e8%a7%a3">#</a>
+</h3>
+<ul>
+<li>在默认情况下，通过System.gc()或者Runtime.getRuntime().gc()的调用会显示触发Full GC，但是该方法可能不是立刻就执行。</li>
+</ul>
+<h3 id="内存溢出">
+  内存溢出
+  <a class="anchor" href="#%e5%86%85%e5%ad%98%e6%ba%a2%e5%87%ba">#</a>
+</h3>
+<ul>
+<li>产生原因：没有空闲内存，并且垃圾收集器也无法提供更多内存。</li>
+</ul>
+<h3 id="内存泄漏">
+  内存泄漏
+  <a class="anchor" href="#%e5%86%85%e5%ad%98%e6%b3%84%e6%bc%8f">#</a>
+</h3>
+<ul>
+<li>严格定义：对象不再被程序使用了，但是GC又不能回收他们的情况（仍然存在引用链）。</li>
+<li>宽泛定义：一些不太好的实践会导致对象的生命周期变得很长，甚至导致OOM，也叫宽泛意义上的内存泄漏。</li>
+</ul>
+<h3 id="安全点">
+  安全点
+  <a class="anchor" href="#%e5%ae%89%e5%85%a8%e7%82%b9">#</a>
+</h3>
+<ul>
+<li>程序执行时并非在所有的地方都能停下来开始GC，只有在特定的位置才能停顿下来开始GC，这些位置称为“安全点”（safepoint）。</li>
+<li>如何在GC发生时，检测所有的程序都跑到最近的安全点停顿下来了呢 &ndash;&gt; 主动式中断：设置一个中断标志，各个线程运行到safe point的时候主动轮询这个标志，如果中断标志为真，则将自己进行中断挂起。</li>
+</ul>
+<h3 id="安全区域">
+  安全区域
+  <a class="anchor" href="#%e5%ae%89%e5%85%a8%e5%8c%ba%e5%9f%9f">#</a>
+</h3>
+<ul>
+<li>指在一段代码片段中，对象的引用关系不会发生变化，在这个区域中的任何位置开始GC都是安全的。</li>
+<li>可以应对处于sleep或者blocked状态的线程，这时候线程无法响应jvm的中断请求，“走”到安全点去中断挂起。</li>
+<li>当程序运行到safe region的代码时，首先标识已经进入了safe region，如果这段时间发生了gc，jvm会忽略标识为safe region状态的线程。</li>
+<li>当线程即将离开safe region时，会检测jvm是否已经完成了gc，如果完成了，则继续运行，否则线程必须等待直到收到可以安全离开safe region的信号为止。</li>
+</ul>
+<h3 id="引用">
+  引用
+  <a class="anchor" href="#%e5%bc%95%e7%94%a8">#</a>
+</h3>
+<ul>
+<li>
+<p><strong>强引用</strong>：类似“Object object=new Object()”这类的引用，只要强引用还存在，就永不回收。</p>
+</li>
+<li>
+<p><strong>软引用</strong>：内存不足才回收。</p>
+</li>
+<li>
+<p><strong>弱引用</strong>：发现即回收。</p>
+</li>
+<li>
+<p><strong>虚引用</strong>：对象回收跟踪。</p>
+<ul>
+<li>如果一个对象仅持有虚引用，那么它和没有引用几乎是一样的，随时都可能被垃圾回收器回收。</li>
+<li>它不能单独使用，也无法通过虚引用来获取被引用的对象。当试图通过虚引用的get方法来获取对象时，总是null。</li>
+<li>为一个对象设置虚引用关联的唯一目的就是能够在这个对象被收集器回收时收到一个系统通知。</li>
+<li>虚引用必须和引用队列一起使用。虚引用在创建时必须提供一个引用队列作为参数。当垃圾回收器准备回收一个对象时，如果发现它还有虚引用，就会在回收对象后，将这个虚引用加入引用队列，以通知引用程序对象的回收情况。</li>
+<li>由于虚引用可以跟踪对象的回收时间，因此，也可以将一些资源释放操作放置在虚引用中执行和记录。</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">//声明强引用
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>Object obj<span style="color:#f92672">=</span><span style="color:#66d9ef">new</span> Object<span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//声明软引用
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>SoftReference<span style="color:#f92672">&lt;</span>Object<span style="color:#f92672">&gt;</span> sf<span style="color:#f92672">=</span><span style="color:#66d9ef">new</span> SoftReference<span style="color:#f92672">&lt;</span>Object<span style="color:#f92672">&gt;(</span><span style="color:#66d9ef">new</span> Object<span style="color:#f92672">());</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//声明弱引用
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>WeakReference<span style="color:#f92672">&lt;</span>Object<span style="color:#f92672">&gt;</span> wr<span style="color:#f92672">=</span><span style="color:#66d9ef">new</span> WeakReference<span style="color:#f92672">&lt;</span>Object<span style="color:#f92672">&gt;(</span><span style="color:#66d9ef">new</span> Object<span style="color:#f92672">());</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//虚引用
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>Object obj<span style="color:#f92672">=</span><span style="color:#66d9ef">new</span> Object<span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>ReferenceQueue<span style="color:#f92672">&lt;</span>Object<span style="color:#f92672">&gt;</span> rq<span style="color:#f92672">=</span><span style="color:#66d9ef">new</span> ReferenceQueue<span style="color:#f92672">&lt;&gt;();</span>
+</span></span><span style="display:flex;"><span>PhantomReference<span style="color:#f92672">&lt;</span>Object<span style="color:#f92672">&gt;</span> pr<span style="color:#f92672">=</span><span style="color:#66d9ef">new</span> PhantomReference<span style="color:#f92672">&lt;&gt;(</span>obj<span style="color:#f92672">,</span>rq<span style="color:#f92672">);</span>
+</span></span></code></pre></div><h3 id="评估性能指标">
+  评估性能指标
+  <a class="anchor" href="#%e8%af%84%e4%bc%b0%e6%80%a7%e8%83%bd%e6%8c%87%e6%a0%87">#</a>
+</h3>
+<ul>
+<li><strong>吞吐量</strong>：运行用户代码时间占总运行时间的比例。</li>
+<li>垃圾收集开销：吞吐量的补数，垃圾收集所用时间与总运行时间的比例。</li>
+<li><strong>暂停时间</strong>：执行垃圾收集时，程序的工作线程被暂停的时间。</li>
+<li>收集频率：相对于应用程序的执行，收集操作发生的频率。</li>
+<li>内存占用：Java堆区所占的内存大小。</li>
+<li>快速：一个对象从诞生到被回收所经历的时间。</li>
+</ul>
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/javase/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%AE%97%E6%B3%95/">垃圾回收算法</a>
+    </h2>
+    
+  <h5>2020-09-27</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">java</a>
+  </div>
+  
+
+
+
+
+    <p><h3 id="垃圾标记算法">
+  垃圾标记算法
+  <a class="anchor" href="#%e5%9e%83%e5%9c%be%e6%a0%87%e8%ae%b0%e7%ae%97%e6%b3%95">#</a>
+</h3>
+<ul>
+<li>
+<p><strong>引用计数器法</strong></p>
+<ul>
+<li>给一个对象中添加一个引用计数器，每当有一个地方引用它时，计数器值就加1；当引用失效时，计数器值就减1；任何时刻计数器为0的对象就是不可能再被使用的。</li>
+<li>优点：实现简单，垃圾对象便于识别；判定效率高，回收没有延迟性。</li>
+<li>缺点：需要单独的字段存储计数器，增加了存储空间的开销；每次赋值都要更新计数器，伴随着加减法的操作，增加了时间开销；引用计数器有一个严重的问题，即<strong>无法处理循环引用情况</strong>。这是一个致命缺陷，导致java在垃圾回收器中没有使用这类算法。</li>
+</ul>
+</li>
+<li>
+<p><strong>可达性分析算法</strong></p>
+<ul>
+<li>基本思路：以根对象集合（GC Roots）为起始点，从这些节点开始向下搜索，搜索走过的路径称为引用链，当一个对象到GC Roots没有任何引用链相连时，则证明此对象是不可用的。</li>
+<li>GC Roots包括：①虚拟机栈中引用的对象；②类静态属性引用的对象；③方法区中常量引用的对象；④本地方法栈中（Native方法）引用的对象；⑤被synchronized持有的对象；⑥jvm内部的引用。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="finalize">
+  finalize
+  <a class="anchor" href="#finalize">#</a>
+</h3>
+<ul>
+<li>
+<p>垃圾回收之前总会调用finalize方法，该方法可以被重写：通常是在这个方法中进行一些资源释放和清理的工作。</p>
+</li>
+<li>
+<p>不要主动调用该方法，该方法的执行时间是没有保障的，它完全由gc线程决定。垃圾回收机制会主动调用该方法。</p>
+</li>
+<li>
+<p>finalize方法只能被调用一次。</p>
+</li>
+<li>
+<p>对象的三种状态：可触及；可复活；不可触及。</p>
+</li>
+<li>
+<p>判断一个对象是否可回收，至少经历两次标记过程：</p>
+<ol>
+<li>如果对象到gc roots没有引用链，则进行第一次标记</li>
+<li>进行筛选，判断该对象是否有必要执行finalize方法：①如果对象没有重写finalize方法，或者finalize方法已经被虚拟机调用过，则虚拟机视为“没有必要执行”，该对象被判为不可及的；②如果对象重写了finalize方法且还未执行过，那么该对象将被插入到F-Queue队列中，由一个低优先级、虚拟机自动创建的Finalizer线程区执行它；③finalize方法是对象逃脱死亡命运的最后一次机会，稍后GC会对F-Queue中的对象进行第二次标记，如果对象在finalize方法中重新与引用链上的任意一个对象建立了联系，那么在第二次标记时它将被移出“即将回收”的集合。之后，如果该对象再次出现没有引用存在的情况下，finalize方法不会再次调用，对象会直接变为不可及的状态。也就是说一个对象的finalize方法就被调用一次。</li>
+</ol>
+</li>
+</ul>
+<h3 id="垃圾收集算法">
+  垃圾收集算法
+  <a class="anchor" href="#%e5%9e%83%e5%9c%be%e6%94%b6%e9%9b%86%e7%ae%97%e6%b3%95">#</a>
+</h3>
+<ul>
+<li>
+<p><strong>标记-清除算法（Mark-Sweep）</strong></p>
+<ul>
+<li>执行过程：当堆中的有效内存空间被耗尽的时候，就会停止整个程序（STW），然后进行两项工作，第一项是标记，第二项是回收。</li>
+<li>标记：从根节点开始，标记所有被引用的对象。一般是在对象的Header中记录为可达对象。</li>
+<li>清除：对堆内存从头到尾进行线性的遍历，如果发现某个对象在其header中没有被标记为可达对象，则将其回收。</li>
+<li>优点：实现简单。</li>
+<li>缺点：效率不够高；导致STW；会导致内存空间不连续，产生内存碎片，需要维护一个空闲列表。</li>
+</ul>
+</li>
+</ul>
+<p>
+  <img src="/img/%e5%9e%83%e5%9c%be%e5%9b%9e%e6%94%b6/1.jpg" alt="标记-清除算法" /></p>
+<ul>
+<li>
+<p><strong>复制算法</strong></p>
+<ul>
+<li>执行过程：将可用内存按容量分为大小相等的两块，每次只使用其中一块。当这一块的内存用完了，就将还活着的对象复制到另外一块上面去，然后再把已使用过的内存空间一次清理掉。</li>
+<li>优点：实现简单；运行高效，不会出现内存碎片。</li>
+<li>缺点：需要两倍的内存空间。</li>
+<li>适用场景：存活对象比较少，垃圾对象比较多的场景。</li>
+</ul>
+</li>
+</ul>
+<p>
+  <img src="/img/%e5%9e%83%e5%9c%be%e5%9b%9e%e6%94%b6/2.jpg" alt="复制算法" /></p>
+<ul>
+<li><strong>标记-压缩（整理）算法</strong>
+<ul>
+<li>执行过程：第一阶段和标记-清除算法一样，从根节点标记所有被引用的对象。第二阶段是将所有存活对象整理到内存的一端，按顺序排放。之后清理边界外的所有对象。</li>
+<li>指针碰撞：如果内存空间以规整、有序的方式分布，即已用和未用的内存都各自一边，彼此之间维系着一个记录下一次分配起始点的标记指针，当为新对象分配内存时，只需要通过修改指针的偏移量将新对象分配在第一个空闲内存位置上，这种分配方式就叫指针碰撞（Bump the Pointer）。</li>
+<li>优点：解决了内存碎片化的问题；消除了复制算法中内存减半的问题。</li>
+<li>缺点：效率低于复制算法和标记-清除算法；移动对象的同时，还要调整引用的地址；会导致stw。</li>
+</ul>
+</li>
+</ul>
+<p>
+  <img src="/img/%e5%9e%83%e5%9c%be%e5%9b%9e%e6%94%b6/3.jpg" alt="标记-整理算法" /></p>
+<ul>
+<li>
+<p><strong>分代收集算法</strong></p>
+<ul>
+<li>不同的对象的生命周期是不一样的。因此，不同生命周期的对象可以采用不同的收集方式，以提高回收效率。一般把java堆分为新生代和老年代，这样就可以根据各个年代的特点使用不同的回收算法，以提高垃圾回收的效率。</li>
+</ul>
+</li>
+<li>
+<p><strong>增量收集算法</strong></p>
+<ul>
+<li>如果一次将所有的垃圾进行处理，需要造成系统长时间的停顿，那么就可以让垃圾收集线程和应用程序线程交替执行。每次，垃圾收集线程只收集一小片区域的内存空间，接着切换到应用程序线程，依次反复，直到垃圾收集完成。</li>
+<li>总的来说，增量收集算法的基础仍然是传统的标记-清除算法和复制算法。增量收集算法通过对线程间冲突的妥善处理，允许垃圾收集器以分阶段的方式完成标记、清理和复制工作。</li>
+<li>缺点：线程切换和上下文转换的消耗，会使得垃圾回收的总体成本上升，造成系统吞吐量下降。</li>
+</ul>
+</li>
+<li>
+<p><strong>分区算法</strong></p>
+<ul>
+<li>将堆空间划分为连续不同的小区间region，每一个小区间都独立使用，独立回收。这种算法的好处是可以控制一次回收多少个小区间。</li>
+</ul>
+</li>
+</ul>
     </p>
   </article>
   
