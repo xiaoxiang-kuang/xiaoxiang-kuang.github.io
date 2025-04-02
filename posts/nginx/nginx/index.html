@@ -277,12 +277,6 @@ https://github.com/alex-shpak/hugo-book
 </h3>
 <ul>
 <li>使用<code>proxy_pass</code>来配置代理服务。代理服务的流程：server接收request-&gt;把request传给代理服务-&gt;获取代理服务的response-&gt;把response返回给客户端。</li>
-<li>proxy_pass有两个要注意的点
-<ul>
-<li>proxy_pass后面如果跟了一个完整的url，如<code>http://localhost:8080/xxx</code>，那么最后访问的时候就是location中匹配的那一部分替换成proxy_pass的url。</li>
-<li>proxy_pass后面如果跟的是如<code>http://localhost:8080</code>，那么最后访问的是proxy_pass的链接加上请求路径。</li>
-</ul>
-</li>
 </ul>
 <h3 id="例">
   例：
@@ -290,16 +284,16 @@ https://github.com/alex-shpak/hugo-book
 </h3>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-nginx" data-lang="nginx"><span style="display:flex;"><span><span style="color:#66d9ef">server</span> {
 </span></span><span style="display:flex;"><span>	<span style="color:#f92672">listen</span> <span style="color:#ae81ff">80</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#最后的地址就是http://localhost:8080/journey/xxx
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">location</span> <span style="color:#e6db74">/journey</span> {
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">proxy_pass</span> <span style="color:#e6db74">http://localhost:8080</span>;
-</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#不带 / 结尾：保留 location 匹配的路径，追加到代理地址后
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#f92672">location</span> <span style="color:#e6db74">/api/</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#f92672">proxy_pass</span> <span style="color:#e6db74">http://backend</span>;  <span style="color:#75715e"># 请求 /api/test → http://backend/api/test
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	}
 </span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#假如访问的是abc.com/chat/xxx, 实际访问的地址就是http://xyz.com:8080/test/xxx，location对应的chat会被替换为url。
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">location</span> <span style="color:#e6db74">/chat</span> {
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">proxy_pass</span> <span style="color:#e6db74">http://xyz.com:8080/test</span>;
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#带 / 结尾：proxy_pass 的 URL 若以 / 结尾，Nginx 会替换 location 匹配的部分。 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#f92672">location</span> <span style="color:#e6db74">/api/</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#f92672">proxy_pass</span> <span style="color:#e6db74">http://backend/</span>;  <span style="color:#75715e"># 请求 /api/test → http://backend/test
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	}
+</span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    <span style="color:#75715e">#将会映射到/html/tool这个路径下
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">location</span> <span style="color:#e6db74">/tool</span> {
 </span></span><span style="display:flex;"><span>    	<span style="color:#f92672">root</span> <span style="color:#e6db74">html</span>;
