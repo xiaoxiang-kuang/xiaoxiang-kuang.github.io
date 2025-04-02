@@ -105,6 +105,7 @@ https://github.com/alex-shpak/hugo-book
             <li><a href="#例">例：</a></li>
           </ul>
         </li>
+        <li><a href="#nginx配置代理yum源和apt源">nginx配置代理yum源和apt源</a></li>
         <li><a href="#nginx内嵌的变量">nginx内嵌的变量</a></li>
         <li><a href="#nginx指令">nginx指令</a>
           <ul>
@@ -210,6 +211,7 @@ https://github.com/alex-shpak/hugo-book
             <li><a href="#例">例：</a></li>
           </ul>
         </li>
+        <li><a href="#nginx配置代理yum源和apt源">nginx配置代理yum源和apt源</a></li>
         <li><a href="#nginx内嵌的变量">nginx内嵌的变量</a></li>
         <li><a href="#nginx指令">nginx指令</a>
           <ul>
@@ -305,7 +307,38 @@ https://github.com/alex-shpak/hugo-book
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p><strong>参考链接：</strong>
   <a href="http://nginx.org/en/docs/beginners_guide.html">Beginner’s Guide (nginx.org)</a></p>
-<h2 id="nginx内嵌的变量">
+<h2 id="nginx配置代理yum源和apt源">
+  nginx配置代理yum源和apt源
+  <a class="anchor" href="#nginx%e9%85%8d%e7%bd%ae%e4%bb%a3%e7%90%86yum%e6%ba%90%e5%92%8capt%e6%ba%90">#</a>
+</h2>
+<ol>
+<li>nginx配置文件中加入如下配置，启动nginx</li>
+</ol>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">	server {
+		listen 8803;
+        #必须要有DNS解析的配置
+		resolver 114.114.114.114;
+		
+		location / {
+			proxy_pass http://$http_host$request_uri;
+			proxy_ssl_verify off;
+		}
+    }
+</code></pre><ol start="2">
+<li>ubuntu中创建/etc/apt/apt.conf文件，填入如下内容<code>/etc/apt/apt.conf</code> 随后执行<code>apt update</code>即可完成代理。</li>
+</ol>
+<pre tabindex="0"><code>Acquire::http::Proxy &#34;http://131.110.99.99:8803/&#34;;
+</code></pre><ol start="3">
+<li>centos或者rocky中，编辑文件<code>/etc/yum.conf</code>，加入<code>proxy=http://131.110.99.99:8803</code>（完整文件如下所示），同时还需要将源配置文件中的https改成http<code>sed -i 's/https/http/g' /etc/yum.repos.d/*.repo</code>，随后执行<code>yum makecache</code>即可。</li>
+</ol>
+<pre tabindex="0"><code>[main]
+proxy=http://131.110.99.99:8803
+gpgcheck=1
+installonly_limit=3
+clean_requirements_on_remove=True
+best=True
+skip_if_unavailable=False
+</code></pre><h2 id="nginx内嵌的变量">
   nginx内嵌的变量
   <a class="anchor" href="#nginx%e5%86%85%e5%b5%8c%e7%9a%84%e5%8f%98%e9%87%8f">#</a>
 </h2>
