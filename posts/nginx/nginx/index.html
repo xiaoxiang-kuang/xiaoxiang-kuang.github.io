@@ -320,7 +320,8 @@ https://github.com/alex-shpak/hugo-book
 		resolver 114.114.114.114;
 		
 		location / {
-			proxy_pass http://$http_host$request_uri;
+			proxy_pass https://$http_host$request_uri;
+			proxy_set_header Host $http_host;
 			proxy_ssl_verify off;
 		}
     }
@@ -328,8 +329,8 @@ https://github.com/alex-shpak/hugo-book
 <li>ubuntu中创建/etc/apt/apt.conf文件，填入如下内容<code>/etc/apt/apt.conf</code> 随后执行<code>apt update</code>即可完成代理。</li>
 </ol>
 <pre tabindex="0"><code>Acquire::http::Proxy &#34;http://131.110.99.99:8803/&#34;;
-</code></pre><ol start="3">
-<li>centos或者rocky中，编辑文件<code>/etc/yum.conf</code>，加入<code>proxy=http://131.110.99.99:8803</code>（完整文件如下所示），同时还需要将源配置文件中的https改成http<code>sed -i 's/https/http/g' /etc/yum.repos.d/*.repo</code>，随后执行<code>yum makecache</code>即可。</li>
+</code></pre><ol>
+<li>centos或者rocky中，编辑文件<code>/etc/yum.conf</code>，加入<code>proxy=http://131.110.99.99:8803</code>（完整文件如下所示），随后执行<code>yum makecache</code>即可。</li>
 </ol>
 <pre tabindex="0"><code>[main]
 proxy=http://131.110.99.99:8803

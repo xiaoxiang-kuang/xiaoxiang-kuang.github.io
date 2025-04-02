@@ -422,7 +422,8 @@ http://nginx.org/en/docs/http/server_names.html
 		resolver 114.114.114.114;
 		
 		location / {
-			proxy_pass http://$http_host$request_uri;
+			proxy_pass https://$http_host$request_uri;
+			proxy_set_header Host $http_host;
 			proxy_ssl_verify off;
 		}
     }
@@ -430,8 +431,8 @@ http://nginx.org/en/docs/http/server_names.html
 &lt;li&gt;ubuntu中创建/etc/apt/apt.conf文件，填入如下内容&lt;code&gt;/etc/apt/apt.conf&lt;/code&gt; 随后执行&lt;code&gt;apt update&lt;/code&gt;即可完成代理。&lt;/li&gt;
 &lt;/ol&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Acquire::http::Proxy &amp;#34;http://131.110.99.99:8803/&amp;#34;;
-&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;3&#34;&gt;
-&lt;li&gt;centos或者rocky中，编辑文件&lt;code&gt;/etc/yum.conf&lt;/code&gt;，加入&lt;code&gt;proxy=http://131.110.99.99:8803&lt;/code&gt;（完整文件如下所示），同时还需要将源配置文件中的https改成http&lt;code&gt;sed -i &#39;s/https/http/g&#39; /etc/yum.repos.d/*.repo&lt;/code&gt;，随后执行&lt;code&gt;yum makecache&lt;/code&gt;即可。&lt;/li&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;ol&gt;
+&lt;li&gt;centos或者rocky中，编辑文件&lt;code&gt;/etc/yum.conf&lt;/code&gt;，加入&lt;code&gt;proxy=http://131.110.99.99:8803&lt;/code&gt;（完整文件如下所示），随后执行&lt;code&gt;yum makecache&lt;/code&gt;即可。&lt;/li&gt;
 &lt;/ol&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;[main]
 proxy=http://131.110.99.99:8803
