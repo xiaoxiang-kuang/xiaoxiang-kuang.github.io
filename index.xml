@@ -12549,6 +12549,7 @@ destination：表示此规则是针对哪个目标进行限制
 &lt;li&gt;-M 不建立home目录(系统账号默认) ；-m 建立home目录(一般账号默认)。&lt;/li&gt;
 &lt;li&gt;useradd参考的是/etc/default/useradd文件，默认值可以通过&lt;code&gt;useradd -D&lt;/code&gt;查看；除此之外，还参考了/etc/login.defs文件。&lt;/li&gt;
 &lt;li&gt;相关命令:&lt;code&gt;id chsh&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;adduser --ingroup sudo h1c&lt;/code&gt;，ubuntu上可以使用此命令交互式创建用户，创建好的目录和命令完整。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id=&#34;passwd&#34;&gt;
   passwd

@@ -2394,6 +2394,7 @@ destination：表示此规则是针对哪个目标进行限制
 <li>-M 不建立home目录(系统账号默认) ；-m 建立home目录(一般账号默认)。</li>
 <li>useradd参考的是/etc/default/useradd文件，默认值可以通过<code>useradd -D</code>查看；除此之外，还参考了/etc/login.defs文件。</li>
 <li>相关命令:<code>id chsh</code></li>
+<li><code>adduser --ingroup sudo h1c</code>，ubuntu上可以使用此命令交互式创建用户，创建好的目录和命令完整。</li>
 </ul>
 <h3 id="passwd">
   passwd
