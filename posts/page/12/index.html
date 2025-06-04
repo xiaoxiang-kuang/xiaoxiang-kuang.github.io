@@ -458,6 +458,251 @@ https://github.com/alex-shpak/hugo-book
   
   <article class="markdown book-post">
     <h2>
+      <a href="/posts/%E6%95%B0%E6%8D%AE%E5%BA%93/clickhouse%E8%B5%B7%E6%AD%A5/">clickhouse起步</a>
+    </h2>
+    
+  <h5>2021-03-11</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
+  </div>
+  
+
+
+
+
+    <p><ul>
+<li>online analytical processing of queries（OLAP）：联机分析</li>
+<li>clickhouse是一个用于OLAP的列式数据库管理系统（来自同一列的数据被存储在一起）。</li>
+<li><code>sudo service clickhouse-server start</code>启动clickhouse.</li>
+<li>clickhouse不要求主键唯一</li>
+</ul>
+<h3 id="clickhouse连接客户端">
+  clickhouse连接客户端
+  <a class="anchor" href="#clickhouse%e8%bf%9e%e6%8e%a5%e5%ae%a2%e6%88%b7%e7%ab%af">#</a>
+</h3>
+<h4 id="clickhouse-client">
+  clickhouse-client
+  <a class="anchor" href="#clickhouse-client">#</a>
+</h4>
+<ul>
+<li>
+  <a href="https://clickhouse.tech/docs/zh/interfaces/cli/#command-line-options">clickhouse-client命令行参数</a></li>
+<li><code>clickhouse-client</code>配置文件地址（使用以下第一个配置文件）
+<ul>
+<li>通过<code>--config-file</code>参数指定</li>
+<li><code>./clickhouse-client.xml</code></li>
+<li><code>~/.clickhouse-client/config.xml</code></li>
+<li><code>/etc/clickhouse-server/config.xml</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="mysql">
+  mysql
+  <a class="anchor" href="#mysql">#</a>
+</h4>
+<ul>
+<li>可以通过mysql命令工具连接，需要在配置文件中配置mysql_port：<code>&lt;mysql_port&gt;9004&lt;/mysql_port&gt;</code></li>
+<li>使用命令行工具mysql进行连接：<code>mysql --protocol tcp -u default -P 9004</code></li>
+</ul>
+<h3 id="数据库引擎">
+  数据库引擎
+  <a class="anchor" href="#%e6%95%b0%e6%8d%ae%e5%ba%93%e5%bc%95%e6%93%8e">#</a>
+</h3>
+<h4 id="mysql引擎">
+  mysql引擎
+  <a class="anchor" href="#mysql%e5%bc%95%e6%93%8e">#</a>
+</h4>
+<ul>
+<li>
+<p>用于将远程的mysql服务器中的表映射到clickhouse中，并允许对表进行insert和select查询等，但无法执行rename、create table、alter操作。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">DATABASE</span> [<span style="color:#66d9ef">IF</span> <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">EXISTS</span>] db_name [<span style="color:#66d9ef">ON</span> <span style="color:#66d9ef">CLUSTER</span> <span style="color:#66d9ef">cluster</span>] ENGINE <span style="color:#f92672">=</span> MYSQL(<span style="color:#e6db74">&#39;host:port&#39;</span>,[<span style="color:#e6db74">&#39;database&#39;</span><span style="color:#f92672">|</span> <span style="color:#66d9ef">database</span>],<span style="color:#e6db74">&#39;user&#39;</span>,<span style="color:#e6db74">&#39;password&#39;</span>)
+</span></span></code></pre></div></li>
+<li>
+<p>
+  <a href="https://clickhouse.tech/docs/en/engines/database-engines/mysql/#data_types-support">类型的对应</a>，其他的mysql数据类型全部转化为字符串</p>
+</li>
+</ul>
+<h3 id="表引擎">
+  表引擎
+  <a class="anchor" href="#%e8%a1%a8%e5%bc%95%e6%93%8e">#</a>
+</h3>
+<h4 id="merge-tree">
+  merge tree
+  <a class="anchor" href="#merge-tree">#</a>
+</h4>
+<ul>
+<li>
+<p>MergeTree：设计用于插入大量数据当一张表当中。数据可以以数据片段的形式一个接一个的快速写入，数据片段在后台按照一定的规则进行合并。</p>
+</li>
+<li>
+<p>SummingMergeTree：合并SummingMergeTree表的数据片断时，clickhouse会把所有具有<strong>相同主键的行合并为一行</strong>，该行包含了被合并的行中具有数值数据类型的列的汇总值。如果主键的组合方式使得单个键值对应于大量的行，则可以显著的减少存储空间并加快数据查询的速度。</p>
+</li>
+<li>
+<p>ReplacingMergeTree：该引擎会<strong>删除排序键值相同</strong>的重复项。适用于在后台清除重复的数据以节省空间，但不保证没有重复数据出现。在数据合并的时候，如果制定了Replcaing的参数，当参数未指定，则保留最后一条数据，当参数已指定，则保留ver值最大的版本。数据的去重只会在数据的合并期间进行，所以常常今天数据重复了，明天看数据还没有被去重。</p>
+</li>
+<li>
+<p>AggregateMergeTree：改变了数据片段的合并逻辑。clickhouse会将一个数据片段内所有具有相同主键的行替换为一行，这一行会存储一系列聚合函数的状态。可以使用AggregatingMergeTree表来做增量数据的聚合统计，包括物化视图的数据聚合。</p>
+</li>
+<li>
+<p>CollapsingMergeTree：会异步的删除掉所有字段的值都相等（除了列Sign，该列一个为1，一个为-1）的成对的行，下面这两行就会被删除。</p>
+<ul>
+<li>
+<table>
+<thead>
+<tr>
+<th>UserId</th>
+<th>PageViews</th>
+<th>Duration</th>
+<th>Sign</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>123</td>
+<td>5</td>
+<td>146</td>
+<td>1</td>
+</tr>
+<tr>
+<td>123</td>
+<td>5</td>
+<td>146</td>
+<td>-1</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>1是状态行，-1是状态取消行</p>
+</li>
+</ul>
+</li>
+<li>
+<p>VersionedCollapsingMergeTree：用于相同目的的折叠树但使用了不同的折叠算法，允许以多个线程的任何顺序插入数据。Version列有助于正确折叠行，即使他们以错误的顺序插入。而CollapsingMergeTree只允许严格的连续插入。</p>
+</li>
+</ul>
+<h5 id="mergetree">
+  MergeTree
+  <a class="anchor" href="#mergetree">#</a>
+</h5>
+<ul>
+<li>
+<p>数据可以以数据片段的形式一个接一个的快速写入，数据片段在后台按照一定的规则进行合并。</p>
+</li>
+<li>
+<p>存储的数据按主键排序；支持数据分区（如果指定分区键的话）；支持数据副本；支持数据采样。</p>
+</li>
+<li>
+<p>建表（
+  <a href="https://clickhouse.tech/docs/zh/engines/table-engines/mergetree-family/mergetree/#table_engine-mergetree-creating-a-table">更多介绍看这里</a>）</p>
+<ul>
+<li>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> [<span style="color:#66d9ef">IF</span> <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">EXISTS</span>] [db.]<span style="color:#66d9ef">table_name</span> [<span style="color:#66d9ef">ON</span> <span style="color:#66d9ef">CLUSTER</span> <span style="color:#66d9ef">cluster</span>]
+</span></span><span style="display:flex;"><span>(
+</span></span><span style="display:flex;"><span>	name [type1] [<span style="color:#66d9ef">DEFAULT</span><span style="color:#f92672">|</span>MATERIALIZED<span style="color:#f92672">|</span><span style="color:#66d9ef">ALIAS</span> expr1] [TTL expr1],
+</span></span><span style="display:flex;"><span>    name [type2] [<span style="color:#66d9ef">DEFAULT</span><span style="color:#f92672">|</span>MATERIALIZED<span style="color:#f92672">|</span><span style="color:#66d9ef">ALIAS</span> expr2] [TTL expr2]
+</span></span><span style="display:flex;"><span>    ...
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">INDEX</span> index_name1 expr1 <span style="color:#66d9ef">TYPE</span> type1(...) GRANULARITY value1,
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">INDEX</span> index_name2 expr2 <span style="color:#66d9ef">TYPE</span> type2(...) GRANULARITY value2
+</span></span><span style="display:flex;"><span>) ENGINE <span style="color:#f92672">=</span> MergeTree()
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">ORDER</span> <span style="color:#66d9ef">BY</span> expr
+</span></span><span style="display:flex;"><span>[PARTITION <span style="color:#66d9ef">BY</span> expr]
+</span></span><span style="display:flex;"><span>[<span style="color:#66d9ef">PRIMARY</span> <span style="color:#66d9ef">KEY</span> expr]
+</span></span><span style="display:flex;"><span>[SAMPLE <span style="color:#66d9ef">BY</span> expr]
+</span></span><span style="display:flex;"><span>[TTL expr [<span style="color:#66d9ef">DELETE</span><span style="color:#f92672">|</span><span style="color:#66d9ef">TO</span> DISK <span style="color:#e6db74">&#39;xxx&#39;</span><span style="color:#f92672">|</span><span style="color:#66d9ef">to</span> volume <span style="color:#e6db74">&#39;xxx&#39;</span>],...]
+</span></span><span style="display:flex;"><span>[SETTINGS name<span style="color:#f92672">=</span>value,..]
+</span></span></code></pre></div></li>
+<li>
+<p>ENGINE：引擎名和参数</p>
+</li>
+<li>
+<p>ORDER BY：排序键，可以是一组列的元组或任意的表达式。<strong>如果没有用PRIMARY KEY显式指定主键，clickhouse会使用排序键作为主键</strong>，如果不需要排序，可以使用ORDER BY tuple()</p>
+</li>
+<li>
+<p>PARTITION BY：分区键，要按月分区，可以使用表达式toYYYYMM(date_column)，这里date_column是一个Date类型的列，分区的格式会是YYYYMM</p>
+</li>
+<li>
+<p>PRIMARY KEY：主键，如果要选择与排序键不同的主键，可选。大部分时间不需要再专门指定一个primary key</p>
+</li>
+<li>
+<p>SIMPLE BY：用于抽样表达式，如果要用抽样表达式，主键中必须包含这个表达式。如<code>SAMPLE BY intHash32(UserID) ORDER BY (CounterID, EventDate, intHash32(UserID))</code></p>
+</li>
+<li>
+<p>TTL：可以为表设置，也可以为每个列单独设置</p>
+<ul>
+<li>表TTL：表可以设置一个用于移除过期行的表达式，当表中的行过期时，clickhouse会删除所有对应的行。clickhouse在数据片段合并的时候会删除掉过期的数据，如果在合并的过程中执行SELECT查询，则可能得到过期的数据。</li>
+</ul>
+</li>
+<li>
+<p>SETTINGS：控制MergeTree行为的额外参数</p>
+<ul>
+<li>index_granularity：索引力度</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>数据存储</p>
+<ul>
+<li>表由按主键排序的数据片段组成。</li>
+<li>当数据被插入到表中时，会创建多个数据片段并按主键的字典排序。</li>
+<li>不同分区的数据会被分成不同的片段，clickhouse在后台合并数据片段以便更高效存储。合并机制不保证具有相同主键的行全部合并到同一个数据片中。</li>
+<li>数据片段以wide或compact格式存储。wide格式下，每一列都会在文件系统中存储为单独的文件，compact模式下所有列都存储在同一个文件下。</li>
+<li>每个数据片段被逻辑分割成颗粒。颗粒是进行数据查询时最小的不可分割数据集。每个颗粒都包含整数个行。</li>
+</ul>
+</li>
+<li>
+<p>可以使用ORDER BY tuple()创建没有主键的表，这种情况下，clickhouse会根据数据插入的顺序存储。</p>
+</li>
+<li>
+<p>对于select查询，如果where子句中有下面这些表达式，就可以使用索引</p>
+<ul>
+<li>包含一个与主键/分区键中的部分字段或全部字段相等或不等的表达式。</li>
+<li>主键/分区键 in (xxx,xxx,xxx) 或者 主键/分区键 like &lsquo;xxx&rsquo;。</li>
+<li>基于主键/分区键的字段上的某些函数。</li>
+<li>基于主键/分区键的表达式的逻辑表达式。</li>
+</ul>
+</li>
+<li>
+<p>TTL</p>
+<ul>
+<li>TTL表达式的计算结果必须是日期或日期时间类型的字段</li>
+</ul>
+</li>
+</ul>
+<p>
+  <a href="https://clickhouse.tech/docs/zh/engines/table-engines/mergetree-family/mergetree/">MergeTree</a>这一块越看越迷惑，之后再来接着看吧。</p>
+<h4 id="日志引擎">
+  日志引擎
+  <a class="anchor" href="#%e6%97%a5%e5%bf%97%e5%bc%95%e6%93%8e">#</a>
+</h4>
+<ul>
+<li>是为了需要写入许多小数据量（少于一百万行）的表的场景而开发的。</li>
+</ul>
+<h5 id="该引擎的共同属性">
+  该引擎的共同属性
+  <a class="anchor" href="#%e8%af%a5%e5%bc%95%e6%93%8e%e7%9a%84%e5%85%b1%e5%90%8c%e5%b1%9e%e6%80%a7">#</a>
+</h5>
+<ol>
+<li>写入时将数据追加到文件末尾。</li>
+<li>不支持索引。</li>
+<li>非原子地写入数据。</li>
+</ol>
+<ul>
+<li>Log和StripeLog支持并行读取数据，Log引擎将表中的每一列使用不同的文件；StripeLog将所有的数据存储到一个文件中</li>
+</ul>
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
       <a href="/posts/python/python%E8%B5%B7%E6%AD%A5/">python起步</a>
     </h2>
     
@@ -3276,178 +3521,6 @@ SHOW CREATE USER root;
 SHOW GRANTS [FOR user];
 show grants for &#39;joe&#39;@&#39;home.example.com&#39;
 </code></pre>
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/git/git%E8%B5%B7%E6%AD%A5/">git起步</a>
-    </h2>
-    
-  <h5>2021-01-28</h5>
-
-
-
-  
-
-  
-  <div>
-    
-      <a href="/tags/git/">git</a>
-  </div>
-  
-
-
-
-
-    <p><ul>
-<li>git：每一次的clone操作，实际上都是对一次代码仓库的完整备份。</li>
-<li>git中文件的三种状态：已修改（modified）和已暂存（staged），已提交（committed）：
-<ul>
-<li>已修改<sup><a id="modified" herf="javascript:;">tag1</a></sup>表示已修改了某个文件，但还没有提交保存（git add之前）；</li>
-<li>已暂存表示把已修改的文件放在下次提交的清单中（git add 之后）;</li>
-<li>已提交表示该文件已经被安全保存在本地数据库中（git commit之后）；</li>
-</ul>
-</li>
-<li>每个项目都有一个git目录（.git），git工作流程如下：
-<ol>
-<li>在工作目录（.git的兄弟目录）中修改某些文件；</li>
-<li>对修改后的文件保存到暂存区域；</li>
-<li>提交跟新，将暂存区域的文件快照转储到git目录中。</li>
-<li>提交到远程仓库。</li>
-</ol>
-</li>
-</ul>
-<h2 id="开始">
-  开始
-  <a class="anchor" href="#%e5%bc%80%e5%a7%8b">#</a>
-</h2>
-<ol>
-<li>安装git，配置个人用户名称和电子邮件地址。
-<code>git config --global user.name &quot;xiaoxiang&quot;</code>
-<code>git config --global user.email &quot;xiaoxiang@xxxx.com&quot;</code></li>
-<li>可以使用<code>git config --list</code>查看已有的配置信息。</li>
-<li>从现有的git仓库克隆<code>git clone [远程仓库]</code>。</li>
-<li>工作目录下的文件分为两种状态：已跟踪和未跟踪：
-<ul>
-<li>已跟踪是本地仓库中有的文件，初次克隆某个仓库时，工作目录的所有文件都是已跟踪的文件。</li>
-<li>未跟踪是新创建的文件，即对该文件从来没有执行git add命令。</li>
-<li>当编辑过某些文件后，git将这些文件标记为已修改，这就跟
-  <a href="/#modified">tag1</a>对于上了。</li>
-</ul>
-</li>
-<li>使用<code>git add</code>开始跟踪一个新文件，<code>git add .</code>暂存当前路径下的所有的已修改的文件。
-<ul>
-<li>通过<code>git status</code>可以查看文件的状态。</li>
-<li>取消已暂存的状态<code>git reset [--mixed] HEAD  &quot;文件名&quot;</code>，该方式会清除暂存区的数据，保留工作目录的数据。</li>
-</ul>
-</li>
-<li>使用<code>git commit -m &quot;提交说明&quot;</code>来提交暂存区的数据到<strong>本地仓库</strong>。</li>
-<li>使用<code>git push origin master</code> 将修改提交到远程仓库。（使用<code>ssh-keygen</code>生成密钥，并将公钥放到git上去，以后提交就不用输账号和密码了）。
-<ul>
-<li><code>git push [remote-name] [branch-name]</code>，这是完整命令。</li>
-</ul>
-</li>
-</ol>
-<h2 id="gitignore">
-  .gitignore
-  <a class="anchor" href="#gitignore">#</a>
-</h2>
-<ul>
-<li>
-<p>可以创建一个.gitignore文件，来指明哪些文件不需要被提交到仓库。</p>
-</li>
-<li>
-<p><code>.gitignore</code>文件的格式规范如下：</p>
-<ul>
-<li>所有空行或者以<code>#</code>开头的行都会被Git忽略。</li>
-<li>忽略指定的模式以外的文件或者目录，可以在模式前加上<code>!</code>。</li>
-<li>匹配模式以<code>/</code>开头防止递归。</li>
-<li>匹配模式以<code>/</code>结尾防止递归。</li>
-<li><code>*</code>匹配零个或多个任意字符，<code>[a-c]</code>匹配任意一个列在方括号中的字符，<code>?</code>只匹配任何一个字符，<code>**</code>表示匹配任意中间目录。</li>
-</ul>
-</li>
-</ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e">#忽略所有的.a文件</span>
-</span></span><span style="display:flex;"><span>*.a
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#跟踪所有的lib.a，即使在前面忽略了.a文件</span>
-</span></span><span style="display:flex;"><span>!lib.a
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#只忽略当前目录下的TODO文件，而不忽略subdir/TODO文件</span>
-</span></span><span style="display:flex;"><span>/TODO
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#忽略任何目录下名为build的文件夹</span>
-</span></span><span style="display:flex;"><span>build/
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#忽略doc/notes.txt，但不忽略doc/server/arch.txt</span>
-</span></span><span style="display:flex;"><span>doc/*.txt
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#忽略doc/目录及其所有子目录下的.pdf文件</span>
-</span></span><span style="display:flex;"><span>doc/**/*.pdf
-</span></span></code></pre></div><h2 id="git-stash">
-  git stash
-  <a class="anchor" href="#git-stash">#</a>
-</h2>
-<ul>
-<li><code>git stash push [-m &quot;暂存的备注&quot;]</code> 暂存当前的更改，并将本地恢复到HEAD。-m是可选的，该参数会给此次暂存加个备注。</li>
-<li><code>git stash list</code> 列出当前所有的暂存，最新的是<code>stash@{0}</code>。</li>
-<li><code>git stash pop</code>  应用stash@{0}，并删除stash@{0}。</li>
-<li><code>git stash drop stash@{0}</code> 从stash列表中删除stash@{0}。</li>
-<li><code>git stash apply stash@{0}</code> 应用stash@{0}，但不删除stash@{0}</li>
-</ul>
-<hr>
-<ul>
-<li>查看文件修改了什么地方，可以使用<code>git diff</code>指令。</li>
-<li>查看提交历史<code>git log</code>，后跟<code>-2</code>只会显示最近两次的跟新。</li>
-<li>切换到其他分支<code>git checkout master</code>。</li>
-<li><code>git tag</code>可以给某一时间点的版本打标签。</li>
-<li><code>git update-index --assume-unchanged 文件名</code>：取消本地跟踪</li>
-<li><code>git update-index --no-assume-unchanged 文件名</code>：恢复本地跟踪</li>
-<li>协议：
-<ul>
-<li>ssh协议：唯一一个同时支持读写操作的网络协议，但无法实现对仓库的匿名访问。</li>
-<li>git协议：该协议通常用来克隆，<strong>通常</strong>不能用来推送（因为没有授权机制，如果允许推送操作，每一个知道该URL的人都有推送权限），比http协议高效。</li>
-<li>http/s协议：容易搭建，通常用来克隆。</li>
-</ul>
-</li>
-</ul>
-<h2 id="git-remote">
-  git remote
-  <a class="anchor" href="#git-remote">#</a>
-</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e">#列出指定的每一个远程服务器的简写</span>
-</span></span><span style="display:flex;"><span>git remote
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#显示远程仓库的简写与对应的URL</span>
-</span></span><span style="display:flex;"><span>git remote -v
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#查看某个远程仓库的更多信息，会列出远程仓库的URL和跟踪分支的信息。</span>
-</span></span><span style="display:flex;"><span>git remote show origin
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#添加一个远程仓库，并指定一个简写</span>
-</span></span><span style="display:flex;"><span>git remote add origin https://xxx.xxx/xxx/xxx
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#修改仓库的远程地址</span>
-</span></span><span style="display:flex;"><span>git remote set-url origin 仓库地址
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#远程仓库的重命名</span>
-</span></span><span style="display:flex;"><span>git remote rename origin paul
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#移除一个远程仓库</span>
-</span></span><span style="display:flex;"><span>git remote remove paul
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#git fetch只会将数据下载到本地仓库，并不会合并。需要手动合并</span>
-</span></span><span style="display:flex;"><span>git fetch origin
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#自动抓取远程分支并合并到本地分支</span>
-</span></span><span style="display:flex;"><span>git pull
-</span></span></code></pre></div><h2 id="git-branch">
-  git branch
-  <a class="anchor" href="#git-branch">#</a>
-</h2>
-<ul>
-<li>只有在本地修改或者产生了文件才会创建主分支master，这个时候才能创建新分支。</li>
-<li><code>git branch</code>查看所有的分支，<code>*</code>表示当前分支。</li>
-<li><code>git checkout -b testing</code>相当于<code>git branch testing (创建一个分支)和 git checkout testing（切到该分支）</code></li>
-<li>删除分支<code>git branch -d testing</code></li>
-<li>分支的合并：在当前分支下（如master），执行<code>git merge testing</code>，会创建新的commit对象，master也会指向他。该commit对象有两个父指针。</li>
-<li>分支的合并会用两个分支的末端以及他们的共同祖先进行一次的三方合并，当两个分支在同一个commit链上时，旧一点的那个分支发起合并，则将其直接指向了新一点的那个分支。</li>
-<li>有时候分支合并会失败，比如两个分支同时修改了相同的文件。这个时候<code>git merge testing</code>仍然做了合并，但是没有提交，可以使用<code>git status</code>查看，此时就需要手动合并了。</li>
-<li><code>git branch --merged</code>查看那些分支已被并入当前分支。<code>git branch --no-merged</code>查看尚未合并的分支。</li>
-</ul>
-<p><strong>参考链接：</strong>
-  <a href="http://git.oschina.net/progit/">Pro Git</a></p>
-<p><strong>参考链接：</strong>
-  <a href="https://git-scm.com/book/zh/v2/Git-%e5%9f%ba%e7%a1%80-%e8%ae%b0%e5%bd%95%e6%af%8f%e6%ac%a1%e6%9b%b4%e6%96%b0%e5%88%b0%e4%bb%93%e5%ba%93">Git - 记录每次更新到仓库 (git-scm.com)</a></p>
-<p><strong>参考链接：</strong><a href="https://gitee.com/opensource-guide/git_tutorial/Git 命令详解/常用 Git 命令/#git-命令手册">开源指北</a></p>
     </p>
   </article>
   

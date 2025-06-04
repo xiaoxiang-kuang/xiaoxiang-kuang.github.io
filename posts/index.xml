@@ -6,6 +6,25 @@
     <description>Recent content in 主页 on 小象的blog</description>
     <generator>Hugo -- gohugo.io</generator><atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Adb命令</title>
+      <link>/posts/%E5%85%B6%E4%BB%96/adb%E5%91%BD%E4%BB%A4/</link>
+      <pubDate>Wed, 04 Jun 2025 14:25:31 +0800</pubDate>
+      
+      <guid>/posts/%E5%85%B6%E4%BB%96/adb%E5%91%BD%E4%BB%A4/</guid>
+      <description>&lt;p&gt;
+  &lt;a href=&#34;/file/platform-tools-latest-windows.zip&#34;&gt;adb工具包下载&lt;/a&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#禁用应用&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;adb shell pm disable-user --user &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; com.vivo.browser
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#列出已经禁用的应用&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;adb shell pm list packages -d
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#启用应用&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;adb shell pm enable com.vivo.browser
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+    </item>
+    
+    <item>
       <title>ACPI调试</title>
       <link>/posts/bios/acpi%E8%B0%83%E8%AF%95/</link>
       <pubDate>Mon, 23 Dec 2024 11:11:33 +0800</pubDate>

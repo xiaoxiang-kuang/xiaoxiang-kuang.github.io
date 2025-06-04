@@ -458,6 +458,178 @@ https://github.com/alex-shpak/hugo-book
   
   <article class="markdown book-post">
     <h2>
+      <a href="/posts/git/git%E8%B5%B7%E6%AD%A5/">git起步</a>
+    </h2>
+    
+  <h5>2021-01-28</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/git/">git</a>
+  </div>
+  
+
+
+
+
+    <p><ul>
+<li>git：每一次的clone操作，实际上都是对一次代码仓库的完整备份。</li>
+<li>git中文件的三种状态：已修改（modified）和已暂存（staged），已提交（committed）：
+<ul>
+<li>已修改<sup><a id="modified" herf="javascript:;">tag1</a></sup>表示已修改了某个文件，但还没有提交保存（git add之前）；</li>
+<li>已暂存表示把已修改的文件放在下次提交的清单中（git add 之后）;</li>
+<li>已提交表示该文件已经被安全保存在本地数据库中（git commit之后）；</li>
+</ul>
+</li>
+<li>每个项目都有一个git目录（.git），git工作流程如下：
+<ol>
+<li>在工作目录（.git的兄弟目录）中修改某些文件；</li>
+<li>对修改后的文件保存到暂存区域；</li>
+<li>提交跟新，将暂存区域的文件快照转储到git目录中。</li>
+<li>提交到远程仓库。</li>
+</ol>
+</li>
+</ul>
+<h2 id="开始">
+  开始
+  <a class="anchor" href="#%e5%bc%80%e5%a7%8b">#</a>
+</h2>
+<ol>
+<li>安装git，配置个人用户名称和电子邮件地址。
+<code>git config --global user.name &quot;xiaoxiang&quot;</code>
+<code>git config --global user.email &quot;xiaoxiang@xxxx.com&quot;</code></li>
+<li>可以使用<code>git config --list</code>查看已有的配置信息。</li>
+<li>从现有的git仓库克隆<code>git clone [远程仓库]</code>。</li>
+<li>工作目录下的文件分为两种状态：已跟踪和未跟踪：
+<ul>
+<li>已跟踪是本地仓库中有的文件，初次克隆某个仓库时，工作目录的所有文件都是已跟踪的文件。</li>
+<li>未跟踪是新创建的文件，即对该文件从来没有执行git add命令。</li>
+<li>当编辑过某些文件后，git将这些文件标记为已修改，这就跟
+  <a href="/#modified">tag1</a>对于上了。</li>
+</ul>
+</li>
+<li>使用<code>git add</code>开始跟踪一个新文件，<code>git add .</code>暂存当前路径下的所有的已修改的文件。
+<ul>
+<li>通过<code>git status</code>可以查看文件的状态。</li>
+<li>取消已暂存的状态<code>git reset [--mixed] HEAD  &quot;文件名&quot;</code>，该方式会清除暂存区的数据，保留工作目录的数据。</li>
+</ul>
+</li>
+<li>使用<code>git commit -m &quot;提交说明&quot;</code>来提交暂存区的数据到<strong>本地仓库</strong>。</li>
+<li>使用<code>git push origin master</code> 将修改提交到远程仓库。（使用<code>ssh-keygen</code>生成密钥，并将公钥放到git上去，以后提交就不用输账号和密码了）。
+<ul>
+<li><code>git push [remote-name] [branch-name]</code>，这是完整命令。</li>
+</ul>
+</li>
+</ol>
+<h2 id="gitignore">
+  .gitignore
+  <a class="anchor" href="#gitignore">#</a>
+</h2>
+<ul>
+<li>
+<p>可以创建一个.gitignore文件，来指明哪些文件不需要被提交到仓库。</p>
+</li>
+<li>
+<p><code>.gitignore</code>文件的格式规范如下：</p>
+<ul>
+<li>所有空行或者以<code>#</code>开头的行都会被Git忽略。</li>
+<li>忽略指定的模式以外的文件或者目录，可以在模式前加上<code>!</code>。</li>
+<li>匹配模式以<code>/</code>开头防止递归。</li>
+<li>匹配模式以<code>/</code>结尾防止递归。</li>
+<li><code>*</code>匹配零个或多个任意字符，<code>[a-c]</code>匹配任意一个列在方括号中的字符，<code>?</code>只匹配任何一个字符，<code>**</code>表示匹配任意中间目录。</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e">#忽略所有的.a文件</span>
+</span></span><span style="display:flex;"><span>*.a
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#跟踪所有的lib.a，即使在前面忽略了.a文件</span>
+</span></span><span style="display:flex;"><span>!lib.a
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#只忽略当前目录下的TODO文件，而不忽略subdir/TODO文件</span>
+</span></span><span style="display:flex;"><span>/TODO
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#忽略任何目录下名为build的文件夹</span>
+</span></span><span style="display:flex;"><span>build/
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#忽略doc/notes.txt，但不忽略doc/server/arch.txt</span>
+</span></span><span style="display:flex;"><span>doc/*.txt
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#忽略doc/目录及其所有子目录下的.pdf文件</span>
+</span></span><span style="display:flex;"><span>doc/**/*.pdf
+</span></span></code></pre></div><h2 id="git-stash">
+  git stash
+  <a class="anchor" href="#git-stash">#</a>
+</h2>
+<ul>
+<li><code>git stash push [-m &quot;暂存的备注&quot;]</code> 暂存当前的更改，并将本地恢复到HEAD。-m是可选的，该参数会给此次暂存加个备注。</li>
+<li><code>git stash list</code> 列出当前所有的暂存，最新的是<code>stash@{0}</code>。</li>
+<li><code>git stash pop</code>  应用stash@{0}，并删除stash@{0}。</li>
+<li><code>git stash drop stash@{0}</code> 从stash列表中删除stash@{0}。</li>
+<li><code>git stash apply stash@{0}</code> 应用stash@{0}，但不删除stash@{0}</li>
+</ul>
+<hr>
+<ul>
+<li>查看文件修改了什么地方，可以使用<code>git diff</code>指令。</li>
+<li>查看提交历史<code>git log</code>，后跟<code>-2</code>只会显示最近两次的跟新。</li>
+<li>切换到其他分支<code>git checkout master</code>。</li>
+<li><code>git tag</code>可以给某一时间点的版本打标签。</li>
+<li><code>git update-index --assume-unchanged 文件名</code>：取消本地跟踪</li>
+<li><code>git update-index --no-assume-unchanged 文件名</code>：恢复本地跟踪</li>
+<li>协议：
+<ul>
+<li>ssh协议：唯一一个同时支持读写操作的网络协议，但无法实现对仓库的匿名访问。</li>
+<li>git协议：该协议通常用来克隆，<strong>通常</strong>不能用来推送（因为没有授权机制，如果允许推送操作，每一个知道该URL的人都有推送权限），比http协议高效。</li>
+<li>http/s协议：容易搭建，通常用来克隆。</li>
+</ul>
+</li>
+</ul>
+<h2 id="git-remote">
+  git remote
+  <a class="anchor" href="#git-remote">#</a>
+</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e">#列出指定的每一个远程服务器的简写</span>
+</span></span><span style="display:flex;"><span>git remote
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#显示远程仓库的简写与对应的URL</span>
+</span></span><span style="display:flex;"><span>git remote -v
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#查看某个远程仓库的更多信息，会列出远程仓库的URL和跟踪分支的信息。</span>
+</span></span><span style="display:flex;"><span>git remote show origin
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#添加一个远程仓库，并指定一个简写</span>
+</span></span><span style="display:flex;"><span>git remote add origin https://xxx.xxx/xxx/xxx
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#修改仓库的远程地址</span>
+</span></span><span style="display:flex;"><span>git remote set-url origin 仓库地址
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#远程仓库的重命名</span>
+</span></span><span style="display:flex;"><span>git remote rename origin paul
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#移除一个远程仓库</span>
+</span></span><span style="display:flex;"><span>git remote remove paul
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#git fetch只会将数据下载到本地仓库，并不会合并。需要手动合并</span>
+</span></span><span style="display:flex;"><span>git fetch origin
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#自动抓取远程分支并合并到本地分支</span>
+</span></span><span style="display:flex;"><span>git pull
+</span></span></code></pre></div><h2 id="git-branch">
+  git branch
+  <a class="anchor" href="#git-branch">#</a>
+</h2>
+<ul>
+<li>只有在本地修改或者产生了文件才会创建主分支master，这个时候才能创建新分支。</li>
+<li><code>git branch</code>查看所有的分支，<code>*</code>表示当前分支。</li>
+<li><code>git checkout -b testing</code>相当于<code>git branch testing (创建一个分支)和 git checkout testing（切到该分支）</code></li>
+<li>删除分支<code>git branch -d testing</code></li>
+<li>分支的合并：在当前分支下（如master），执行<code>git merge testing</code>，会创建新的commit对象，master也会指向他。该commit对象有两个父指针。</li>
+<li>分支的合并会用两个分支的末端以及他们的共同祖先进行一次的三方合并，当两个分支在同一个commit链上时，旧一点的那个分支发起合并，则将其直接指向了新一点的那个分支。</li>
+<li>有时候分支合并会失败，比如两个分支同时修改了相同的文件。这个时候<code>git merge testing</code>仍然做了合并，但是没有提交，可以使用<code>git status</code>查看，此时就需要手动合并了。</li>
+<li><code>git branch --merged</code>查看那些分支已被并入当前分支。<code>git branch --no-merged</code>查看尚未合并的分支。</li>
+</ul>
+<p><strong>参考链接：</strong>
+  <a href="http://git.oschina.net/progit/">Pro Git</a></p>
+<p><strong>参考链接：</strong>
+  <a href="https://git-scm.com/book/zh/v2/Git-%e5%9f%ba%e7%a1%80-%e8%ae%b0%e5%bd%95%e6%af%8f%e6%ac%a1%e6%9b%b4%e6%96%b0%e5%88%b0%e4%bb%93%e5%ba%93">Git - 记录每次更新到仓库 (git-scm.com)</a></p>
+<p><strong>参考链接：</strong><a href="https://gitee.com/opensource-guide/git_tutorial/Git 命令详解/常用 Git 命令/#git-命令手册">开源指北</a></p>
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
       <a href="/posts/linux/%E6%96%87%E4%BB%B6/">文件</a>
     </h2>
     
@@ -1102,107 +1274,6 @@ https://github.com/alex-shpak/hugo-book
 <li>对应的线程状态还是wait状态</li>
 <li>unpark可以在park之前执行，仍然可以恢复线程的执行</li>
 </ul>
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E6%A1%A5%E6%A8%A1%E5%BC%8F/">桥模式</a>
-    </h2>
-    
-  <h5>2020-10-20</h5>
-
-
-
-  
-
-  
-  <div>
-    
-      <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
-  </div>
-  
-
-
-
-
-    <p><ul>
-<li>模式定义：将抽象与实现分离，使它们都可以独立地变化。</li>
-<li>应用场景：两个非常强的变化维度。</li>
-</ul>
-<h3 id="案例">
-  案例
-  <a class="anchor" href="#%e6%a1%88%e4%be%8b">#</a>
-</h3>
-<p>
-  <img src="/img/%e6%a1%a5%e6%a8%a1%e5%bc%8f/1.jpg" alt="场景" /></p>
-<ol>
-<li>
-<p>分析一下，首先会创建1个电脑类，然后创建3个电脑的子类（即电脑的类型），再创建3x3个子类。假设有n种电脑类型，m种电脑品牌，那么产生的类的数量为<strong>1+n+n</strong>x<strong>m</strong>。</p>
-</li>
-<li>
-<p>如果再加一个电脑品牌acer，则需要再添加三个类，即acer台式机、acer笔记本、acer平板。显然这种方式产生的类的数量非常多。</p>
-</li>
-<li>
-<p>此外，这个实现违背了单一职责原则，类中出现了两个变化（电脑类型和品牌）。</p>
-</li>
-<li>
-<p>解决办法：将类型写成一个抽象类，将品牌写成一个抽象类。通过一个&quot;桥&quot;将他们联系起来。</p>
-</li>
-</ol>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">//品牌类
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">Brand</span><span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">info</span><span style="color:#f92672">();</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Lenovo</span> <span style="color:#66d9ef">implements</span> Brand<span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">info</span><span style="color:#f92672">(){</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">//...
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Apple</span> <span style="color:#66d9ef">implements</span> Brand<span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">info</span><span style="color:#f92672">(){</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">//...
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Dell</span> <span style="color:#66d9ef">implements</span> Brand<span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">info</span><span style="color:#f92672">(){</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">//...
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
-</span></span></code></pre></div><hr>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">//电脑类
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">abstract</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Computer</span><span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//通过类组合来替代类继承
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">protected</span> Brand brand<span style="color:#f92672">;</span>
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">Computer</span><span style="color:#f92672">(</span>Brand brand<span style="color:#f92672">){</span><span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">brand</span><span style="color:#f92672">=</span>brand<span style="color:#f92672">;}</span>
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">abstract</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">info</span><span style="color:#f92672">();</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Desktop</span> <span style="color:#66d9ef">extends</span> Computer<span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">Desktop</span><span style="color:#f92672">(</span>Brand brand<span style="color:#f92672">){</span><span style="color:#66d9ef">super</span><span style="color:#f92672">(</span>brand<span style="color:#f92672">);}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">info</span><span style="color:#f92672">(){</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">//...
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Laptop</span> <span style="color:#66d9ef">extends</span> Computer<span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">Laptop</span><span style="color:#f92672">(</span>Brand brand<span style="color:#f92672">){</span><span style="color:#66d9ef">super</span><span style="color:#f92672">(</span>brand<span style="color:#f92672">);}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">info</span><span style="color:#f92672">(){</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">//...
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Pad</span> <span style="color:#66d9ef">extends</span> Computer<span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">Pad</span><span style="color:#f92672">(</span>Brand brand<span style="color:#f92672">){</span><span style="color:#66d9ef">super</span><span style="color:#f92672">(</span>brand<span style="color:#f92672">);}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">info</span><span style="color:#f92672">(){</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">//...
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
-</span></span></code></pre></div><ol start="5">
-<li>通过上面的修改，类的数量变成了<strong>1+n+m</strong>。</li>
-<li>在这里我理解的抽象是Brand，实现指的是Computer和Computer的子类。</li>
-</ol>
     </p>
   </article>
   

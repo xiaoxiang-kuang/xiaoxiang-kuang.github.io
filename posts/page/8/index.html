@@ -458,6 +458,134 @@ https://github.com/alex-shpak/hugo-book
   
   <article class="markdown book-post">
     <h2>
+      <a href="/posts/javaee/spring/springboot%E9%85%8D%E7%BD%AE/">springboot配置</a>
+    </h2>
+    
+  <h5>2021-09-01</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">java</a>
+  </div>
+  
+
+
+
+
+    <p><h2 id="springboot配置">
+  springboot配置
+  <a class="anchor" href="#springboot%e9%85%8d%e7%bd%ae">#</a>
+</h2>
+<h3 id="配置加载顺序">
+  配置加载顺序
+  <a class="anchor" href="#%e9%85%8d%e7%bd%ae%e5%8a%a0%e8%bd%bd%e9%a1%ba%e5%ba%8f">#</a>
+</h3>
+<ul>
+<li>优先级从高到低</li>
+</ul>
+<ol>
+<li><strong>命令行传入的参数。</strong></li>
+<li>SPRING_APPLICATION_JSON中的属性，是以JSON格式配置在系统环境变量中的内容。</li>
+<li>java:comp/env中的JNDI属性。</li>
+<li>java的系统属性，可以通过System.getProperties()获得的内容。</li>
+<li>操作系统的环境变量。</li>
+<li>通过random.*配置的随机属性。</li>
+<li>**位于当前jar包之外，针对于特定的环境的而指定的配置文件。**如application-prod.yml。</li>
+<li><strong>位于当前jar包内，针对于特定环境的而指定配置文件。</strong></li>
+<li><strong>位于当前jar包外的application.properties和yml文件。</strong></li>
+<li><strong>位于当前jar包内的application.properties和yml文件。</strong></li>
+<li>在@Configuration注解修饰的类中，通过@PropertySource注解定义的属性。</li>
+<li>应用默认属性，使用SpringAppication.setDefaultProperties定义的内容。</li>
+</ol>
+<h3 id="注入到类">
+  注入到类
+  <a class="anchor" href="#%e6%b3%a8%e5%85%a5%e5%88%b0%e7%b1%bb">#</a>
+</h3>
+<ol>
+<li>resources/properties/person.properties</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-properties" data-lang="properties"><span style="display:flex;"><span><span style="color:#a6e22e">person.name</span><span style="color:#f92672">=</span><span style="color:#e6db74">xiaoxiang</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">person.age</span><span style="color:#f92672">=</span><span style="color:#e6db74">21</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">person.sex</span><span style="color:#f92672">=</span><span style="color:#e6db74">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">person.weight</span><span style="color:#f92672">=</span><span style="color:#e6db74">67</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">person.height</span><span style="color:#f92672">=</span><span style="color:#e6db74">177</span>
+</span></span></code></pre></div><ol start="2">
+<li>java/space/xiaoxiang/properties/Person</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Component</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@PropertySource</span><span style="color:#f92672">(</span>value <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;classpath:properties/person.properties&#34;</span><span style="color:#f92672">,</span>ignoreResourceNotFound <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@ConfigurationProperties</span><span style="color:#f92672">(</span>prefix <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;person&#34;</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@Data</span> <span style="color:#75715e">//必须要有setter方法，否则无法注入
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Person</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> String name<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">int</span> age<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">int</span> sex<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">double</span> weight<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">double</span> height<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> String description<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><ol start="3">
+<li>controller中注入</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Autowired</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">private</span> Person person<span style="color:#f92672">;</span>
+</span></span></code></pre></div><h3 id="注入某个字段">
+  注入某个字段
+  <a class="anchor" href="#%e6%b3%a8%e5%85%a5%e6%9f%90%e4%b8%aa%e5%ad%97%e6%ae%b5">#</a>
+</h3>
+<ol>
+<li>application.yml</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">sbl</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">hostname</span>: <span style="color:#ae81ff">xiaoxiang.space</span>
+</span></span></code></pre></div><ol start="2">
+<li>controller</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@RestController</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">IndexController</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//注入
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">@Value</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;${sbl.hostname}&#34;</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> String sblHostname<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//...
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><h3 id="参数引用">
+  参数引用
+  <a class="anchor" href="#%e5%8f%82%e6%95%b0%e5%bc%95%e7%94%a8">#</a>
+</h3>
+<ul>
+<li>在application.yml中的各个参数之间，可以通过placeholder的方式进行引用。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">sbl</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">hostname</span>: <span style="color:#ae81ff">${hostname}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">hostname</span>: <span style="color:#ae81ff">xiaoxiang.space</span>
+</span></span></code></pre></div><h3 id="使用随机数">
+  使用随机数
+  <a class="anchor" href="#%e4%bd%bf%e7%94%a8%e9%9a%8f%e6%9c%ba%e6%95%b0">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#75715e">#随机字符串</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">value1</span>: <span style="color:#ae81ff">${random.value}</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#随机int</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">value2</span>: <span style="color:#ae81ff">${random.int}</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#随机long</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">value3</span>: <span style="color:#ae81ff">${random.long}</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#10以内的随机数</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">value4</span>: <span style="color:#ae81ff">${random.int(10)}</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#10-20的随机数</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">value5</span>: <span style="color:#ae81ff">${random.int[10,20]}</span>
+</span></span></code></pre></div><p><strong>参考链接：</strong>
+  <a href="https://blog.didispace.com/spring-boot-learning-21-1-3/">Spring Boot 2.x基础教程：配置文件详解 | 程序猿DD</a></p>
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
       <a href="/posts/javaee/docker/">docker</a>
     </h2>
     
@@ -1279,79 +1407,6 @@ https://github.com/alex-shpak/hugo-book
 <li>如果没找到，会用ServiceLoader工具去解析<code>META-INF\services\ch.qos.logback.classic.spi.Configutator</code>路径下实现了Configurator接口的类</li>
 <li>如果还没找到，logback会通过BasicConfigurator为自己进行配置，日志将会全部打印在控制台。</li>
 </ol>
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/javaee/oAuth/">oAuth</a>
-    </h2>
-    
-  <h5>2021-08-20</h5>
-
-
-
-  
-
-  
-  <div>
-    
-      <a href="/tags/java/">java</a>
-  </div>
-  
-
-
-
-
-    <p><ul>
-<li>oAuth是一种授权机制，数据所有者告诉授权系统，允许第三方应用获取这些数据，授权系统从而产生一个短期的进入令牌（token），第三方应用通过令牌获取数据。</li>
-</ul>
-<h3 id="授权码方式">
-  授权码方式
-  <a class="anchor" href="#%e6%8e%88%e6%9d%83%e7%a0%81%e6%96%b9%e5%bc%8f">#</a>
-</h3>
-<p>第三方应用（记为a）访问CALLBACK_URL这个网站，会重定向到授权系统（记为b），url如1所示</p>
-<h4 id="1-请求授权码">
-  1. 请求授权码
-  <a class="anchor" href="#1-%e8%af%b7%e6%b1%82%e6%8e%88%e6%9d%83%e7%a0%81">#</a>
-</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>https:<span style="color:#f92672">//</span>b.com<span style="color:#f92672">/</span>oauth<span style="color:#f92672">/</span>authorize<span style="color:#f92672">?</span>
-</span></span><span style="display:flex;"><span>  response_type<span style="color:#f92672">=</span>code<span style="color:#f92672">&amp;</span> <span style="color:#f92672">#</span><span style="color:#960050;background-color:#1e0010">表示参数要求返回授权码</span>
-</span></span><span style="display:flex;"><span>  client_id<span style="color:#f92672">=</span>CLIENT_ID<span style="color:#f92672">&amp;</span> <span style="color:#f92672">#</span><span style="color:#960050;background-color:#1e0010">客户端</span>id<span style="color:#960050;background-color:#1e0010">，</span>b<span style="color:#960050;background-color:#1e0010">就知道是谁在请求</span>
-</span></span><span style="display:flex;"><span>  redirect_uri<span style="color:#f92672">=</span>CALLBACK_URL<span style="color:#f92672">&amp;</span> <span style="color:#f92672">#</span>b<span style="color:#960050;background-color:#1e0010">接收请求后跳转的网站</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">scope</span><span style="color:#f92672">=</span><span style="color:#66d9ef">read</span> <span style="color:#f92672">#</span><span style="color:#960050;background-color:#1e0010">授权范围</span>
-</span></span></code></pre></div><h4 id="2-返回授权码">
-  2. 返回授权码
-  <a class="anchor" href="#2-%e8%bf%94%e5%9b%9e%e6%8e%88%e6%9d%83%e7%a0%81">#</a>
-</h4>
-<p>在授权系统登录成功后，会重定向到<code>CALLBACK_URL?code=AUTHORIZATION_CODE</code>，code就是授权码。</p>
-<h4 id="3-请求令牌">
-  3. 请求令牌
-  <a class="anchor" href="#3-%e8%af%b7%e6%b1%82%e4%bb%a4%e7%89%8c">#</a>
-</h4>
-<p>CALLBACK_URL这个网站会重定向到授权系统，url如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>https:<span style="color:#f92672">//</span>b.com<span style="color:#f92672">/</span>oauth<span style="color:#f92672">/</span>token<span style="color:#f92672">?</span>
-</span></span><span style="display:flex;"><span> client_id<span style="color:#f92672">=</span>CLIENT_ID<span style="color:#f92672">&amp;</span> <span style="color:#f92672">#</span><span style="color:#960050;background-color:#1e0010">客户端</span>id<span style="color:#960050;background-color:#1e0010">，</span>b<span style="color:#960050;background-color:#1e0010">就知道是谁在请求</span>
-</span></span><span style="display:flex;"><span> client_secret<span style="color:#f92672">=</span>CLIENT_SECRET<span style="color:#f92672">&amp;</span> 
-</span></span><span style="display:flex;"><span> grant_type<span style="color:#f92672">=</span>authorization_code<span style="color:#f92672">&amp;</span> <span style="color:#f92672">#</span><span style="color:#960050;background-color:#1e0010">授权类型，表明是授权码</span>
-</span></span><span style="display:flex;"><span> code<span style="color:#f92672">=</span>AUTHORIZATION_CODE<span style="color:#f92672">&amp;</span> <span style="color:#f92672">#</span><span style="color:#960050;background-color:#1e0010">上一步拿到的授权码</span>
-</span></span><span style="display:flex;"><span> redirect_uri<span style="color:#f92672">=</span>CALLBACK_URL <span style="color:#f92672">#</span>b<span style="color:#960050;background-color:#1e0010">之后跳转的网站</span>
-</span></span></code></pre></div><h4 id="4-返回令牌">
-  4. 返回令牌
-  <a class="anchor" href="#4-%e8%bf%94%e5%9b%9e%e4%bb%a4%e7%89%8c">#</a>
-</h4>
-<p>授权系统会重定向到CALLBACK_URL，并发送一段JSON数据</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{  
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;access_token&#34;</span>:<span style="color:#e6db74">&#34;ACCESS_TOKEN（令牌）&#34;</span>,  
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;token_type&#34;</span>:<span style="color:#e6db74">&#34;bearer&#34;</span>,
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;expires_in&#34;</span>:<span style="color:#ae81ff">2592000</span>,
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;refresh_token&#34;</span>:<span style="color:#e6db74">&#34;REFRESH_TOKEN&#34;</span>,
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;scope&#34;</span>:<span style="color:#e6db74">&#34;read&#34;</span>,
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;uid&#34;</span>:<span style="color:#ae81ff">100101</span>,
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;info&#34;</span>:{<span style="color:#960050;background-color:#1e0010">...</span>}
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p><strong>参考链接：</strong>
-  <a href="https://www.ruanyifeng.com/blog/2019/04/oauth-grant-types.html">OAuth 2.0 的四种方式 - 阮一峰的网络日志 (ruanyifeng.com)</a></p>
     </p>
   </article>
   

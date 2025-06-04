@@ -458,6 +458,231 @@ https://github.com/alex-shpak/hugo-book
   
   <article class="markdown book-post">
     <h2>
+      <a href="/posts/javaee/syslog/">Syslog</a>
+    </h2>
+    
+  <h5>2022-01-07</h5>
+
+
+
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">java</a>
+  </div>
+  
+
+
+
+
+    <p><h2 id="rfc5424">
+  rfc5424
+  <a class="anchor" href="#rfc5424">#</a>
+</h2>
+<h3 id="介绍">
+  介绍
+  <a class="anchor" href="#%e4%bb%8b%e7%bb%8d">#</a>
+</h3>
+<p>格式：<code>PRI VERSION TIMESTAMP HOSTNAME APP-NAME PROCID MSGID STRUCTURED-DATA MSG</code></p>
+<ul>
+<li>消息头
+<ul>
+<li>PRI 优先级</li>
+<li>VERSION 版本</li>
+<li>TIMESTAMP 时间</li>
+<li>HOSTNAME 主机名</li>
+<li>APP-NAME APP名称</li>
+<li>PROCID 进程的ID</li>
+<li>MSGID 消息ID</li>
+</ul>
+</li>
+<li>STRUCTURED-DATA</li>
+<li>消息体</li>
+</ul>
+<h4 id="pri">
+  PRI
+  <a class="anchor" href="#pri">#</a>
+</h4>
+<ul>
+<li>PRI（priority）代表两个值（Facility）和日志级别（serverity）。PRI必须是类似<code>&lt;14&gt;</code>的格式。中间的值的计算公式为<code>priority = facility x 8 + serverity</code>。</li>
+<li>Facility的值是<code>[0,23]</code>。各个值的含义如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>数字</th>
+<th>介绍</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>内核消息</td>
+</tr>
+<tr>
+<td>1</td>
+<td>用户级别消息</td>
+</tr>
+<tr>
+<td>2</td>
+<td>邮件系统</td>
+</tr>
+<tr>
+<td>3</td>
+<td>系统守护进程</td>
+</tr>
+<tr>
+<td>4</td>
+<td>安全/认证消息</td>
+</tr>
+<tr>
+<td>5</td>
+<td>syslogd内部生成的消息</td>
+</tr>
+<tr>
+<td>6</td>
+<td>line printer subsystem</td>
+</tr>
+<tr>
+<td>7</td>
+<td>network news subsystem</td>
+</tr>
+<tr>
+<td>8</td>
+<td>UUCP subsystem</td>
+</tr>
+<tr>
+<td>9</td>
+<td>时钟守护程序</td>
+</tr>
+<tr>
+<td>10</td>
+<td>安全/认证消息</td>
+</tr>
+<tr>
+<td>11</td>
+<td>FTP守护程序</td>
+</tr>
+<tr>
+<td>12</td>
+<td>NTF子系统</td>
+</tr>
+<tr>
+<td>13</td>
+<td>log audit</td>
+</tr>
+<tr>
+<td>14</td>
+<td>log alert</td>
+</tr>
+<tr>
+<td>15</td>
+<td>clock daemon (note 2)</td>
+</tr>
+<tr>
+<td>16</td>
+<td>本地用户0（LOCAL0）</td>
+</tr>
+<tr>
+<td>17</td>
+<td>本地用户1（LOCAL1）</td>
+</tr>
+<tr>
+<td>18</td>
+<td>本地用户2（LOCAL2）</td>
+</tr>
+<tr>
+<td>19</td>
+<td>本地用户3（LOCAL3）</td>
+</tr>
+<tr>
+<td>20</td>
+<td>本地用户4（LOCAL4）</td>
+</tr>
+<tr>
+<td>21</td>
+<td>本地用户5（LOCAL5）</td>
+</tr>
+<tr>
+<td>22</td>
+<td>本地用户6（LOCAL6）</td>
+</tr>
+<tr>
+<td>23</td>
+<td>本地用户7（LOCAL7）</td>
+</tr>
+</tbody>
+</table>
+<h4 id="serverity">
+  Serverity
+  <a class="anchor" href="#serverity">#</a>
+</h4>
+<table>
+<thead>
+<tr>
+<th>数字</th>
+<th>介绍</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>emergency紧急，系统无法使用</td>
+</tr>
+<tr>
+<td>1</td>
+<td>alert警告，必须立即采取措施</td>
+</tr>
+<tr>
+<td>2</td>
+<td>critical</td>
+</tr>
+<tr>
+<td>3</td>
+<td>error</td>
+</tr>
+<tr>
+<td>4</td>
+<td>warning</td>
+</tr>
+<tr>
+<td>5</td>
+<td>notice；正常但是重要的情况</td>
+</tr>
+<tr>
+<td>6</td>
+<td>informational；普通信息</td>
+</tr>
+<tr>
+<td>7</td>
+<td>debug；</td>
+</tr>
+</tbody>
+</table>
+<h3 id="例子">
+  例子
+  <a class="anchor" href="#%e4%be%8b%e5%ad%90">#</a>
+</h3>
+<pre tabindex="0"><code>&lt;165&gt;1 2003-08-24T05:14:15.000003-07:00 192.0.2.1 myproc 8710 - - %% It&#39;s time to make the do-nuts
+&lt;165&gt;1 2003-10-11T22:14:15.003Z mymachine.example.com evntslog - ID47 [exampleSDID@32473 iut=&#34;3&#34; eventSource=&#34;Application&#34; eventID=&#34;1011&#34;] BOMAn
+&lt;165&gt;1 2003-10-11T22:14:15.003Z mymachine.example.com evntslog - ID47 [exampleSDID@32473 iut=&#34;3&#34; eventSource=&#34;Application&#34; eventID=&#34;1011&#34;][examplePriority@32473 class=&#34;high&#34;]
+</code></pre><h3 id="log4j2配置">
+  log4j2配置
+  <a class="anchor" href="#log4j2%e9%85%8d%e7%bd%ae">#</a>
+</h3>
+<pre tabindex="0"><code>&lt;Syslog name=&#34;RFC5424&#34; format=&#34;RFC5424&#34; host=&#34;10.2.4.31&#34; port=&#34;5140&#34; protocol=&#34;UDP&#34; 
+appName=&#34;auditSyslogDemo&#34; facility=&#34;LOCAL0&#34; newLine=&#34;true&#34; messageId=&#34;Audit&#34; id=&#34;App&#34;/&gt;
+</code></pre><p>参考链接：
+  <a href="https://www.rfc-editor.org/rfc/rfc5424.html">RFC 5424: The Syslog Protocol (rfc-editor.org)</a></p>
+<p>参考链接：
+  <a href="https://logging.apache.org/log4j/2.x/manual/appenders.html#SyslogAppender">Log4j – Log4j 2 Appenders (apache.org)</a></p>
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
       <a href="/posts/%E5%89%8D%E7%AB%AF/css-flex/">CSS Flex</a>
     </h2>
     
@@ -1629,127 +1854,6 @@ snmpwalk -c nsag -v2c 10.0.1.81 1.3.6.1.2.1.1.1.0
 </span></span><span style="display:flex;"><span>apt install twm
 </span></span><span style="display:flex;"><span><span style="color:#75715e">#启动twm，再切换到tty2就能拖动窗口了</span>
 </span></span><span style="display:flex;"><span>twm -display :1 &amp;
-</span></span></code></pre></div>
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/javaee/mybatis%E9%85%8D%E7%BD%AE/">mybatis配置</a>
-    </h2>
-    
-  <h5>2021-11-02</h5>
-
-
-
-  
-
-  
-  <div>
-    
-      <a href="/tags/java/">java</a>
-  </div>
-  
-
-
-
-
-    <p><h3 id="总览">
-  总览
-  <a class="anchor" href="#%e6%80%bb%e8%a7%88">#</a>
-</h3>
-<ul>
-<li><code>configuration</code> 配置
-<ul>
-<li><code>properties</code> 属性</li>
-<li><code>settings</code> 设置</li>
-<li><code>typeAliases</code> 类型别名</li>
-<li><code>typeHandlers</code> 类型处理器</li>
-<li><code>objectFactory</code> 对象工厂</li>
-<li><code>plugins</code> 插件</li>
-<li><code>environments</code> 环境变量
-<ul>
-<li><code>environment</code>
-<ul>
-<li><code>transactionManager</code> 事务管理器</li>
-<li><code>dataSource</code> 数据源</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><code>databaseIdProvider</code> 数据库标识</li>
-<li><code>mappers</code> 映射器</li>
-</ul>
-</li>
-</ul>
-<h3 id="属性properties">
-  属性properties
-  <a class="anchor" href="#%e5%b1%9e%e6%80%a7properties">#</a>
-</h3>
-<ul>
-<li>设置好的属性可以在整个配置文件中使用。</li>
-<li>通过方法参数传递的属性优先级最高，resource/url属性中指定的位置文件次之，properties元素中指定的属性优先级最低。</li>
-</ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#f92672">&lt;properties</span> <span style="color:#a6e22e">resource=</span><span style="color:#e6db74">&#34;org/mybatis/example/config.properties&#34;</span><span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;username&#34;</span> <span style="color:#a6e22e">value=</span><span style="color:#e6db74">&#34;dev_user&#34;</span><span style="color:#f92672">/&gt;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#75715e">&lt;!-- 启用默认值设置，使用方式为${username:prod_user} --&gt;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;org.apache.ibatis.parsing.PropertyParser.enable-default-value&#34;</span> <span style="color:#a6e22e">value=</span><span style="color:#e6db74">&#34;true&#34;</span><span style="color:#f92672">/&gt;</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/properties&gt;</span>
-</span></span></code></pre></div><h3 id="类型别名typealiases">
-  类型别名typeAliases
-  <a class="anchor" href="#%e7%b1%bb%e5%9e%8b%e5%88%ab%e5%90%8dtypealiases">#</a>
-</h3>
-<ul>
-<li>指定类型别名</li>
-<li>内建的一些类型别名，如：string、long、integer、float、map、arraylist、date等</li>
-</ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#f92672">&lt;typeAliases&gt;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;typeAlias</span> <span style="color:#a6e22e">alias=</span><span style="color:#e6db74">&#34;author&#34;</span> <span style="color:#a6e22e">type=</span><span style="color:#e6db74">&#34;domain.blog.Author&#34;</span><span style="color:#f92672">/&gt;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#75715e">&lt;!-- 每一个在包domain.blog中的类，会默认使用该类的首字母小写的类名作为它的别名 --&gt;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;package</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;domain.blog&#34;</span><span style="color:#f92672">/&gt;</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/typeAliases&gt;</span>
-</span></span></code></pre></div><h3 id="环境变量environments">
-  环境变量environments
-  <a class="anchor" href="#%e7%8e%af%e5%a2%83%e5%8f%98%e9%87%8fenvironments">#</a>
-</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#f92672">&lt;environments</span> <span style="color:#a6e22e">default=</span><span style="color:#e6db74">&#34;development&#34;</span><span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">&lt;!--  type用来指定数据源，内建了三种数据源UNPOOLED|POOLED|JNDI，可以通过实现接口DataSourceFactory来使用第三方数据源 --&gt;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;dataSource</span> <span style="color:#a6e22e">type=</span><span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;driver&#34;</span> <span style="color:#a6e22e">value=</span><span style="color:#e6db74">&#34;${driver}&#34;</span><span style="color:#f92672">/&gt;</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;url&#34;</span> <span style="color:#a6e22e">value=</span><span style="color:#e6db74">&#34;${url}&#34;</span><span style="color:#f92672">/&gt;</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;username&#34;</span> <span style="color:#a6e22e">value=</span><span style="color:#e6db74">&#34;${username}&#34;</span><span style="color:#f92672">/&gt;</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;password&#34;</span> <span style="color:#a6e22e">value=</span><span style="color:#e6db74">&#34;${password}&#34;</span><span style="color:#f92672">/&gt;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;/dataSource&gt;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;/environment&gt;</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/environments&gt;</span>
-</span></span></code></pre></div><h3 id="数据库标识databaseidprovider">
-  数据库标识databaseIdProvider
-  <a class="anchor" href="#%e6%95%b0%e6%8d%ae%e5%ba%93%e6%a0%87%e8%af%86databaseidprovider">#</a>
-</h3>
-<ul>
-<li>mybatis可以根据不同的数据库厂商执行不同的语句。</li>
-</ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#f92672">&lt;databaseIdProvider</span> <span style="color:#a6e22e">type=</span><span style="color:#e6db74">&#34;DB_VENDOR&#34;</span><span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;SQL Server&#34;</span> <span style="color:#a6e22e">value=</span><span style="color:#e6db74">&#34;sqlserver&#34;</span><span style="color:#f92672">/&gt;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;DB2&#34;</span> <span style="color:#a6e22e">value=</span><span style="color:#e6db74">&#34;db2&#34;</span><span style="color:#f92672">/&gt;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;MySQL&#34;</span> <span style="color:#a6e22e">value=</span><span style="color:#e6db74">&#34;mysql&#34;</span> <span style="color:#f92672">/&gt;</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/databaseIdProvider&gt;</span>
-</span></span></code></pre></div><ul>
-<li>使用方式</li>
-</ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#f92672">&lt;select</span> <span style="color:#a6e22e">id=</span><span style="color:#e6db74">&#34;select&#34;</span> <span style="color:#a6e22e">resultType=</span><span style="color:#e6db74">&#34;map&#34;</span> <span style="color:#a6e22e">databaseId=</span><span style="color:#e6db74">&#34;mysql&#34;</span><span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span>	select * from mysql
-</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/select&gt;</span>
-</span></span></code></pre></div><h3 id="映射器">
-  映射器
-  <a class="anchor" href="#%e6%98%a0%e5%b0%84%e5%99%a8">#</a>
-</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#f92672">&lt;mappers&gt;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;mapper</span> <span style="color:#a6e22e">resource=</span><span style="color:#e6db74">&#34;org/mybatis/builder/AuthorMapper.xml&#34;</span><span style="color:#f92672">/&gt;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;mapper</span> <span style="color:#a6e22e">url=</span><span style="color:#e6db74">&#34;file:///var/mappers/PostMapper.xml&#34;</span><span style="color:#f92672">/&gt;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;mapper</span> <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;org.mybatis.builder.PostMapper&#34;</span><span style="color:#f92672">/&gt;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;package</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;org.mybatis.builder&#34;</span><span style="color:#f92672">/&gt;</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/mappers&gt;</span>
 </span></span></code></pre></div>
     </p>
   </article>
